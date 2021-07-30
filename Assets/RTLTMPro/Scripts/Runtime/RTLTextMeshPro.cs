@@ -90,7 +90,7 @@ namespace RTLTMPro
 
         [SerializeField] protected bool fixTags = true;
 
-        [SerializeField] protected bool forceFix;
+        [SerializeField] public bool forceFix;
 
         protected readonly FastStringBuilder finalText = new FastStringBuilder(RTLSupport.DefaultBufferSize);
 
