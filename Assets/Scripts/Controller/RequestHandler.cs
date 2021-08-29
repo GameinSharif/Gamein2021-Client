@@ -4,12 +4,12 @@ public class RequestHandler
 {
     public static void HandleServerResponse(string responseJson)
     {
-        var responseObject = JsonUtility.FromJson<ResponseObject<Object>>(responseJson);
-        switch (responseObject.ResponseType)
+        ResponseObject responseObject = JsonUtility.FromJson<ResponseObject>(responseJson);
+        switch (responseObject.responseTypeConstant)
         {
-            case ResponseTypeConstants.LOGIN:
-                var loginResponseObject = JsonUtility.FromJson<ResponseObject<LoginResponse>>(responseJson);
-                EventManager.Instance.OnLoginResponse(loginResponseObject.ResponseData);
+            case ResponseTypeConstant.LOGIN:
+                LoginResponse loginResponseObject = (LoginResponse) responseObject.responseData;
+                EventManager.Instance.OnLoginResponse(loginResponseObject);
                 break;
         }
     }

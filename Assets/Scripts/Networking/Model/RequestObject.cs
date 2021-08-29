@@ -9,10 +9,10 @@ using Object = System.Object;
 public class RequestObject<T>
 {
     public int PlayerId;
-    public RequestTypeConstants RequestType;
+    public RequestTypeConstant RequestType;
     public T RequestData;
 
-    public RequestObject(int playerId, RequestTypeConstants requestType, T requestData)
+    public RequestObject(int playerId, RequestTypeConstant requestType, T requestData)
     {
         PlayerId = playerId;
         RequestType = requestType;

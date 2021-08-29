@@ -1,8 +1,9 @@
 ﻿using System;
 
 [Serializable]
-public class ResponseObject<T>
+public class ResponseObject
 {
-    public ResponseTypeConstants ResponseType;
-    public T ResponseData;
+    public ResponseTypeConstant responseTypeConstant;
+    public object responseData;
+    public string result;
 }
