@@ -4,12 +4,12 @@ using System.Collections.Generic;
 [Serializable]
 public class LoginRequest
 {
-    public string Teamname;
-    public string Password;
+    public string username;
+    public string password;
 
-    public LoginRequest(string teamname, string password)
+    public LoginRequest(string username, string password)
     {
-        Teamname = teamname;
-        Password = password;
+        this.username = username;
+        this.password = password;
     }
 }

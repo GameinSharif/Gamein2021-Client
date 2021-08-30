@@ -6,16 +6,16 @@ using UnityEngine.Serialization;
 using Object = System.Object;
 
 [Serializable]
-public class RequestObject<T>
+public class RequestObject
 {
-    public int PlayerId;
-    public RequestTypeConstant RequestType;
-    public T RequestData;
+    public int playerId;
+    public RequestTypeConstant requestTypeConstant;
+    public object requestData;
 
-    public RequestObject(int playerId, RequestTypeConstant requestType, T requestData)
+    public RequestObject(int playerId, RequestTypeConstant requestTypeConstant, object requestData)
     {
-        PlayerId = playerId;
-        RequestType = requestType;
-        RequestData = requestData;
+        this.playerId = playerId;
+        this.requestTypeConstant = requestTypeConstant;
+        this.requestData = requestData;
     }
 }

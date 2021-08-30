@@ -48,7 +48,7 @@ public class NetworkTransport
         return _instance;
     }
 
-    public void GenerateData<T>(RequestObject<T> requestObject)
+    public void GenerateData<T>(RequestObject requestObject)
     {
         if (_seqNumber - ReceivedSequenceNumber >= Constants.WindowSize) return;
         IncrementSequenceNumber();
