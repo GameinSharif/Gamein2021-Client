@@ -10,10 +10,12 @@ public class LoginManager : MonoBehaviour
     public TMP_InputField usernameInputField;
     public TMP_InputField passwordInputField;
     public Localize loginError;
+
     private void Start()
     {
         loginError.gameObject.SetActive(false);
     }
+
     private void OnEnable()
     {
         EventManager.Instance.OnLoginResponseEvent += OnLoginResponseReceive;
@@ -25,8 +27,6 @@ public class LoginManager : MonoBehaviour
 
     }
 
-
-
     public void OnLoginButtonClick()
     {
         string username = usernameInputField.text;
@@ -37,18 +37,19 @@ public class LoginManager : MonoBehaviour
             loginError.gameObject.SetActive(true);
             return;
         }
-        LoginRequest loginRequest = new LoginRequest(username, password);
-        RequestManager.Instance.SendRequest(RequestTypeConstant.LOGIN, loginRequest);
+
+        LoginRequest loginRequest = new LoginRequest(RequestTypeConstant.LOGIN, username, password);
+        RequestManager.Instance.SendRequest(loginRequest);
     }
 
     public void OnLoginResponseReceive(LoginResponse loginResponse)
     {
         if (loginResponse.result == "Successful")
         {
-            int playerId = loginResponse.PlayerId;
+            int playerId = loginResponse.playerId;
             PlayerPrefs.SetInt("PlayerId" , playerId);
             
-            SceneManager.LoadScene("Menu");
+            SceneManager.LoadScene("MenuScene");
         }
         else
         {

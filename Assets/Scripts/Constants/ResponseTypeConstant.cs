@@ -1,4 +1,4 @@
 public enum ResponseTypeConstant
 {
-    LOGIN = 0
+    LOGIN = 1
 }

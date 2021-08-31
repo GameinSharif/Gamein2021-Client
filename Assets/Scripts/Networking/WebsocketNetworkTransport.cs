@@ -12,6 +12,7 @@ public class WebsocketNetworkTransport : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        Connect();
     }
 
     public static WebsocketNetworkTransport Instance
@@ -22,7 +23,7 @@ public class WebsocketNetworkTransport : MonoBehaviour
 
     #endregion
 
-    private string address = "ws://" + Constants.ServerIp + ":8080";
+    private string address = "ws://" + Constants.ServerIp + ":" + Constants.ServerPort;
 
     private WebSocket _webSocket;
     private bool _isOpened;
@@ -32,7 +33,7 @@ public class WebsocketNetworkTransport : MonoBehaviour
 
     public void Connect()
     {
-        _webSocket = new WebSocket(new Uri(address + "/name"));
+        _webSocket = new WebSocket(new Uri(address + "/user"));
 
         _webSocket.OnOpen += OnOpen;
         _webSocket.OnMessage += OnMessageReceived;
