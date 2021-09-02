@@ -7,9 +7,15 @@ using UnityEngine.SceneManagement;
 
 public class LoginManager : MonoBehaviour
 {
+    public static LoginManager Instance;
     public TMP_InputField usernameInputField;
     public TMP_InputField passwordInputField;
     public Localize loginError;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -24,7 +30,6 @@ public class LoginManager : MonoBehaviour
     private void OnDisable()
     {
         EventManager.Instance.OnLoginResponseEvent -= OnLoginResponseReceive;
-
     }
 
     public void OnLoginButtonClick()
@@ -56,5 +61,10 @@ public class LoginManager : MonoBehaviour
             loginError.SetKey("login_error_info");
             loginError.gameObject.SetActive(true);
         }
+    }
+
+    public void print(string s)
+    {
+        Debug.Log(s);
     }
 }

@@ -12,6 +12,8 @@ public class WebsocketNetworkTransport : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        DontDestroyOnLoad(gameObject);
+
         Connect();
     }
 

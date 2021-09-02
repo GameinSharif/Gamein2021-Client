@@ -8,6 +8,10 @@ public class RequestHandler
         ResponseTypeConstant responseTypeConstant = (ResponseTypeConstant)responseObject.responseTypeConstant;
         switch (responseTypeConstant)
         {
+            case ResponseTypeConstant.CONNECTION:
+                ConnectionResponse connectionResponse = JsonUtility.FromJson<ConnectionResponse>(responseJson);
+                EventManager.Instance.OnConnectionResponse(connectionResponse);
+                break;
             case ResponseTypeConstant.LOGIN:
                 LoginResponse loginResponseObject = JsonUtility.FromJson<LoginResponse>(responseJson);
                 EventManager.Instance.OnLoginResponse(loginResponseObject);
