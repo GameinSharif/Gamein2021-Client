@@ -60,7 +60,8 @@ public class DatePicker : MonoBehaviour
         GameObject prefab = Resources.Load<GameObject>("DatePicker");
         if (prefab == null) return;
 
-        Instantiate(prefab, Selection.activeTransform);
+        GameObject go = Instantiate(prefab, Selection.activeTransform);
+        go.name = "Date Picker";
     }
 
     #endregion
