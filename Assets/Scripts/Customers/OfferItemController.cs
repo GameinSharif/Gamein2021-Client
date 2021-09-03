@@ -17,9 +17,19 @@ public class OfferItemController : MonoBehaviour
     public RTLTextMeshPro deadline;
     public RTLTextMeshPro frequency;
 
-    public void SetInfo(string no, string company, string type, string volume, string costPerUnit, string total, string EEA, string LEA, string deadline, string frequency)
+    public void SetInfo(
+        int no,
+        string company,
+        string type,
+        string volume,
+        string costPerUnit,
+        string total,
+        string EEA,
+        string LEA,
+        string deadline,
+        string frequency)
     {
-        this.no.text = no;
+        this.no.text = no.ToString();
         this.company.text = company;
         this.type.text = type;
         this.volume.text = volume;
@@ -31,7 +41,23 @@ public class OfferItemController : MonoBehaviour
         this.frequency.text = frequency;
     }
 
-    
+    public void SetInfo(int no, Offer offer)
+    {
+        SetInfo(
+            no: no,
+            company: offer.Company,
+            type: offer.Type,
+            volume: offer.Volume.ToString(),
+            costPerUnit: offer.CostPerUnit.ToString(),
+            total: offer.TotalCost.ToString(),
+            EEA: offer.EEA,
+            LEA: offer.LEA,
+            deadline: offer.Deadline,
+            frequency: offer.Frequency.ToString()
+        );
+    }
+
+
     public void OnAcceptOfferClicked()
     {
         // TODO
