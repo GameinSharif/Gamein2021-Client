@@ -25,7 +25,7 @@ public class DatePicker : MonoBehaviour
 
     private void Start()
     {
-        currentSelectedDate.text = "choose date ...";
+        currentSelectedDate.text = "Choose date ...";
         GetComponent<Button>().onClick.AddListener(OnClicked);
     }
 
