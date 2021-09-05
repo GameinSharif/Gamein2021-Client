@@ -297,5 +297,15 @@
 			if (!_groundPlane.Raycast(ray, out distance)) { return Vector3.zero; }
 			return ray.GetPoint(distance);
 		}
+
+		public void SetPanSpeed(float panSpeed)
+        {
+			_panSpeed = panSpeed;
+        }
+
+		public void SetZoomSpeed(float zoomSpeed)
+		{
+			_zoomSpeed = zoomSpeed;
+		}
 	}
 }
