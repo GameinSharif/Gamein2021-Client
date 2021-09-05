@@ -457,6 +457,9 @@ MonoBehaviour:
   - {fileID: 793888531}
   PanSpeed: 2
   ZoomSpeed: 0
+  UseRetina: 0
+  UseCompression: 1
+  UseMipMap: 1
 --- !u!4 &312701716
 Transform:
   m_ObjectHideFlags: 0
@@ -1679,12 +1682,12 @@ MonoBehaviour:
   _options:
     locationOptions:
       latitudeLongitude: 37.7648, -122.463
-      zoom: 20
+      zoom: 2
     extentOptions:
       extentType: 0
       defaultExtents:
         cameraBoundsOptions:
-          camera: {fileID: 0}
+          camera: {fileID: 1024181840}
           visibleBuffer: 0
           disposeBuffer: 0
         rangeAroundCenterOptions:
@@ -1716,8 +1719,8 @@ MonoBehaviour:
           Modified: 
           UserName: 
       rasterOptions:
-        useRetina: 1
-        useCompression: 0
+        useRetina: 0
+        useCompression: 1
         useMipMap: 1
   _terrain:
     _layerProperty:

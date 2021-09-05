@@ -9,12 +9,19 @@ public class MapManager : MonoBehaviour
 {
     private AbstractMap _abstractMap;
     private QuadTreeCameraMovement _quadTreeCameraMovement;
+
     private float[] _possibleZoomAmounts = { 2, 4, 6, 8, 10 };
     private int _currnetZoomAmountIndex = 0;
+    private int _currnetMapTypeIndex = 0;
 
     public List<GameObject> IsMapTypeSelectedGameObjects;
+    [Space]
+    [Header("InitialValues")]
     public float PanSpeed = 2f;
     public float ZoomSpeed = 0f;
+    public bool UseRetina = false;
+    public bool UseCompression = true;
+    public bool UseMipMap = true;
 
     private void Awake()
     {
@@ -24,32 +31,45 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        int lastMapTypeIndex = PlayerPrefs.GetInt("LastMapTypeIndex", 0);
-        SetMapImagerySourceType(lastMapTypeIndex);
-
-        InitializeMapZoomAmount();
+        InitializeMap();
 
         _quadTreeCameraMovement.SetPanSpeed(PanSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(ZoomSpeed);
     }
 
+    private void InitializeMap()
+    {
+        int lastMapTypeIndex = PlayerPrefs.GetInt("LastMapTypeIndex", 0);
+        _currnetMapTypeIndex = lastMapTypeIndex;
+        _abstractMap.ImageLayer.SetProperties((ImagerySourceType)_currnetMapTypeIndex, UseRetina, UseCompression, UseMipMap);
+        SetMapTypesActiveStatus();
+
+        int mapZoomIndex = PlayerPrefs.GetInt("MapZoomIndex", 0);
+        _currnetZoomAmountIndex = mapZoomIndex;
+        _abstractMap.SetZoom(_possibleZoomAmounts[_currnetZoomAmountIndex]);
+    }
+
+    //Called On Map Types Button Click
     public void SetMapImagerySourceType(int index)
     {
-        _abstractMap.ImageLayer.SetLayerSource((ImagerySourceType)index);
-        PlayerPrefs.SetInt("LastMapTypeIndex", index);
+        if (_currnetMapTypeIndex == index)
+        {
+            return;
+        }
 
+        _currnetMapTypeIndex = index;
+        _abstractMap.ImageLayer.SetLayerSource((ImagerySourceType)_currnetMapTypeIndex);
+        PlayerPrefs.SetInt("LastMapTypeIndex", _currnetMapTypeIndex);
+        SetMapTypesActiveStatus();
+    }
+
+    private void SetMapTypesActiveStatus()
+    {
         foreach (GameObject gameObject in IsMapTypeSelectedGameObjects)
         {
             gameObject.SetActive(false);
         }
-        IsMapTypeSelectedGameObjects[index].SetActive(true);
-    }
-
-    private void InitializeMapZoomAmount()
-    {
-        int mapZoomIndex = PlayerPrefs.GetInt("MapZoomIndex", 0);
-        _currnetZoomAmountIndex = mapZoomIndex;
-        _abstractMap.SetZoom(_possibleZoomAmounts[_currnetZoomAmountIndex]);
+        IsMapTypeSelectedGameObjects[_currnetMapTypeIndex].SetActive(true);
     }
 
     private void SetMapZoom(int index)

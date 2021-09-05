@@ -50,6 +50,7 @@ namespace Mapbox.Unity.Map
 		protected Vector3 _cachedPosition;
 		protected Quaternion _cachedRotation;
 		protected Vector3 _cachedScale = Vector3.one;
+		protected bool _isUpdatingMap = false;
 		#endregion
 
 		#region Properties
@@ -359,10 +360,11 @@ namespace Mapbox.Unity.Map
 		/// <param name="zoom">Zoom level.</param>
 		public virtual void UpdateMap(Vector2d latLon, float zoom)
 		{
-			if (Application.isEditor && !Application.isPlaying && !IsEditorPreviewEnabled)
+			if (Application.isEditor && !Application.isPlaying && !IsEditorPreviewEnabled && _isUpdatingMap)
 			{
 				return;
 			}
+			_isUpdatingMap = true;
 
 			//so map will be snapped to zero using next new tile loaded
 			_worldHeightFixed = false;
@@ -406,6 +408,7 @@ namespace Mapbox.Unity.Map
 
 			if (OnUpdated != null)
 			{
+				_isUpdatingMap = false;
 				OnUpdated();
 			}
 		}
