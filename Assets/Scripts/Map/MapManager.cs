@@ -22,6 +22,7 @@ public class MapManager : MonoBehaviour
     public bool UseRetina = false;
     public bool UseCompression = true;
     public bool UseMipMap = true;
+    public ElevationLayerType ElevationLayerType = ElevationLayerType.FlatTerrain;
 
     private void Awake()
     {
@@ -47,6 +48,8 @@ public class MapManager : MonoBehaviour
         int mapZoomIndex = PlayerPrefs.GetInt("MapZoomIndex", 0);
         _currnetZoomAmountIndex = mapZoomIndex;
         _abstractMap.SetZoom(_possibleZoomAmounts[_currnetZoomAmountIndex]);
+
+        _abstractMap.Terrain.SetElevationType(ElevationLayerType);
     }
 
     //Called On Map Types Button Click
