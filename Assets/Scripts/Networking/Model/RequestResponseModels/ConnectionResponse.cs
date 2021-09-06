@@ -3,5 +3,6 @@ using System;
 [Serializable]
 public class ConnectionResponse : ResponseObject
 {
-    public byte[] encodedPublicKey;
+    public byte[] exponent;
+    public byte[] modules;
 }

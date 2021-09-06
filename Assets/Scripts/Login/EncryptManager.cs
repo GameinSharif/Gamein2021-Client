@@ -1,13 +1,26 @@
 using System;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 public class EncryptManager
 {
-    public PublicKey PublicKey;
+    public static RSACryptoServiceProvider Rsa;
 
     public static void OnConnectionResponse(ConnectionResponse connectionResponse)
     {
-        //TODO
+        var rsaParameters = new RSAParameters();
+        rsaParameters.Exponent = connectionResponse.exponent;
+        rsaParameters.Modulus = connectionResponse.modules;
+
+        Rsa = new RSACryptoServiceProvider();
+        Rsa.ImportParameters(rsaParameters);
+    }
+
+    public static string Encrypt(string message)
+    {
+        var messageBytes = Encoding.ASCII.GetBytes(message);
+        var encryptedMessageBytes = Rsa.Encrypt(messageBytes, false);
+        var encryptedMessage = Encoding.ASCII.GetString(encryptedMessageBytes);
+        return encryptedMessage;
     }
 }

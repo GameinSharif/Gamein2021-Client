@@ -43,7 +43,10 @@ public class LoginManager : MonoBehaviour
             return;
         }
 
-        LoginRequest loginRequest = new LoginRequest(RequestTypeConstant.LOGIN, username, password);
+        //string encryptedPassword = EncryptManager.Encrypt(password);
+        string encryptedPassword = password;
+
+        LoginRequest loginRequest = new LoginRequest(RequestTypeConstant.LOGIN, username, encryptedPassword);
         RequestManager.Instance.SendRequest(loginRequest);
     }
 
