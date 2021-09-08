@@ -16,9 +16,9 @@ public class CustomersController : MonoBehaviour
 
     public GameObject newOfferPopUp;
 
-    // public RTLTextMeshPro date1;
-    // public RTLTextMeshPro date2;
-    // public RTLTextMeshPro date3;
+    public DatePicker date1;
+    public DatePicker date2;
+    public DatePicker date3;
 
     public RTLTextMeshPro[] dates;
 
@@ -41,12 +41,6 @@ public class CustomersController : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-    }
-
-    public void OnDateButtonClicked(int index)
-    {
-        //TODO shop date pop-up and get the date
-        // dates[index].text = "The Returned Date";
     }
 
     public void OnPlaceOfferClicked()
