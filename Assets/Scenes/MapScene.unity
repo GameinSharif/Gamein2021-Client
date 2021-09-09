@@ -455,12 +455,10 @@ MonoBehaviour:
   - {fileID: 1154054300}
   - {fileID: 2111744634}
   - {fileID: 793888531}
-  PanSpeed: 2
-  ZoomSpeed: 0
-  UseRetina: 0
-  UseCompression: 1
-  UseMipMap: 1
-  ElevationLayerType: 0
+  MapAgenetMarkerPrefab: {fileID: 1839187062704024, guid: 834c4d836ad9e934fb95485373874f83, type: 3}
+  MapAgentMarkers:
+  - MapAgentType: 0
+    MarkerMaterial: {fileID: 2100000, guid: f37754830c57c814aa30d481678df909, type: 2}
 --- !u!4 &312701716
 Transform:
   m_ObjectHideFlags: 0
@@ -710,7 +708,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 6, y: -6.1089935}
+  m_AnchoredPosition: {x: 6, y: -6.109009}
   m_SizeDelta: {x: 108, y: 118.878}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &698559150
@@ -1644,11 +1642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _map: {fileID: 1125235529}
-  _locationStrings:
-  - 37.7648, -122.463
-  - 37.8045, -122.2714
-  - 37.859, -122.4855
-  - 35.658611111111, 139.74555555556
+  _locationStrings: []
   _spawnScale: 10
   _markerPrefab: {fileID: 1839187062704024, guid: 9b5b1b761a8994c07affd0a05396633b, type: 3}
 --- !u!114 &1125235528
@@ -1666,7 +1660,7 @@ MonoBehaviour:
   _panSpeed: 1
   _zoomSpeed: 0.25
   _referenceCamera: {fileID: 1024181840}
-  _mapManager: {fileID: 1125235529}
+  _abstractMap: {fileID: 1125235529}
   _useDegreeMethod: 0
 --- !u!114 &1125235529
 MonoBehaviour:
@@ -1844,6 +1838,10 @@ PrefabInstance:
     - target: {fileID: 223082131773786238, guid: 00f5bf1ff996842fc82384f8f686fda6, type: 3}
       propertyPath: m_RenderMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 223082131773786238, guid: 00f5bf1ff996842fc82384f8f686fda6, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 224178813210018432, guid: 00f5bf1ff996842fc82384f8f686fda6, type: 3}
       propertyPath: m_AnchorMax.y

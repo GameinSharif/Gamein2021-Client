@@ -20,7 +20,7 @@
 		public Camera _referenceCamera;
 
 		[SerializeField]
-		AbstractMap _mapManager;
+		AbstractMap _abstractMap;
 
 		[SerializeField]
 		bool _useDegreeMethod;
@@ -33,6 +33,8 @@
 		private Plane _groundPlane = new Plane(Vector3.up, 0);
 		private bool _dragStartedOnUI = false;
 
+		private MapManager _mapManager;
+
 		void Awake()
 		{
 			if (null == _referenceCamera)
@@ -40,10 +42,12 @@
 				_referenceCamera = GetComponent<Camera>();
 				if (null == _referenceCamera) { Debug.LogErrorFormat("{0}: reference camera not set", this.GetType().Name); }
 			}
-			_mapManager.OnInitialized += () =>
+			_abstractMap.OnInitialized += () =>
 			{
 				_isInitialized = true;
 			};
+
+			_mapManager = FindObjectOfType<MapManager>();
 		}
 
 		public void Update()
@@ -84,16 +88,16 @@
 			scrollDelta = Input.GetAxis("Mouse ScrollWheel");
 			ZoomMapUsingTouchOrMouse(scrollDelta);
 
-
 			//pan keyboard
 			float xMove = Input.GetAxis("Horizontal");
 			float zMove = Input.GetAxis("Vertical");
 
 			PanMapUsingKeyBoard(xMove, zMove);
 
-
 			//pan mouse
 			PanMapUsingTouchOrMouse();
+
+			_mapManager.UpdateMarkersLocation();
 		}
 
 		void HandleTouch()
@@ -129,14 +133,16 @@
 				default:
 					break;
 			}
+
+			_mapManager.UpdateMarkersLocation();
 		}
 
 		void ZoomMapUsingTouchOrMouse(float zoomFactor)
 		{
-			var zoom = Mathf.Max(0.0f, Mathf.Min(_mapManager.Zoom + zoomFactor * _zoomSpeed, 21.0f));
-			if (Math.Abs(zoom - _mapManager.Zoom) > 0.0f)
+			var zoom = Mathf.Max(0.0f, Mathf.Min(_abstractMap.Zoom + zoomFactor * _zoomSpeed, 21.0f));
+			if (Math.Abs(zoom - _abstractMap.Zoom) > 0.0f)
 			{
-				_mapManager.UpdateMap(_mapManager.CenterLatitudeLongitude, zoom);
+				_abstractMap.UpdateMap(_abstractMap.CenterLatitudeLongitude, zoom);
 			}
 		}
 
@@ -148,11 +154,11 @@
 				// Divide it by the tile width in pixels ( 256 in our case)
 				// to get degrees represented by each pixel.
 				// Keyboard offset is in pixels, therefore multiply the factor with the offset to move the center.
-				float factor = _panSpeed * (Conversions.GetTileScaleInDegrees((float)_mapManager.CenterLatitudeLongitude.x, _mapManager.AbsoluteZoom));
+				float factor = _panSpeed * (Conversions.GetTileScaleInDegrees((float)_abstractMap.CenterLatitudeLongitude.x, _abstractMap.AbsoluteZoom));
 
-				var latitudeLongitude = new Vector2d(_mapManager.CenterLatitudeLongitude.x + zMove * factor * 2.0f, _mapManager.CenterLatitudeLongitude.y + xMove * factor * 4.0f);
+				var latitudeLongitude = new Vector2d(_abstractMap.CenterLatitudeLongitude.x + zMove * factor * 2.0f, _abstractMap.CenterLatitudeLongitude.y + xMove * factor * 4.0f);
 
-				_mapManager.UpdateMap(latitudeLongitude, _mapManager.Zoom);
+				_abstractMap.UpdateMap(latitudeLongitude, _abstractMap.Zoom);
 			}
 		}
 
@@ -178,7 +184,7 @@
 				mousePosScreen.z = _referenceCamera.transform.localPosition.y;
 				var pos = _referenceCamera.ScreenToWorldPoint(mousePosScreen);
 
-				var latlongDelta = _mapManager.WorldToGeoPosition(pos);
+				var latlongDelta = _abstractMap.WorldToGeoPosition(pos);
 				Debug.Log("Latitude: " + latlongDelta.x + " Longitude: " + latlongDelta.y);
 			}
 
@@ -211,13 +217,13 @@
 
 					if (Mathf.Abs(offset.x) > 0.0f || Mathf.Abs(offset.z) > 0.0f)
 					{
-						if (null != _mapManager)
+						if (null != _abstractMap)
 						{
-							float factor = _panSpeed * Conversions.GetTileScaleInMeters((float)0, _mapManager.AbsoluteZoom) / _mapManager.UnityTileSize;
+							float factor = _panSpeed * Conversions.GetTileScaleInMeters((float)0, _abstractMap.AbsoluteZoom) / _abstractMap.UnityTileSize;
 							var latlongDelta = Conversions.MetersToLatLon(new Vector2d(offset.x * factor, offset.z * factor));
-							var newLatLong = _mapManager.CenterLatitudeLongitude + latlongDelta;
+							var newLatLong = _abstractMap.CenterLatitudeLongitude + latlongDelta;
 
-							_mapManager.UpdateMap(newLatLong, _mapManager.Zoom);
+							_abstractMap.UpdateMap(newLatLong, _abstractMap.Zoom);
 						}
 					}
 					_origin = _mousePosition;
@@ -265,16 +271,16 @@
 
 					if (Mathf.Abs(offset.x) > 0.0f || Mathf.Abs(offset.z) > 0.0f)
 					{
-						if (null != _mapManager)
+						if (null != _abstractMap)
 						{
 							// Get the number of degrees in a tile at the current zoom level.
 							// Divide it by the tile width in pixels ( 256 in our case)
 							// to get degrees represented by each pixel.
 							// Mouse offset is in pixels, therefore multiply the factor with the offset to move the center.
-							float factor = _panSpeed * Conversions.GetTileScaleInDegrees((float)_mapManager.CenterLatitudeLongitude.x, _mapManager.AbsoluteZoom) / _mapManager.UnityTileSize;
+							float factor = _panSpeed * Conversions.GetTileScaleInDegrees((float)_abstractMap.CenterLatitudeLongitude.x, _abstractMap.AbsoluteZoom) / _abstractMap.UnityTileSize;
 
-							var latitudeLongitude = new Vector2d(_mapManager.CenterLatitudeLongitude.x + offset.z * factor, _mapManager.CenterLatitudeLongitude.y + offset.x * factor);
-							_mapManager.UpdateMap(latitudeLongitude, _mapManager.Zoom);
+							var latitudeLongitude = new Vector2d(_abstractMap.CenterLatitudeLongitude.x + offset.z * factor, _abstractMap.CenterLatitudeLongitude.y + offset.x * factor);
+							_abstractMap.UpdateMap(latitudeLongitude, _abstractMap.Zoom);
 						}
 					}
 					_origin = _mousePosition;
