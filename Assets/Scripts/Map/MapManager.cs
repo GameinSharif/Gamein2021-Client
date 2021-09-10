@@ -10,7 +10,7 @@ public class MapManager : MonoBehaviour
 {
     private AbstractMap _abstractMap;
     private QuadTreeCameraMovement _quadTreeCameraMovement;
-    private List<OnMapMarker> _onMapMarkers = new List<OnMapMarker>();
+    private List<MapUtils.OnMapMarker> _onMapMarkers = new List<MapUtils.OnMapMarker>();
 
     private readonly float[] _possibleZoomAmounts = { 2, 4, 6, 8, 10 };
     private int _currnetZoomAmountIndex = 0;
@@ -27,36 +27,32 @@ public class MapManager : MonoBehaviour
     public List<GameObject> IsMapTypeSelectedGameObjects;
     [Space]
     public GameObject MapAgenetMarkerPrefab;
-    public List<MapAgentMarker> MapAgentMarkers;
-
-    public struct OnMapMarker
-    {
-        public Vector2d Location;
-        public GameObject SpawnedObject;
-
-        public OnMapMarker(Vector2d location, GameObject spawnedObject)
-        {
-            Location = location;
-            SpawnedObject = spawnedObject;
-        }
-    }
+    public List<MapUtils.MapAgentMarker> MapAgentMarkers;
+    [Space]
+    public List<MapUtils.MapLine> MapLines;
 
     private void Awake()
     {
         _abstractMap = FindObjectOfType<AbstractMap>();
-        _quadTreeCameraMovement = FindObjectOfType<QuadTreeCameraMovement>();       
+        _quadTreeCameraMovement = FindObjectOfType<QuadTreeCameraMovement>();
     }
 
     private void Start()
     {
         InitializeMap();
 
-        //SetMapAgentMarker(MapAgentMarker.AgentType.Manufacturer, new Vector2(0, 0));
-        //SnapToLocation(new Vector2(35,50));
+        SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(0, 0));
+        SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(35, 50));
+
+        //ChangeMapAgentType(_onMapMarkers[0], MapUtils.MapAgentMarker.AgentType.Storage);
+
+        SnapToLocation(new Vector2(30,40));
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
     }
+
+    #region Initialize
 
     private void InitializeMap()
     {
@@ -95,6 +91,10 @@ public class MapManager : MonoBehaviour
         IsMapTypeSelectedGameObjects[_currnetMapTypeIndex].SetActive(true);
     }
 
+    #endregion
+
+    #region Zoom
+
     private void SetMapZoom(int index)
     {
         _currnetZoomAmountIndex = index;
@@ -118,11 +118,15 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void SetMapAgentMarker(MapAgentMarker.AgentType agentType, Vector2 location)
+    #endregion
+
+    #region Markers
+
+    public void SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType agentType, Vector2 location)
     {
         Vector2d vector2d = new Vector2d(location.x, location.y);
 
-        foreach (MapAgentMarker mapAgentMarker in MapAgentMarkers)
+        foreach (MapUtils.MapAgentMarker mapAgentMarker in MapAgentMarkers)
         {
             if (mapAgentMarker.MapAgentType == agentType)
             {
@@ -131,14 +135,25 @@ public class MapManager : MonoBehaviour
                 
                 instance.transform.localPosition = _abstractMap.GeoToWorldPosition(vector2d);
                 instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-                _onMapMarkers.Add(new OnMapMarker(vector2d, instance));
+                _onMapMarkers.Add(new MapUtils.OnMapMarker(vector2d, instance));
+            }
+        }
+    }
+
+    public void ChangeMapAgentType(MapUtils.OnMapMarker onMapMarker, MapUtils.MapAgentMarker.AgentType newAgentType)
+    {
+        foreach (MapUtils.MapAgentMarker mapAgentMarker in MapAgentMarkers)
+        {
+            if (mapAgentMarker.MapAgentType == newAgentType)
+            {
+                onMapMarker.SpawnedObject.GetComponent<MaterialSetter>().SetMaterial(mapAgentMarker.MarkerMaterial);
             }
         }
     }
 
     public void UpdateMarkersLocation()
     {
-        foreach (OnMapMarker onMapMarker in _onMapMarkers)
+        foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
         {
             var spawnedObject = onMapMarker.SpawnedObject;
             var location = onMapMarker.Location;
@@ -146,9 +161,17 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region SnapToLocation
+
     public void SnapToLocation(Vector2 location)
     {
         Vector2d vector2d = new Vector2d(location.x, location.y);
         _abstractMap.SetCenterLatitudeLongitude(vector2d);
     }
+
+    #endregion
+
+
 }
