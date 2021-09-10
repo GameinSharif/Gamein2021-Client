@@ -254,12 +254,12 @@ public class LocalizationManager : MonoBehaviour
 
     public static void SetInstance()
     {
-        /*if (Instance == null)
+        if (Instance == null)
         {
             Instance = GameObject.FindObjectOfType<LocalizationManager>();
         }
 
-        RTLTextMeshPro[] rtl = Resources.FindObjectsOfTypeAll<RTLTextMeshPro>();
+        /*RTLTextMeshPro[] rtl = Resources.FindObjectsOfTypeAll<RTLTextMeshPro>();
         Color32 color = new Color32(251, 246, 221, 255);
         foreach (RTLTextMeshPro rTLTextMeshPro in rtl)
         {
