@@ -52,6 +52,7 @@ public class MapManager : MonoBehaviour
         InitializeMap();
 
         //SetMapAgentMarker(MapAgentMarker.AgentType.Manufacturer, new Vector2(0, 0));
+        //SnapToLocation(new Vector2(35,50));
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
@@ -143,5 +144,11 @@ public class MapManager : MonoBehaviour
             var location = onMapMarker.Location;
             spawnedObject.transform.localPosition = _abstractMap.GeoToWorldPosition(location);
         }
+    }
+
+    public void SnapToLocation(Vector2 location)
+    {
+        Vector2d vector2d = new Vector2d(location.x, location.y);
+        _abstractMap.SetCenterLatitudeLongitude(vector2d);
     }
 }
