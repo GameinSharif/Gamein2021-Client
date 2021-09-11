@@ -13,9 +13,8 @@ public class RequestManager : MonoBehaviour
         Instance = this;
     }
 
-    public void SendRequest<T>(RequestTypeConstant requestType, T requestData)
+    public void SendRequest(RequestObject requestObject)
     {
-        var requestObject = new RequestObject<T>(PlayerPrefs.GetInt("TeamID"), requestType, requestData);
         var request = JsonUtility.ToJson(requestObject);
         StartCoroutine(Send(request));
     }
