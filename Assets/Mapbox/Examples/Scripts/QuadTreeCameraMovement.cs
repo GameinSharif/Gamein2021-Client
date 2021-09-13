@@ -97,7 +97,7 @@
 			//pan mouse
 			PanMapUsingTouchOrMouse();
 
-			_mapManager.UpdateMarkersLocation();
+			_mapManager.UpdateOnMapObjects();
 		}
 
 		void HandleTouch()
@@ -134,7 +134,7 @@
 					break;
 			}
 
-			_mapManager.UpdateMarkersLocation();
+			_mapManager.UpdateOnMapObjects();
 		}
 
 		void ZoomMapUsingTouchOrMouse(float zoomFactor)

@@ -11,6 +11,7 @@ public class MapManager : MonoBehaviour
     private AbstractMap _abstractMap;
     private QuadTreeCameraMovement _quadTreeCameraMovement;
     private List<MapUtils.OnMapMarker> _onMapMarkers = new List<MapUtils.OnMapMarker>();
+    private List<MapUtils.OnMapLine> _onMapLines = new List<MapUtils.OnMapLine>();
 
     private readonly float[] _possibleZoomAmounts = { 2, 4, 6, 8, 10 };
     private int _currnetZoomAmountIndex = 0;
@@ -23,12 +24,14 @@ public class MapManager : MonoBehaviour
     private readonly bool _useMipMap = true;
     private readonly ElevationLayerType _elevationLayerType = ElevationLayerType.FlatTerrain;
     private readonly float _spawnScale = 10f;
+    private readonly float _onMapMarkerVerticalDistanceFromMap = 2;
 
     public List<GameObject> IsMapTypeSelectedGameObjects;
     [Space]
     public GameObject MapAgenetMarkerPrefab;
     public List<MapUtils.MapAgentMarker> MapAgentMarkers;
     [Space]
+    public GameObject MapLinePrefab;
     public List<MapUtils.MapLine> MapLines;
 
     private void Awake()
@@ -41,8 +44,10 @@ public class MapManager : MonoBehaviour
     {
         InitializeMap();
 
-        SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(0, 0));
-        SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(35, 50));
+        SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(0, 0), 0);
+        SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(35, 50), 1);
+
+        SetMapLine(MapUtils.MapLine.LineType.StorageToShop, _onMapMarkers[0], _onMapMarkers[1]);
 
         //ChangeMapAgentType(_onMapMarkers[0], MapUtils.MapAgentMarker.AgentType.Storage);
 
@@ -50,6 +55,12 @@ public class MapManager : MonoBehaviour
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
+    }
+
+    public void UpdateOnMapObjects()
+    {
+        UpdateMarkersLocation();
+        UpdateLinesLocation();
     }
 
     #region Initialize
@@ -122,7 +133,7 @@ public class MapManager : MonoBehaviour
 
     #region Markers
 
-    public void SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType agentType, Vector2 location)
+    public void SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType agentType, Vector2 location, int index)
     {
         Vector2d vector2d = new Vector2d(location.x, location.y);
 
@@ -133,9 +144,9 @@ public class MapManager : MonoBehaviour
                 var instance = Instantiate(MapAgenetMarkerPrefab);
                 instance.GetComponent<MaterialSetter>().SetMaterial(mapAgentMarker.MarkerMaterial);
                 
-                instance.transform.localPosition = _abstractMap.GeoToWorldPosition(vector2d);
+                instance.transform.localPosition = _abstractMap.GeoToWorldPosition(vector2d) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);
                 instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-                _onMapMarkers.Add(new MapUtils.OnMapMarker(vector2d, instance));
+                _onMapMarkers.Add(new MapUtils.OnMapMarker(vector2d, instance, mapAgentMarker, index));
             }
         }
     }
@@ -157,7 +168,7 @@ public class MapManager : MonoBehaviour
         {
             var spawnedObject = onMapMarker.SpawnedObject;
             var location = onMapMarker.Location;
-            spawnedObject.transform.localPosition = _abstractMap.GeoToWorldPosition(location);
+            spawnedObject.transform.localPosition = _abstractMap.GeoToWorldPosition(location) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);
         }
     }
 
@@ -173,5 +184,35 @@ public class MapManager : MonoBehaviour
 
     #endregion
 
+    #region Lines
+    
+    public void SetMapLine(MapUtils.MapLine.LineType lineType, MapUtils.OnMapMarker start, MapUtils.OnMapMarker end)
+    {
+        foreach (MapUtils.MapLine mapLine in MapLines)
+        {
+            if (mapLine.MapLineType == lineType)
+            {
+                var instance = Instantiate(MapLinePrefab);
+
+                LineRenderer lineRenderer = instance.GetComponent<LineRenderer>();
+                lineRenderer.SetPosition(0, start.SpawnedObject.transform.position);
+                lineRenderer.SetPosition(1, end.SpawnedObject.transform.position);
+
+                _onMapLines.Add(new MapUtils.OnMapLine(start, end, lineRenderer));
+            }
+        }
+    }
+
+    public void UpdateLinesLocation()
+    {
+        foreach (MapUtils.OnMapLine onMapLine in _onMapLines)
+        {
+            LineRenderer lineRenderer = onMapLine.LineRenderer;
+            lineRenderer.SetPosition(0, onMapLine.Start.SpawnedObject.transform.position);
+            lineRenderer.SetPosition(1, onMapLine.End.SpawnedObject.transform.position);
+        }
+    }
+
+    #endregion
 
 }
