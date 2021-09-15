@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2264302379968471495}
   - component: {fileID: 2264302379968471497}
   - component: {fileID: 5937593297313546568}
+  - component: {fileID: 3677056944577820024}
   m_Layer: 5
   m_Name: ProviderItem
   m_TagString: Untagged
@@ -44,8 +45,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 324.73984, y: -27.906616}
-  m_SizeDelta: {x: 1051.0366, y: 97.5916}
+  m_AnchoredPosition: {x: 97.31711, y: -27.906616}
+  m_SizeDelta: {x: 0, y: 97.5916}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2264302379968471494
 CanvasRenderer:
@@ -98,12 +99,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 8
-    m_Right: 8
+    m_Left: 0
+    m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 50
+  m_ChildAlignment: 3
+  m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -130,6 +131,20 @@ MonoBehaviour:
   providerAverageCost: {fileID: 2264302380969953123}
   providerMinOnRecord: {fileID: 2264302380212674524}
   providerMaxOnRecord: {fileID: 2264302381544050600}
+--- !u!114 &3677056944577820024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2264302379968471493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 0
 --- !u!1 &2264302380022201539
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,7 +157,7 @@ GameObject:
   - component: {fileID: 2264302380022201543}
   - component: {fileID: 2264302380022201540}
   - component: {fileID: 2264302380022201541}
-  - component: {fileID: 7475129576978600450}
+  - component: {fileID: 8199800866314703824}
   m_Layer: 5
   m_Name: Text - Type
   m_TagString: Untagged
@@ -306,7 +321,7 @@ MonoBehaviour:
   LocalizedString:
     key: 
   ValueSetBefore: 0
---- !u!114 &7475129576978600450
+--- !u!114 &8199800866314703824
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -319,9 +334,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
+  m_MinWidth: 240
   m_MinHeight: -1
-  m_PreferredWidth: 40
+  m_PreferredWidth: 240
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -338,7 +353,7 @@ GameObject:
   - component: {fileID: 2264302380140724092}
   - component: {fileID: 2264302380140724093}
   - component: {fileID: 2264302380140724090}
-  - component: {fileID: 4952488156153847806}
+  - component: {fileID: 2431146420824441300}
   m_Layer: 5
   m_Name: Text - Company
   m_TagString: Untagged
@@ -502,7 +517,7 @@ MonoBehaviour:
   LocalizedString:
     key: 
   ValueSetBefore: 0
---- !u!114 &4952488156153847806
+--- !u!114 &2431146420824441300
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -515,9 +530,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
+  m_MinWidth: 240
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 240
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -534,7 +549,7 @@ GameObject:
   - component: {fileID: 2264302380212674527}
   - component: {fileID: 2264302380212674524}
   - component: {fileID: 2264302380212674525}
-  - component: {fileID: 9060997339025389301}
+  - component: {fileID: 7092428401994852674}
   m_Layer: 5
   m_Name: Text - Provider Min on record
   m_TagString: Untagged
@@ -698,7 +713,7 @@ MonoBehaviour:
   LocalizedString:
     key: 
   ValueSetBefore: 0
---- !u!114 &9060997339025389301
+--- !u!114 &7092428401994852674
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -711,9 +726,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 250
+  m_MinWidth: 240
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 240
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -730,7 +745,7 @@ GameObject:
   - component: {fileID: 2264302380916391254}
   - component: {fileID: 2264302380916391255}
   - component: {fileID: 2264302380916391252}
-  - component: {fileID: 6869943438961613779}
+  - component: {fileID: 4684670842676955162}
   m_Layer: 5
   m_Name: Text - Max monthly Cap
   m_TagString: Untagged
@@ -894,7 +909,7 @@ MonoBehaviour:
   LocalizedString:
     key: 
   ValueSetBefore: 0
---- !u!114 &6869943438961613779
+--- !u!114 &4684670842676955162
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -907,9 +922,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 200
+  m_MinWidth: 240
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 240
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -926,7 +941,7 @@ GameObject:
   - component: {fileID: 2264302380969953122}
   - component: {fileID: 2264302380969953123}
   - component: {fileID: 2264302380969953120}
-  - component: {fileID: 4763757451235843370}
+  - component: {fileID: 3917647910995436364}
   m_Layer: 5
   m_Name: Text - Provider Average Cost
   m_TagString: Untagged
@@ -1090,7 +1105,7 @@ MonoBehaviour:
   LocalizedString:
     key: 
   ValueSetBefore: 0
---- !u!114 &4763757451235843370
+--- !u!114 &3917647910995436364
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1103,9 +1118,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 250
+  m_MinWidth: 240
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 240
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -1122,7 +1137,7 @@ GameObject:
   - component: {fileID: 2264302381078614341}
   - component: {fileID: 2264302381078614338}
   - component: {fileID: 2264302381078614339}
-  - component: {fileID: 2651156388732470718}
+  - component: {fileID: 5222048573545070029}
   m_Layer: 5
   m_Name: Text - No
   m_TagString: Untagged
@@ -1286,7 +1301,7 @@ MonoBehaviour:
   LocalizedString:
     key: 
   ValueSetBefore: 0
---- !u!114 &2651156388732470718
+--- !u!114 &5222048573545070029
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1299,9 +1314,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
+  m_MinWidth: 100
   m_MinHeight: -1
-  m_PreferredWidth: 30
+  m_PreferredWidth: 100
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -1318,7 +1333,7 @@ GameObject:
   - component: {fileID: 2264302381217034583}
   - component: {fileID: 2264302381217034580}
   - component: {fileID: 2264302381217034581}
-  - component: {fileID: 7261743619634732714}
+  - component: {fileID: 7759991215022203816}
   m_Layer: 0
   m_Name: SendOfferButton
   m_TagString: Untagged
@@ -1440,7 +1455,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7261743619634732714
+--- !u!114 &7759991215022203816
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1453,9 +1468,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 100
+  m_MinWidth: 200
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 200
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -1647,7 +1662,7 @@ GameObject:
   - component: {fileID: 2264302381544050603}
   - component: {fileID: 2264302381544050600}
   - component: {fileID: 2264302381544050601}
-  - component: {fileID: 3982049840291246068}
+  - component: {fileID: 2526805091695243706}
   m_Layer: 5
   m_Name: Text - Provider Max on record
   m_TagString: Untagged
@@ -1811,7 +1826,7 @@ MonoBehaviour:
   LocalizedString:
     key: 
   ValueSetBefore: 0
---- !u!114 &3982049840291246068
+--- !u!114 &2526805091695243706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1824,9 +1839,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 250
+  m_MinWidth: 240
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 240
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
