@@ -11,6 +11,8 @@ public class Offer
     public string LEA { get; }
     public string Deadline { get; }
     public Frequency Frequency { get; }
+    public State State { get; }
+
 
     public Offer(
         string company,
@@ -21,7 +23,8 @@ public class Offer
         string EEA,
         string LEA,
         string deadline,
-        Frequency frequency)
+        Frequency frequency,
+        State state)
     {
         Company = company;
         Type = type;
@@ -32,10 +35,16 @@ public class Offer
         this.LEA = LEA;
         Deadline = deadline;
         Frequency = frequency;
+        State = state;
     }
 }
 
 public enum Frequency
 {
     ONCE, MONTHLY
+}
+
+public enum State
+{
+    INPROGRESS, DEAL, CLOSED
 }
