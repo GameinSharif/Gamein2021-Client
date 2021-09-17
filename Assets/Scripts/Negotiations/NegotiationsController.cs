@@ -44,13 +44,25 @@ public class NegotiationsController : MonoBehaviour
         Offer offer3 = new Offer("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
             "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
         AddToList(offer3);
+        
+        Offer offer4 = new Offer("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
+            "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
+        AddToList(offer4);
+        
+        Offer offer5 = new Offer("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
+            "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
+        AddToList(offer5);
+        
+        Offer offer6 = new Offer("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
+            "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
+        AddToList(offer6);
     }
     
     public void AddToList(Offer offer)
     {
         var createdItem = Instantiate(negotiationOfferItemPrefab, scrollPanel);
         var controller = createdItem.GetComponent<NegotiationOfferItemController>();
-        controller.SetInfo(scrollPanel.transform.childCount + 1, offer);
+        controller.SetInfo(scrollPanel.transform.childCount, offer);
         RectTransform createdItemRectTransform = createdItem.GetComponent<RectTransform>();
         float height = -123.3697f;
         createdItemRectTransform.anchoredPosition = new Vector2(0, (float) scrollPanel.transform.childCount * height);
