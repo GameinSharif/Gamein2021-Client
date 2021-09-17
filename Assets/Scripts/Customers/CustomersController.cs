@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,16 @@ public class CustomersController : MonoBehaviour
         SetActivePopup(false);
     }
 
+    private void OnEnable()
+    {
+        EventManager.Instance.OnGetOffersResponseEvent += OnGetOffersResponseReceived;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnGetOffersResponseEvent -= OnGetOffersResponseReceived;
+    }
+
     public void AddToList(Offer offer)
     {
         var createdItem = Instantiate(offerItemPrefab, scrollPanel);
@@ -47,6 +58,7 @@ public class CustomersController : MonoBehaviour
     {
         //TODO send offer to server
         Debug.Log("Place offer clicked");
+        Debug.Log(JsonUtility.ToJson(new CustomDateTime(date1.Value)));
     }
 
     public void OnNewOfferButtonClicked()
@@ -62,5 +74,15 @@ public class CustomersController : MonoBehaviour
     private void SetActivePopup(bool value)
     {
         newOfferPopUp.SetActive(value);
+    }
+
+    public void OnRefreshButtonClicked()
+    {
+        RequestManager.Instance.SendRequest(new GetOffersRequest(RequestTypeConstant.GET_OFFERS));
+    }
+
+    public void OnGetOffersResponseReceived(GetOffersResponse response)
+    {
+        //TODO
     }
 }
