@@ -17,6 +17,8 @@ public class NegotiationOfferItemController : MonoBehaviour
     public RTLTextMeshPro frequency;
     public RTLTextMeshPro state;
 
+    private Offer offer;
+
     public void SetInfo(
         int no,
         string company,
@@ -43,6 +45,7 @@ public class NegotiationOfferItemController : MonoBehaviour
 
     public void SetInfo(int no, Offer offer)
     {
+        this.offer = offer;
         SetInfo(
             no: no,
             company: offer.Company,
@@ -96,7 +99,8 @@ public class NegotiationOfferItemController : MonoBehaviour
     
     public void OnSwitchToThisOfferButtonClicked()
     {
-        // TODO
+        var negotiationsController = FindObjectOfType<NegotiationsController>();
+        negotiationsController.ShowSelectedOffer(offer);
     }
 
     public void OnRejectButtonClicked()
