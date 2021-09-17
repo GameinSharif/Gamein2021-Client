@@ -10,16 +10,16 @@ public class CustomersController : MonoBehaviour
     public GameObject offerItemPrefab;
     public Transform scrollPanel;
 
-    public TMP_InputField inputField1;
-    public TMP_InputField inputField2;
+    public TMP_InputField volumeInput;
+    public TMP_InputField costPerUnitInput;
     public TMP_InputField inputField3;
     public TMP_Dropdown dropdown;
 
     public GameObject newOfferPopUp;
 
-    public DatePicker date1;
-    public DatePicker date2;
-    public DatePicker date3;
+    public DatePicker eea;
+    public DatePicker lea;
+    public DatePicker deadline;
 
     public RTLTextMeshPro[] dates;
 
@@ -32,11 +32,13 @@ public class CustomersController : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnGetOffersResponseEvent += OnGetOffersResponseReceived;
+        EventManager.Instance.OnNewOfferResponseEvent += OnNewOfferResponseReceived;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnGetOffersResponseEvent -= OnGetOffersResponseReceived;
+        EventManager.Instance.OnNewOfferResponseEvent -= OnNewOfferResponseReceived;
     }
 
     public void AddToList(Offer offer)
@@ -56,9 +58,28 @@ public class CustomersController : MonoBehaviour
 
     public void OnPlaceOfferClicked()
     {
-        //TODO send offer to server
-        Debug.Log("Place offer clicked");
-        Debug.Log(JsonUtility.ToJson(new CustomDateTime(date1.Value)));
+        int volume = Convert.ToInt32(volumeInput.text);
+        int costPerUnit = Convert.ToInt32(costPerUnitInput.text);
+
+        if (volume < 0 || costPerUnit < 0)
+        {
+            //TODO show error
+            Debug.Log("Negative input");
+            return;
+        }
+
+        
+        var offer = new NewOfferTransitModel(
+            type: dropdown.options[dropdown.value].text,
+            volume: volume,
+            costPerUnit: costPerUnit,
+            earliestExpectedArrival: new CustomDateTime(eea.Value),
+            latestExpectedArrival: new CustomDateTime(lea.Value),
+            offerDeadline: new CustomDateTime(deadline.Value)
+        );
+        var request = new NewOfferRequest(RequestTypeConstant.NEW_OFFER, offer);
+        
+        RequestManager.Instance.SendRequest(request);
     }
 
     public void OnNewOfferButtonClicked()
@@ -83,6 +104,11 @@ public class CustomersController : MonoBehaviour
 
     public void OnGetOffersResponseReceived(GetOffersResponse response)
     {
-        //TODO
+        //TODO refresh the list
+    }
+
+    public void OnNewOfferResponseReceived(NewOfferResponse response)
+    {
+        //TODO show visual feedback
     }
 }
