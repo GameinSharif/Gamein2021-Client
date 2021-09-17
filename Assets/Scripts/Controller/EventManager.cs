@@ -11,6 +11,22 @@ public class EventManager : MonoBehaviour
         Instance = this;
     }
 
+    private void OnEnable()
+    {
+        OnConnectionResponseEvent += EncryptManager.OnConnectionResponse;
+    }
+
+    private void OnDisable()
+    {
+        OnConnectionResponseEvent -= EncryptManager.OnConnectionResponse;
+    }
+
+    public event Action<ConnectionResponse> OnConnectionResponseEvent;
+    public void OnConnectionResponse(ConnectionResponse connectionResponse)
+    {
+        OnConnectionResponseEvent?.Invoke(connectionResponse);
+    }
+
     public event Action<LoginResponse> OnLoginResponseEvent;  
     public void OnLoginResponse(LoginResponse loginResponse)
     {

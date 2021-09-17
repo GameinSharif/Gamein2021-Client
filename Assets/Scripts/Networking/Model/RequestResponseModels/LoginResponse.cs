@@ -1,7 +1,8 @@
 ﻿using System;
 
 [Serializable]
-public class LoginResponse
+public class LoginResponse : ResponseObject
 {
-    public int PlayerId;
+    public int playerId;
+    public string result;
 }
