@@ -10,9 +10,11 @@ public class MapUtils
     {
         public enum AgentType
         {
-            Manufacturer,
-            Storage,
-            Shop,
+            Factory,
+            Supplier,
+            GameinCustomer,
+            DistributionCenter,
+            RecycleCenter
         }
 
         public AgentType MapAgentType;
@@ -40,7 +42,7 @@ public class MapUtils
     {
         public enum LineType
         {
-            StorageToShop
+            FactoryToFactory
         }
 
         public LineType MapLineType;
