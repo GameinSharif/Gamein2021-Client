@@ -1,23 +1,23 @@
 using System;
 
-public class Offer
+public class OfferViewModel
 {
     public string Company { get; }
     public string Type { get; }
     public int Volume { get; }
-    public double CostPerUnit { get; }
-    public double TotalCost { get; }
+    public int CostPerUnit { get; }
+    public int TotalCost { get; }
     public string EEA { get; }
     public string LEA { get; }
     public string Deadline { get; }
     public Frequency Frequency { get; }
 
-    public Offer(
+    public OfferViewModel(
         string company,
         string type,
         int volume,
-        double costPerUnit,
-        double total,
+        int costPerUnit,
+        int total,
         string EEA,
         string LEA,
         string deadline,
@@ -32,6 +32,21 @@ public class Offer
         this.LEA = LEA;
         Deadline = deadline;
         Frequency = frequency;
+    }
+
+    public OfferViewModel(GetOffersTransitModel transitModel)
+    {
+        Company = transitModel.teamName;
+        Type = transitModel.type;
+        Volume = transitModel.volume;
+        CostPerUnit = transitModel.costPerUnit;
+        TotalCost = CostPerUnit * Volume;
+        EEA = transitModel.earliestExpectedArrival.ToString();
+        LEA = transitModel.latestExpectedArrival.ToString();
+        Deadline = transitModel.offerDeadline.ToString();
+        
+        //TODO change default value
+        Frequency = Frequency.ONCE;
     }
 }
 

@@ -41,19 +41,19 @@ public class OfferItemController : MonoBehaviour
         this.frequency.text = frequency;
     }
 
-    public void SetInfo(int no, Offer offer)
+    public void SetInfo(int no, OfferViewModel offerViewModel)
     {
         SetInfo(
             no: no,
-            company: offer.Company,
-            type: offer.Type,
-            volume: offer.Volume.ToString(),
-            costPerUnit: offer.CostPerUnit.ToString(),
-            total: offer.TotalCost.ToString(),
-            EEA: offer.EEA,
-            LEA: offer.LEA,
-            deadline: offer.Deadline,
-            frequency: offer.Frequency.ToString()
+            company: offerViewModel.Company,
+            type: offerViewModel.Type,
+            volume: offerViewModel.Volume.ToString(),
+            costPerUnit: offerViewModel.CostPerUnit.ToString(),
+            total: offerViewModel.TotalCost.ToString(),
+            EEA: offerViewModel.EEA,
+            LEA: offerViewModel.LEA,
+            deadline: offerViewModel.Deadline,
+            frequency: offerViewModel.Frequency.ToString()
         );
     }
 
