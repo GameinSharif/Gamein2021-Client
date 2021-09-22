@@ -22,6 +22,7 @@ public class Localize : MonoBehaviour
         Font,
         FontAsset,
         GridLayoutGroup,
+        HorizontalOrVerticalLayoutGroup,
         Position2D
     }
 
@@ -32,6 +33,7 @@ public class Localize : MonoBehaviour
     [HideInInspector] public Font[] Fonts;
     [HideInInspector] public TMP_FontAsset[] FontAssets;
     [HideInInspector] public GridLayoutStartCorner StartCorner;
+    [HideInInspector] public bool ReverseArrangement = true;
     [HideInInspector] public Vector2[] Positions;
     [HideInInspector] public LocalizationManager.Outline Outline;
     [HideInInspector] public bool FixedFontAsset = false;
@@ -49,7 +51,7 @@ public class Localize : MonoBehaviour
 
     public void ApplyLocalization(int currentLanguageIndex, bool editMode)
     {
-        if (ValueSetBefore)
+        if (ValueSetBefore && !editMode)
         {
             return;
         }
@@ -78,6 +80,17 @@ public class Localize : MonoBehaviour
                 break;
             case TargetComponent.GridLayoutGroup:
                 SetGridLayoutStartCorner(currentLanguageIndex);
+                break;
+            case TargetComponent.HorizontalOrVerticalLayoutGroup:
+                HorizontalOrVerticalLayoutGroup horizontalOrVerticalLayoutGroup = GetComponent<HorizontalOrVerticalLayoutGroup>();
+                if ((LocalizationManager.LocalizedLanguage)currentLanguageIndex == LocalizationManager.LocalizedLanguage.Farsi && ReverseArrangement)
+                {
+                    horizontalOrVerticalLayoutGroup.reverseArrangement = true;
+                }
+                else
+                {
+                    horizontalOrVerticalLayoutGroup.reverseArrangement = false;
+                }
                 break;
             case TargetComponent.Position2D:
                 gameObject.transform.localPosition = Positions[currentLanguageIndex];
