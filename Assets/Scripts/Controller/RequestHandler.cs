@@ -16,6 +16,14 @@ public class RequestHandler
                 LoginResponse loginResponseObject = JsonUtility.FromJson<LoginResponse>(responseJson);
                 EventManager.Instance.OnLoginResponse(loginResponseObject);
                 break;
+            case ResponseTypeConstant.NEW_OFFER:
+                NewOfferResponse newOfferResponse = JsonUtility.FromJson<NewOfferResponse>(responseJson);
+                EventManager.Instance.OnNewOfferResponse(newOfferResponse);
+                break;
+            case ResponseTypeConstant.GET_OFFERS:
+                GetOffersResponse getOffersResponse = JsonUtility.FromJson<GetOffersResponse>(responseJson);
+                EventManager.Instance.OnGetOffersResponse(getOffersResponse);
+                break;
         }
     }
 }
