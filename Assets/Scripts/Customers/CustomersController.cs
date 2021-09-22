@@ -41,11 +41,11 @@ public class CustomersController : MonoBehaviour
         EventManager.Instance.OnNewOfferResponseEvent -= OnNewOfferResponseReceived;
     }
 
-    public void AddToList(Offer offer)
+    public void AddToList(OfferViewModel offerViewModel)
     {
         var createdItem = Instantiate(offerItemPrefab, scrollPanel);
         var controller = createdItem.GetComponent<OfferItemController>();
-        controller.SetInfo(scrollPanel.transform.childCount + 1, offer);
+        controller.SetInfo(scrollPanel.transform.childCount + 1, offerViewModel);
     }
 
     private void DestroyAllChildrenInScrollPanel()

@@ -11,6 +11,11 @@ public class CustomDateTime
         this.date = new CustomDate(dateTime.Year, dateTime.Month, dateTime.Day);
         this.time = new CustomTime(dateTime.Hour, dateTime.Minute, dateTime.Second, dateTime.Millisecond * 1_000_000);
     }
+
+    public override string ToString()
+    {
+        return date.day.ToString().PadLeft(2, '0') + "/" + date.month.ToString().PadLeft(2, '0') + "/" + date.year.ToString().PadLeft(4, '0');
+    }
 }
 
 [Serializable]
