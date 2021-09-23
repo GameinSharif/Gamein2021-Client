@@ -19,9 +19,10 @@ public class RFQUtils
 
     public class ContractModel
     {
-        public int index;
+        public int contractIndex;
         public int gameinCustomerIndex;
-        public string productName;
+        public int categoryIndex;
+        public int productIndex;
         public ContractType contractType;
         public List<ContractDetail> contractDetails;
     }
