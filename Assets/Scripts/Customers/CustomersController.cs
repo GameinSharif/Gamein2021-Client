@@ -20,9 +20,7 @@ public class CustomersController : MonoBehaviour
     public DatePicker eea;
     public DatePicker lea;
     public DatePicker deadline;
-
-    public RTLTextMeshPro[] dates;
-
+    
     void Awake()
     {
         // DestroyAllChildrenInScrollPanel();

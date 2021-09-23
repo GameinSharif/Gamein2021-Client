@@ -23,9 +23,7 @@ public class ProvidersController : MonoBehaviour
     public DatePicker date1;
     public DatePicker date2;
     public DatePicker date3;
-    public RTLTextMeshPro[] dates;
 
-    
     private void Awake()
     {
         SetOfferPopUpActive(false);
