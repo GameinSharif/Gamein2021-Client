@@ -11,6 +11,8 @@ public class OfferViewModel
     public string LEA { get; }
     public string Deadline { get; }
     public Frequency Frequency { get; }
+    public State State { get; }
+
 
     public OfferViewModel(
         string company,
@@ -21,7 +23,8 @@ public class OfferViewModel
         string EEA,
         string LEA,
         string deadline,
-        Frequency frequency)
+        Frequency frequency,
+        State state)
     {
         Company = company;
         Type = type;
@@ -32,6 +35,7 @@ public class OfferViewModel
         this.LEA = LEA;
         Deadline = deadline;
         Frequency = frequency;
+        State = state;
     }
 
     public OfferViewModel(GetOffersTransitModel transitModel)
@@ -53,4 +57,9 @@ public class OfferViewModel
 public enum Frequency
 {
     ONCE, MONTHLY
+}
+
+public enum State
+{
+    INPROGRESS, DEAL, CLOSED
 }
