@@ -26,15 +26,36 @@ public class ProvidersController : MonoBehaviour
 
     private void Awake()
     {
+        DestroyAllChildrenInScrollPanel();
         SetOfferPopUpActive(false);
         SetProviderPopUpActive(false);
+        testFunc();
     }
 
+    private void testFunc()
+    {
+        Provider provider = new Provider("abck0", "T2", 500, 2.5,
+            1.2, 5);
+        AddToList(provider);
+        
+        Provider provider2 = new Provider("lefwN", "T2", 500, 2.5,
+            1.2, 5);
+        AddToList(provider2);
+        
+        Provider provider3 = new Provider("KNCjascnkivehq", "T2", 500, 2.5,
+            1.2, 5);
+        AddToList(provider3);
+    }
+    
     public void AddToList(Provider provider)
     {
         var createdItem = Instantiate(providerItemPrefab, scrollPanel);
         var controller = createdItem.GetComponent<ProviderItemController>();
-        controller.SetInfo(scrollPanel.transform.childCount + 1, provider);
+        controller.SetInfo(scrollPanel.transform.childCount, provider);
+        RectTransform createdItemRectTransform = createdItem.GetComponent<RectTransform>();
+        float height = -97.5916f;
+        createdItemRectTransform.anchoredPosition = new Vector2(0, (float) scrollPanel.transform.childCount * height);
+        createdItem.gameObject.SetActive(true);
     }
 
     private void DestroyAllChildrenInScrollPanel()
