@@ -33,32 +33,32 @@ public class NegotiationsController : MonoBehaviour
 
     public void TestFunc()
     {
-        Offer offer = new Offer("test", "T3", 2000, 5, 10000, "09/11/2021",
+        OfferViewModel offer = new OfferViewModel("test", "T3", 2000, 5, 10000, "09/11/2021",
             "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.INPROGRESS);
         AddToList(offer);
         
-        Offer offer2 = new Offer("bhkbkk", "T32", 500, 5, 10000, "09/11/2021",
+        OfferViewModel offer2 = new OfferViewModel("bhkbkk", "T32", 500, 5, 10000, "09/11/2021",
             "09/12/2021", "20/11/2021", Frequency.ONCE, State.INPROGRESS);
         AddToList(offer2);
         
-        Offer offer3 = new Offer("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
+        OfferViewModel offer3 = new OfferViewModel("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
             "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
         AddToList(offer3);
         
-        Offer offer4 = new Offer("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
+        OfferViewModel offer4 = new OfferViewModel("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
             "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
         AddToList(offer4);
         
-        Offer offer5 = new Offer("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
+        OfferViewModel offer5 = new OfferViewModel("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
             "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
         AddToList(offer5);
         
-        Offer offer6 = new Offer("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
+        OfferViewModel offer6 = new OfferViewModel("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
             "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
         AddToList(offer6);
     }
     
-    public void AddToList(Offer offer)
+    public void AddToList(OfferViewModel offer)
     {
         var createdItem = Instantiate(negotiationOfferItemPrefab, scrollPanel);
         var controller = createdItem.GetComponent<NegotiationOfferItemController>();
@@ -77,7 +77,7 @@ public class NegotiationsController : MonoBehaviour
         }
     }
     
-    public void ShowSelectedOffer(Offer offer)
+    public void ShowSelectedOffer(OfferViewModel offer)
     {
         DestroySelectedOfferInPanel();
         var createdItem = Instantiate(negotiationSelectedOfferItemPrefab, offerPanel);
