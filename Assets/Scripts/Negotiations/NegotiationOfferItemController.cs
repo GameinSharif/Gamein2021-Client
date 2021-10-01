@@ -17,7 +17,7 @@ public class NegotiationOfferItemController : MonoBehaviour
     public RTLTextMeshPro frequency;
     public RTLTextMeshPro state;
 
-    private Offer offer;
+    private OfferViewModel offer;
 
     public void SetInfo(
         int no,
@@ -43,7 +43,7 @@ public class NegotiationOfferItemController : MonoBehaviour
         this.state.text = state;
     }
 
-    public void SetInfo(int no, Offer offer)
+    public void SetInfo(int no, OfferViewModel offer)
     {
         this.offer = offer;
         SetInfo(
@@ -82,7 +82,7 @@ public class NegotiationOfferItemController : MonoBehaviour
         this.frequency.text = frequency;
     }
     
-    public void SetInfo(Offer offer)
+    public void SetInfo(OfferViewModel offer)
     {
         SetInfo(
             company: offer.Company,
