@@ -18,6 +18,7 @@ public class ChatController : MonoBehaviour
     public TMP_InputField inputField;
     public RTLTextMeshPro teamName;
     public Image teamAvatar;
+    public ScrollRect chatScrollViewScrollRect;
 
     private void Awake()
     {
@@ -49,7 +50,8 @@ public class ChatController : MonoBehaviour
         }
         poolingSystem.Add(messageData);
         
-        //TODO somehow fix vertical layout bug
+        Canvas.ForceUpdateCanvases();
+        chatScrollViewScrollRect.verticalNormalizedPosition = 0f;
     }
 
     public void OnSendMessageClicked()
