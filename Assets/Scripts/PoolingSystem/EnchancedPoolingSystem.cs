@@ -14,7 +14,6 @@ public class EnhancedPoolingSystem<T>
 
     public EnhancedPoolingSystem(Transform parent, GameObject[] prefabs, Action<GameObject, int, int, T> initializerAction, int capacityPerPrefab)
     {
-        Debug.Log("In constructor");
         _parent = parent;
         _prefabs = prefabs;
         _initializerAction = initializerAction;
@@ -31,8 +30,6 @@ public class EnhancedPoolingSystem<T>
         {
             UnityEngine.Object.Destroy(child.gameObject);
         }
-
-        Debug.Log("Deleted All");
     }
 
     private void Initialize(int capacityPerPrefab)
@@ -42,8 +39,9 @@ public class EnhancedPoolingSystem<T>
             _objectsOfPrefab[i] = new List<GameObject>(capacityPerPrefab);
             for (int j = 0; j < capacityPerPrefab; j++)
             {
-                _objectsOfPrefab[i].Add( UnityEngine.Object.Instantiate(_prefabs[i], _parent));
-                _objectsOfPrefab[i][j].SetActive(false);
+                var gameObject = UnityEngine.Object.Instantiate(_prefabs[i], _parent);
+                _objectsOfPrefab[i].Add(gameObject);
+                gameObject.SetActive(false);
             }
         }
     }
@@ -66,13 +64,13 @@ public class EnhancedPoolingSystem<T>
     public void Add(int indexOfPrefab, int indexInParent, T data)
     {
         indexInParent = indexInParent > ActiveCount ? ActiveCount : indexInParent;
-        
+
         var gameObject = GetAvailableGameObjectOfIndex(indexOfPrefab);
         
         _initializerAction.Invoke(gameObject, indexOfPrefab, indexInParent, data);
-        
-        gameObject.transform.SetSiblingIndex(indexInParent);
+
         gameObject.SetActive(true);
+        gameObject.transform.SetSiblingIndex(indexInParent);
         ActiveCount++;
     }
 
@@ -102,9 +100,9 @@ public class EnhancedPoolingSystem<T>
 
     public void RemoveAll()
     {
-        foreach (GameObject child in _parent)
+        foreach (Transform child in _parent)
         {
-            child.SetActive(false);
+            child.gameObject.SetActive(false);
         }
 
         ActiveCount = 0;

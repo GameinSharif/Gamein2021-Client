@@ -8,9 +8,14 @@ using UnityEngine.UI;
 
 public class ChatPageController : MonoBehaviour
 {
-    private EnhancedPoolingSystem<MessageData> _poolingSystem;
 
-    public int MAX_MESSAGES;
+    public static ChatPageController Instance;
+
+    private const int MAX_MESSAGES = 20;
+    private EnhancedPoolingSystem<MessageData> _poolingSystem;
+    private ChatData _chatData;
+
+    public GameObject chatPage;
     public Transform chatScrollPanel;
     public GameObject myMessagePrefab;
     public GameObject theirMessagePrefab;
@@ -21,6 +26,7 @@ public class ChatPageController : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         _poolingSystem = new EnhancedPoolingSystem<MessageData>(chatScrollPanel, new[]{myMessagePrefab, theirMessagePrefab}, MessageInitializer, MAX_MESSAGES);
     }
 
@@ -48,6 +54,11 @@ public class ChatPageController : MonoBehaviour
         }
         _poolingSystem.Add(messageData.IsFromMe ? 0 : 1, messageData);
 
+        RebuildLayout();
+    }
+
+    private void RebuildLayout()
+    {
         Canvas.ForceUpdateCanvases();
         chatScrollViewScrollRect.verticalNormalizedPosition = 0.0f;
         LayoutRebuilder.ForceRebuildLayoutImmediate(chatScrollPanel as RectTransform);
@@ -73,6 +84,36 @@ public class ChatPageController : MonoBehaviour
     public void OnMessageReceived(MessageData messageData)
     {
         //TODO receive message from server and show to user
+        //if the new message is from this chat:
         // AddMessageToChat(messageData);
+    }
+
+    public void LoadChat(ChatData chatData)
+    {
+        chatPage.SetActive(true); // do not delete this; if scroll panel is not active, all children are not active as well and pooling system won't work 
+        
+        _chatData = chatData;
+        teamName.text = chatData.TeamName;
+        //TODO set avatar
+        
+        _poolingSystem.RemoveAll();
+        foreach (var messageData in chatData.Messagas)
+        {
+            _poolingSystem.Add(messageData.IsFromMe ? 0 : 1, messageData);
+        }
+        
+        RebuildLayout();
+        SetOpen(true);
+    }
+
+    public void OnBackButtonPressed()
+    {
+        SetOpen(false);
+    }
+
+    private void SetOpen(bool value)
+    {
+        //TODO show animation
+        chatPage.SetActive(value);
     }
 }
