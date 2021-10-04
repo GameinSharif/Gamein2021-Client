@@ -5,16 +5,15 @@ using RTLTMPro;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = System.Random;
 
-public class ChatController : MonoBehaviour
+public class ChatPageController : MonoBehaviour
 {
+    private EnhancedPoolingSystem<MessageData> _poolingSystem;
 
-    public static readonly int MAX_MESSAGES = 50; 
-    
-    private PoolingSystem<MessageData> poolingSystem;
+    public int MAX_MESSAGES;
     public Transform chatScrollPanel;
-    public GameObject messagePrefab;
+    public GameObject myMessagePrefab;
+    public GameObject theirMessagePrefab;
     public TMP_InputField inputField;
     public RTLTextMeshPro teamName;
     public Image teamAvatar;
@@ -22,7 +21,7 @@ public class ChatController : MonoBehaviour
 
     private void Awake()
     {
-        poolingSystem = new PoolingSystem<MessageData>(chatScrollPanel, messagePrefab, MessageInitializer, MAX_MESSAGES);
+        _poolingSystem = new EnhancedPoolingSystem<MessageData>(chatScrollPanel, new[]{myMessagePrefab, theirMessagePrefab}, MessageInitializer, MAX_MESSAGES);
     }
 
     private void OnEnable()
@@ -35,23 +34,23 @@ public class ChatController : MonoBehaviour
         //TODO add event handling action
     }
 
-    private void MessageInitializer(GameObject theGameObject, int index, MessageData messageData)
+    private void MessageInitializer(GameObject theGameObject, int indexOfPrefab, int indexInParent, MessageData messageData)
     {
         var controller = theGameObject.GetComponent<MessageController>();
         controller.SetText(messageData.Text);
-        controller.IsFromMe = messageData.IsFromMe;
     }
 
     private void AddMessageToChat(MessageData messageData)
     {
-        if (poolingSystem.ActiveCount >= MAX_MESSAGES)
+        if (_poolingSystem.ActiveCount >= MAX_MESSAGES)
         {
-            poolingSystem.Remove(0);
+            _poolingSystem.Remove(0);
         }
-        poolingSystem.Add(messageData);
-        
+        _poolingSystem.Add(messageData.IsFromMe ? 0 : 1, messageData);
+
         Canvas.ForceUpdateCanvases();
-        chatScrollViewScrollRect.verticalNormalizedPosition = 0f;
+        chatScrollViewScrollRect.verticalNormalizedPosition = 0.0f;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(chatScrollPanel as RectTransform);
     }
 
     public void OnSendMessageClicked()
@@ -67,6 +66,8 @@ public class ChatController : MonoBehaviour
         AddMessageToChat(new MessageData("wow! that is amazing :) ", false, null));
         
         inputField.text = "";
+        inputField.Select();
+        inputField.ActivateInputField();
     }
 
     public void OnMessageReceived(MessageData messageData)
