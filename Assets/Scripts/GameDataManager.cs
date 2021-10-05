@@ -20,8 +20,6 @@ public class GameDataManager : MonoBehaviour
         GameinCustomers = getGameDataResponse.gameinCustomers;
         Products = getGameDataResponse.products;
 
-        Debug.Log(Products.Count);
-
         GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
     }
 }

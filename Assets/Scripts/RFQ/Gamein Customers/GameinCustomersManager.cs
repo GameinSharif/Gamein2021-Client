@@ -39,7 +39,7 @@ public class GameinCustomersManager : MonoBehaviour
     {
         foreach (GameObject gameObject in _spawnedObjects)
         {
-            if (!gameObject.activeInHierarchy)
+            if (!gameObject.activeSelf)
             {
                 return gameObject;
             }
