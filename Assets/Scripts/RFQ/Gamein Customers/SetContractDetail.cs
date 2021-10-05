@@ -17,7 +17,7 @@ public class SetContractDetail : MonoBehaviour
     {
         ContractData = contractData;
 
-        RowNumberTxt.text = index.ToString();
+        RowNumberTxt.text = (index + 1).ToString();
         GameinCustomerNameTxt.text = contractData.gameinCustomer.name;
         ProductNameTxt.text = GameDataManager.Instance.Products[contractData.productId].name;
         ContractTypeLocalize.SetKey("contract_type_" + contractData.contractType.ToString().ToLower());

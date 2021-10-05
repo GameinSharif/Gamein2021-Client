@@ -305,6 +305,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -480,6 +481,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -835,6 +837,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -1040,7 +1043,7 @@ GameObject:
   - component: {fileID: 1027159165127275999}
   - component: {fileID: 5818942300202681059}
   - component: {fileID: 1047185349448590314}
-  - component: {fileID: 3303772805491513768}
+  - component: {fileID: 7935562827762424528}
   m_Layer: 5
   m_Name: Username InputField
   m_TagString: Untagged
@@ -1106,7 +1109,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3303772805491513768
+--- !u!114 &7935562827762424528
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1115,7 +1118,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6931618526829801725}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0af62fc5d31e12499310ecac3fc822e, type: 3}
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -1154,17 +1157,17 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 0
+  m_CharacterLimit: 20
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -1197,7 +1200,7 @@ MonoBehaviour:
   m_CaretWidth: 1
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 0}
+  m_GlobalFontAsset: {fileID: 11400000, guid: 36c42da29c16f2741af97fb94637803e, type: 2}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
@@ -1370,6 +1373,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -1597,6 +1601,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -1617,7 +1622,7 @@ GameObject:
   - component: {fileID: 8305499709895240762}
   - component: {fileID: 8305499709895240760}
   - component: {fileID: 8305499709895240763}
-  - component: {fileID: 8305499709895240761}
+  - component: {fileID: 3841942960647907230}
   m_Layer: 5
   m_Name: Password InputField
   m_TagString: Untagged
@@ -1683,7 +1688,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8305499709895240761
+--- !u!114 &3841942960647907230
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1692,7 +1697,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8305499709895240709}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0af62fc5d31e12499310ecac3fc822e, type: 3}
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -1723,7 +1728,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 8305499709895240763}
+  m_TargetGraphic: {fileID: 1047185349448590314}
   m_TextViewport: {fileID: 0}
   m_TextComponent: {fileID: 8305499710415838612}
   m_Placeholder: {fileID: 8305499708636702684}
@@ -1731,17 +1736,17 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 0
+  m_CharacterLimit: 20
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -1774,7 +1779,7 @@ MonoBehaviour:
   m_CaretWidth: 1
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 0}
+  m_GlobalFontAsset: {fileID: 11400000, guid: 36c42da29c16f2741af97fb94637803e, type: 2}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1

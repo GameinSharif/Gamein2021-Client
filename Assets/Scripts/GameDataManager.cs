@@ -6,8 +6,8 @@ public class GameDataManager : MonoBehaviour
 {
     public static GameDataManager Instance;
 
-    public List<RFQUtils.GameinCustomer> GameinCustomers;
-    public List<RFQUtils.Product> Products;
+    [HideInInspector] public List<RFQUtils.GameinCustomer> GameinCustomers;
+    [HideInInspector] public List<RFQUtils.Product> Products;
 
     private void Awake()
     {
@@ -19,5 +19,9 @@ public class GameDataManager : MonoBehaviour
     {
         GameinCustomers = getGameDataResponse.gameinCustomers;
         Products = getGameDataResponse.products;
+
+        Debug.Log(Products.Count);
+
+        GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
     }
 }

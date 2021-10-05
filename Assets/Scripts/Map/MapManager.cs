@@ -8,6 +8,8 @@ using System;
 
 public class MapManager : MonoBehaviour
 {
+    public static MapManager Instance;
+
     private AbstractMap _abstractMap;
     private QuadTreeCameraMovement _quadTreeCameraMovement;
     private List<MapUtils.OnMapMarker> _onMapMarkers = new List<MapUtils.OnMapMarker>();
@@ -36,6 +38,7 @@ public class MapManager : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         _abstractMap = FindObjectOfType<AbstractMap>();
         _quadTreeCameraMovement = FindObjectOfType<QuadTreeCameraMovement>();
     }

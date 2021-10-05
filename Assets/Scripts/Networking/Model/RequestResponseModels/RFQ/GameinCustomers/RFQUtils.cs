@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 public class RFQUtils
 {
@@ -10,6 +12,7 @@ public class RFQUtils
         LONGTERM
     }
 
+    [Serializable]
     public class ContractDetail
     {
         public int id;
@@ -20,6 +23,7 @@ public class RFQUtils
         public int lostSalePenalty;
     }
 
+    [Serializable]
     public class ContractModel
     {
         public int id;
@@ -30,6 +34,7 @@ public class RFQUtils
         public int terminatePenalty;
     }
 
+    [Serializable]
     public class GameinCustomer
     {
         public int id;
@@ -38,6 +43,7 @@ public class RFQUtils
         public double longitude;
     }
 
+    [Serializable]
     public class Product
     {
         public int id;
@@ -47,6 +53,7 @@ public class RFQUtils
         public List<ProductIngredient> ingredientsPerUnit;
     }
 
+    [Serializable]
     public class ProductIngredient
     {
         public int productId;

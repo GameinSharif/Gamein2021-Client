@@ -4,20 +4,17 @@ using UnityEngine;
 
 public class ContractsManager : MonoBehaviour
 {
+    public static ContractsManager Instance;
+
     public GameObject ContractParentGameObject;
     public GameObject ContractPrefab;
 
-    private List<GameObject> _spawnedObjects;
+    private List<GameObject> _spawnedObjects = new List<GameObject>();
 
     private void Awake()
     {
+        Instance = this;
         EventManager.Instance.OnGetContractsResponseEvent += OnGetContractsResponse;
-    }
-
-    public void GetContracts()
-    {
-        GetContractsRequest getContractsRequest = new GetContractsRequest(RequestTypeConstant.GET_CONTRACTS);
-        RequestManager.Instance.SendRequest(getContractsRequest);
     }
 
     public void OnGetContractsResponse(GetContractsResponse getContractsResponse)
@@ -27,16 +24,18 @@ public class ContractsManager : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-        for(int i=0; i < getContractsResponse.contracts.Count; i++)
+        for (int i=0; i < getContractsResponse.contracts.Count; i++)
         {
             GameObject contractGameObject = GetPoolledContractGameObject();
 
             SetContractDetail setContractDetail = contractGameObject.GetComponent<SetContractDetail>();
             setContractDetail.InitializeContract(getContractsResponse.contracts[i], i);
 
-            contractGameObject.transform.SetSiblingIndex(i);
+            contractGameObject.transform.SetSiblingIndex(i + 1);
             contractGameObject.SetActive(true);
         }
+
+        Canvas.ForceUpdateCanvases();
     }
 
     private GameObject GetPoolledContractGameObject()

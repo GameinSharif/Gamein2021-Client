@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class GameinCustomersManager : MonoBehaviour
 {
+    public static GameinCustomersManager Instance;
+
     public GameObject GameinCustomersParentGameObject;
     public GameObject GameinCustomersPrefab;
 
-    private List<GameObject> _spawnedObjects;
+    private List<GameObject> _spawnedObjects = new List<GameObject>();
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     public void InitializeGameinCustomersInShop(List<RFQUtils.GameinCustomer> gameinCustomers)
     {
@@ -18,13 +25,13 @@ public class GameinCustomersManager : MonoBehaviour
 
         for (int i = 0; i < gameinCustomers.Count; i++)
         {
-            GameObject contractGameObject = GetPoolledContractGameObject();
+            GameObject gameinCustomerGameObject = GetPoolledContractGameObject();
 
-            SetGameinCustomerDetail setGameinCustomerDetail = GetComponent<SetGameinCustomerDetail>();
+            SetGameinCustomerDetail setGameinCustomerDetail = gameinCustomerGameObject.GetComponent<SetGameinCustomerDetail>();
             setGameinCustomerDetail.InitializeGameinCustomer(gameinCustomers[i]);
 
-            contractGameObject.transform.SetSiblingIndex(i);
-            contractGameObject.SetActive(true);
+            gameinCustomerGameObject.transform.SetSiblingIndex(i);
+            gameinCustomerGameObject.SetActive(true);
         }
     }
 
