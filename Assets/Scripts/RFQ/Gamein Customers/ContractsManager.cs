@@ -54,9 +54,5 @@ public class ContractsManager : MonoBehaviour
         return instance;
     }
 
-    //TODO terminate longterm contract
-
-    //TODO (another script) Get all gamein customers
-
-    //TODO make a deal with gamein customer
+    //TODO new contract gamein customer
 }

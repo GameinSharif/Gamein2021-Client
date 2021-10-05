@@ -18,16 +18,27 @@ public class SetContractDetail : MonoBehaviour
         ContractData = contractData;
 
         RowNumberTxt.text = index.ToString();
-        //TODO
+        GameinCustomerNameTxt.text = contractData.gameinCustomer.name;
+        ProductNameTxt.text = GameDataManager.Instance.Products[contractData.productId].name;
+        ContractTypeLocalize.SetKey("contract_type_" + contractData.contractType.ToString().ToLower());
+
+        if (contractData.contractType == RFQUtils.ContractType.LONGTERM)
+        {
+            TerminateButtonGameObject.SetActive(true);
+        }
+        else
+        {
+            TerminateButtonGameObject.SetActive(false);
+        }
     }
 
     public void OnShowDetailsButtonClick()
     {
-
+        //TODO
     }
 
     public void OnTerminateContractButtonClick()
     {
-
+        //TODO
     }
 }

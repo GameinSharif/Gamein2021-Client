@@ -50,4 +50,10 @@ public class EventManager : MonoBehaviour
     {
         OnGetContractsResponseEvent?.Invoke(getContractsResponse);
     }
+
+    public event Action<GetGameDataResponse> OnGetGameDataResponseEvent;
+    public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
+    {
+        OnGetGameDataResponseEvent?.Invoke(getGameDataResponse);
+    }
 }

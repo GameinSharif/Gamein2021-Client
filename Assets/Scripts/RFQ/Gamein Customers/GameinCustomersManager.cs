@@ -4,15 +4,42 @@ using UnityEngine;
 
 public class GameinCustomersManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject GameinCustomersParentGameObject;
+    public GameObject GameinCustomersPrefab;
+
+    private List<GameObject> _spawnedObjects;
+
+    public void InitializeGameinCustomersInShop(List<RFQUtils.GameinCustomer> gameinCustomers)
     {
-        
+        foreach (GameObject gameObject in _spawnedObjects)
+        {
+            gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < gameinCustomers.Count; i++)
+        {
+            GameObject contractGameObject = GetPoolledContractGameObject();
+
+            SetGameinCustomerDetail setGameinCustomerDetail = GetComponent<SetGameinCustomerDetail>();
+            setGameinCustomerDetail.InitializeGameinCustomer(gameinCustomers[i]);
+
+            contractGameObject.transform.SetSiblingIndex(i);
+            contractGameObject.SetActive(true);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private GameObject GetPoolledContractGameObject()
     {
-        
+        foreach (GameObject gameObject in _spawnedObjects)
+        {
+            if (!gameObject.activeInHierarchy)
+            {
+                return gameObject;
+            }
+        }
+
+        var instance = Instantiate(GameinCustomersPrefab, GameinCustomersParentGameObject.transform);
+        _spawnedObjects.Add(instance);
+        return instance;
     }
 }

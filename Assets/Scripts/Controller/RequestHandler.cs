@@ -24,6 +24,10 @@ public class RequestHandler
                 GetOffersResponse getOffersResponse = JsonUtility.FromJson<GetOffersResponse>(responseJson);
                 EventManager.Instance.OnGetOffersResponse(getOffersResponse);
                 break;
+            case ResponseTypeConstant.GET_GAME_DATA:
+                GetGameDataResponse getGameDataResponse = JsonUtility.FromJson<GetGameDataResponse>(responseJson);
+                EventManager.Instance.OnGetGameDataResponse(getGameDataResponse);
+                break;
             case ResponseTypeConstant.GET_CONTRACTS:
                 GetContractsResponse getContractsResponse = JsonUtility.FromJson<GetContractsResponse>(responseJson);
                 EventManager.Instance.OnGetContractsResponse(getContractsResponse);
