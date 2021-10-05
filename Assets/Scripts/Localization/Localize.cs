@@ -34,6 +34,7 @@ public class Localize : MonoBehaviour
     [HideInInspector] public TMP_FontAsset[] FontAssets;
     [HideInInspector] public GridLayoutStartCorner StartCorner;
     [HideInInspector] public bool ReverseArrangement = true;
+    [HideInInspector] public bool ChangeChildAlignment = false;
     [HideInInspector] public Vector2[] Positions;
     [HideInInspector] public LocalizationManager.Outline Outline;
     [HideInInspector] public bool FixedFontAsset = false;
@@ -45,6 +46,8 @@ public class Localize : MonoBehaviour
 
     void Start()
     {
+        ValueSetBefore = false;
+
         int currentLanguageIndex = (int)LocalizationManager.GetCurrentLanguage();
         ApplyLocalization(currentLanguageIndex, false);
     }
@@ -82,15 +85,7 @@ public class Localize : MonoBehaviour
                 SetGridLayoutStartCorner(currentLanguageIndex);
                 break;
             case TargetComponent.HorizontalOrVerticalLayoutGroup:
-                HorizontalOrVerticalLayoutGroup horizontalOrVerticalLayoutGroup = GetComponent<HorizontalOrVerticalLayoutGroup>();
-                if ((LocalizationManager.LocalizedLanguage)currentLanguageIndex == LocalizationManager.LocalizedLanguage.Farsi && ReverseArrangement)
-                {
-                    horizontalOrVerticalLayoutGroup.reverseArrangement = true;
-                }
-                else
-                {
-                    horizontalOrVerticalLayoutGroup.reverseArrangement = false;
-                }
+                SetLayoutGroupChildAlignment(currentLanguageIndex);
                 break;
             case TargetComponent.Position2D:
                 gameObject.transform.localPosition = Positions[currentLanguageIndex];
@@ -200,6 +195,35 @@ public class Localize : MonoBehaviour
         }
         gridLayoutGroup.enabled = false;
         gridLayoutGroup.enabled = true;
+    }
+
+    private void SetLayoutGroupChildAlignment(int currentLanguageIndex)
+    {
+        LocalizationManager.LocalizedLanguage currenctLanguage = (LocalizationManager.LocalizedLanguage)currentLanguageIndex;
+
+        HorizontalOrVerticalLayoutGroup horizontalOrVerticalLayoutGroup = GetComponent<HorizontalOrVerticalLayoutGroup>();
+        if (currenctLanguage == LocalizationManager.LocalizedLanguage.Farsi && ReverseArrangement)
+        {
+            horizontalOrVerticalLayoutGroup.reverseArrangement = true;
+        }
+        else
+        {
+            horizontalOrVerticalLayoutGroup.reverseArrangement = false;
+        }
+
+        if (ChangeChildAlignment == true)
+        {
+            if (currenctLanguage == LocalizationManager.LocalizedLanguage.Farsi && horizontalOrVerticalLayoutGroup.childAlignment.ToString().Contains("Left"))
+            {
+                int alignmentNumber = (int)horizontalOrVerticalLayoutGroup.childAlignment + 2;
+                horizontalOrVerticalLayoutGroup.childAlignment = (TextAnchor)alignmentNumber;
+            }
+            else if (currenctLanguage != LocalizationManager.LocalizedLanguage.Farsi && horizontalOrVerticalLayoutGroup.childAlignment.ToString().Contains("Right"))
+            {
+                int alignmentNumber = (int)horizontalOrVerticalLayoutGroup.childAlignment - 2;
+                horizontalOrVerticalLayoutGroup.childAlignment = (TextAnchor)alignmentNumber;
+            }
+        }
     }
 
     public void SetKey(string key, params string[] replaceStrings)

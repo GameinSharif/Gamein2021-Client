@@ -38,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1460, y: 0}
+  m_AnchoredPosition: {x: 1450, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6166450397094760202
@@ -751,7 +751,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 10
-    m_Right: 0
+    m_Right: 10
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
@@ -825,6 +825,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd9b2d93dcac86049bb944d2281450de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ContractData:
+    id: 0
+    gameinCustomer:
+      id: 0
+      name: 
+      latitude: 0
+      longitude: 0
+    productId: 0
+    contractType: 0
+    contractDetails: []
+    terminatePenalty: 0
   RowNumberTxt: {fileID: 6166450398070852523}
   GameinCustomerNameTxt: {fileID: 6166450397145518156}
   ProductNameTxt: {fileID: 6166450398859389503}
@@ -1342,9 +1353,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 350
+  m_MinWidth: 340
   m_MinHeight: -1
-  m_PreferredWidth: 350
+  m_PreferredWidth: 340
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
