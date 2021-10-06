@@ -8,6 +8,8 @@ using System;
 
 public class MapManager : MonoBehaviour
 {
+    public static MapManager Instance;
+
     private AbstractMap _abstractMap;
     private QuadTreeCameraMovement _quadTreeCameraMovement;
     private List<MapUtils.OnMapMarker> _onMapMarkers = new List<MapUtils.OnMapMarker>();
@@ -36,6 +38,7 @@ public class MapManager : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         _abstractMap = FindObjectOfType<AbstractMap>();
         _quadTreeCameraMovement = FindObjectOfType<QuadTreeCameraMovement>();
     }
@@ -43,6 +46,7 @@ public class MapManager : MonoBehaviour
     private void Start()
     {
         InitializeMap();
+        InitializeGameDataOnMap();
 
         //SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(0, 0), 0);
         //SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(35, 50), 1);
@@ -55,6 +59,17 @@ public class MapManager : MonoBehaviour
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
+    }
+
+    private void InitializeGameDataOnMap()
+    {
+        for (int i=0; i < GameDataManager.Instance.GameinCustomers.Count; i++)
+        {
+            RFQUtils.GameinCustomer gameinCustomer = GameDataManager.Instance.GameinCustomers[i];
+            SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), i);
+        }
+
+        //TODO do the same thing for other map markers
     }
 
     public void UpdateOnMapObjects()
@@ -133,10 +148,8 @@ public class MapManager : MonoBehaviour
 
     #region Markers
 
-    public void SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType agentType, Vector2 location, int index)
+    public void SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType agentType, Vector2d location, int index)
     {
-        Vector2d vector2d = new Vector2d(location.x, location.y);
-
         foreach (MapUtils.MapAgentMarker mapAgentMarker in MapAgentMarkers)
         {
             if (mapAgentMarker.MapAgentType == agentType)
@@ -144,9 +157,9 @@ public class MapManager : MonoBehaviour
                 var instance = Instantiate(MapAgenetMarkerPrefab);
                 instance.GetComponent<MaterialSetter>().SetMaterial(mapAgentMarker.MarkerMaterial);
                 
-                instance.transform.localPosition = _abstractMap.GeoToWorldPosition(vector2d) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);
+                instance.transform.localPosition = _abstractMap.GeoToWorldPosition(location) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);
                 instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-                _onMapMarkers.Add(new MapUtils.OnMapMarker(vector2d, instance, mapAgentMarker, index));
+                _onMapMarkers.Add(new MapUtils.OnMapMarker(location, instance, mapAgentMarker, index));
             }
         }
     }

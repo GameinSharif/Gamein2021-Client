@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &29954503 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7935562827762424528, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
+  m_PrefabInstance: {fileID: 8305499709672655514}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &59474652 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8305499709698312262, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
@@ -132,17 +143,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &390882979 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8305499709895240761, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
-  m_PrefabInstance: {fileID: 8305499709672655514}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0af62fc5d31e12499310ecac3fc822e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &499924051
@@ -174,8 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8ab0c40d79ea594b9a3989caca532ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usernameInputField: {fileID: 6816853514821358386}
-  passwordInputField: {fileID: 390882979}
+  usernameInputField: {fileID: 29954503}
+  passwordInputField: {fileID: 1615342851}
   loginError: {fileID: 59474652}
 --- !u!4 &499924053
 Transform:
@@ -395,6 +395,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1615342851 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3841942960647907230, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
+  m_PrefabInstance: {fileID: 8305499709672655514}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1848695360
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,17 +472,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6816853514821358386 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3303772805491513768, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
-  m_PrefabInstance: {fileID: 8305499709672655514}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0af62fc5d31e12499310ecac3fc822e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &8305499709672655514
 PrefabInstance:
   m_ObjectHideFlags: 0
