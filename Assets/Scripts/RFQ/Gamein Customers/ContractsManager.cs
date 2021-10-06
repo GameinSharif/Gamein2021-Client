@@ -9,12 +9,22 @@ public class ContractsManager : MonoBehaviour
     public GameObject ContractParentGameObject;
     public GameObject ContractPrefab;
 
-    private List<GameObject> _spawnedObjects = new List<GameObject>();
+    private List<GameObject> _spawnedObjects;
 
     private void Awake()
     {
         Instance = this;
+        _spawnedObjects = new List<GameObject>();
+    }
+
+    private void OnEnable()
+    {
         EventManager.Instance.OnGetContractsResponseEvent += OnGetContractsResponse;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnGetContractsResponseEvent -= OnGetContractsResponse;
     }
 
     public void OnGetContractsResponse(GetContractsResponse getContractsResponse)
