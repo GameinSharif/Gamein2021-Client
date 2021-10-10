@@ -10,11 +10,15 @@ public class MapUtils
     {
         public enum AgentType
         {
-            Factory,
+            MyFactory,
+            OtherFactory,
+            DifferentCountryFactory,
+            NoOwnerFactory,
             Supplier,
             GameinCustomer,
-            DistributionCenter,
-            RecycleCenter
+            MyDistributionCenter,
+            OtherDistributionCenter,
+            NoOwnerDistributionCenter
         }
 
         public AgentType MapAgentType;
