@@ -170,6 +170,7 @@ public class MapManager : MonoBehaviour
         {
             if (mapAgentMarker.MapAgentType == newAgentType)
             {
+                onMapMarker.MapAgentMarker = mapAgentMarker;
                 onMapMarker.SpawnedObject.GetComponent<MaterialSetter>().SetMaterial(mapAgentMarker.MarkerMaterial);
             }
         }

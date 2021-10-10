@@ -458,15 +458,23 @@ MonoBehaviour:
   MapAgenetMarkerPrefab: {fileID: 1839187062704024, guid: 834c4d836ad9e934fb95485373874f83, type: 3}
   MapAgentMarkers:
   - MapAgentType: 0
-    MarkerMaterial: {fileID: 2100000, guid: f37754830c57c814aa30d481678df909, type: 2}
+    MarkerMaterial: {fileID: 2100000, guid: 246d940a06df7854bbc6385b1a1b247d, type: 2}
   - MapAgentType: 1
-    MarkerMaterial: {fileID: 2100000, guid: 21e03b6e54257f140a72dde2e0fb4374, type: 2}
+    MarkerMaterial: {fileID: 2100000, guid: 25abad32c7aae6f47a40222288d14690, type: 2}
   - MapAgentType: 2
-    MarkerMaterial: {fileID: 2100000, guid: 2a2c949a1a25fbe47b27851ab885d4f5, type: 2}
+    MarkerMaterial: {fileID: 2100000, guid: 2d4517ddeb38ed743851666d71e3a3eb, type: 2}
   - MapAgentType: 3
-    MarkerMaterial: {fileID: 2100000, guid: 79fe43cb85c93064d971baa1779f17bf, type: 2}
+    MarkerMaterial: {fileID: 2100000, guid: f37754830c57c814aa30d481678df909, type: 2}
   - MapAgentType: 4
-    MarkerMaterial: {fileID: 2100000, guid: a9350da962ff52e44b34d1518a219fff, type: 2}
+    MarkerMaterial: {fileID: 2100000, guid: 21e03b6e54257f140a72dde2e0fb4374, type: 2}
+  - MapAgentType: 5
+    MarkerMaterial: {fileID: 2100000, guid: 2a2c949a1a25fbe47b27851ab885d4f5, type: 2}
+  - MapAgentType: 6
+    MarkerMaterial: {fileID: 2100000, guid: f022fd633436a8f41821d1ba4570e9f5, type: 2}
+  - MapAgentType: 7
+    MarkerMaterial: {fileID: 2100000, guid: bcf7855a23ba71045b9c20e5e3bd9b13, type: 2}
+  - MapAgentType: 8
+    MarkerMaterial: {fileID: 2100000, guid: 79fe43cb85c93064d971baa1779f17bf, type: 2}
   MapLinePrefab: {fileID: 5860706683937244222, guid: ccccb9503363d374d9716923348e4092, type: 3}
   MapLines:
   - MapLineType: 0
@@ -2348,6 +2356,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
