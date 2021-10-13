@@ -55,7 +55,7 @@ public class MapManager : MonoBehaviour
 
         //ChangeMapAgentType(_onMapMarkers[0], MapUtils.MapAgentMarker.AgentType.Storage);
 
-        //SnapToLocation(new Vector2(30,40));
+        SnapToLocation(new Vector2(46, 2));
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
@@ -66,7 +66,7 @@ public class MapManager : MonoBehaviour
         for (int i=0; i < GameDataManager.Instance.GameinCustomers.Count; i++)
         {
             RFQUtils.GameinCustomer gameinCustomer = GameDataManager.Instance.GameinCustomers[i];
-            SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), i);
+            SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), i, gameinCustomer.name);
         }
 
         //TODO do the same thing for other map markers
@@ -148,14 +148,14 @@ public class MapManager : MonoBehaviour
 
     #region Markers
 
-    public void SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType agentType, Vector2d location, int index)
+    public void SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType agentType, Vector2d location, int index, string name)
     {
         foreach (MapUtils.MapAgentMarker mapAgentMarker in MapAgentMarkers)
         {
             if (mapAgentMarker.MapAgentType == agentType)
             {
                 var instance = Instantiate(MapAgenetMarkerPrefab);
-                instance.GetComponent<MaterialSetter>().SetMaterial(mapAgentMarker.MarkerMaterial);
+                instance.GetComponent<MaterialSetter>().Initialize(mapAgentMarker, name);
                 
                 instance.transform.localPosition = _abstractMap.GeoToWorldPosition(location) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);
                 instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);

@@ -94,7 +94,7 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: d3004ef6e9078b249ad21e6664e3a359, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4280427042
+    rgba: 4279900698
 --- !u!1 &1839187062704024
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,8 +104,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4936519322476758}
-  - component: {fileID: 114657051886494624}
-  - component: {fileID: 114584515627220354}
   - component: {fileID: 3923440946366735131}
   m_Layer: 10
   m_Name: MapAgentMarkerPrefab
@@ -121,7 +119,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1839187062704024}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -129,33 +127,7 @@ Transform:
   - {fileID: 7476511225159973747}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114657051886494624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1839187062704024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75f4a424246980d46a214433149ef222, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _textMesh: {fileID: 102975335696083196}
---- !u!114 &114584515627220354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1839187062704024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22805dac1b8933d49b89c409a8903cde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _camera: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &3923440946366735131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MeshRenderer: {fileID: 8232405191849123113}
+  textMesh: {fileID: 102975335696083196}
 --- !u!1 &4930180369777179834
 GameObject:
   m_ObjectHideFlags: 0

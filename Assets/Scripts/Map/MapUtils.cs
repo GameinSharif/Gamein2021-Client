@@ -23,6 +23,7 @@ public class MapUtils
 
         public AgentType MapAgentType;
         public Material MarkerMaterial;
+        public Color TextColor;
     }
 
     public class OnMapMarker
