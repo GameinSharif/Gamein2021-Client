@@ -32,6 +32,10 @@ public class RequestHandler
                 GetContractsResponse getContractsResponse = JsonUtility.FromJson<GetContractsResponse>(responseJson);
                 EventManager.Instance.OnGetContractsResponse(getContractsResponse);
                 break;
+            case ResponseTypeConstant.CHANGE_MAP_MARKER:
+                ChangeMapMarkerResponse changeMapMarkerResponse = JsonUtility.FromJson<ChangeMapMarkerResponse>(responseJson);
+                EventManager.Instance.OnChangeMapMarkerResponse(changeMapMarkerResponse);
+                break;
         }
     }
 }

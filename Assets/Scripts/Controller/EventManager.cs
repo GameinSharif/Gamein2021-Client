@@ -56,4 +56,10 @@ public class EventManager : MonoBehaviour
     {
         OnGetGameDataResponseEvent?.Invoke(getGameDataResponse);
     }
+    
+    public event Action<ChangeMapMarkerResponse> OnChangeMapMarkerResponseEvent;
+    public void OnChangeMapMarkerResponse(ChangeMapMarkerResponse changeMapMarkerResponse)
+    {
+        OnChangeMapMarkerResponseEvent?.Invoke(changeMapMarkerResponse);
+    }
 }
