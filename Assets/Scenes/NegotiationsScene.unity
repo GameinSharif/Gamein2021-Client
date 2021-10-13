@@ -208,6 +208,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -404,6 +406,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -729,10 +733,10 @@ MonoBehaviour:
   scrollPanel: {fileID: 1893986699}
   negotiationSelectedOfferItemPrefab: {fileID: 2264302379968471493, guid: 2da0993823f3f15429d0c0833f11f70d, type: 3}
   offerPanel: {fileID: 104700744}
-  sendNewOfferPopUp: {fileID: 1238822585}
-  offerPopUpInputField1: {fileID: 0}
-  offerPopUpInputField2: {fileID: 0}
-  offerPopUpInputField3: {fileID: 0}
+  sendNewOfferPopUp: {fileID: 1238822588}
+  offerPopUpInputField1: {fileID: 1238822587}
+  offerPopUpInputField2: {fileID: 1238822586}
+  offerPopUpInputField3: {fileID: 1238822585}
   offerPopUpDropdown: {fileID: 1238822584}
   date1: {fileID: 1238822583}
   date2: {fileID: 1238822582}
@@ -819,6 +823,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -1015,6 +1021,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -1216,6 +1224,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -1412,6 +1422,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -2009,6 +2021,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -2338,6 +2352,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -2534,6 +2550,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -2851,6 +2869,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -3047,6 +3067,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -3323,9 +3345,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1238822585 stripped
+--- !u!114 &1238822585 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8559336515542449172, guid: c834b9c693b7bae43ba73d60438fa510, type: 3}
+  m_PrefabInstance: {fileID: 1238822580}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1238822586 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8559336514886939055, guid: c834b9c693b7bae43ba73d60438fa510, type: 3}
+  m_PrefabInstance: {fileID: 1238822580}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1238822587 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8559336515555343034, guid: c834b9c693b7bae43ba73d60438fa510, type: 3}
+  m_PrefabInstance: {fileID: 1238822580}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1238822588 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 8559336516261102366, guid: c834b9c693b7bae43ba73d60438fa510, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8559336515555530366, guid: c834b9c693b7bae43ba73d60438fa510, type: 3}
   m_PrefabInstance: {fileID: 1238822580}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1311341093
@@ -3840,6 +3895,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
   Positions:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
