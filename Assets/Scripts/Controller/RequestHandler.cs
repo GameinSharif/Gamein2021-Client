@@ -28,9 +28,32 @@ public class RequestHandler
                 GetGameDataResponse getGameDataResponse = JsonUtility.FromJson<GetGameDataResponse>(responseJson);
                 EventManager.Instance.OnGetGameDataResponse(getGameDataResponse);
                 break;
+            case ResponseTypeConstant.GET_CURRENT_WEEK_DEMANDS:
+                GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse = JsonUtility.FromJson<GetCurrentWeekDemandsResponse>(responseJson);
+                EventManager.Instance.OnGetCurrentWeekDemandsResponse(getCurrentWeekDemandsResponse);
+                break;
             case ResponseTypeConstant.GET_CONTRACTS:
                 GetContractsResponse getContractsResponse = JsonUtility.FromJson<GetContractsResponse>(responseJson);
                 EventManager.Instance.OnGetContractsResponse(getContractsResponse);
+                break;
+            case ResponseTypeConstant.NEW_NEGOTIATION:
+                //TODO
+                break;
+            case ResponseTypeConstant.GET_NEGOTIATIONS:
+                //TODO
+                break;
+            case ResponseTypeConstant.EDIT_NEGOTIATION_COST_PER_UNIT:
+                //TODO
+                break;
+            case ResponseTypeConstant.NEW_PROVIDER:
+                //TODO
+                break;
+            case ResponseTypeConstant.GET_PROVIDERS:
+                GetProvidersResponse getProvidersResponse = JsonUtility.FromJson<GetProvidersResponse>(responseJson);
+                EventManager.Instance.OnGetProvidersResponse(getProvidersResponse);
+                break;
+            case ResponseTypeConstant.REMOVE_PROVIDER:
+                //TODO
                 break;
         }
     }

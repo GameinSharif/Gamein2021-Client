@@ -16,7 +16,7 @@ public class GameinCustomersManager : MonoBehaviour
         Instance = this;
     }
 
-    public void InitializeGameinCustomersInShop(List<RFQUtils.GameinCustomer> gameinCustomers)
+    public void InitializeGameinCustomersInShop(List<Utils.GameinCustomer> gameinCustomers)
     {
         foreach (GameObject gameObject in _spawnedObjects)
         {

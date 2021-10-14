@@ -29,25 +29,24 @@ public class ProvidersController : MonoBehaviour
         DestroyAllChildrenInScrollPanel();
         SetOfferPopUpActive(false);
         SetProviderPopUpActive(false);
-        testFunc();
     }
 
-    private void testFunc()
+    private void OnEnable()
     {
-        Provider provider = new Provider("abck0", "T2", 500, 2.5,
-            1.2, 5);
-        AddToList(provider);
-        
-        Provider provider2 = new Provider("lefwN", "T2", 500, 2.5,
-            1.2, 5);
-        AddToList(provider2);
-        
-        Provider provider3 = new Provider("KNCjascnkivehq", "T2", 500, 2.5,
-            1.2, 5);
-        AddToList(provider3);
+        EventManager.Instance.OnGetProvidersResponseEvent += OnGetProvidersResponse;
     }
-    
-    public void AddToList(Provider provider)
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnGetProvidersResponseEvent -= OnGetProvidersResponse;
+    }
+
+    public void OnGetProvidersResponse(GetProvidersResponse getProvidersResponse)
+    {
+        //TODO set in UI
+    }
+
+    public void AddToList(Utils.Provider provider)
     {
         var createdItem = Instantiate(providerItemPrefab, scrollPanel);
         var controller = createdItem.GetComponent<ProviderItemController>();

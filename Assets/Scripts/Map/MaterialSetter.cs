@@ -9,9 +9,9 @@ public class MaterialSetter : MonoBehaviour
 
     public void Initialize(MapUtils.MapAgentMarker mapAgentMarker, string name)
     {
+        MeshRenderer.material = mapAgentMarker.MarkerMaterial;
         textMesh.text = name;
         textMesh.color = mapAgentMarker.TextColor;
-        MeshRenderer.material = mapAgentMarker.MarkerMaterial;
     }
 
     public void SetMaterial(Material material)

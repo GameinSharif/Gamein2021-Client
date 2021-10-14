@@ -4,6 +4,6 @@ using System;
 [Serializable]
 public class GetGameDataResponse : ResponseObject
 {
-    public List<RFQUtils.GameinCustomer> gameinCustomers;
-    public List<RFQUtils.Product> products;
+    public List<Utils.GameinCustomer> gameinCustomers;
+    public List<Utils.Product> products;
 }

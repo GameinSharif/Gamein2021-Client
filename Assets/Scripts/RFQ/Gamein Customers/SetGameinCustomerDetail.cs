@@ -5,12 +5,12 @@ using RTLTMPro;
 
 public class SetGameinCustomerDetail: MonoBehaviour
 {
-    [HideInInspector] public RFQUtils.GameinCustomer GameinCustomerData;
+    [HideInInspector] public Utils.GameinCustomer GameinCustomerData;
 
     public RTLTextMeshPro RowNumberTxt;
     public RTLTextMeshPro GameinCustomerNameTxt;
 
-    public void InitializeGameinCustomer(RFQUtils.GameinCustomer gameinCustomer)
+    public void InitializeGameinCustomer(Utils.GameinCustomer gameinCustomer)
     {
         GameinCustomerData = gameinCustomer;
 
@@ -25,6 +25,8 @@ public class SetGameinCustomerDetail: MonoBehaviour
 
     public void OnShowDemandsButtonClick()
     {
+        List<Utils.WeekDemand> currentWeekemands = GameDataManager.Instance.GetCurrentWeekDemands(GameinCustomerData.id);
+
         //TODO
     }
 }

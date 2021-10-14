@@ -4,8 +4,28 @@ using UnityEngine;
 using System;
 
 
-public class RFQUtils
+public class Utils
 {
+    public class Team
+    {
+        public int id;
+        public string teamName;
+        public double latitude;
+        public double longitude;
+    }
+
+    [Serializable]
+    public class Provider
+    {
+        public int id;
+        public Team team;
+        public int productId;
+        public int capacity;
+        public int averagePrice;
+        public int minPriceOnRecord;
+        public int maxPriceOnRecord;
+    }
+
     public enum ContractType
     {
         ONCE,
@@ -24,7 +44,7 @@ public class RFQUtils
     }
 
     [Serializable]
-    public class ContractModel
+    public class Contract
     {
         public int id;
         public GameinCustomer gameinCustomer;
@@ -41,6 +61,16 @@ public class RFQUtils
         public string name;
         public double latitude;
         public double longitude;
+    }
+
+    [Serializable]
+    public class WeekDemand
+    {
+        public int id;
+        public int week;
+        public GameinCustomer gameinCustomer;
+        public int productId;
+        public int amount;
     }
 
     [Serializable]

@@ -65,7 +65,7 @@ public class MapManager : MonoBehaviour
     {
         for (int i=0; i < GameDataManager.Instance.GameinCustomers.Count; i++)
         {
-            RFQUtils.GameinCustomer gameinCustomer = GameDataManager.Instance.GameinCustomers[i];
+            Utils.GameinCustomer gameinCustomer = GameDataManager.Instance.GameinCustomers[i];
             SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), i, gameinCustomer.name);
         }
 

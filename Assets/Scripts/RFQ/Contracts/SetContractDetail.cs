@@ -5,7 +5,7 @@ using RTLTMPro;
 
 public class SetContractDetail : MonoBehaviour
 {
-    [HideInInspector] public RFQUtils.ContractModel ContractData;
+    [HideInInspector] public Utils.Contract ContractData;
 
     public RTLTextMeshPro RowNumberTxt;
     public RTLTextMeshPro GameinCustomerNameTxt;
@@ -13,7 +13,7 @@ public class SetContractDetail : MonoBehaviour
     public Localize ContractTypeLocalize;
     public GameObject TerminateButtonGameObject;
 
-    public void InitializeContract(RFQUtils.ContractModel contractData, int index)
+    public void InitializeContract(Utils.Contract contractData, int index)
     {
         ContractData = contractData;
 
@@ -22,7 +22,7 @@ public class SetContractDetail : MonoBehaviour
         ProductNameTxt.text = GameDataManager.Instance.Products[contractData.productId].name;
         ContractTypeLocalize.SetKey("contract_type_" + contractData.contractType.ToString().ToLower());
 
-        if (contractData.contractType == RFQUtils.ContractType.LONGTERM)
+        if (contractData.contractType == Utils.ContractType.LONGTERM)
         {
             TerminateButtonGameObject.SetActive(true);
         }

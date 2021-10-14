@@ -6,5 +6,5 @@ using System;
 [Serializable]
 public class GetContractsResponse : ResponseObject
 {
-    public List<RFQUtils.ContractModel> contracts;
+    public List<Utils.Contract> contracts;
 }
