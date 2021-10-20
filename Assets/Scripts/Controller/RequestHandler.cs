@@ -55,6 +55,14 @@ public class RequestHandler
             case ResponseTypeConstant.REMOVE_PROVIDER:
                 //TODO
                 break;
+            case ResponseTypeConstant.BUY_DC:
+                BuyDCResponse buyDcResponse = JsonUtility.FromJson<BuyDCResponse>(responseJson);
+                EventManager.Instance.OnBuyDCResponse(buyDcResponse);
+                break;
+            case ResponseTypeConstant.SELL_DC:
+                SellDCResponse sellDcResponse = JsonUtility.FromJson<SellDCResponse>(responseJson);
+                EventManager.Instance.OnSellDCResponse(sellDcResponse);
+                break;
         }
     }
 }

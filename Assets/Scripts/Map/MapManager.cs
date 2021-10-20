@@ -69,6 +69,14 @@ public class MapManager : MonoBehaviour
             SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), i, gameinCustomer.name);
         }
 
+        for (int i = 0; i < GameDataManager.Instance.DCDtos.Count; i++)
+        {
+            Utils.DCDto dcDto = GameDataManager.Instance.DCDtos[i];
+            SetMapAgentMarker(dcDto.ownerTeamId == null ? MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter
+                    : MapUtils.MapAgentMarker.AgentType.MyDistributionCenter,
+                new Vector2d(dcDto.latitude, dcDto.longitude), i, dcDto.name);
+        }
+
         //TODO do the same thing for other map markers
     }
 

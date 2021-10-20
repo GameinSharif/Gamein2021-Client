@@ -89,4 +89,22 @@ public class Utils
         public int productId;
         public int amount;
     }
+    
+    [Serializable]
+    public class DCDto
+    {
+        public int DCId;
+        public int? ownerTeamId;
+        public string name;
+        public DCType type;
+        public double latitude;
+        public double longitude;
+        public int purchasePrice;
+        public int sellPrice;
+    }
+
+    public enum DCType
+    {
+        MIDDLE, FINAL
+    }
 }

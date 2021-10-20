@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ public class GameDataManager : MonoBehaviour
 
     [HideInInspector] public List<Utils.WeekDemand> CurrentWeekDemands;
 
+    [HideInInspector] public List<Utils.DCDto> DCDtos;
+
     private void Awake()
     {
         Instance = this;
@@ -23,6 +26,7 @@ public class GameDataManager : MonoBehaviour
     {
         GameinCustomers = getGameDataResponse.gameinCustomers;
         Products = getGameDataResponse.products;
+        DCDtos = getGameDataResponse.dcDtos;
 
         GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
     }

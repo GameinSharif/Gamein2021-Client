@@ -68,4 +68,16 @@ public class EventManager : MonoBehaviour
     {
         OnGetProvidersResponseEvent?.Invoke(getProvidersResponse);
     }
+
+    public event Action<BuyDCResponse> OnBuyDCResponseEvent;
+    public void OnBuyDCResponse(BuyDCResponse buyDcResponse)
+    {
+        OnBuyDCResponseEvent?.Invoke(buyDcResponse);
+    }
+    
+    public event Action<SellDCResponse> OnSellDCResponseEvent;
+    public void OnSellDCResponse(SellDCResponse sellDcResponse)
+    {
+        OnSellDCResponseEvent?.Invoke(sellDcResponse);
+    }
 }

@@ -12,5 +12,7 @@ public enum ResponseTypeConstant
     EDIT_NEGOTIATION_COST_PER_UNIT = 9,
     NEW_PROVIDER = 10,
     GET_PROVIDERS = 11,
-    REMOVE_PROVIDER = 12
+    REMOVE_PROVIDER = 12,
+    BUY_DC = 13,
+    SELL_DC = 14,
 }
