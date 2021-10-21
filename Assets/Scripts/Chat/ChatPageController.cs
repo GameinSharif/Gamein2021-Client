@@ -11,9 +11,11 @@ public class ChatPageController : MonoBehaviour
 
     public static ChatPageController Instance;
 
-    private const int MAX_MESSAGES = 20;
+    public const int MAX_MESSAGES = 20;
     private EnhancedPoolingSystem<MessageData> _poolingSystem;
     private ChatData _chatData;
+
+    public int? CurrentChatId => _chatData?.TheirTeamId;
 
     public GameObject chatPage;
     public Transform chatScrollPanel;
@@ -30,23 +32,13 @@ public class ChatPageController : MonoBehaviour
         _poolingSystem = new EnhancedPoolingSystem<MessageData>(chatScrollPanel, new[]{myMessagePrefab, theirMessagePrefab}, MessageInitializer, MAX_MESSAGES);
     }
 
-    private void OnEnable()
-    {
-        //TODO add event handling action
-    }
-    
-    private void OnDisable()
-    {
-        //TODO add event handling action
-    }
-
     private void MessageInitializer(GameObject theGameObject, int indexOfPrefab, int indexInParent, MessageData messageData)
     {
         var controller = theGameObject.GetComponent<MessageController>();
-        controller.SetText(messageData.Text);
+        controller.SetText(messageData.text);
     }
 
-    private void AddMessageToChat(MessageData messageData)
+    public void AddMessageToChat(MessageData messageData)
     {
         if (_poolingSystem.ActiveCount >= MAX_MESSAGES)
         {
@@ -70,22 +62,20 @@ public class ChatPageController : MonoBehaviour
         {
             return;
         }
+
+        SendMessageToServer(inputField.text);
         
-        //TODO send message to server
-        
-        AddMessageToChat(new MessageData(inputField.text, true, null));
-        AddMessageToChat(new MessageData("wow! that is amazing :) ", false, null));
+        AddMessageToChat(new MessageData{text = inputField.text, IsFromMe = true});
+        AddMessageToChat(new MessageData{text = "wow! that is amazing :) ", IsFromMe = false});
         
         inputField.text = "";
         inputField.Select();
         inputField.ActivateInputField();
     }
 
-    public void OnMessageReceived(MessageData messageData)
+    private void SendMessageToServer(string text)
     {
-        //TODO receive message from server and show to user
-        //if the new message is from this chat:
-        // AddMessageToChat(messageData);
+        RequestManager.Instance.SendRequest(new NewMessageRequest(_chatData.TheirTeamId, text, new CustomDateTime(DateTime.Now)));
     }
 
     public void LoadChat(ChatData chatData)
@@ -97,13 +87,14 @@ public class ChatPageController : MonoBehaviour
         //TODO set avatar
         
         _poolingSystem.RemoveAll();
-        foreach (var messageData in chatData.Messagas)
+        foreach (var messageData in chatData.messages)
         {
             _poolingSystem.Add(messageData.IsFromMe ? 0 : 1, messageData);
         }
         
         RebuildLayout();
         SetOpen(true);
+        Debug.Log(JsonUtility.ToJson(chatData.messages[0]));
     }
 
     public void OnBackButtonPressed()

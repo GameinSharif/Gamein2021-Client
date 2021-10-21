@@ -1,26 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+[Serializable]
 public class ChatData
 {
-    public ChatData(int chatId, string teamName, List<MessageData> messagas)
-    {
-        ChatId = chatId;
-        TeamName = teamName;
-        Messagas = messagas;
-    }
-
-    public int ChatId
-    {
-        get;
-    }
+    
+    public int id;
+    public CustomDateTime latestMessageDate;
+    public int team1Id;
+    public int team2Id;
+    public List<MessageData> messages;
 
     public string TeamName
     {
+        //TODO get team name from somewhere
         get;
+        set;
     }
 
-    public List<MessageData> Messagas
-    {
-        get;
-    }
+    //TODO check team1Id and team2Id with our teamId and return theirs
+    public int TheirTeamId => team2Id;
 }
