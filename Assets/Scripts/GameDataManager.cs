@@ -12,6 +12,8 @@ public class GameDataManager : MonoBehaviour
 
     [HideInInspector] public List<Utils.WeekDemand> CurrentWeekDemands;
 
+    public List<Sprite> ProductSprites;
+
     private void Awake()
     {
         Instance = this;
