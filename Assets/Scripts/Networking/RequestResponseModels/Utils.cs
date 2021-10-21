@@ -73,14 +73,23 @@ public class Utils
         public int amount;
     }
 
+    public enum ProductType
+    {
+        RawMaterial,
+        SemiFinished,
+        Finished
+    }
+
     [Serializable]
     public class Product
     {
         public int id;
-        public int categoryId;
-        public int productionLineId;
+        public string categoryIds; //for SemiFinishedProducts only
+        public int productionLineId; //for SemiFinishedProducts & Finished only
+        public ProductType productType;
         public string name;
-        public List<ProductIngredient> ingredientsPerUnit;
+        public int volumetricUnit;
+        public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 36)
     }
 
     [Serializable]
