@@ -124,4 +124,14 @@ public class Utils
         Active,
         Over
     }
+
+    public class Auction
+    {
+        public int id;
+        public int factoryId;
+        public int highestBid;
+        public int highestBidTeamId;
+        public int bidsCount;
+        public AuctionBidStatus auctionBidStatus;
+    }
 }

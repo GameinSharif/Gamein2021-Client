@@ -55,6 +55,12 @@ public class RequestHandler
             case ResponseTypeConstant.REMOVE_PROVIDER:
                 //TODO
                 break;
+            case ResponseTypeConstant.NEW_PROVIDER_NEGOTIATION:
+                //TODO
+                break;
+            case ResponseTypeConstant.GET_ALL_AUCTIONS:
+                //TOOD
+                break;
             case ResponseTypeConstant.BID_FOR_AUCTION:
                 BidForAuctionResponse bidForAuctionResponse = JsonUtility.FromJson<BidForAuctionResponse>(responseJson);
                 EventManager.Instance.OnBidForAuctionResponse(bidForAuctionResponse);

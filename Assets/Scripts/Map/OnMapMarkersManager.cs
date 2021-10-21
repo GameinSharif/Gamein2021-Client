@@ -7,20 +7,20 @@ public class OnMapMarkersManager : MonoBehaviour
 {
     private void OnEnable()
     {
-        EventManager.Instance.OnBidForAuctionResponseEvent += OnChangeMapMarkerResponseReceive;
+        EventManager.Instance.OnBidForAuctionResponseEvent += OnBidForAuctionResponseReceive;
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.OnBidForAuctionResponseEvent -= OnChangeMapMarkerResponseReceive;
+        EventManager.Instance.OnBidForAuctionResponseEvent -= OnBidForAuctionResponseReceive;
     }
     
-    public void OnChangeMapMarkerResponseReceive(BidForAuctionResponse changeMapMarkerResponse)
+    public void OnBidForAuctionResponseReceive(BidForAuctionResponse bidForAuctionResponse)
     {
-        if (changeMapMarkerResponse.result == "Successful")
+        if (bidForAuctionResponse.result == "success")
         {
             int playerId = PlayerPrefs.GetInt("PlayerId");
-            if (changeMapMarkerResponse.bidderPlayerId == playerId)
+            if (bidForAuctionResponse.auction.highestBidTeamId == playerId) //TODO teamId not playerId
             {
                 //TODO show feedback for successfully biding higher
             }
