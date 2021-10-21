@@ -33,16 +33,28 @@ public class EventManager : MonoBehaviour
         OnLoginResponseEvent?.Invoke(loginResponse);
     }
 
+    public event Action<NewOfferResponse> OnNewOfferResponseEvent;
+    public void OnNewOfferResponse(NewOfferResponse newOfferResponse)
+    {
+        OnNewOfferResponseEvent?.Invoke(newOfferResponse);
+    }
+
     public event Action<GetOffersResponse> OnGetOffersResponseEvent;
     public void OnGetOffersResponse(GetOffersResponse getOffersResponse)
     {
         OnGetOffersResponseEvent?.Invoke(getOffersResponse);
     }
 
-    public event Action<NewOfferResponse> OnNewOfferResponseEvent;
-    public void OnNewOfferResponse(NewOfferResponse newOfferResponse)
+    public event Action<GetGameDataResponse> OnGetGameDataResponseEvent;
+    public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
     {
-        OnNewOfferResponseEvent?.Invoke(newOfferResponse);
+        OnGetGameDataResponseEvent?.Invoke(getGameDataResponse);
+    }
+
+    public event Action<GetCurrentWeekDemandsResponse> OnGetCurrentWeekDemandsResponseEvent;
+    public void OnGetCurrentWeekDemandsResponse(GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse)
+    {
+        OnGetCurrentWeekDemandsResponseEvent?.Invoke(getCurrentWeekDemandsResponse);
     }
 
     public event Action<GetContractsResponse> OnGetContractsResponseEvent;
@@ -51,10 +63,10 @@ public class EventManager : MonoBehaviour
         OnGetContractsResponseEvent?.Invoke(getContractsResponse);
     }
 
-    public event Action<GetGameDataResponse> OnGetGameDataResponseEvent;
-    public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
+    public event Action<GetProvidersResponse> OnGetProvidersResponseEvent;
+    public void OnGetProvidersResponse(GetProvidersResponse getProvidersResponse)
     {
-        OnGetGameDataResponseEvent?.Invoke(getGameDataResponse);
+        OnGetProvidersResponseEvent?.Invoke(getProvidersResponse);
     }
     
     public event Action<ChangeMapMarkerResponse> OnChangeMapMarkerResponseEvent;
