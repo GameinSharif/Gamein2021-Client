@@ -10,5 +10,7 @@ public enum RequestTypeConstant
     EDIT_NEGOTIATION_COST_PER_UNIT = 7,
     NEW_PROVIDER = 8,
     GET_PROVIDERS = 9,
-    REMOVE_PROVIDER = 10
+    REMOVE_PROVIDER = 10,
+    GET_All_CHATS = 12,
+    NEW_MESSAGE = 13,
 }
