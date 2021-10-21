@@ -94,7 +94,6 @@ public class ChatPageController : MonoBehaviour
         
         RebuildLayout();
         SetOpen(true);
-        Debug.Log(JsonUtility.ToJson(chatData.messages[0]));
     }
 
     public void OnBackButtonPressed()

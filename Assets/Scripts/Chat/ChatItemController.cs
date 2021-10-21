@@ -9,6 +9,7 @@ public class ChatItemController : MonoBehaviour
     public Image teamAvatar;
     public RTLTextMeshPro unreadCountText;
     public GameObject unreadCountObject;
+    public RTLTextMeshPro lastMessagePreview;
     
     private int _chatId;
 
@@ -34,23 +35,17 @@ public class ChatItemController : MonoBehaviour
     {
         _chatId = chatId;
         teamName.text = theTeamName;
+        lastMessagePreview.text = "";
         //TODO set avatar
-    }
-
-    private void SetUnreadCount(int value)
-    {
-        if (value == 0)
-        {
-            unreadCountObject.SetActive(false);
-            return;
-        }
-
-        unreadCountText.text = value.ToString();
-        unreadCountObject.SetActive(true);
     }
 
     public void OnChatItemClicked()
     {
         ChatsListController.Instance.ShowChatPageWithId(_chatId);
+    }
+
+    public void SetLastMessagePreview(string text)
+    {
+        lastMessagePreview.text = text.Replace('\n', ' ');
     }
 }

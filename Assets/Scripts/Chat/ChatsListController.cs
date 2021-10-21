@@ -51,7 +51,7 @@ public class ChatsListController : MonoBehaviour
         {
             new MessageData{text = "hello\nwe are team " + teamName, IsFromMe = false},
             new MessageData{text = "hey", IsFromMe = true},
-            new MessageData{text = "good for you", IsFromMe = true}
+            new MessageData{text = "good for you\nnow get out", IsFromMe = true}
         };
 
         var chatData = new ChatData {id = chatId, TeamName = teamName, messages = list};
@@ -61,6 +61,7 @@ public class ChatsListController : MonoBehaviour
         _controllerOfChatId.Add(chatId, itemController);
         
         itemController.SetData(chatId, teamName);
+        itemController.SetLastMessagePreview(list[list.Count - 1].text);
         itemController.UnreadCount = 3;
     }
 
@@ -116,7 +117,9 @@ public class ChatsListController : MonoBehaviour
         if (ChatPageController.Instance.CurrentChatId != newMessageResponse.messageDto.TheirTeamId &&
             _controllerOfChatId.ContainsKey(newMessageResponse.messageDto.TheirTeamId))
         {
-            _controllerOfChatId[newMessageResponse.messageDto.TheirTeamId].UnreadCount++;
+            var controller = _controllerOfChatId[newMessageResponse.messageDto.TheirTeamId];
+            controller.UnreadCount++;
+            controller.SetLastMessagePreview(newMessageResponse.messageDto.text);
         }
 
         if (ChatPageController.Instance.CurrentChatId == newMessageResponse.messageDto.TheirTeamId) // is in chat page
