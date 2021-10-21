@@ -86,15 +86,16 @@ public class ChatsListController : MonoBehaviour
         {
             if (!_controllerOfChatId.ContainsKey(chat.TheirTeamId))
             {
-                AddAndInitializeChatItem(chat.TheirTeamId, chat.TeamName);
+                AddAndInitializeChatItem(chat.TheirTeamId, chat.TeamName, chat.messages[chat.messages.Count - 1].text);
             }
         }
     }
 
-    private void AddAndInitializeChatItem(int chatId, string teamName)
+    private void AddAndInitializeChatItem(int chatId, string teamName, string lastMessage)
     {
         var itemController = Instantiate(chatItemPrefab, chatsListScrollPanel).GetComponent<ChatItemController>();
         itemController.SetData(chatId, teamName);
+        itemController.SetLastMessagePreview(lastMessage);
         _controllerOfChatId.Add(chatId, itemController);
     }
 
