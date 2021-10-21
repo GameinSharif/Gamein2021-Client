@@ -56,11 +56,8 @@ public class LoginManager : MonoBehaviour
         {
             int playerId = loginResponse.playerId;
             PlayerPrefs.SetInt("PlayerId" , playerId);
-            if (loginResponse.isFirstTime)
-            {
-                PlayerPrefs.SetInt("IsFirstTime", 1);
-                PlayerPrefs.SetString("Country", loginResponse.country);
-            }
+            PlayerPrefs.SetString("Country", loginResponse.team.country.ToString());
+            PlayerPrefs.SetInt("TeamId", loginResponse.team.id);
             SceneManager.LoadScene("MenuScene");
         }
         else

@@ -10,7 +10,7 @@ public class Utils
     {
         public int id;
         public string teamName;
-        //public Country country;
+        public Country country;
         public int factoryId;
     }
 
