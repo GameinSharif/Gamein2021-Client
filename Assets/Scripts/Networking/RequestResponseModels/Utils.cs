@@ -10,8 +10,8 @@ public class Utils
     {
         public int id;
         public string teamName;
-        public double latitude;
-        public double longitude;
+        //public Country country;
+        public int factoryId;
     }
 
     [Serializable]
