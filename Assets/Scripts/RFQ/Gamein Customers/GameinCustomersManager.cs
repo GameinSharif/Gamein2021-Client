@@ -9,14 +9,15 @@ public class GameinCustomersManager : MonoBehaviour
     public GameObject GameinCustomersParentGameObject;
     public GameObject GameinCustomersPrefab;
 
-    private List<GameObject> _spawnedObjects = new List<GameObject>();
+    private List<GameObject> _spawnedObjects;
 
     private void Awake()
     {
         Instance = this;
+        _spawnedObjects = new List<GameObject>();
     }
 
-    public void InitializeGameinCustomersInShop(List<RFQUtils.GameinCustomer> gameinCustomers)
+    public void InitializeGameinCustomersInShop(List<Utils.GameinCustomer> gameinCustomers)
     {
         foreach (GameObject gameObject in _spawnedObjects)
         {
@@ -30,7 +31,7 @@ public class GameinCustomersManager : MonoBehaviour
             SetGameinCustomerDetail setGameinCustomerDetail = gameinCustomerGameObject.GetComponent<SetGameinCustomerDetail>();
             setGameinCustomerDetail.InitializeGameinCustomer(gameinCustomers[i]);
 
-            gameinCustomerGameObject.transform.SetSiblingIndex(i);
+            gameinCustomerGameObject.transform.SetSiblingIndex(i + 1);
             gameinCustomerGameObject.SetActive(true);
         }
     }
