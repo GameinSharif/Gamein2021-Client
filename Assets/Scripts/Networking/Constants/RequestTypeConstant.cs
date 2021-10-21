@@ -13,4 +13,5 @@ public enum RequestTypeConstant
     REMOVE_PROVIDER = 10,
     BUY_DC = 11,
     SELL_DC = 12,
+    GET_STORAGE_PRODUCTS = 13,
 }

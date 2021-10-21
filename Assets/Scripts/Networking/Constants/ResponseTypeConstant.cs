@@ -15,4 +15,5 @@ public enum ResponseTypeConstant
     REMOVE_PROVIDER = 12,
     BUY_DC = 13,
     SELL_DC = 14,
+    GET_STORAGE_PRODUCTS = 15,
 }

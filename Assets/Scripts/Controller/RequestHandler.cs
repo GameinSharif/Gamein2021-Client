@@ -63,6 +63,11 @@ public class RequestHandler
                 SellDCResponse sellDcResponse = JsonUtility.FromJson<SellDCResponse>(responseJson);
                 EventManager.Instance.OnSellDCResponse(sellDcResponse);
                 break;
+            case ResponseTypeConstant.GET_STORAGE_PRODUCTS:
+                GetStorageProductsResponse getStorageProductsResponse =
+                    JsonUtility.FromJson<GetStorageProductsResponse>(responseJson);
+                EventManager.Instance.OnGetStorageProductsResponse(getStorageProductsResponse);
+                break;
         }
     }
 }

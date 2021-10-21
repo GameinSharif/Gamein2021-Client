@@ -80,4 +80,10 @@ public class EventManager : MonoBehaviour
     {
         OnSellDCResponseEvent?.Invoke(sellDcResponse);
     }
+
+    public event Action<GetStorageProductsResponse> OnGetStorageProductsResponseEvent;
+    public void OnGetStorageProductsResponse(GetStorageProductsResponse getStorageProductsResponse)
+    {
+        OnGetStorageProductsResponseEvent?.Invoke(getStorageProductsResponse);
+    }
 }

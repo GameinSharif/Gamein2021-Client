@@ -107,4 +107,25 @@ public class Utils
     {
         MIDDLE, FINAL
     }
+
+    [Serializable]
+    public class Storage
+    {
+        public StorageType type;
+        public int DCId;
+        public List<StorageProduct> storageProducts;
+    }
+
+    [Serializable]
+    public class StorageProduct
+    {
+        public int productId;
+        public int amount;
+    }
+    
+    public enum StorageType
+    {
+        WAREHOUSE, DC
+    }
+
 }
