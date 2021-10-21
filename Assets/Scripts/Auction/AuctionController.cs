@@ -39,8 +39,10 @@ public class AuctionController : MonoBehaviour
     
     public void OnBidButtonClicked()
     {
+        //TODO this has to be factoryId not bidingAmount
+
         int bidingAmount = Convert.ToInt32(highestBidAmount.text);
-        BidHigherRequest bidHigherRequest = new BidHigherRequest(RequestTypeConstant.BID_HIGHER, bidingAmount);
+        BidForAuctionRequest bidHigherRequest = new BidForAuctionRequest(RequestTypeConstant.BID_FOR_AUCTION, bidingAmount);
         RequestManager.Instance.SendRequest(bidHigherRequest);
     }
 }

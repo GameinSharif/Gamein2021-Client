@@ -69,9 +69,9 @@ public class EventManager : MonoBehaviour
         OnGetProvidersResponseEvent?.Invoke(getProvidersResponse);
     }
     
-    public event Action<ChangeMapMarkerResponse> OnChangeMapMarkerResponseEvent;
-    public void OnChangeMapMarkerResponse(ChangeMapMarkerResponse changeMapMarkerResponse)
+    public event Action<BidForAuctionResponse> OnBidForAuctionResponseEvent;
+    public void OnBidForAuctionResponse(BidForAuctionResponse bidForAuctionResponse)
     {
-        OnChangeMapMarkerResponseEvent?.Invoke(changeMapMarkerResponse);
+        OnBidForAuctionResponseEvent?.Invoke(bidForAuctionResponse);
     }
 }

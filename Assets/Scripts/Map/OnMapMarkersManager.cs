@@ -7,15 +7,15 @@ public class OnMapMarkersManager : MonoBehaviour
 {
     private void OnEnable()
     {
-        EventManager.Instance.OnChangeMapMarkerResponseEvent += OnChangeMapMarkerResponseReceive;
+        EventManager.Instance.OnBidForAuctionResponseEvent += OnChangeMapMarkerResponseReceive;
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.OnChangeMapMarkerResponseEvent -= OnChangeMapMarkerResponseReceive;
+        EventManager.Instance.OnBidForAuctionResponseEvent -= OnChangeMapMarkerResponseReceive;
     }
     
-    public void OnChangeMapMarkerResponseReceive(ChangeMapMarkerResponse changeMapMarkerResponse)
+    public void OnChangeMapMarkerResponseReceive(BidForAuctionResponse changeMapMarkerResponse)
     {
         if (changeMapMarkerResponse.result == "Successful")
         {

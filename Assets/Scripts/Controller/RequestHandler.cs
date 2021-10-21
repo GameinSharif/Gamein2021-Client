@@ -54,9 +54,10 @@ public class RequestHandler
                 break;
             case ResponseTypeConstant.REMOVE_PROVIDER:
                 //TODO
-            case ResponseTypeConstant.CHANGE_MAP_MARKER:
-                ChangeMapMarkerResponse changeMapMarkerResponse = JsonUtility.FromJson<ChangeMapMarkerResponse>(responseJson);
-                EventManager.Instance.OnChangeMapMarkerResponse(changeMapMarkerResponse);
+                break;
+            case ResponseTypeConstant.BID_FOR_AUCTION:
+                BidForAuctionResponse bidForAuctionResponse = JsonUtility.FromJson<BidForAuctionResponse>(responseJson);
+                EventManager.Instance.OnBidForAuctionResponse(bidForAuctionResponse);
                 break;
         }
     }

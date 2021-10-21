@@ -98,4 +98,30 @@ public class Utils
         public int productId;
         public int amount;
     }
+
+    public enum Country
+    {
+        France,
+        Germany,
+        UnitedKingdom,
+        Netherlands,
+        Belgium,
+        Switzerland
+    }
+
+    [Serializable]
+    public class Factory
+    {
+        public int id;
+        public string name;
+        public Country country;
+        public double latitude;
+        public double longitude;
+    }
+
+    public enum AuctionBidStatus
+    {
+        Active,
+        Over
+    }
 }

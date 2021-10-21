@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Serializable]
-public class ChangeMapMarkerResponse : ResponseObject
+public class BidForAuctionResponse : ResponseObject
 {
     public string result;
     public int highestBidAmount;
