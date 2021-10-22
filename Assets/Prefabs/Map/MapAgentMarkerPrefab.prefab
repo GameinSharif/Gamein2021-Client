@@ -105,6 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4936519322476758}
   - component: {fileID: 3923440946366735131}
+  - component: {fileID: 4355761910815627648}
   m_Layer: 10
   m_Name: MapAgentMarkerPrefab
   m_TagString: Untagged
@@ -143,6 +144,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MeshRenderer: {fileID: 8232405191849123113}
   textMesh: {fileID: 102975335696083196}
+--- !u!114 &4355761910815627648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839187062704024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89031f4c1ad4ec941ab1f897da979e0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  auctionGameObject: {fileID: 8592027489743577332}
+  bidHigherGameObject: {fileID: 7219390368044299889}
+  hasHighestBidGameObject: {fileID: 5671313731833130946}
+  highestBidAmount: {fileID: 3597887572355107541}
 --- !u!1 &335915953834038324
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,10 +195,10 @@ RectTransform:
   m_Father: {fileID: 6912110265823819752}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 22.2759, y: -40.176033}
+  m_SizeDelta: {x: 44.5518, y: 19.79115}
   m_Pivot: {x: 0.5, y: -0.03}
 --- !u!222 &8095439090578450301
 CanvasRenderer:
@@ -723,7 +740,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4355761910815627648}
         m_TargetAssemblyTypeName: AuctionController, Assembly-CSharp
         m_MethodName: OnBidButtonClicked
         m_Mode: 1
@@ -907,10 +924,10 @@ RectTransform:
   m_Father: {fileID: 6912110265823819752}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 120.73538, y: 0}
+  m_SizeDelta: {x: 44.5518, y: 19.79115}
   m_Pivot: {x: 2.71, y: 1}
 --- !u!222 &3250958049571738819
 CanvasRenderer:
@@ -1588,7 +1605,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4355761910815627648}
         m_TargetAssemblyTypeName: AuctionController, Assembly-CSharp
         m_MethodName: OnCloseButtonClicked
         m_Mode: 1
@@ -1971,7 +1988,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3255992427197564677
 RectTransform:
   m_ObjectHideFlags: 0

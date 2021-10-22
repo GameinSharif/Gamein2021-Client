@@ -74,4 +74,16 @@ public class EventManager : MonoBehaviour
     {
         OnBidForAuctionResponseEvent?.Invoke(bidForAuctionResponse);
     }
+    
+    public event Action<GetAllAuctionsResponse> OnGetAllAuctionsResponseEvent;
+    public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
+    {
+        OnGetAllAuctionsResponseEvent?.Invoke(getAllAuctionsResponse);
+    }
+    
+    public event Action<GetAllFactoriesResponse> OnGetAllFactoriesResponseEvent;
+    public void OnGetAllFactoriesResponse(GetAllFactoriesResponse getAllFactoriesResponse)
+    {
+        OnGetAllFactoriesResponseEvent?.Invoke(getAllFactoriesResponse);
+    }
 }

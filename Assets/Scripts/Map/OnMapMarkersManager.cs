@@ -19,12 +19,13 @@ public class OnMapMarkersManager : MonoBehaviour
     {
         if (bidForAuctionResponse.result == "success")
         {
-            int playerId = PlayerPrefs.GetInt("PlayerId");
-            if (bidForAuctionResponse.auction.highestBidTeamId == playerId) //TODO teamId not playerId
+            int teamId = PlayerPrefs.GetInt("TeamId");
+            if (bidForAuctionResponse.auction.highestBidTeamId == teamId)
             {
                 //TODO show feedback for successfully biding higher
             }
-            //TODO set the new values for the changed on map marker
+            GameDataManager.Instance.UpdateAuctionElement(bidForAuctionResponse.auction);
+            MapManager.Instance.UpdateAllOnMapMarkers();
         }
         else
         {

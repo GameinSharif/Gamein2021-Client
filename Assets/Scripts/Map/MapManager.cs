@@ -5,6 +5,7 @@ using Mapbox.Unity.Map;
 using Mapbox.Utils;
 using Mapbox.Examples;
 using System;
+using System.Linq;
 
 public class MapManager : MonoBehaviour
 {
@@ -176,6 +177,44 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public void UpdateAllOnMapMarkers()
+    {
+        foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+        {
+            UpdateOnMapMarker(onMapMarker);
+        }
+    }
+
+    public void UpdateOnMapMarker(MapUtils.OnMapMarker onMapMarker)
+    {
+        int auctionId = onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().auction.id;
+        Utils.Auction newAuction = GameDataManager.Instance.GetAuctionById(auctionId);
+        if (true) 
+        { //TODO check if they have a highest bid someWhere
+            if (newAuction.auctionBidStatus == Utils.AuctionBidStatus.Over) 
+            {
+                ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory);
+            } else if (newAuction.highestBidTeamId == PlayerPrefs.GetInt("TeamId"))
+            {
+                ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.MyFactory);
+            } else if (GameDataManager.Instance.GetFactoryById(newAuction.factoryId).country.ToString() 
+                       != PlayerPrefs.GetString("Country")) 
+            {
+                ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory);
+            }
+            else if (newAuction.highestBidTeamId == null)
+            {
+                ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.NoOwnerFactory);
+            }
+        }
+        onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().SetAuctionValues(newAuction, onMapMarker);
+    }
+
+    public MapUtils.OnMapMarker GetOnMapMarkerById(int id)
+    {
+        return _onMapMarkers.First(marker => marker.Index == id);
+    }
+    
     public void UpdateMarkersLocation()
     {
         foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)

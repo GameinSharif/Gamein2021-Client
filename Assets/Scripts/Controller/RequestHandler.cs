@@ -59,11 +59,16 @@ public class RequestHandler
                 //TODO
                 break;
             case ResponseTypeConstant.GET_ALL_AUCTIONS:
-                //TOOD
+                GetAllAuctionsResponse getAllAuctionsResponse = JsonUtility.FromJson<GetAllAuctionsResponse>(responseJson);
+                EventManager.Instance.OnGetAllAuctionsResponse(getAllAuctionsResponse);
                 break;
             case ResponseTypeConstant.BID_FOR_AUCTION:
                 BidForAuctionResponse bidForAuctionResponse = JsonUtility.FromJson<BidForAuctionResponse>(responseJson);
                 EventManager.Instance.OnBidForAuctionResponse(bidForAuctionResponse);
+                break;
+            case ResponseTypeConstant.GET_ALL_FACTORIES:
+                GetAllFactoriesResponse getAllFactoriesResponse = JsonUtility.FromJson<GetAllFactoriesResponse>(responseJson);
+                EventManager.Instance.OnGetAllFactoriesResponse(getAllFactoriesResponse);
                 break;
         }
     }
