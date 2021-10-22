@@ -9,21 +9,16 @@ using Random = UnityEngine.Random;
 
 public class CountrySelectionController : MonoBehaviour
 {
+    [Serializable]
     public class CountryCard
     {
         public Sprite blackMap;
         public Sprite cardBg;
-
         public Utils.Country country;
     }
 
-    public class CountryCardsManager
-    {
-        public List<CountryCard> cards = new List<CountryCard>();
-    }
-
-    public CountryCardsManager cardManager;
     public GameObject[] cardSlots;
+    public List<CountryCard> cards = new List<CountryCard>();
     public GameObject loadingCircle;
     public Button goToMapButton;
     public Button getCountryButton;
@@ -31,10 +26,12 @@ public class CountrySelectionController : MonoBehaviour
 
     private List<string> _countryNameLocalizeKeys = new List<string>();
 
-    private void Start()
+    private void Awake()
     {
         goToMapButton.gameObject.SetActive(false);
+        goToMapButton.GetComponent<Button>().onClick.AddListener(delegate { onGoToMapButtonClicked(); });
         getCountryButton.gameObject.SetActive(true);
+        getCountryButton.GetComponent<Button>().onClick.AddListener(delegate { OnGetCountryButtonClicked(); });
         FillCountryNameLocalizeKeyList();
         DisplayCards();
     }
@@ -51,24 +48,23 @@ public class CountrySelectionController : MonoBehaviour
         
     private void DisplayCards()
     {
-        for(int i = 0; i < cardManager.cards.Count; i++)
+        for(int i = 0; i < cards.Count; i++)
         {
-            cardSlots[i].transform.GetChild(3).GetComponent<RTLTextMeshPro>().text = cardManager.cards[i].country.ToString();
-            cardSlots[i].transform.GetChild(3).GetComponent<Localize>().SetKey(_countryNameLocalizeKeys[i]);
-            //cardSlots[i].transform.GetChild(1).GetComponent<Image>().sprite = cardManager.cards[i].cardBg;
-            cardSlots[i].transform.GetChild(2).GetComponent<Image>().sprite = cardManager.cards[i].blackMap;
-            cardSlots[i].transform.GetChild(0).gameObject.SetActive(false);
-            cardSlots[i].transform.GetChild(4).gameObject.SetActive(false);
+            string countryName = cards[i].country.ToString();
+            string localizeKey = _countryNameLocalizeKeys[i];
+            Sprite cardBg = cards[i].cardBg;
+            Sprite blackMap = cards[i].blackMap;
+            cardSlots[i].GetComponent<CountryCardSetter>().SetAllValues(countryName, localizeKey, blackMap, cardBg);
         }
     }
 
-    public void OnGetCountryButtonClicked()
+    void OnGetCountryButtonClicked()
     {
         loadingCircle.gameObject.SetActive(true);
         
-        for(int i = 0; i < cardManager.cards.Count; i++)
+        for(int i = 0; i < cards.Count; i++)
         {
-            cardSlots[i].transform.GetChild(4).gameObject.SetActive(true);
+            cardSlots[i].GetComponent<CountryCardSetter>().SetMaskActive(true);
         }
         
         StartCoroutine(ShowCountryCoroutine());
@@ -83,8 +79,8 @@ public class CountrySelectionController : MonoBehaviour
         {
             //TODO get country from server again
         }
-        cardSlots[countryIndex].transform.GetChild(4).gameObject.SetActive(false);
-        cardSlots[countryIndex].transform.GetChild(0).gameObject.SetActive(true);
+        cardSlots[countryIndex].GetComponent<CountryCardSetter>().SetMaskActive(false);
+        cardSlots[countryIndex].GetComponent<CountryCardSetter>().SetSelectedBorderActive(true);
         loadingCircle.gameObject.SetActive(false);
         goToMapButton.gameObject.SetActive(true);
         getCountryButton.gameObject.SetActive(false);
@@ -97,7 +93,7 @@ public class CountrySelectionController : MonoBehaviour
         string countryName = PlayerPrefs.GetString("Country");
         foreach (GameObject cardSlot in cardSlots)
         {
-            if (cardSlot.transform.GetChild(3).GetComponent<RTLTextMeshPro>().text == countryName)
+            if (cardSlot.GetComponent<CountryCardSetter>().GetCountryName() == countryName)
             {
                 return index;
             }
@@ -106,7 +102,7 @@ public class CountrySelectionController : MonoBehaviour
         return -1;
     }
 
-    public void onGoToMapButtonClicked()
+    void onGoToMapButtonClicked()
     {
         countrySelectionCanvas.SetActive(false);
         SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);

@@ -1,72 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1165557942711170639
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1165557942711170638}
-  - component: {fileID: 1165557942711170637}
-  m_Layer: 5
-  m_Name: CountryCardsManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1165557942711170638
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1165557942711170639}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1165557942926403470}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1165557942711170637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1165557942711170639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5c6baf259187c64abf4bc9814b6a7af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cards:
-  - blackMap: {fileID: 21300000, guid: dfa58f520e7cf444196d04c3c5c207e0, type: 3}
-    cardBg: {fileID: 0}
-    countryName: France
-  - blackMap: {fileID: 21300000, guid: 9e0ba730482dd1841a946feccf996268, type: 3}
-    cardBg: {fileID: 0}
-    countryName: Germany
-  - blackMap: {fileID: 21300000, guid: d1c437088ff481f4da4c9656a65485ec, type: 3}
-    cardBg: {fileID: 0}
-    countryName: England
-  - blackMap: {fileID: 21300000, guid: 89a82f95fb88b154095d2aedc27da917, type: 3}
-    cardBg: {fileID: 0}
-    countryName: Netherlands
-  - blackMap: {fileID: 21300000, guid: 2080b94fc13315241b9f0d6c91458fb3, type: 3}
-    cardBg: {fileID: 0}
-    countryName: Belgium
-  - blackMap: {fileID: 21300000, guid: b4fb2e2176935af448f7c397ef7b7dcb, type: 3}
-    cardBg: {fileID: 0}
-    countryName: Switzerland
 --- !u!1 &1165557942795328421
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,7 +209,6 @@ RectTransform:
   m_Children:
   - {fileID: 1165557944430510901}
   - {fileID: 1165557943692206856}
-  - {fileID: 1165557942711170638}
   - {fileID: 1165557944753460610}
   - {fileID: 1165557944356698253}
   - {fileID: 3131831466721116236}
@@ -423,7 +355,7 @@ MonoBehaviour:
   fitY: 1
   rows: 2
   columns: 3
-  cellSize: {x: 169.32294, y: 114.113}
+  cellSize: {x: 182.32294, y: 141.113}
   spacing: {x: 20, y: 5}
 --- !u!1 &1165557943693084133
 GameObject:
@@ -544,7 +476,7 @@ RectTransform:
   m_Children:
   - {fileID: 1165557943693084132}
   m_Father: {fileID: 1165557942926403470}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -798,7 +730,7 @@ RectTransform:
   m_Children:
   - {fileID: 1165557942795328420}
   m_Father: {fileID: 1165557942926403470}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -886,19 +818,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1165557944753460608}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CountrySelectionController, Assembly-CSharp
-        m_MethodName: OnGetCountryButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3291291677076637582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1112,7 +1032,7 @@ RectTransform:
   m_Children:
   - {fileID: 4547602949552767212}
   m_Father: {fileID: 1165557942926403470}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1200,19 +1120,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1336744100343888976}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CountrySelectionController, Assembly-CSharp
-        m_MethodName: OnGetCountryButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1001 &1165557942796598432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1227,6 +1135,10 @@ PrefabInstance:
     - target: {fileID: 2544646524361439124, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 10.247799
+      objectReference: {fileID: 0}
+    - target: {fileID: 2544646524864231565, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
+      propertyPath: m_fontSize
+      value: 14.05
       objectReference: {fileID: 0}
     - target: {fileID: 2544646524864231566, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1346,6 +1258,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 10.247799
       objectReference: {fileID: 0}
+    - target: {fileID: 2544646524864231565, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
+      propertyPath: m_fontSize
+      value: 14.05
+      objectReference: {fileID: 0}
     - target: {fileID: 2544646524864231566, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -1.3898163
@@ -1463,6 +1379,10 @@ PrefabInstance:
     - target: {fileID: 2544646524361439124, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 10.247799
+      objectReference: {fileID: 0}
+    - target: {fileID: 2544646524864231565, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
+      propertyPath: m_fontSize
+      value: 14.05
       objectReference: {fileID: 0}
     - target: {fileID: 2544646524864231566, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1582,6 +1502,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 10.247799
       objectReference: {fileID: 0}
+    - target: {fileID: 2544646524864231565, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
+      propertyPath: m_fontSize
+      value: 14.05
+      objectReference: {fileID: 0}
     - target: {fileID: 2544646524864231566, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -1.3898163
@@ -1700,6 +1624,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 10.247799
       objectReference: {fileID: 0}
+    - target: {fileID: 2544646524864231565, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
+      propertyPath: m_fontSize
+      value: 14.05
+      objectReference: {fileID: 0}
     - target: {fileID: 2544646524864231566, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -1.3898163
@@ -1817,6 +1745,10 @@ PrefabInstance:
     - target: {fileID: 2544646524361439124, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 10.247799
+      objectReference: {fileID: 0}
+    - target: {fileID: 2544646524864231565, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
+      propertyPath: m_fontSize
+      value: 14.05
       objectReference: {fileID: 0}
     - target: {fileID: 2544646524864231566, guid: 2730c32b60da85d4db133670b71da0e0, type: 3}
       propertyPath: m_AnchoredPosition.x
