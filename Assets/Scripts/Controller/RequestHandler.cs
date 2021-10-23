@@ -66,10 +66,6 @@ public class RequestHandler
                 BidForAuctionResponse bidForAuctionResponse = JsonUtility.FromJson<BidForAuctionResponse>(responseJson);
                 EventManager.Instance.OnBidForAuctionResponse(bidForAuctionResponse);
                 break;
-            case ResponseTypeConstant.GET_ALL_FACTORIES:
-                GetAllFactoriesResponse getAllFactoriesResponse = JsonUtility.FromJson<GetAllFactoriesResponse>(responseJson);
-                EventManager.Instance.OnGetAllFactoriesResponse(getAllFactoriesResponse);
-                break;
         }
     }
 }

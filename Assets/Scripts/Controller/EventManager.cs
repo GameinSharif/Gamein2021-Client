@@ -80,10 +80,4 @@ public class EventManager : MonoBehaviour
     {
         OnGetAllAuctionsResponseEvent?.Invoke(getAllAuctionsResponse);
     }
-    
-    public event Action<GetAllFactoriesResponse> OnGetAllFactoriesResponseEvent;
-    public void OnGetAllFactoriesResponse(GetAllFactoriesResponse getAllFactoriesResponse)
-    {
-        OnGetAllFactoriesResponseEvent?.Invoke(getAllFactoriesResponse);
-    }
 }

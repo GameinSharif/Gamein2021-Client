@@ -21,13 +21,13 @@ public class GameDataManager : MonoBehaviour
         EventManager.Instance.OnGetGameDataResponseEvent += OnGetGameDataResponse;
         EventManager.Instance.OnGetCurrentWeekDemandsResponseEvent += OnGetCurrentWeekDemandsResponse;
         EventManager.Instance.OnGetAllAuctionsResponseEvent += OnGetAllAuctionsResponse;
-        EventManager.Instance.OnGetAllFactoriesResponseEvent += OnGetAllFactoriesResponse;
     }
 
     public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
     {
         GameinCustomers = getGameDataResponse.gameinCustomers;
         Products = getGameDataResponse.products;
+        Factories = getGameDataResponse.factories;
 
         GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
     }
@@ -54,12 +54,6 @@ public class GameDataManager : MonoBehaviour
     {
         int index = Auctions.IndexOf(GetAuctionById(auction.id));
         Auctions[index] = auction;
-    }
-
-    public void OnGetAllFactoriesResponse(GetAllFactoriesResponse getAllFactoriesResponse)
-    {
-        Factories = getAllFactoriesResponse.factories;
-        MapManager.Instance.UpdateAllOnMapMarkers();
     }
     
     public Utils.Factory GetFactoryById(int id)
