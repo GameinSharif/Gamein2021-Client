@@ -8,9 +8,13 @@ using UnityEngine.SceneManagement;
 public class LoginManager : MonoBehaviour
 {
     public static LoginManager Instance;
-    public TMP_InputField usernameInputField;
-    public TMP_InputField passwordInputField;
-    public Localize loginError;
+
+    public GameObject LoginCanvas;
+    public GameObject SelectLanguagePopup;
+
+    public TMP_InputField UsernameInputField;
+    public TMP_InputField PasswordInputField;
+    public Localize LoginErrorLocalize;
 
     private void Awake()
     {
@@ -19,7 +23,18 @@ public class LoginManager : MonoBehaviour
 
     private void Start()
     {
-        loginError.gameObject.SetActive(false);
+        LoginErrorLocalize.gameObject.SetActive(false);
+
+        if (PlayerPrefs.HasKey("Language"))
+        {
+            LoginCanvas.SetActive(true);
+            SelectLanguagePopup.SetActive(false);
+        }
+        else
+        {
+            LoginCanvas.SetActive(false);
+            SelectLanguagePopup.SetActive(true);
+        }
     }
 
     private void OnEnable()
@@ -32,14 +47,22 @@ public class LoginManager : MonoBehaviour
         EventManager.Instance.OnLoginResponseEvent -= OnLoginResponseReceive;
     }
 
+    public void SelectLangugae(string language)
+    {
+        LocalizationManager.Instance.SetLanguage(language);
+
+        LoginCanvas.SetActive(true);
+        SelectLanguagePopup.SetActive(false);
+    }
+
     public void OnLoginButtonClick()
     {
-        string username = usernameInputField.text;
-        string password = passwordInputField.text;
+        string username = UsernameInputField.text;
+        string password = PasswordInputField.text;
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
-            loginError.SetKey("login_error_empty");
-            loginError.gameObject.SetActive(true);
+            LoginErrorLocalize.SetKey("login_error_empty");
+            LoginErrorLocalize.gameObject.SetActive(true);
             return;
         }
 
@@ -61,8 +84,8 @@ public class LoginManager : MonoBehaviour
         }
         else
         {
-            loginError.SetKey("login_error_info");
-            loginError.gameObject.SetActive(true);
+            LoginErrorLocalize.SetKey("login_error_info");
+            LoginErrorLocalize.gameObject.SetActive(true);
         }
     }
 
