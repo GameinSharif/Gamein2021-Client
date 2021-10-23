@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RTLTMPro;
 using UnityEditor;
+using UnityEngine.UI;
 
 public class EachAuctionController : MonoBehaviour
 {
@@ -11,12 +12,12 @@ public class EachAuctionController : MonoBehaviour
     public GameObject bidHigherGameObject;
     public GameObject hasHighestBidGameObject;
     public RTLTextMeshPro highestBidAmount;
-    public Utils.Auction auction;
-    
+    public Button factoryButton;
+    private Utils.Auction _auction;
 
-    public void SetAuctionPanelActive()
+    public void OnFactoryButtonClicked()
     {
-        auctionGameObject.SetActive(true);
+        auctionGameObject.SetActive(!auctionGameObject.activeSelf);
     }
     
     public void OnCloseButtonClicked()
@@ -26,15 +27,21 @@ public class EachAuctionController : MonoBehaviour
 
     public void SetAuctionValues(Utils.Auction auction, MapUtils.OnMapMarker onMapMarker)
     {
-        this.auction = auction;
-
-        if (auction.auctionBidStatus == Utils.AuctionBidStatus.Over)
+        _auction = auction;
+        if (auction.auctionBidStatus == Utils.AuctionBidStatus.Over ||  onMapMarker.MapAgentMarker.MapAgentType == MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory) 
         {
-            //TODO deactivate the on map marker onclick function
+            factoryButton.interactable = false;
             return;
         }
-        
-        highestBidAmount.text = auction.highestBid + " $";
+
+        if (onMapMarker.MapAgentMarker.MapAgentType == MapUtils.MapAgentMarker.AgentType.NoOwnerFactory)
+        {
+            highestBidAmount.text = "minimum amount" + " $"; //TODO get minimum from constants
+        }
+        else
+        {
+            highestBidAmount.text = auction.highestBid + " $";
+        }
         
         if (hasHighestBid())
         {
@@ -61,7 +68,7 @@ public class EachAuctionController : MonoBehaviour
     
     public void OnBidButtonClicked()
     {
-        int factoryId = auction.factoryId;
+        int factoryId = _auction.factoryId;
         BidForAuctionRequest bidHigherRequest = new BidForAuctionRequest(RequestTypeConstant.BID_FOR_AUCTION, factoryId);
         RequestManager.Instance.SendRequest(bidHigherRequest);
     }
