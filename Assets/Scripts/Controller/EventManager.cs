@@ -68,4 +68,16 @@ public class EventManager : MonoBehaviour
     {
         OnGetProvidersResponseEvent?.Invoke(getProvidersResponse);
     }
+    
+    public event Action<GetProductionLinesResponse> OnGetProductionLinesResponseEvent;
+    public void OnGetProductionLinesResponse(GetProductionLinesResponse getProductionLinesResponse)
+    {
+        OnGetProductionLinesResponseEvent?.Invoke(getProductionLinesResponse);
+    }
+    
+    public event Action<ConstructProductionLineResponse> OnConstructProductionLineResponseEvent;
+    public void OnConstructProductionLineResponse(ConstructProductionLineResponse constructProductionLineResponse)
+    {
+        OnConstructProductionLineResponseEvent?.Invoke(constructProductionLineResponse);
+    }
 }

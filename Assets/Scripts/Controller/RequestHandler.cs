@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class RequestHandler
@@ -55,6 +56,24 @@ public class RequestHandler
             case ResponseTypeConstant.REMOVE_PROVIDER:
                 //TODO
                 break;
+            case ResponseTypeConstant.GET_PRODUCTION_LINES:
+                GetProductionLinesResponse getProductionLinesResponse = JsonUtility.FromJson<GetProductionLinesResponse>(responseJson);
+                EventManager.Instance.OnGetProductionLinesResponse(getProductionLinesResponse);
+                break;
+            case ResponseTypeConstant.CONSTRUCT_PRODUCTION_LINE:
+                ConstructProductionLineResponse constructProductionLineResponse = JsonUtility.FromJson<ConstructProductionLineResponse>(responseJson);
+                EventManager.Instance.OnConstructProductionLineResponse(constructProductionLineResponse);
+                break;
+            case ResponseTypeConstant.SCRAP_PRODUCTION_LINE:
+                break;
+            case ResponseTypeConstant.START_PRODUCTION:
+                break;
+            case ResponseTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY:
+                break;
+            case ResponseTypeConstant.UPGRADE_PRODUCTION_LINE_EFFICIENCY:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 }

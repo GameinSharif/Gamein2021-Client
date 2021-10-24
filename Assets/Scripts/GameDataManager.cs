@@ -9,6 +9,7 @@ public class GameDataManager : MonoBehaviour
 
     [HideInInspector] public List<Utils.GameinCustomer> GameinCustomers;
     [HideInInspector] public List<Utils.Product> Products;
+    [HideInInspector] public List<Utils.ProductionLineTemplate> ProductionLineTemplates;
 
     [HideInInspector] public List<Utils.WeekDemand> CurrentWeekDemands;
 
@@ -23,6 +24,9 @@ public class GameDataManager : MonoBehaviour
     {
         GameinCustomers = getGameDataResponse.gameinCustomers;
         Products = getGameDataResponse.products;
+        ProductionLineTemplates = getGameDataResponse.productionLineTemplates;
+
+        Debug.Log(ProductionLineTemplates);
 
         GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
     }

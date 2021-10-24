@@ -31,5 +31,11 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
     }
 
+    //button
+    public void GoToProductionLineMenu()
+    {
+        SceneManager.LoadScene("ProductionLine");
+    }
+
     //TODO for other pages
 }

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using ProductionLine;
+using QualityLevel = ProductionLine.QualityLevel;
 
 
 public class Utils
@@ -97,5 +99,33 @@ public class Utils
     {
         public int productId;
         public int amount;
+    }
+    
+    [Serializable]
+    public class ProductionLine
+    {
+        private int id;
+        private int productionLineTemplateId;
+        private int teamId;
+        private List<Product> products;
+        private int qualityLevel;
+        private int efficiencyLevel;
+        private ProductionLineStatus status;
+    }
+    
+    [Serializable]
+    public class ProductionLineTemplate
+    {
+        private int id;
+        private string name;
+        private int constructionCost;
+        private int scrapPrice;
+        private int batchSize;
+        private int dailyProductionRate;
+        private List<EfficiencyLevel> efficiencyLevels;
+        private int weeklyMaintenanceCost;
+        private int setupCost;
+        private int productionCostPerOneProduct;
+        private List<QualityLevel> qualityLevels;
     }
 }
