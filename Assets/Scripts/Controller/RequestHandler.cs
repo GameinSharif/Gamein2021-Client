@@ -54,6 +54,13 @@ public class RequestHandler
                 break;
             case ResponseTypeConstant.REMOVE_PROVIDER:
                 //TODO
+            case ResponseTypeConstant.GET_All_CHATS:
+                GetAllChatsResponse getAllChatsResponse = JsonUtility.FromJson<GetAllChatsResponse>(responseJson);
+                EventManager.Instance.OnGetAllChatsResponse(getAllChatsResponse);
+                break;
+            case ResponseTypeConstant.NEW_MESSAGE:
+                NewMessageResponse newMessageResponse = JsonUtility.FromJson<NewMessageResponse>(responseJson);
+                EventManager.Instance.OnNewMessageResponse(newMessageResponse);
                 break;
         }
     }

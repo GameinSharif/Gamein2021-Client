@@ -150,7 +150,6 @@ GameObject:
   - component: {fileID: 5852439150869979601}
   - component: {fileID: 5852439150869979603}
   - component: {fileID: 5852439150869979602}
-  - component: {fileID: 5583761026481413877}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -212,8 +211,8 @@ MonoBehaviour:
 
     :)'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5f153c2825e092949bbfc88c342f7685, type: 2}
+  m_sharedMaterial: {fileID: -1908425998639066346, guid: 5f153c2825e092949bbfc88c342f7685, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -289,41 +288,6 @@ MonoBehaviour:
     :)'
   fixTags: 1
   forceFix: 0
---- !u!114 &5583761026481413877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5852439150869979600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: 0
-  AudioClips:
-  - {fileID: 0}
-  - {fileID: 0}
-  Sprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  Fonts:
-  - {fileID: 0}
-  - {fileID: 0}
-  FontAssets:
-  - {fileID: 0}
-  - {fileID: 0}
-  StartCorner: 0
-  Positions:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  Outline: 0
-  FixedFontAsset: 0
-  IsContainsAtSign: 0
-  LocalizedString:
-    key: 
-  ValueSetBefore: 0
 --- !u!1 &5852439151080664290
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,7 +302,7 @@ GameObject:
   - component: {fileID: 5852439151080664222}
   - component: {fileID: 85010660011047601}
   m_Layer: 5
-  m_Name: Message
+  m_Name: MyMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,8 +381,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 5852439150869979602}
-  backgroundImage: {fileID: 5852439149423620961}
-  mainLayoutGroup: {fileID: 5852439151080664220}
 --- !u!222 &85010660011047601
 CanvasRenderer:
   m_ObjectHideFlags: 0
