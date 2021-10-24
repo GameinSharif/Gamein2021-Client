@@ -6,29 +6,19 @@ using TMPro;
 
 public class ProvidersController : MonoBehaviour
 {
-    public GameObject providerItemPrefab;
-    public Transform scrollPanel;
-    
-    public GameObject placeAsProviderPopUp;
-    public TMP_InputField providerPopUpInputField1;
-    public RTLTextMeshPro providerPopUpTextField1;
-    public RTLTextMeshPro providerPopUpTextField2;
-    public RTLTextMeshPro providerPopUpTextField3;
+    [HideInInspector] List<Utils.Provider> MyTeamProviders;
+    [HideInInspector] List<Utils.Provider> OtherTeamsProviders;
 
-    public GameObject newOfferPopUp;
-    public TMP_InputField offerPopUpInputField1;
-    public TMP_InputField offerPopUpInputField2;
-    public TMP_InputField offerPopUpInputField3;
-    public TMP_Dropdown offerPopUpDropdown;
-    public DatePicker date1;
-    public DatePicker date2;
-    public DatePicker date3;
+    public GameObject providerItemPrefab;
+
+    public GameObject MyTeamProvidersScrollViewParent;
+    public GameObject OtherTeamsProvidersScrollViewParent;
+
+    private List<GameObject> _spawnedGameObjects = new List<GameObject>();
 
     private void Awake()
     {
-        DestroyAllChildrenInScrollPanel();
-        SetOfferPopUpActive(false);
-        SetProviderPopUpActive(false);
+        DeactiveAllChildrenInScrollPanel();
     }
 
     private void OnEnable()
@@ -43,65 +33,62 @@ public class ProvidersController : MonoBehaviour
 
     public void OnGetProvidersResponse(GetProvidersResponse getProvidersResponse)
     {
-        //TODO set in UI
-    }
+        MyTeamProviders = getProvidersResponse.myTeamProviders;
+        OtherTeamsProviders = getProvidersResponse.otherTeamsProviders;
 
-    public void AddToList(Utils.Provider provider)
-    {
-        var createdItem = Instantiate(providerItemPrefab, scrollPanel);
-        var controller = createdItem.GetComponent<ProviderItemController>();
-        controller.SetInfo(scrollPanel.transform.childCount, provider);
-        RectTransform createdItemRectTransform = createdItem.GetComponent<RectTransform>();
-        float height = -97.5916f;
-        createdItemRectTransform.anchoredPosition = new Vector2(0, (float) scrollPanel.transform.childCount * height);
-        createdItem.gameObject.SetActive(true);
-    }
-
-    private void DestroyAllChildrenInScrollPanel()
-    {
-        foreach (Transform child in scrollPanel.transform)
+        DeactiveAllChildrenInScrollPanel();
+        for (int i=0;i < MyTeamProviders.Count; i++)
         {
-            Destroy(child.gameObject);
+            AddMyProviderToList(MyTeamProviders[i], i + 1);
+        }
+        for (int i = 0; i < OtherTeamsProviders.Count; i++)
+        {
+            AddOtherProviderToList(OtherTeamsProviders[i], i + 1);
         }
     }
 
-    public void OnPlaceYourselfAsProviderClicked()
+    private void AddMyProviderToList(Utils.Provider provider, int index)
     {
-        SetProviderPopUpActive(true);
+        GameObject createdItem = GetItem();
+        createdItem.transform.SetParent(MyTeamProvidersScrollViewParent.transform);
+        createdItem.transform.SetSiblingIndex(index);
+
+        ProviderItemController controller = createdItem.GetComponent<ProviderItemController>();
+        controller.SetInfo(index, provider);
+
+        createdItem.SetActive(true);
     }
 
-    public void OnProviderPopUpCloseClicked()
+    private void AddOtherProviderToList(Utils.Provider provider, int index)
     {
-        SetProviderPopUpActive(false);
+        GameObject createdItem = GetItem();
+        createdItem.transform.SetParent(OtherTeamsProvidersScrollViewParent.transform);
+        createdItem.transform.SetSiblingIndex(index);
+
+        ProviderItemController controller = createdItem.GetComponent<ProviderItemController>();
+        controller.SetInfo(index, provider);
+
+        createdItem.SetActive(true);
     }
 
-    private void SetProviderPopUpActive(bool value)
+    private GameObject GetItem()
     {
-        placeAsProviderPopUp.SetActive(value);
+        foreach (GameObject gameObject in _spawnedGameObjects)
+        {
+            if (!gameObject.activeSelf)
+            {
+                return gameObject;
+            }
+        }
+
+        return Instantiate(providerItemPrefab);
     }
 
-    public void OnPlaceProviderButtonClicked()
+    private void DeactiveAllChildrenInScrollPanel()
     {
-        //TODO
-    }
-
-    public void OnSendOfferButtonClicked()
-    {
-        SetOfferPopUpActive(true);
-    }
-
-    public void OnOfferPopUpCloseClicked()
-    {
-        SetOfferPopUpActive(false);
-    }
-
-    private void SetOfferPopUpActive(bool value)
-    {
-        newOfferPopUp.SetActive(value);
-    }
-    
-    public void OnPlaceOfferButtonClicked()
-    {
-        //TODO
+        foreach (GameObject gameObject in _spawnedGameObjects)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

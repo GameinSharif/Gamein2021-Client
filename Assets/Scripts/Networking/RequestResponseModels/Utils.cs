@@ -18,12 +18,10 @@ public class Utils
     public class Provider
     {
         public int id;
-        public Team team;
+        public int teamId;
         public int productId;
         public int capacity;
-        public int averagePrice;
-        public int minPriceOnRecord;
-        public int maxPriceOnRecord;
+        public float price;
     }
 
     public enum ContractType

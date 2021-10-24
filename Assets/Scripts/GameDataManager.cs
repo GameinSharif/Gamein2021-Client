@@ -7,6 +7,7 @@ public class GameDataManager : MonoBehaviour
 {
     public static GameDataManager Instance;
 
+    [HideInInspector] public List<Utils.Team> Teams;
     [HideInInspector] public List<Utils.GameinCustomer> GameinCustomers;
     [HideInInspector] public List<Utils.Product> Products;
 
@@ -23,6 +24,7 @@ public class GameDataManager : MonoBehaviour
 
     public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
     {
+        Teams = getGameDataResponse.teams;
         GameinCustomers = getGameDataResponse.gameinCustomers;
         Products = getGameDataResponse.products;
 
@@ -39,5 +41,17 @@ public class GameDataManager : MonoBehaviour
     public List<Utils.WeekDemand> GetCurrentWeekDemands(int gameinCustomerId)
     {
         return CurrentWeekDemands.Where(d => d.gameinCustomer.id == gameinCustomerId) as List<Utils.WeekDemand>;
+    }
+
+    public string GetTeamName(int teamId)
+    {
+        foreach (Utils.Team team in Teams)
+        {
+            if (teamId == team.id)
+            {
+                return team.teamName;
+            }
+        }
+        return "Team";
     }
 }
