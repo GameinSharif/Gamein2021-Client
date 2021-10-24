@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Serializable]
-public class ConstructProductionLineResponse : ResponseObject
+public class UpgradeProductionLineEfficiencyResponse : ResponseObject
 {
     public Utils.ProductionLine productionLine;
 }
