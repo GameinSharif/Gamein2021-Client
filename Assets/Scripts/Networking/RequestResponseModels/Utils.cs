@@ -107,10 +107,19 @@ public class Utils
         private int id;
         private int productionLineTemplateId;
         private int teamId;
-        private List<Product> products;
+        private List<ProductionLineProduct> products;
         private int qualityLevel;
         private int efficiencyLevel;
         private ProductionLineStatus status;
+    }
+    
+    [Serializable]
+    public class ProductionLineProduct {
+        private int id;
+        private int productId;
+        private int amount;
+        private DateTime startDate;
+        private DateTime endDate;
     }
     
     [Serializable]
