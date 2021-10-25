@@ -73,5 +73,15 @@ public class EventManager : MonoBehaviour
     public void OnNewProviderResponse(NewProviderResponse newProviderResponse)
     {
         OnNewProviderResponseEvent?.Invoke(newProviderResponse);
+    public event Action<GetAllChatsResponse> OnGetAllChatsResponseEvent;
+    public void OnGetAllChatsResponse(GetAllChatsResponse getAllChatsResponse)
+    {
+        OnGetAllChatsResponseEvent?.Invoke(getAllChatsResponse);
+    }
+
+    public event Action<NewMessageResponse> OnNewMessageResponseEvent;
+    public void OnNewMessageResponse(NewMessageResponse newMessageResponse)
+    {
+        OnNewMessageResponseEvent?.Invoke(newMessageResponse);
     }
 }

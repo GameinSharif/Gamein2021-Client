@@ -93,4 +93,14 @@ public class PoolingSystem<T>
         counter--;
     }
     
+    public void RemoveAll()
+    {
+        foreach (GameObject child in parent)
+        {
+            child.SetActive(false);
+        }
+
+        counter = 0;
+    }
+    
 }
