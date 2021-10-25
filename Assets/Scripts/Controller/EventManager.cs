@@ -68,4 +68,10 @@ public class EventManager : MonoBehaviour
     {
         OnGetProvidersResponseEvent?.Invoke(getProvidersResponse);
     }
+
+    public event Action<NewProviderResponse> OnNewProviderResponseEvent;
+    public void OnNewProviderResponse(NewProviderResponse newProviderResponse)
+    {
+        OnNewProviderResponseEvent?.Invoke(newProviderResponse);
+    }
 }

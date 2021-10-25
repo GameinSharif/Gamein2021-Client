@@ -46,7 +46,8 @@ public class RequestHandler
                 //TODO
                 break;
             case ResponseTypeConstant.NEW_PROVIDER:
-                //TODO
+                NewProviderResponse newProviderResponse = JsonUtility.FromJson<NewProviderResponse>(responseJson);
+                EventManager.Instance.OnNewProviderResponse(newProviderResponse);
                 break;
             case ResponseTypeConstant.GET_PROVIDERS:
                 GetProvidersResponse getProvidersResponse = JsonUtility.FromJson<GetProvidersResponse>(responseJson);

@@ -13,13 +13,38 @@ public class NewProviderPopupController : MonoBehaviour
     public List<GameObject> IsSelectedGameObjects;
 
     public TMP_InputField CapacityInputfield;
+    public TMP_InputField PriceInputfield;
     public TMP_InputField AveragePriceInputfield;
     public TMP_InputField MinPriceOnRecordInputfield;
     public TMP_InputField MaxPriceOnRecordInputfield;
 
+    private int _selectedProductId = 0;
+
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
+        EventManager.Instance.OnNewProviderResponseEvent += OnNewProviderResponse;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnNewProviderResponseEvent -= OnNewProviderResponse;
+    }
+
+    private void OnNewProviderResponse(NewProviderResponse newProviderResponse)
+    {
+        if (newProviderResponse.result == "Success")
+        {
+            ProvidersController.Instance.AddMyProviderToList(newProviderResponse.newProvider);
+        }
+        else
+        {
+            //TODO show error
+        }
     }
 
     public void OnOpenNewProviderPopupClick()
@@ -64,6 +89,15 @@ public class NewProviderPopupController : MonoBehaviour
 
     public void OnDoneButtonClick()
     {
-        //TODO send request
+        string capacity = CapacityInputfield.text;
+        string price = PriceInputfield.text;
+        if (string.IsNullOrEmpty(capacity) || string.IsNullOrEmpty(price) || _selectedProductId == 0)
+        {
+            //TODO show error
+            return;
+        }
+
+        NewProviderRequest newProviderRequest = new NewProviderRequest(RequestTypeConstant.LOGIN, _selectedProductId, int.Parse(capacity), float.Parse(price));
+        RequestManager.Instance.SendRequest(newProviderRequest);
     }
 }

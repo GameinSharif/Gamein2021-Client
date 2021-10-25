@@ -6,6 +6,8 @@ using TMPro;
 
 public class ProvidersController : MonoBehaviour
 {
+    public static ProvidersController Instance;
+
     [HideInInspector] List<Utils.Provider> MyTeamProviders;
     [HideInInspector] List<Utils.Provider> OtherTeamsProviders;
 
@@ -18,6 +20,8 @@ public class ProvidersController : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
+
         DeactiveAllChildrenInScrollPanel();
     }
 
@@ -45,6 +49,12 @@ public class ProvidersController : MonoBehaviour
         {
             AddOtherProviderToList(OtherTeamsProviders[i], i + 1);
         }
+    }
+
+    public void AddMyProviderToList(Utils.Provider provider)
+    {
+        MyTeamProviders.Add(provider);
+        AddMyProviderToList(provider, MyTeamProviders.Count);
     }
 
     private void AddMyProviderToList(Utils.Provider provider, int index)
@@ -90,5 +100,11 @@ public class ProvidersController : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+
+    public void OnRefreshButtonClick()
+    {
+        GetProvidersRequest getProvidersRequest = new GetProvidersRequest(RequestTypeConstant.GET_PROVIDERS);
+        RequestManager.Instance.SendRequest(getProvidersRequest);
     }
 }
