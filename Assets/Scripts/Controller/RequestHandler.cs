@@ -6,7 +6,7 @@ public class RequestHandler
     public static void HandleServerResponse(string responseJson)
     {
         ResponseObject responseObject = JsonUtility.FromJson<ResponseObject>(responseJson);
-        ResponseTypeConstant responseTypeConstant = (ResponseTypeConstant)responseObject.responseTypeConstant;
+        ResponseTypeConstant responseTypeConstant = (ResponseTypeConstant) responseObject.responseTypeConstant;
         switch (responseTypeConstant)
         {
             case ResponseTypeConstant.CONNECTION:
@@ -30,7 +30,8 @@ public class RequestHandler
                 EventManager.Instance.OnGetGameDataResponse(getGameDataResponse);
                 break;
             case ResponseTypeConstant.GET_CURRENT_WEEK_DEMANDS:
-                GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse = JsonUtility.FromJson<GetCurrentWeekDemandsResponse>(responseJson);
+                GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse =
+                    JsonUtility.FromJson<GetCurrentWeekDemandsResponse>(responseJson);
                 EventManager.Instance.OnGetCurrentWeekDemandsResponse(getCurrentWeekDemandsResponse);
                 break;
             case ResponseTypeConstant.GET_CONTRACTS:
@@ -57,20 +58,28 @@ public class RequestHandler
                 //TODO
                 break;
             case ResponseTypeConstant.GET_PRODUCTION_LINES:
-                GetProductionLinesResponse getProductionLinesResponse = JsonUtility.FromJson<GetProductionLinesResponse>(responseJson);
-                EventManager.Instance.OnGetProductionLinesResponse(getProductionLinesResponse);
+                EventManager.Instance.OnGetProductionLinesResponse(
+                    JsonUtility.FromJson<GetProductionLinesResponse>(responseJson));
                 break;
             case ResponseTypeConstant.CONSTRUCT_PRODUCTION_LINE:
-                ConstructProductionLineResponse constructProductionLineResponse = JsonUtility.FromJson<ConstructProductionLineResponse>(responseJson);
-                EventManager.Instance.OnConstructProductionLineResponse(constructProductionLineResponse);
+                EventManager.Instance.OnConstructProductionLineResponse(
+                    JsonUtility.FromJson<ConstructProductionLineResponse>(responseJson));
                 break;
             case ResponseTypeConstant.SCRAP_PRODUCTION_LINE:
+                EventManager.Instance.OnScrapProductionLineResponse(
+                    JsonUtility.FromJson<ScrapProductionLineResponse>(responseJson));
                 break;
             case ResponseTypeConstant.START_PRODUCTION:
+                EventManager.Instance.OnStartProductionResponse(
+                    JsonUtility.FromJson<StartProductionResponse>(responseJson));
                 break;
             case ResponseTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY:
+                EventManager.Instance.OnUpgradeProductionLineQualityResponse(
+                    JsonUtility.FromJson<UpgradeProductionLineQualityResponse>(responseJson));
                 break;
             case ResponseTypeConstant.UPGRADE_PRODUCTION_LINE_EFFICIENCY:
+                EventManager.Instance.OnUpgradeProductionLineEfficiencyResponse(
+                    JsonUtility.FromJson<UpgradeProductionLineEfficiencyResponse>(responseJson));
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

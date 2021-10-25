@@ -70,14 +70,38 @@ public class EventManager : MonoBehaviour
     }
     
     public event Action<GetProductionLinesResponse> OnGetProductionLinesResponseEvent;
-    public void OnGetProductionLinesResponse(GetProductionLinesResponse getProductionLinesResponse)
+    public void OnGetProductionLinesResponse(GetProductionLinesResponse response)
     {
-        OnGetProductionLinesResponseEvent?.Invoke(getProductionLinesResponse);
+        OnGetProductionLinesResponseEvent?.Invoke(response);
     }
     
     public event Action<ConstructProductionLineResponse> OnConstructProductionLineResponseEvent;
-    public void OnConstructProductionLineResponse(ConstructProductionLineResponse constructProductionLineResponse)
+    public void OnConstructProductionLineResponse(ConstructProductionLineResponse response)
     {
-        OnConstructProductionLineResponseEvent?.Invoke(constructProductionLineResponse);
+        OnConstructProductionLineResponseEvent?.Invoke(response);
+    }
+    
+    public event Action<ScrapProductionLineResponse> OnScrapProductionLineResponseEvent;
+    public void OnScrapProductionLineResponse(ScrapProductionLineResponse response)
+    {
+        OnScrapProductionLineResponseEvent?.Invoke(response);
+    }
+    
+    public event Action<StartProductionResponse> OnStartProductionResponseEvent;
+    public void OnStartProductionResponse(StartProductionResponse response)
+    {
+        OnStartProductionResponseEvent?.Invoke(response);
+    }
+    
+    public event Action<UpgradeProductionLineEfficiencyResponse> OnUpgradeProductionLineEfficiencyResponseEvent;
+    public void OnUpgradeProductionLineEfficiencyResponse(UpgradeProductionLineEfficiencyResponse response)
+    {
+        OnUpgradeProductionLineEfficiencyResponseEvent?.Invoke(response);
+    }
+    
+    public event Action<UpgradeProductionLineQualityResponse> OnUpgradeProductionLineQualityResponseEvent;
+    public void OnUpgradeProductionLineQualityResponse(UpgradeProductionLineQualityResponse response)
+    {
+        OnUpgradeProductionLineQualityResponseEvent?.Invoke(response);
     }
 }
