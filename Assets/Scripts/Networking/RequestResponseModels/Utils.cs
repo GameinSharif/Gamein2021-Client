@@ -24,6 +24,41 @@ public class Utils
         public float price;
     }
 
+    public enum OfferStatus
+    {
+        ACTIVE, ACCEPTED, TERMINATED, PASSED_DEADLINE
+    }
+
+    [Serializable]
+    public class Offer
+    {
+        public int id;
+        public int teamId;
+        public int productId;
+        public int volume;
+        public OfferStatus offerStatus;
+        public float costPerUnit;
+        public CustomDate offerDeadline;
+    }
+
+    public enum NegotiationState
+    {
+        CLOSED, DEAL, IN_PROGRESS, PENDING
+    }
+
+    [Serializable]
+    public class Negotiation
+    {
+        public int id;
+        public int demanderTeamId;
+        public int supplierTeamId;
+        public int productId;
+        public int amount;
+        public float costPerUnitDemander;
+        public float costPerUnitSupplier;
+        public NegotiationState state;
+    }
+
     public enum ContractType
     {
         ONCE,
