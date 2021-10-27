@@ -11,8 +11,9 @@ public enum RequestTypeConstant
     NEW_PROVIDER = 8,
     GET_PROVIDERS = 9,
     REMOVE_PROVIDER = 10,
-    GET_All_CHATS = 12,
-    NEW_MESSAGE = 13,
     NEW_PROVIDER_NEGOTIATION = 11,
-    BID_FOR_AUCTION = 12
+    BID_FOR_AUCTION = 12,
+    TERMINATE_OFFER = 13,
+    NEW_MESSAGE = 14,
+    GET_All_CHATS = 15
 }

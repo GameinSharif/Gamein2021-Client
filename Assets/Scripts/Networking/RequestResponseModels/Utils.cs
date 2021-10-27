@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
-
 
 public class Utils
 {
+    [Serializable]
     public class Team
     {
         public int id;

@@ -75,26 +75,27 @@ public class EventManager : MonoBehaviour
         OnNewProviderResponseEvent?.Invoke(newProviderResponse);
     }
 
-    public event Action<GetAllChatsResponse> OnGetAllChatsResponseEvent;
-    public void OnGetAllChatsResponse(GetAllChatsResponse getAllChatsResponse)
+    public event Action<BidForAuctionResponse> OnBidForAuctionResponseEvent;
+    public void OnBidForAuctionResponse(BidForAuctionResponse bidForAuctionResponse)
     {
-        OnGetAllChatsResponseEvent?.Invoke(getAllChatsResponse);
+        OnBidForAuctionResponseEvent?.Invoke(bidForAuctionResponse);
+    }
+
+    public event Action<GetAllAuctionsResponse> OnGetAllAuctionsResponseEvent;
+    public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
+    {
+        OnGetAllAuctionsResponseEvent?.Invoke(getAllAuctionsResponse);
     }
 
     public event Action<NewMessageResponse> OnNewMessageResponseEvent;
     public void OnNewMessageResponse(NewMessageResponse newMessageResponse)
     {
         OnNewMessageResponseEvent?.Invoke(newMessageResponse);
-    
-    public event Action<BidForAuctionResponse> OnBidForAuctionResponseEvent;
-    public void OnBidForAuctionResponse(BidForAuctionResponse bidForAuctionResponse)
-    {
-        OnBidForAuctionResponseEvent?.Invoke(bidForAuctionResponse);
     }
-    
-    public event Action<GetAllAuctionsResponse> OnGetAllAuctionsResponseEvent;
-    public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
+
+    public event Action<GetAllChatsResponse> OnGetAllChatsResponseEvent;
+    public void OnGetAllChatsResponse(GetAllChatsResponse getAllChatsResponse)
     {
-        OnGetAllAuctionsResponseEvent?.Invoke(getAllAuctionsResponse);
+        OnGetAllChatsResponseEvent?.Invoke(getAllChatsResponse);
     }
 }

@@ -77,10 +77,11 @@ public class LoginManager : MonoBehaviour
     {
         if (loginResponse.result == "Successful")
         {
-            int playerId = loginResponse.playerId;
-            PlayerPrefs.SetInt("PlayerId" , playerId);
-            PlayerPrefs.SetString("Country", loginResponse.team.country.ToString());
+            PlayerPrefs.SetInt("PlayerId" , loginResponse.playerId);
             PlayerPrefs.SetInt("TeamId", loginResponse.team.id);
+            PlayerPrefs.SetInt("FctoryId", loginResponse.team.factoryId); //Is 0 if player has no factory
+            PlayerPrefs.SetString("Country", loginResponse.team.country.ToString());
+
             SceneManager.LoadScene("MenuScene");
         }
         else

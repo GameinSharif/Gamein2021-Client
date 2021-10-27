@@ -13,8 +13,14 @@ public class MainMenuManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        
+        GetGameDataRequest getGameDataRequest = new GetGameDataRequest(RequestTypeConstant.GET_GAME_DATA);
+        RequestManager.Instance.SendRequest(getGameDataRequest);
+    }
 
-        if (PlayerPrefs.GetInt("IsFirstTime") == 1)
+    private void Start()
+    {
+        if (PlayerPrefs.GetInt("FactoryId") == 0)
         {
             mainMenu.SetActive(false);
             countrySelection.SetActive(true);
@@ -24,9 +30,6 @@ public class MainMenuManager : MonoBehaviour
             mainMenu.SetActive(true);
             countrySelection.SetActive(false);
         }
-        
-        GetGameDataRequest getGameDataRequest = new GetGameDataRequest(RequestTypeConstant.GET_GAME_DATA);
-        RequestManager.Instance.SendRequest(getGameDataRequest);
     }
 
     public void OnOpenTradePageButtonClick()

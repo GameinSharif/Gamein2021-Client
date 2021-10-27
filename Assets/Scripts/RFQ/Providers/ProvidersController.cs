@@ -59,8 +59,7 @@ public class ProvidersController : MonoBehaviour
 
     private void AddMyProviderToList(Utils.Provider provider, int index)
     {
-        GameObject createdItem = GetItem();
-        createdItem.transform.SetParent(MyTeamProvidersScrollViewParent.transform);
+        GameObject createdItem = GetItem(MyTeamProvidersScrollViewParent);
         createdItem.transform.SetSiblingIndex(index);
 
         ProviderItemController controller = createdItem.GetComponent<ProviderItemController>();
@@ -71,8 +70,7 @@ public class ProvidersController : MonoBehaviour
 
     private void AddOtherProviderToList(Utils.Provider provider, int index)
     {
-        GameObject createdItem = GetItem();
-        createdItem.transform.SetParent(OtherTeamsProvidersScrollViewParent.transform);
+        GameObject createdItem = GetItem(OtherTeamsProvidersScrollViewParent);
         createdItem.transform.SetSiblingIndex(index);
 
         ProviderItemController controller = createdItem.GetComponent<ProviderItemController>();
@@ -81,7 +79,7 @@ public class ProvidersController : MonoBehaviour
         createdItem.SetActive(true);
     }
 
-    private GameObject GetItem()
+    private GameObject GetItem(GameObject parent)
     {
         foreach (GameObject gameObject in _spawnedGameObjects)
         {
@@ -91,7 +89,7 @@ public class ProvidersController : MonoBehaviour
             }
         }
 
-        return Instantiate(providerItemPrefab);
+        return Instantiate(providerItemPrefab, parent.transform);
     }
 
     private void DeactiveAllChildrenInScrollPanel()

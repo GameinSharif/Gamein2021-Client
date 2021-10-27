@@ -67,6 +67,7 @@ public class NewProviderPopupController : MonoBehaviour
                 //TODO
 
                 ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine, index);
+                index++;
             }
         }
     }

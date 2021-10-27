@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using UnityEngine;
 
 public class RequestHandler
@@ -25,7 +27,7 @@ public class RequestHandler
                 EventManager.Instance.OnGetOffersResponse(getOffersResponse);
                 break;
             case ResponseTypeConstant.GET_GAME_DATA:
-                GetGameDataResponse getGameDataResponse = JsonUtility.FromJson<GetGameDataResponse>(responseJson);
+                GetGameDataResponse getGameDataResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetGameDataResponse), new StringEnumConverter()) as GetGameDataResponse;
                 EventManager.Instance.OnGetGameDataResponse(getGameDataResponse);
                 break;
             case ResponseTypeConstant.GET_CURRENT_WEEK_DEMANDS:
@@ -55,13 +57,6 @@ public class RequestHandler
                 break;
             case ResponseTypeConstant.REMOVE_PROVIDER:
                 //TODO
-            case ResponseTypeConstant.GET_All_CHATS:
-                GetAllChatsResponse getAllChatsResponse = JsonUtility.FromJson<GetAllChatsResponse>(responseJson);
-                EventManager.Instance.OnGetAllChatsResponse(getAllChatsResponse);
-                break;
-            case ResponseTypeConstant.NEW_MESSAGE:
-                NewMessageResponse newMessageResponse = JsonUtility.FromJson<NewMessageResponse>(responseJson);
-                EventManager.Instance.OnNewMessageResponse(newMessageResponse);
                 break;
             case ResponseTypeConstant.NEW_PROVIDER_NEGOTIATION:
                 //TODO
@@ -73,6 +68,17 @@ public class RequestHandler
             case ResponseTypeConstant.BID_FOR_AUCTION:
                 BidForAuctionResponse bidForAuctionResponse = JsonUtility.FromJson<BidForAuctionResponse>(responseJson);
                 EventManager.Instance.OnBidForAuctionResponse(bidForAuctionResponse);
+                break;
+            case ResponseTypeConstant.TERMINATE_OFFER:
+                //TODO
+                break;
+            case ResponseTypeConstant.NEW_MESSAGE:
+                NewMessageResponse newMessageResponse = JsonUtility.FromJson<NewMessageResponse>(responseJson);
+                EventManager.Instance.OnNewMessageResponse(newMessageResponse);
+                break;
+            case ResponseTypeConstant.GET_All_CHATS:
+                GetAllChatsResponse getAllChatsResponse = JsonUtility.FromJson<GetAllChatsResponse>(responseJson);
+                EventManager.Instance.OnGetAllChatsResponse(getAllChatsResponse);
                 break;
         }
     }

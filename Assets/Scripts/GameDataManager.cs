@@ -31,6 +31,7 @@ public class GameDataManager : MonoBehaviour
         Teams = getGameDataResponse.teams;
         GameinCustomers = getGameDataResponse.gameinCustomers;
         Products = getGameDataResponse.products;
+
         Factories = getGameDataResponse.factories;
 
         GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
@@ -46,7 +47,7 @@ public class GameDataManager : MonoBehaviour
     public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
     {
         Auctions = getAllAuctionsResponse.auctions;
-        MapManager.Instance.UpdateAllOnMapMarkers();
+        //MapManager.Instance.UpdateAllOnMapMarkers();
     }
     
     public Utils.Auction GetAuctionById(int id)
