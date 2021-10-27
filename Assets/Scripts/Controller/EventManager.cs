@@ -85,5 +85,16 @@ public class EventManager : MonoBehaviour
     public void OnNewMessageResponse(NewMessageResponse newMessageResponse)
     {
         OnNewMessageResponseEvent?.Invoke(newMessageResponse);
+    
+    public event Action<BidForAuctionResponse> OnBidForAuctionResponseEvent;
+    public void OnBidForAuctionResponse(BidForAuctionResponse bidForAuctionResponse)
+    {
+        OnBidForAuctionResponseEvent?.Invoke(bidForAuctionResponse);
+    }
+    
+    public event Action<GetAllAuctionsResponse> OnGetAllAuctionsResponseEvent;
+    public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
+    {
+        OnGetAllAuctionsResponseEvent?.Invoke(getAllAuctionsResponse);
     }
 }

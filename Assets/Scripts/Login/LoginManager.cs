@@ -79,7 +79,8 @@ public class LoginManager : MonoBehaviour
         {
             int playerId = loginResponse.playerId;
             PlayerPrefs.SetInt("PlayerId" , playerId);
-            
+            PlayerPrefs.SetString("Country", loginResponse.team.country.ToString());
+            PlayerPrefs.SetInt("TeamId", loginResponse.team.id);
             SceneManager.LoadScene("MenuScene");
         }
         else

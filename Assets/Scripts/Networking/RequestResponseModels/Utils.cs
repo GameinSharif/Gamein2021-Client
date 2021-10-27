@@ -10,7 +10,7 @@ public class Utils
     {
         public int id;
         public string teamName;
-        //public Country country;
+        public Country country;
         public int factoryId;
     }
 
@@ -130,5 +130,47 @@ public class Utils
     {
         public int productId;
         public int amount;
+    }
+
+    public enum Country
+    {
+        France,
+        Germany,
+        UnitedKingdom,
+        Netherlands,
+        Belgium,
+        Switzerland
+    }
+
+    [Serializable]
+    public class Factory
+    {
+        public int id;
+        public string name;
+        public Country country;
+        public double latitude;
+        public double longitude;
+    }
+
+    public enum AuctionBidStatus
+    {
+        Active,
+        Over
+    }
+
+    public class Auction
+    {
+        public int id;
+        public int factoryId;
+        public int highestBid;
+        public int highestBidTeamId;
+        public AuctionBidStatus auctionBidStatus;
+    }
+
+    public class GameConstants
+    {
+        public int AuctionStartValue = 1000;
+        public int AuctionStepValue = 100;
+        public List<CustomDateTime> AuctionRoundsStartTime;
     }
 }

@@ -63,6 +63,17 @@ public class RequestHandler
                 NewMessageResponse newMessageResponse = JsonUtility.FromJson<NewMessageResponse>(responseJson);
                 EventManager.Instance.OnNewMessageResponse(newMessageResponse);
                 break;
+            case ResponseTypeConstant.NEW_PROVIDER_NEGOTIATION:
+                //TODO
+                break;
+            case ResponseTypeConstant.GET_ALL_AUCTIONS:
+                GetAllAuctionsResponse getAllAuctionsResponse = JsonUtility.FromJson<GetAllAuctionsResponse>(responseJson);
+                EventManager.Instance.OnGetAllAuctionsResponse(getAllAuctionsResponse);
+                break;
+            case ResponseTypeConstant.BID_FOR_AUCTION:
+                BidForAuctionResponse bidForAuctionResponse = JsonUtility.FromJson<BidForAuctionResponse>(responseJson);
+                EventManager.Instance.OnBidForAuctionResponse(bidForAuctionResponse);
+                break;
         }
     }
 }
