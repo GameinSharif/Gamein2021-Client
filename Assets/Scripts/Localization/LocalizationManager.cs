@@ -76,10 +76,7 @@ public class LocalizationManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         LanguageDescriptions = new DescriptionAttributes<LocalizedLanguage>().Descriptions.ToList();
-    }
 
-    private void Start()
-    {
         string language = PlayerPrefs.GetString("Language");
         switch (language)
         {
@@ -91,7 +88,6 @@ public class LocalizationManager : MonoBehaviour
                 CurrentLanguage = LocalizedLanguage.Farsi;
                 break;
         }
-
     }
 
     public static void Init()

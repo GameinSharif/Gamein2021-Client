@@ -10,6 +10,7 @@ using System.Linq;
 public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
+    public static Vector2 SnapToLocaltionOnOpenMap;
 
     private AbstractMap _abstractMap;
     private QuadTreeCameraMovement _quadTreeCameraMovement;
@@ -32,6 +33,7 @@ public class MapManager : MonoBehaviour
     public List<GameObject> IsMapTypeSelectedGameObjects;
     [Space]
     public GameObject MapAgenetMarkerPrefab;
+    public GameObject OnMapMarkersParent;
     public List<MapUtils.MapAgentMarker> MapAgentMarkers;
     [Space]
     public GameObject MapLinePrefab;
@@ -56,7 +58,10 @@ public class MapManager : MonoBehaviour
 
         //ChangeMapAgentType(_onMapMarkers[0], MapUtils.MapAgentMarker.AgentType.Storage);
 
-        SnapToLocation(new Vector2(46, 2));
+        if (SnapToLocaltionOnOpenMap != null)
+        {
+            SnapToLocation(SnapToLocaltionOnOpenMap);
+        }
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
@@ -70,30 +75,30 @@ public class MapManager : MonoBehaviour
             SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), i, gameinCustomer.name);
         }
         
-        foreach (Utils.Auction auction in GameDataManager.Instance.Auctions)
-        {
-            MapUtils.MapAgentMarker.AgentType agentType;
-            bool isTheirs = auction.highestBidTeamId == PlayerPrefs.GetInt("TeamId");
-            bool isDifferentCountry = GameDataManager.Instance.GetFactoryById(auction.factoryId).country.ToString() !=
-                                      PlayerPrefs.GetString("Country");
-            bool isOver = auction.auctionBidStatus == Utils.AuctionBidStatus.Over;
-            if (isDifferentCountry || !isTheirs && isOver)
-            {
-                agentType = MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory;
-            } else if (auction.highestBidTeamId == null)
-            {
-                agentType = MapUtils.MapAgentMarker.AgentType.NoOwnerFactory;
-            } else if (isTheirs)
-            {
-                agentType = MapUtils.MapAgentMarker.AgentType.MyFactory;
-            }
-            else
-            {
-                agentType = MapUtils.MapAgentMarker.AgentType.OtherFactory;
-            }
-            Utils.Factory factory = GameDataManager.Instance.GetFactoryById(auction.factoryId);
-            SetMapAgentMarker(agentType, new Vector2d(factory.latitude, factory.longitude), auction.id, factory.name);
-        }
+        //foreach (Utils.Auction auction in GameDataManager.Instance.Auctions)
+        //{
+        //    MapUtils.MapAgentMarker.AgentType agentType;
+        //    bool isTheirs = auction.highestBidTeamId == PlayerPrefs.GetInt("TeamId");
+        //    bool isDifferentCountry = GameDataManager.Instance.GetFactoryById(auction.factoryId).country.ToString() !=
+        //                              PlayerPrefs.GetString("Country");
+        //    bool isOver = auction.auctionBidStatus == Utils.AuctionBidStatus.Over;
+        //    if (isDifferentCountry || !isTheirs && isOver)
+        //    {
+        //        agentType = MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory;
+        //    } else if (auction.highestBidTeamId == null)
+        //    {
+        //        agentType = MapUtils.MapAgentMarker.AgentType.NoOwnerFactory;
+        //    } else if (isTheirs)
+        //    {
+        //        agentType = MapUtils.MapAgentMarker.AgentType.MyFactory;
+        //    }
+        //    else
+        //    {
+        //        agentType = MapUtils.MapAgentMarker.AgentType.OtherFactory;
+        //    }
+        //    Utils.Factory factory = GameDataManager.Instance.GetFactoryById(auction.factoryId);
+        //    SetMapAgentMarker(agentType, new Vector2d(factory.latitude, factory.longitude), auction.id, factory.name);
+        //}
 
         //TODO do the same thing for other map markers
     }
@@ -113,7 +118,7 @@ public class MapManager : MonoBehaviour
         _abstractMap.ImageLayer.SetProperties((ImagerySourceType)_currnetMapTypeIndex, _useRetina, _useCompression, _useMipMap);
         SetMapTypesActiveStatus();
 
-        int mapZoomIndex = PlayerPrefs.GetInt("MapZoomIndex", 0);
+        int mapZoomIndex = PlayerPrefs.GetInt("MapZoomIndex", 2);
         _currnetZoomAmountIndex = mapZoomIndex;
         _abstractMap.SetZoom(_possibleZoomAmounts[_currnetZoomAmountIndex]);
 
@@ -180,7 +185,7 @@ public class MapManager : MonoBehaviour
         {
             if (mapAgentMarker.MapAgentType == agentType)
             {
-                var instance = Instantiate(MapAgenetMarkerPrefab);
+                var instance = Instantiate(MapAgenetMarkerPrefab, OnMapMarkersParent.transform);
                 instance.GetComponent<MaterialSetter>().Initialize(mapAgentMarker, name);
                 
                 instance.transform.localPosition = _abstractMap.GeoToWorldPosition(location) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);

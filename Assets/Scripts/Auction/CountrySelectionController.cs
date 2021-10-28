@@ -26,6 +26,8 @@ public class CountrySelectionController : MonoBehaviour
     public Button startRandomizeProcessButton;
 
     private List<string> _countryNameLocalizeKeys = new List<string>();
+    private List<Vector2> _countryCapitalsLocaltion = new List<Vector2>();
+    private int _countryIndex;
 
     private void Awake()
     {
@@ -49,6 +51,13 @@ public class CountrySelectionController : MonoBehaviour
         _countryNameLocalizeKeys.Add("auction_netherlands");
         _countryNameLocalizeKeys.Add("auction_belgium");
         _countryNameLocalizeKeys.Add("auction_switzerland");
+
+        _countryCapitalsLocaltion.Add(new Vector2(48.8566f, 2.3522f));
+        _countryCapitalsLocaltion.Add(new Vector2(52.5200f, 13.4050f));
+        _countryCapitalsLocaltion.Add(new Vector2(51.5072f, 0.1276f));
+        _countryCapitalsLocaltion.Add(new Vector2(52.3676f, 4.9041f));
+        _countryCapitalsLocaltion.Add(new Vector2(50.8503f, 4.3517f));
+        _countryCapitalsLocaltion.Add(new Vector2(46.8182f, 8.2275f));
     }
         
     private void DisplayCards()
@@ -85,9 +94,9 @@ public class CountrySelectionController : MonoBehaviour
         }
 
         Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
-        int countryIndex = (int) country;
+        _countryIndex = (int) country;
 
-        ShowRandomlySelectedCountry(countryIndex);
+        ShowRandomlySelectedCountry(_countryIndex);
 
         goToMapButton.gameObject.SetActive(true);
         startRandomizeProcessButton.gameObject.SetActive(false);
@@ -108,6 +117,20 @@ public class CountrySelectionController : MonoBehaviour
             countryCardSetter.SetSelectedBorderActive(false);
             countryCardSetter.SetMaskActive(true);
         }
+    }
+
+    public void OnGoToMapButtonClick()
+    {
+        LoadMap();
+    }
+
+    public void LoadMap()
+    {
+        MapManager.SnapToLocaltionOnOpenMap = _countryCapitalsLocaltion[_countryIndex];
+
+        SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
+
+        countrySelectionCanvas.SetActive(false);
     }
 
 }
