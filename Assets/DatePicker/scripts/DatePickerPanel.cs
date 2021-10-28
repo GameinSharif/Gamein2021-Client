@@ -103,8 +103,7 @@ public class DatePickerPanel : MonoBehaviour
     {
         for (int i = 0; i < DayToggles.Length; i++)
         {
-            var DayToggle = Instantiate(DayToggleTemplate);
-            DayToggle.transform.SetParent(DayContainer.transform);
+            var DayToggle = Instantiate(DayToggleTemplate, DayContainer.transform);
             DayToggle.GetComponentInChildren<TMP_Text>().text = string.Empty;
             DayToggle.onDateSelected.AddListener(OnDaySelected);
             DayToggles[i] = DayToggle;

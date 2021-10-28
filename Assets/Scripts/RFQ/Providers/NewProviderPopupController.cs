@@ -68,7 +68,7 @@ public class NewProviderPopupController : MonoBehaviour
                 bool hasThisProductsProductionLine = true;
                 //TODO
 
-                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine, index);
+                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine, index, "NewProvider");
                 index++;
             }
         }

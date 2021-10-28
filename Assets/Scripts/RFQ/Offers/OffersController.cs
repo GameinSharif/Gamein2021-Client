@@ -50,7 +50,7 @@ public class OffersController : MonoBehaviour
         }
     }
 
-    public void AddMyProviderToList(Utils.Offer offer)
+    public void AddMyOfferToList(Utils.Offer offer)
     {
         MyTeamOffers.Add(offer);
         AddMyOfferToList(offer, MyTeamOffers.Count);

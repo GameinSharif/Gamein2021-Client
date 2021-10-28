@@ -31,6 +31,12 @@ public class CustomDate
         this.month = month;
         this.day = day;
     }
+
+    override
+    public string ToString()
+    {
+        return year.ToString("0000") + "/" + month.ToString("00") + "/" + day.ToString("00");
+    }
 }
 
 [Serializable]

@@ -10,7 +10,7 @@ public class ProductDetailsSetter : MonoBehaviour
     public GameObject IsUnavailable;
     public Button Button;
 
-    public void SetData(Utils.Product product, bool isAvailable, int index)
+    public void SetData(Utils.Product product, bool isAvailable, int index, string popupType)
     {
         ProductImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
         ProductNameLocalize.SetKey("product_" + product.name);
@@ -21,7 +21,15 @@ public class ProductDetailsSetter : MonoBehaviour
         {
             Button.onClick.AddListener(() =>
             {
-                NewProviderPopupController.Instance.OnProductClick(product.id, index);
+                switch (popupType)
+                {
+                    case "NewOffer":
+                        NewOfferPopupController.Instance.OnProductClick(product.id, index);
+                        break;
+                    case "NewProvider":
+                        NewProviderPopupController.Instance.OnProductClick(product.id, index);
+                        break;
+                }
             });
         }
     }

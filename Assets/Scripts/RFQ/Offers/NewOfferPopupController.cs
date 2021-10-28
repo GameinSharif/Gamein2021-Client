@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class NewOfferPopupController : MonoBehaviour
 {
@@ -12,13 +13,10 @@ public class NewOfferPopupController : MonoBehaviour
     public List<ProductDetailsSetter> ProductDetailsSetters;
     public List<GameObject> IsSelectedGameObjects;
 
-    public TMP_InputField CapacityInputfield;
-    public TMP_InputField PriceInputfield;
-    public TMP_InputField AveragePriceInputfield;
-    public TMP_InputField MinPriceOnRecordInputfield;
-    public TMP_InputField MaxPriceOnRecordInputfield;
-
-    public DatePicker deadline;
+    public TMP_InputField VolumeInputfield;
+    public TMP_InputField PricePerUnitInputfield;
+    public TMP_InputField TotalPriceInputfield;
+    public DatePicker OfferDeadline;
 
     private int _selectedProductId = 0;
 
@@ -39,7 +37,16 @@ public class NewOfferPopupController : MonoBehaviour
 
     private void OnNewOfferResponse(NewOfferResponse newOfferResponse)
     {
-        //TODO
+        if (newOfferResponse.offer != null)
+        {
+            OffersController.Instance.AddMyOfferToList(newOfferResponse.offer);
+
+            NewOfferPopupCanvas.SetActive(false);
+        }
+        else
+        {
+            //TODO show error
+        }
     }
 
     public void OnOpenNewOfferPopupClick()
@@ -58,10 +65,10 @@ public class NewOfferPopupController : MonoBehaviour
         {
             if (product.productType == Utils.ProductType.SemiFinished)
             {
-                bool hasThisProductsProductionLine = true;
+                bool hasThisProductCategoryProductionLine = true;
                 //TODO
 
-                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine, index);
+                ProductDetailsSetters[index].SetData(product, hasThisProductCategoryProductionLine, index, "NewOffer");
                 index++;
             }
         }
@@ -71,8 +78,19 @@ public class NewOfferPopupController : MonoBehaviour
     {
         DisableAllSelections();
         IsSelectedGameObjects[index].SetActive(true);
+        _selectedProductId = productId;
+    }
 
-        //TODO Set Prices
+    public void OnVolumeOrPriceValueChange()
+    {
+        string volume = VolumeInputfield.text;
+        string price = PricePerUnitInputfield.text;
+        if (string.IsNullOrEmpty(volume) || string.IsNullOrEmpty(price))
+        {
+            return;
+        }
+
+        TotalPriceInputfield.text = (int.Parse(volume) * float.Parse(price)).ToString("0.00");
     }
 
     public void DisableAllSelections()
@@ -85,41 +103,23 @@ public class NewOfferPopupController : MonoBehaviour
 
     public void OnDoneButtonClick()
     {
-        string capacity = CapacityInputfield.text;
-        string price = PriceInputfield.text;
-        if (string.IsNullOrEmpty(capacity) || string.IsNullOrEmpty(price) || _selectedProductId == 0)
+        string volume = VolumeInputfield.text;
+        string price = PricePerUnitInputfield.text;
+        string date = OfferDeadline.currentSelectedDate.text;
+        DateTime selectedDate = OfferDeadline.Value;
+        if (string.IsNullOrEmpty(volume) || string.IsNullOrEmpty(price) || _selectedProductId == 0 || string.IsNullOrEmpty(date))
         {
             //TODO show error
             return;
         }
 
-        NewProviderRequest newProviderRequest = new NewProviderRequest(RequestTypeConstant.LOGIN, _selectedProductId, int.Parse(capacity), float.Parse(price));
-        RequestManager.Instance.SendRequest(newProviderRequest);
-    }
-
-    public void OnPlaceOfferClicked()
-    {
-        //int volume = Convert.ToInt32(volumeInput.text);
-        //int costPerUnit = Convert.ToInt32(costPerUnitInput.text);
-
-        //if (volume < 0 || costPerUnit < 0)
-        //{
-        //    //TODO show error
-        //    Debug.Log("Negative input");
-        //    return;
-        //}
-
-
-        //var offer = new NewOfferTransitModel(
-        //    type: dropdown.options[dropdown.value].text,
-        //    volume: volume,
-        //    costPerUnit: costPerUnit,
-        //    earliestExpectedArrival: new CustomDateTime(eea.Value),
-        //    latestExpectedArrival: new CustomDateTime(lea.Value),
-        //    offerDeadline: new CustomDateTime(deadline.Value)
-        //);
-        //var request = new NewOfferRequest(RequestTypeConstant.NEW_OFFER, offer);
-
-        //RequestManager.Instance.SendRequest(request);
+        NewOfferRequest newOfferRequest = new NewOfferRequest(RequestTypeConstant.NEW_OFFER, new Utils.Offer()
+        {
+            productId = _selectedProductId,
+            volume = int.Parse(volume),
+            costPerUnit = float.Parse(price),
+            offerDeadline = new CustomDate(selectedDate.Year, selectedDate.Month, selectedDate.Day),
+        });
+        RequestManager.Instance.SendRequest(newOfferRequest);
     }
 }
