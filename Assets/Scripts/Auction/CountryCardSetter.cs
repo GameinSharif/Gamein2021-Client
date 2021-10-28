@@ -7,17 +7,15 @@ using UnityEngine.UI;
 public class CountryCardSetter : MonoBehaviour
 {
     public GameObject selectedBorder;
-    public GameObject cardBg;
-    public GameObject blackMap;
-    public GameObject countryName;
+    public Image blackMap;
+    public Localize countryNameLocalize;
     public GameObject unavailableMask;
 
-    public void SetAllValues(string countryName, string localizeKey, Sprite blackMap, Sprite cardBg)
+    public void SetAllValues(string countryNameKey, Sprite blackMapSprite)
     {
-        this.cardBg.GetComponent<Image>().sprite = cardBg;
-        this.blackMap.GetComponent<Image>().sprite = blackMap;
-        this.countryName.GetComponent<RTLTextMeshPro>().text = countryName;
-        //this.countryName.GetComponent<Localize>().SetKey(localizeKey);
+        blackMap.sprite = blackMapSprite;
+        countryNameLocalize.SetKey(countryNameKey);
+
         selectedBorder.SetActive(false);
         unavailableMask.SetActive(false);
     }
@@ -30,10 +28,5 @@ public class CountryCardSetter : MonoBehaviour
     public void SetSelectedBorderActive(bool active)
     {
         selectedBorder.SetActive(active);
-    }
-
-    public string GetCountryName()
-    {
-        return countryName.GetComponent<RTLTextMeshPro>().text;
     }
 }

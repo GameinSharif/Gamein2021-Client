@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 public class MainMenuManager : MonoBehaviour
 {
     public static MainMenuManager Instance;
-    public GameObject mainMenu;
-    public GameObject countrySelection;
     
     private void Awake()
     {
@@ -22,13 +20,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("FactoryId") == 0)
         {
-            mainMenu.SetActive(false);
-            countrySelection.SetActive(true);
-        }
-        else
-        {
-            mainMenu.SetActive(true);
-            countrySelection.SetActive(false);
+            CountrySelectionController.Instance.Initialize();
         }
     }
 

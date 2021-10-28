@@ -9,29 +9,34 @@ using Random = UnityEngine.Random;
 
 public class CountrySelectionController : MonoBehaviour
 {
+    public static CountrySelectionController Instance;
+
     [Serializable]
     public class CountryCard
     {
         public Sprite blackMap;
-        public Sprite cardBg;
         public Utils.Country country;
     }
 
-    public GameObject[] cardSlots;
-    public List<CountryCard> cards = new List<CountryCard>();
-    public GameObject loadingCircle;
-    public Button goToMapButton;
-    public Button getCountryButton;
     public GameObject countrySelectionCanvas;
+
+    public List<CountryCardSetter> countryCardSetters;
+    public List<CountryCard> cards;
+    public Button goToMapButton;
+    public Button startRandomizeProcessButton;
 
     private List<string> _countryNameLocalizeKeys = new List<string>();
 
     private void Awake()
     {
+        Instance = this;
+    }
+
+    public void Initialize()
+    {
         goToMapButton.gameObject.SetActive(false);
-        goToMapButton.GetComponent<Button>().onClick.AddListener(delegate { onGoToMapButtonClicked(); });
-        getCountryButton.gameObject.SetActive(true);
-        getCountryButton.GetComponent<Button>().onClick.AddListener(delegate { OnGetCountryButtonClicked(); });
+        startRandomizeProcessButton.gameObject.SetActive(true);
+
         FillCountryNameLocalizeKeyList();
         DisplayCards();
     }
@@ -40,7 +45,7 @@ public class CountrySelectionController : MonoBehaviour
     {
         _countryNameLocalizeKeys.Add("auction_france");
         _countryNameLocalizeKeys.Add("auction_germany");
-        _countryNameLocalizeKeys.Add("auction_england");
+        _countryNameLocalizeKeys.Add("auction_united_kingdom");
         _countryNameLocalizeKeys.Add("auction_netherlands");
         _countryNameLocalizeKeys.Add("auction_belgium");
         _countryNameLocalizeKeys.Add("auction_switzerland");
@@ -50,62 +55,59 @@ public class CountrySelectionController : MonoBehaviour
     {
         for(int i = 0; i < cards.Count; i++)
         {
-            string countryName = cards[i].country.ToString();
             string localizeKey = _countryNameLocalizeKeys[i];
-            Sprite cardBg = cards[i].cardBg;
+
             Sprite blackMap = cards[i].blackMap;
-            cardSlots[i].GetComponent<CountryCardSetter>().SetAllValues(countryName, localizeKey, blackMap, cardBg);
+            countryCardSetters[i].SetAllValues(localizeKey, blackMap);
         }
     }
 
-    void OnGetCountryButtonClicked()
+    public void OnStartRandomizeProcessButtonClick()
     {
-        loadingCircle.gameObject.SetActive(true);
-        
+        startRandomizeProcessButton.interactable = false;
         for(int i = 0; i < cards.Count; i++)
         {
-            cardSlots[i].GetComponent<CountryCardSetter>().SetMaskActive(true);
+            countryCardSetters[i].SetMaskActive(true);
         }
         
         StartCoroutine(ShowCountryCoroutine());
     }
     
-    IEnumerator ShowCountryCoroutine()
+    private IEnumerator ShowCountryCoroutine()
     {
-        yield return new WaitForSeconds(10);
-
-        int countryIndex = GetTeamsCountry();
-        if (countryIndex < 0)
+        for (int i=0;i < 50; i++)
         {
-            //TODO get country from server again
+            int randomCountryIndex = Random.Range(0, Enum.GetNames(typeof(Utils.Country)).Length);
+            ShowRandomlySelectedCountry(randomCountryIndex);
+
+            float waitTime = Random.Range(0.1f, 0.2f);
+            yield return new WaitForSeconds(waitTime);
         }
-        cardSlots[countryIndex].GetComponent<CountryCardSetter>().SetMaskActive(false);
-        cardSlots[countryIndex].GetComponent<CountryCardSetter>().SetSelectedBorderActive(true);
-        loadingCircle.gameObject.SetActive(false);
+
+        Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
+        int countryIndex = (int) country;
+
+        ShowRandomlySelectedCountry(countryIndex);
+
         goToMapButton.gameObject.SetActive(true);
-        getCountryButton.gameObject.SetActive(false);
-        PlayerPrefs.SetInt("IsFirstTime", 0);
+        startRandomizeProcessButton.gameObject.SetActive(false);
     }
 
-    private int GetTeamsCountry()
+    private void ShowRandomlySelectedCountry(int countryIndex)
     {
-        int index = 0;
-        string countryName = PlayerPrefs.GetString("Country");
-        foreach (GameObject cardSlot in cardSlots)
+        DisableAllSelections();
+
+        countryCardSetters[countryIndex].SetMaskActive(false);
+        countryCardSetters[countryIndex].SetSelectedBorderActive(true);
+    }
+
+    public void DisableAllSelections()
+    {
+        foreach (CountryCardSetter countryCardSetter in countryCardSetters)
         {
-            if (cardSlot.GetComponent<CountryCardSetter>().GetCountryName() == countryName)
-            {
-                return index;
-            }
-            index++;
+            countryCardSetter.SetSelectedBorderActive(false);
+            countryCardSetter.SetMaskActive(true);
         }
-        return -1;
     }
 
-    void onGoToMapButtonClicked()
-    {
-        countrySelectionCanvas.SetActive(false);
-        SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
-    }
-    
 }
