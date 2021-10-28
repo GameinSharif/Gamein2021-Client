@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class NewProviderPopupController : MonoBehaviour
+public class NewOfferPopupController : MonoBehaviour
 {
-    public static NewProviderPopupController Instance;
+    public static NewOfferPopupController Instance;
 
-    public GameObject NewProviderPopupCanvas;
+    public GameObject NewOfferPopupCanvas;
 
     public List<ProductDetailsSetter> ProductDetailsSetters;
     public List<GameObject> IsSelectedGameObjects;
@@ -18,6 +18,8 @@ public class NewProviderPopupController : MonoBehaviour
     public TMP_InputField MinPriceOnRecordInputfield;
     public TMP_InputField MaxPriceOnRecordInputfield;
 
+    public DatePicker deadline;
+
     private int _selectedProductId = 0;
 
     private void Awake()
@@ -27,35 +29,26 @@ public class NewProviderPopupController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.OnNewProviderResponseEvent += OnNewProviderResponse;
+        EventManager.Instance.OnNewOfferResponseEvent += OnNewOfferResponse;
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.OnNewProviderResponseEvent -= OnNewProviderResponse;
+        EventManager.Instance.OnNewOfferResponseEvent -= OnNewOfferResponse;
     }
 
-    private void OnNewProviderResponse(NewProviderResponse newProviderResponse)
+    private void OnNewOfferResponse(NewOfferResponse newOfferResponse)
     {
-        if (newProviderResponse.result == "Success")
-        {
-            ProvidersController.Instance.AddMyProviderToList(newProviderResponse.newProvider);
-
-            NewProviderPopupCanvas.SetActive(false);
-        }
-        else
-        {
-            //TODO show error
-        }
+        //TODO
     }
 
-    public void OnOpenNewProviderPopupClick()
+    public void OnOpenNewOfferPopupClick()
     {
         //TODO clear inputfields
 
         SetProducts();
 
-        NewProviderPopupCanvas.SetActive(true);
+        NewOfferPopupCanvas.SetActive(true);
     }
 
     private void SetProducts()
@@ -78,7 +71,6 @@ public class NewProviderPopupController : MonoBehaviour
     {
         DisableAllSelections();
         IsSelectedGameObjects[index].SetActive(true);
-        _selectedProductId = productId;
 
         //TODO Set Prices
     }
@@ -101,7 +93,33 @@ public class NewProviderPopupController : MonoBehaviour
             return;
         }
 
-        NewProviderRequest newProviderRequest = new NewProviderRequest(RequestTypeConstant.NEW_PROVIDER, _selectedProductId, int.Parse(capacity), float.Parse(price));
+        NewProviderRequest newProviderRequest = new NewProviderRequest(RequestTypeConstant.LOGIN, _selectedProductId, int.Parse(capacity), float.Parse(price));
         RequestManager.Instance.SendRequest(newProviderRequest);
+    }
+
+    public void OnPlaceOfferClicked()
+    {
+        //int volume = Convert.ToInt32(volumeInput.text);
+        //int costPerUnit = Convert.ToInt32(costPerUnitInput.text);
+
+        //if (volume < 0 || costPerUnit < 0)
+        //{
+        //    //TODO show error
+        //    Debug.Log("Negative input");
+        //    return;
+        //}
+
+
+        //var offer = new NewOfferTransitModel(
+        //    type: dropdown.options[dropdown.value].text,
+        //    volume: volume,
+        //    costPerUnit: costPerUnit,
+        //    earliestExpectedArrival: new CustomDateTime(eea.Value),
+        //    latestExpectedArrival: new CustomDateTime(lea.Value),
+        //    offerDeadline: new CustomDateTime(deadline.Value)
+        //);
+        //var request = new NewOfferRequest(RequestTypeConstant.NEW_OFFER, offer);
+
+        //RequestManager.Instance.SendRequest(request);
     }
 }

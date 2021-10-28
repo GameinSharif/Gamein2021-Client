@@ -3,5 +3,5 @@
 [Serializable]
 public class NewOfferResponse : ResponseObject
 {
-    public string result;
+    public Utils.Offer offer;
 }

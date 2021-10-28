@@ -34,13 +34,14 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnOpenTradePageButtonClick()
     {
-        GetContractsRequest getContractsRequest = new GetContractsRequest(RequestTypeConstant.GET_CONTRACTS);
-        RequestManager.Instance.SendRequest(getContractsRequest);
+        GetOffersRequest getOffersRequest = new GetOffersRequest(RequestTypeConstant.GET_OFFERS);
+        RequestManager.Instance.SendRequest(getOffersRequest);
 
         GetProvidersRequest getProvidersRequest = new GetProvidersRequest(RequestTypeConstant.GET_PROVIDERS);
         RequestManager.Instance.SendRequest(getProvidersRequest);
 
-        //TODO for offers, negotioations, ...
+        GetContractsRequest getContractsRequest = new GetContractsRequest(RequestTypeConstant.GET_CONTRACTS);
+        RequestManager.Instance.SendRequest(getContractsRequest);
     }
 
     public void OnLoadMapSceneButtonClick()

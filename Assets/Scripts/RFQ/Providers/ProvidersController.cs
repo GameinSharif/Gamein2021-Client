@@ -89,7 +89,9 @@ public class ProvidersController : MonoBehaviour
             }
         }
 
-        return Instantiate(providerItemPrefab, parent.transform);
+        GameObject newItem = Instantiate(providerItemPrefab, parent.transform);
+        _spawnedGameObjects.Add(newItem);
+        return newItem;
     }
 
     private void DeactiveAllChildrenInScrollPanel()

@@ -13,7 +13,7 @@ public class ProductDetailsSetter : MonoBehaviour
     public void SetData(Utils.Product product, bool isAvailable, int index)
     {
         ProductImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
-        ProductNameLocalize.SetKey(product.name);
+        ProductNameLocalize.SetKey("product_" + product.name);
         IsUnavailable.SetActive(!isAvailable);
 
         Button.onClick.RemoveAllListeners();

@@ -7,7 +7,7 @@ public class ProviderItemController : MonoBehaviour
 {
     public RTLTextMeshPro no;
     public RTLTextMeshPro teamName;
-    public RTLTextMeshPro productName;
+    public Localize productNameLocalize;
     public RTLTextMeshPro capacity;
     public RTLTextMeshPro price;
     public GameObject RemoveProviderButtonGameObject;
@@ -15,11 +15,11 @@ public class ProviderItemController : MonoBehaviour
 
     private Utils.Provider _provider;
 
-    private void SetInfo(int no, string teamName, string productName, int capacity, float price)
+    private void SetInfo(int no, string teamName, string productNameKey, int capacity, float price)
     {
         this.no.text = no.ToString();
         this.teamName.text = teamName;
-        this.productName.text = productName;
+        productNameLocalize.SetKey("product_" + productNameKey);
         this.capacity.text = capacity.ToString();
         this.price.text = price.ToString("0.00");
     }
@@ -29,7 +29,7 @@ public class ProviderItemController : MonoBehaviour
         SetInfo(
             no: no,
             teamName: GameDataManager.Instance.GetTeamName(provider.teamId),
-            productName: GameDataManager.Instance.Products[provider.productId].name,
+            productNameKey: GameDataManager.Instance.Products[provider.productId].name,
             capacity: provider.capacity,
             price: provider.price);
 

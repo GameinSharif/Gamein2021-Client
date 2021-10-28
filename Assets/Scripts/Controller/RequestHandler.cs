@@ -23,7 +23,7 @@ public class RequestHandler
                 EventManager.Instance.OnNewOfferResponse(newOfferResponse);
                 break;
             case ResponseTypeConstant.GET_OFFERS:
-                GetOffersResponse getOffersResponse = JsonUtility.FromJson<GetOffersResponse>(responseJson);
+                GetOffersResponse getOffersResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetOffersResponse), new StringEnumConverter()) as GetOffersResponse;
                 EventManager.Instance.OnGetOffersResponse(getOffersResponse);
                 break;
             case ResponseTypeConstant.GET_GAME_DATA:

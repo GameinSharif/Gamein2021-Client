@@ -17,7 +17,7 @@ public class NegotiationOfferItemController : MonoBehaviour
     public RTLTextMeshPro frequency;
     public RTLTextMeshPro state;
 
-    private OfferViewModel offer;
+    //private OfferViewModel offer;
 
     public void SetInfo(
         int no,
@@ -43,22 +43,22 @@ public class NegotiationOfferItemController : MonoBehaviour
         this.state.text = state;
     }
 
-    public void SetInfo(int no, OfferViewModel offer)
-    {
-        this.offer = offer;
-        SetInfo(
-            no: no,
-            company: offer.Company,
-            type: offer.Type,
-            volume: offer.Volume.ToString(),
-            costPerUnit: offer.CostPerUnit.ToString(),
-            total: offer.TotalCost.ToString(),
-            EEA: offer.EEA,
-            LEA: offer.LEA,
-            deadline: offer.Deadline,
-            state: offer.State.ToString()
-        );
-    }
+    //public void SetInfo(int no, OfferViewModel offer)
+    //{
+    //    this.offer = offer;
+    //    SetInfo(
+    //        no: no,
+    //        company: offer.Company,
+    //        type: offer.Type,
+    //        volume: offer.Volume.ToString(),
+    //        costPerUnit: offer.CostPerUnit.ToString(),
+    //        total: offer.TotalCost.ToString(),
+    //        EEA: offer.EEA,
+    //        LEA: offer.LEA,
+    //        deadline: offer.Deadline,
+    //        state: offer.State.ToString()
+    //    );
+    //}
 
     public void SetInfo(
         string company,
@@ -82,26 +82,26 @@ public class NegotiationOfferItemController : MonoBehaviour
         this.frequency.text = frequency;
     }
     
-    public void SetInfo(OfferViewModel offer)
-    {
-        SetInfo(
-            company: offer.Company,
-            type: offer.Type,
-            volume: offer.Volume.ToString(),
-            costPerUnit: offer.CostPerUnit.ToString(),
-            total: offer.TotalCost.ToString(),
-            EEA: offer.EEA,
-            LEA: offer.LEA,
-            deadline: offer.Deadline,
-            frequency: offer.Frequency.ToString()
-        );
-    }
+    //public void SetInfo(OfferViewModel offer)
+    //{
+    //    SetInfo(
+    //        company: offer.Company,
+    //        type: offer.Type,
+    //        volume: offer.Volume.ToString(),
+    //        costPerUnit: offer.CostPerUnit.ToString(),
+    //        total: offer.TotalCost.ToString(),
+    //        EEA: offer.EEA,
+    //        LEA: offer.LEA,
+    //        deadline: offer.Deadline,
+    //        frequency: offer.Frequency.ToString()
+    //    );
+    //}
     
-    public void OnSwitchToThisOfferButtonClicked()
-    {
-        var negotiationsController = FindObjectOfType<NegotiationsController>();
-        negotiationsController.ShowSelectedOffer(offer);
-    }
+    //public void OnSwitchToThisOfferButtonClicked()
+    //{
+    //    var negotiationsController = FindObjectOfType<NegotiationsController>();
+    //    negotiationsController.ShowSelectedOffer(offer);
+    //}
 
     public void OnRejectButtonClicked()
     {
