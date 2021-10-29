@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
     public static MainMenuManager Instance;
+    public static bool IsLoadingMap;
     
     private void Awake()
     {
@@ -38,6 +40,12 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnLoadMapSceneButtonClick()
     {
+        if (IsLoadingMap)
+        {
+            return;
+        }
+
+        IsLoadingMap = true;
         SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
     }
 

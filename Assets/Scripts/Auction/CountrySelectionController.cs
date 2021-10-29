@@ -36,11 +36,18 @@ public class CountrySelectionController : MonoBehaviour
 
     public void Initialize()
     {
-        goToMapButton.gameObject.SetActive(false);
-        startRandomizeProcessButton.gameObject.SetActive(true);
-
         FillCountryNameLocalizeKeyList();
         DisplayCards();
+
+        if (PlayerPrefs.HasKey("SeenRandomizeProcess"))
+        {
+            ShowTheActualCountry();
+        }
+        else
+        {
+            goToMapButton.gameObject.SetActive(false);
+            startRandomizeProcessButton.gameObject.SetActive(true);
+        }
     }
 
     private void FillCountryNameLocalizeKeyList()
@@ -93,13 +100,20 @@ public class CountrySelectionController : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
         }
 
+        ShowTheActualCountry();
+    }
+
+    private void ShowTheActualCountry()
+    {
         Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
-        _countryIndex = (int) country;
+        _countryIndex = (int)country;
 
         ShowRandomlySelectedCountry(_countryIndex);
 
         goToMapButton.gameObject.SetActive(true);
         startRandomizeProcessButton.gameObject.SetActive(false);
+
+        PlayerPrefs.SetString("SeenRandomizeProcess", "True");
     }
 
     private void ShowRandomlySelectedCountry(int countryIndex)
@@ -128,7 +142,7 @@ public class CountrySelectionController : MonoBehaviour
     {
         MapManager.SnapToLocaltionOnOpenMap = _countryCapitalsLocaltion[_countryIndex];
 
-        SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
+        MainMenuManager.Instance.OnLoadMapSceneButtonClick();
 
         countrySelectionCanvas.SetActive(false);
     }

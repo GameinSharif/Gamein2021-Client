@@ -15,8 +15,8 @@ public class RequestHandler
                 EventManager.Instance.OnConnectionResponse(connectionResponse);
                 break;
             case ResponseTypeConstant.LOGIN:
-                LoginResponse loginResponseObject = JsonUtility.FromJson<LoginResponse>(responseJson);
-                EventManager.Instance.OnLoginResponse(loginResponseObject);
+                LoginResponse loginResponse = JsonConvert.DeserializeObject(responseJson, typeof(LoginResponse), new StringEnumConverter()) as LoginResponse;
+                EventManager.Instance.OnLoginResponse(loginResponse);
                 break;
             case ResponseTypeConstant.NEW_OFFER:
                 NewOfferResponse newOfferResponse = JsonUtility.FromJson<NewOfferResponse>(responseJson);

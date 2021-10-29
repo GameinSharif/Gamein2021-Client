@@ -65,6 +65,8 @@ public class MapManager : MonoBehaviour
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
+
+        MainMenuManager.IsLoadingMap = false;
     }
 
     private void InitializeGameDataOnMap()
@@ -118,7 +120,7 @@ public class MapManager : MonoBehaviour
         _abstractMap.ImageLayer.SetProperties((ImagerySourceType)_currnetMapTypeIndex, _useRetina, _useCompression, _useMipMap);
         SetMapTypesActiveStatus();
 
-        int mapZoomIndex = PlayerPrefs.GetInt("MapZoomIndex", 2);
+        int mapZoomIndex = PlayerPrefs.GetInt("MapZoomIndex", 3);
         _currnetZoomAmountIndex = mapZoomIndex;
         _abstractMap.SetZoom(_possibleZoomAmounts[_currnetZoomAmountIndex]);
 
