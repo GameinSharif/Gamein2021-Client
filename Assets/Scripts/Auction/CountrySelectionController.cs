@@ -38,6 +38,7 @@ public class CountrySelectionController : MonoBehaviour
     {
         FillCountryNameLocalizeKeyList();
         DisplayCards();
+        countrySelectionCanvas.SetActive(true);
 
         if (PlayerPrefs.HasKey("SeenRandomizeProcess"))
         {
@@ -96,8 +97,7 @@ public class CountrySelectionController : MonoBehaviour
             int randomCountryIndex = Random.Range(0, Enum.GetNames(typeof(Utils.Country)).Length);
             ShowRandomlySelectedCountry(randomCountryIndex);
 
-            float waitTime = Random.Range(0.1f, 0.2f);
-            yield return new WaitForSeconds(waitTime);
+            yield return new WaitForSeconds(0.1f);
         }
 
         ShowTheActualCountry();

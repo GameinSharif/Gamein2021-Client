@@ -9,7 +9,7 @@ public class MainMenuManager : MonoBehaviour
 {
     public static MainMenuManager Instance;
     public static bool IsLoadingMap;
-    
+
     private void Awake()
     {
         Instance = this;
@@ -46,6 +46,13 @@ public class MainMenuManager : MonoBehaviour
         }
 
         IsLoadingMap = true;
+
+        var canvases = FindObjectsOfType<Canvas>();
+        foreach (Canvas canvas in canvases)
+        {
+            canvas.gameObject.SetActive(false);
+        }
+
         SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
     }
 

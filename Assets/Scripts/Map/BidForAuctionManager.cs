@@ -34,7 +34,6 @@ public class BidForAuctionManager : MonoBehaviour
                 }
             }
             GameDataManager.Instance.UpdateAuctionElement(bidForAuctionResponse.auction);
-            MapManager.Instance.UpdateAllOnMapMarkers();
         }
         else
         {

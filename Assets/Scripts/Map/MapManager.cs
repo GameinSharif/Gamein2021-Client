@@ -44,6 +44,12 @@ public class MapManager : MonoBehaviour
         Instance = this;
         _abstractMap = FindObjectOfType<AbstractMap>();
         _quadTreeCameraMovement = FindObjectOfType<QuadTreeCameraMovement>();
+
+        var canvases = FindObjectsOfType<Canvas>();
+        foreach (Canvas canvas in canvases)
+        {
+            canvas.worldCamera = Camera.main;
+        }
     }
 
     private void Start()
@@ -74,33 +80,25 @@ public class MapManager : MonoBehaviour
         for (int i=0; i < GameDataManager.Instance.GameinCustomers.Count; i++)
         {
             Utils.GameinCustomer gameinCustomer = GameDataManager.Instance.GameinCustomers[i];
-            SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), i, gameinCustomer.name);
+            SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), gameinCustomer.id, gameinCustomer.name);
         }
-        
-        //foreach (Utils.Auction auction in GameDataManager.Instance.Auctions)
-        //{
-        //    MapUtils.MapAgentMarker.AgentType agentType;
-        //    bool isTheirs = auction.highestBidTeamId == PlayerPrefs.GetInt("TeamId");
-        //    bool isDifferentCountry = GameDataManager.Instance.GetFactoryById(auction.factoryId).country.ToString() !=
-        //                              PlayerPrefs.GetString("Country");
-        //    bool isOver = auction.auctionBidStatus == Utils.AuctionBidStatus.Over;
-        //    if (isDifferentCountry || !isTheirs && isOver)
-        //    {
-        //        agentType = MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory;
-        //    } else if (auction.highestBidTeamId == null)
-        //    {
-        //        agentType = MapUtils.MapAgentMarker.AgentType.NoOwnerFactory;
-        //    } else if (isTheirs)
-        //    {
-        //        agentType = MapUtils.MapAgentMarker.AgentType.MyFactory;
-        //    }
-        //    else
-        //    {
-        //        agentType = MapUtils.MapAgentMarker.AgentType.OtherFactory;
-        //    }
-        //    Utils.Factory factory = GameDataManager.Instance.GetFactoryById(auction.factoryId);
-        //    SetMapAgentMarker(agentType, new Vector2d(factory.latitude, factory.longitude), auction.id, factory.name);
-        //}
+
+        Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
+        for (int i = 0; i < GameDataManager.Instance.Factories.Count; i++)
+        {
+            Utils.Factory factory = GameDataManager.Instance.Factories[i];
+            if (factory.country == country)
+            {
+                SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.NoOwnerFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
+
+            }
+            else
+            {
+                SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
+            }
+        }
+
+        UpdateAllAuctions();
 
         //TODO do the same thing for other map markers
     }
@@ -115,7 +113,7 @@ public class MapManager : MonoBehaviour
 
     private void InitializeMap()
     {
-        int lastMapTypeIndex = PlayerPrefs.GetInt("LastMapTypeIndex", 0);
+        int lastMapTypeIndex = PlayerPrefs.GetInt("LastMapTypeIndex", 2);
         _currnetMapTypeIndex = lastMapTypeIndex;
         _abstractMap.ImageLayer.SetProperties((ImagerySourceType)_currnetMapTypeIndex, _useRetina, _useCompression, _useMipMap);
         SetMapTypesActiveStatus();
@@ -194,14 +192,6 @@ public class MapManager : MonoBehaviour
                 instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
                 MapUtils.OnMapMarker onMapMarker = new MapUtils.OnMapMarker(location, instance, mapAgentMarker, index);
                 _onMapMarkers.Add(onMapMarker);
-                if (agentType == MapUtils.MapAgentMarker.AgentType.MyFactory ||
-                    agentType == MapUtils.MapAgentMarker.AgentType.OtherFactory ||
-                    agentType == MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory ||
-                    agentType == MapUtils.MapAgentMarker.AgentType.NoOwnerFactory)
-                {
-                    Utils.Auction auction = GameDataManager.Instance.GetAuctionById(index);
-                    instance.GetComponent<EachAuctionController>().SetAuctionValues(auction, onMapMarker);
-                }
             }
         }
     }
@@ -218,46 +208,61 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void UpdateAllOnMapMarkers()
+    public void UpdateAuctionData(int factoryId)
     {
         foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
         {
-            UpdateOnMapMarker(onMapMarker);
+            if (onMapMarker.MapAgentMarker.MapAgentType.ToString().Contains("Factory") && onMapMarker.Index == factoryId)
+            {
+                UpdateFactory(onMapMarker);
+            }
         }
     }
 
-    public void UpdateOnMapMarker(MapUtils.OnMapMarker onMapMarker)
+    public void UpdateAllAuctions()
     {
-        int auctionId = onMapMarker.Index;
-        Utils.Auction newAuction = GameDataManager.Instance.GetAuctionById(auctionId);
-        int teamId = PlayerPrefs.GetInt("TeamId"); 
-        bool hasHighest = GameDataManager.Instance.Auctions.Exists(a => a.highestBidTeamId == teamId);
-        bool isTheirs = newAuction.highestBidTeamId == PlayerPrefs.GetInt("TeamId");
-        bool isDifferentCountry = GameDataManager.Instance.GetFactoryById(newAuction.factoryId).country.ToString() !=
-                                  PlayerPrefs.GetString("Country");
-        bool isOver = newAuction.auctionBidStatus == Utils.AuctionBidStatus.Over;
+        foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+        {
+            if (onMapMarker.MapAgentMarker.MapAgentType.ToString().Contains("Factory"))
+            {
+                UpdateFactory(onMapMarker);
+            }
+        }
+    }
+
+    public void UpdateFactory(MapUtils.OnMapMarker onMapMarker)
+    {
+        int factoryId = onMapMarker.Index;
+        Utils.Auction auction = GameDataManager.Instance.GetAuctionByFactoryId(factoryId);
+        if (auction == null) //This factory has no bid yet.
+        {
+            return;
+        }
+
+        bool isForThisTeam = auction.highestBidTeamId == PlayerPrefs.GetInt("TeamId");
+        bool isDifferentCountry = GameDataManager.Instance.GetFactoryById(auction.factoryId).country.ToString() != PlayerPrefs.GetString("Country");
+        bool isOver = auction.auctionBidStatus == Utils.AuctionBidStatus.Over;
         if (isOver)
         {
             ChangeMapAgentType(onMapMarker,
-                isTheirs
+                isForThisTeam
                     ? MapUtils.MapAgentMarker.AgentType.MyFactory
                     : MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory);
-        } else if (isTheirs)
+        } 
+        else if (isForThisTeam)
         {
             ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.MyFactory);
-        } else if (isDifferentCountry) 
+        } 
+        else if (isDifferentCountry) 
         {
             ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory);
-        }
-        else if (newAuction.highestBidTeamId == null)
-        {
-            ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.NoOwnerFactory);
         }
         else
         {
             ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.OtherFactory);
         }
-        onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().SetAuctionValues(newAuction, onMapMarker);
+
+        onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().SetAuctionValues(auction, onMapMarker);
     }
 
     public MapUtils.OnMapMarker GetOnMapMarkerById(int id)

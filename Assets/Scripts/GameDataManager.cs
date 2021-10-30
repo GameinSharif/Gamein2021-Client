@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameDataManager : MonoBehaviour
 {
@@ -47,18 +48,29 @@ public class GameDataManager : MonoBehaviour
     public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
     {
         Auctions = getAllAuctionsResponse.auctions;
-        //MapManager.Instance.UpdateAllOnMapMarkers();
+
+        if (SceneManager.GetActiveScene().name == "MapScene")
+            MapManager.Instance.UpdateAllAuctions();
     }
     
-    public Utils.Auction GetAuctionById(int id)
+    public Utils.Auction GetAuctionByFactoryId(int id)
     {
-        return Auctions.First(a => a.id == id);
+        return Auctions.FirstOrDefault(a => a.factoryId == id);
     }
 
     public void UpdateAuctionElement(Utils.Auction auction)
     {
-        int index = Auctions.IndexOf(GetAuctionById(auction.id));
-        Auctions[index] = auction;
+        int index = Auctions.IndexOf(GetAuctionByFactoryId(auction.factoryId));
+        if (index != -1)
+        {
+            Auctions[index] = auction;
+        }
+        else
+        {
+            Auctions.Add(auction);
+        }
+
+        MapManager.Instance.UpdateAuctionData(auction.factoryId);
     }
     
     public Utils.Factory GetFactoryById(int id)

@@ -62,7 +62,7 @@ public class RequestHandler
                 //TODO
                 break;
             case ResponseTypeConstant.GET_ALL_AUCTIONS:
-                GetAllAuctionsResponse getAllAuctionsResponse = JsonUtility.FromJson<GetAllAuctionsResponse>(responseJson);
+                GetAllAuctionsResponse getAllAuctionsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetAllAuctionsResponse), new StringEnumConverter()) as GetAllAuctionsResponse;
                 EventManager.Instance.OnGetAllAuctionsResponse(getAllAuctionsResponse);
                 break;
             case ResponseTypeConstant.BID_FOR_AUCTION:
