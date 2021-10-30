@@ -3,5 +3,5 @@
 [Serializable]
 public class ScrapProductionLineResponse : ResponseObject
 {
-    public Utils.ProductionLine productionLine;
+    public Utils.ProductionLineDto productionLine;
 }

@@ -3,5 +3,5 @@
 [Serializable]
 public class StartProductionResponse : ResponseObject
 {
-    public Utils.ProductionLine productionLine;
+    public Utils.ProductionLineDto productionLine;
 }

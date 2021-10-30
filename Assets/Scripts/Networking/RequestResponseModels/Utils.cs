@@ -102,39 +102,39 @@ public class Utils
     }
     
     [Serializable]
-    public class ProductionLine
+    public class ProductionLineDto
     {
-        private int id;
-        private int productionLineTemplateId;
-        private int teamId;
-        private List<ProductionLineProduct> products;
-        private int qualityLevel;
-        private int efficiencyLevel;
-        private ProductionLineStatus status;
+        public int id;
+        public int productionLineTemplateId;
+        public int teamId;
+        public List<ProductionLineProductDto> products;
+        public int qualityLevel;
+        public int efficiencyLevel;
+        public ProductionLineStatus status;
     }
     
     [Serializable]
-    public class ProductionLineProduct {
-        private int id;
-        private int productId;
-        private int amount;
-        private DateTime startDate;
-        private DateTime endDate;
+    public class ProductionLineProductDto {
+        public int id;
+        public int productId;
+        public int amount;
+        public DateTime startDate;
+        public DateTime endDate;
     }
     
     [Serializable]
     public class ProductionLineTemplate
     {
-        private int id;
-        private string name;
-        private int constructionCost;
-        private int scrapPrice;
-        private int batchSize;
-        private int dailyProductionRate;
-        private List<EfficiencyLevel> efficiencyLevels;
-        private int weeklyMaintenanceCost;
-        private int setupCost;
-        private int productionCostPerOneProduct;
-        private List<QualityLevel> qualityLevels;
+        public int id;
+        public string name;
+        public int constructionCost;
+        public int scrapPrice;
+        public int batchSize;
+        public int dailyProductionRate;
+        public List<EfficiencyLevel> efficiencyLevels;
+        public int weeklyMaintenanceCost;
+        public int setupCost;
+        public int productionCostPerOneProduct;
+        public List<QualityLevel> qualityLevels;
     }
 }
