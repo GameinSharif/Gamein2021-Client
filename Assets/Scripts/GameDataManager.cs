@@ -94,4 +94,9 @@ public class GameDataManager : MonoBehaviour
         }
         return "Team";
     }
+
+    public Utils.Product GetProductById(int id)
+    {
+        return Products.First(p => p.id == id);
+    }
 }

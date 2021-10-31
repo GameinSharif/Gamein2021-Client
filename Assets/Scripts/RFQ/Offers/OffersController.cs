@@ -39,6 +39,9 @@ public class OffersController : MonoBehaviour
         MyTeamOffers = getOffersResponse.myTeamOffers;
         OtherTeamsOffers = getOffersResponse.otherTeamsOffers;
 
+        MyTeamOffers.Reverse();
+        OtherTeamsOffers.Reverse();
+
         DeactiveAllChildrenInScrollPanel();
         for (int i = 0; i < MyTeamOffers.Count; i++)
         {

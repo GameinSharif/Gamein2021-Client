@@ -29,7 +29,7 @@ public class ProviderItemController : MonoBehaviour
         SetInfo(
             no: no,
             teamName: GameDataManager.Instance.GetTeamName(provider.teamId),
-            productNameKey: GameDataManager.Instance.Products[provider.productId].name,
+            productNameKey: GameDataManager.Instance.GetProductById(provider.productId).name,
             capacity: provider.capacity,
             price: provider.price);
 

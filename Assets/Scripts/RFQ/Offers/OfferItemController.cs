@@ -37,7 +37,7 @@ public class OfferItemController : MonoBehaviour
         SetInfo(
             no: no,
             teamName: GameDataManager.Instance.GetTeamName(offer.teamId),
-            productNameKey: GameDataManager.Instance.Products[offer.productId].name,
+            productNameKey: GameDataManager.Instance.GetProductById(offer.productId).name,
             volume: offer.volume,
             costPerUnit: offer.costPerUnit,
             offerDeadline: offer.offerDeadline,

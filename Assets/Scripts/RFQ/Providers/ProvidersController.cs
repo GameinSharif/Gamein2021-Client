@@ -40,6 +40,9 @@ public class ProvidersController : MonoBehaviour
         MyTeamProviders = getProvidersResponse.myTeamProviders;
         OtherTeamsProviders = getProvidersResponse.otherTeamsProviders;
 
+        MyTeamProviders.Reverse();
+        OtherTeamsProviders.Reverse();
+
         DeactiveAllChildrenInScrollPanel();
         for (int i=0;i < MyTeamProviders.Count; i++)
         {
