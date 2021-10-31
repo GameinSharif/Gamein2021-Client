@@ -17,6 +17,8 @@ public class GameDataManager : MonoBehaviour
 
     [HideInInspector] public List<Utils.WeekDemand> CurrentWeekDemands;
 
+    [HideInInspector] public Utils.GameConstants GameConstants;
+
     public List<Sprite> ProductSprites;
 
     private void Awake()
@@ -34,6 +36,8 @@ public class GameDataManager : MonoBehaviour
         Products = getGameDataResponse.products;
 
         Factories = getGameDataResponse.factories;
+
+        GameConstants = getGameDataResponse.gameConstants;
 
         GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
     }

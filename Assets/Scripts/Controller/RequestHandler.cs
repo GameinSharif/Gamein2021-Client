@@ -66,7 +66,7 @@ public class RequestHandler
                 EventManager.Instance.OnGetAllAuctionsResponse(getAllAuctionsResponse);
                 break;
             case ResponseTypeConstant.BID_FOR_AUCTION:
-                BidForAuctionResponse bidForAuctionResponse = JsonUtility.FromJson<BidForAuctionResponse>(responseJson);
+                BidForAuctionResponse bidForAuctionResponse = JsonConvert.DeserializeObject(responseJson, typeof(BidForAuctionResponse), new StringEnumConverter()) as BidForAuctionResponse;
                 EventManager.Instance.OnBidForAuctionResponse(bidForAuctionResponse);
                 break;
             case ResponseTypeConstant.TERMINATE_OFFER:

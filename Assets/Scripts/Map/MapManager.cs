@@ -30,6 +30,7 @@ public class MapManager : MonoBehaviour
     private readonly float _spawnScale = 10f;
     private readonly float _onMapMarkerVerticalDistanceFromMap = 2;
 
+    public Camera Camera;
     public List<GameObject> IsMapTypeSelectedGameObjects;
     [Space]
     public GameObject MapAgenetMarkerPrefab;
@@ -234,6 +235,8 @@ public class MapManager : MonoBehaviour
     {
         int factoryId = onMapMarker.Index;
         Utils.Auction auction = GameDataManager.Instance.GetAuctionByFactoryId(factoryId);
+        onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().SetAuctionValues(auction, onMapMarker);
+
         if (auction == null) //This factory has no bid yet.
         {
             return;
@@ -261,8 +264,6 @@ public class MapManager : MonoBehaviour
         {
             ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.OtherFactory);
         }
-
-        onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().SetAuctionValues(auction, onMapMarker);
     }
 
     public MapUtils.OnMapMarker GetOnMapMarkerById(int id)
