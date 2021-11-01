@@ -235,10 +235,10 @@ public class MapManager : MonoBehaviour
     {
         int factoryId = onMapMarker.Index;
         Utils.Auction auction = GameDataManager.Instance.GetAuctionByFactoryId(factoryId);
-        onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().SetAuctionValues(auction, onMapMarker);
-
         if (auction == null) //This factory has no bid yet.
         {
+            onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().SetAuctionValues(auction, onMapMarker);
+
             return;
         }
 
@@ -264,6 +264,8 @@ public class MapManager : MonoBehaviour
         {
             ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.OtherFactory);
         }
+
+        onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().SetAuctionValues(auction, onMapMarker);
     }
 
     public MapUtils.OnMapMarker GetOnMapMarkerById(int id)
