@@ -1,29 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
-
 
 public class Utils
 {
+    [Serializable]
     public class Team
     {
         public int id;
         public string teamName;
-        public double latitude;
-        public double longitude;
+        public Country country;
+        public int factoryId;
     }
 
     [Serializable]
     public class Provider
     {
         public int id;
-        public Team team;
+        public int teamId;
         public int productId;
         public int capacity;
-        public int averagePrice;
-        public int minPriceOnRecord;
-        public int maxPriceOnRecord;
+        public float price;
+    }
+
+    public enum OfferStatus
+    {
+        ACTIVE, ACCEPTED, TERMINATED, PASSED_DEADLINE
+    }
+
+    [Serializable]
+    public class Offer
+    {
+        public int id;
+        public int teamId;
+        public int productId;
+        public int volume;
+        public OfferStatus offerStatus;
+        public float costPerUnit;
+        public CustomDate offerDeadline;
+    }
+
+    public enum NegotiationState
+    {
+        CLOSED, DEAL, IN_PROGRESS, PENDING
+    }
+
+    [Serializable]
+    public class Negotiation
+    {
+        public int id;
+        public int demanderTeamId;
+        public int supplierTeamId;
+        public int productId;
+        public int amount;
+        public float costPerUnitDemander;
+        public float costPerUnitSupplier;
+        public NegotiationState state;
     }
 
     public enum ContractType
@@ -73,14 +105,23 @@ public class Utils
         public int amount;
     }
 
+    public enum ProductType
+    {
+        RawMaterial,
+        SemiFinished,
+        Finished
+    }
+
     [Serializable]
     public class Product
     {
         public int id;
-        public int categoryId;
-        public int productionLineId;
+        public string categoryIds; //for SemiFinishedProducts only
+        public int productionLineId; //for SemiFinishedProducts & Finished only
+        public ProductType productType;
         public string name;
-        public List<ProductIngredient> ingredientsPerUnit;
+        public int volumetricUnit;
+        public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 36)
     }
 
     [Serializable]
@@ -128,4 +169,46 @@ public class Utils
         WAREHOUSE, DC
     }
 
+
+    public enum Country
+    {
+        France,
+        Germany,
+        UnitedKingdom,
+        Netherlands,
+        Belgium,
+        Switzerland
+    }
+
+    [Serializable]
+    public class Factory
+    {
+        public int id;
+        public string name;
+        public Country country;
+        public double latitude;
+        public double longitude;
+    }
+
+    public enum AuctionBidStatus
+    {
+        Active,
+        Over
+    }
+
+    public class Auction
+    {
+        public int id;
+        public int factoryId;
+        public int highestBid;
+        public int highestBidTeamId;
+        public AuctionBidStatus auctionBidStatus;
+    }
+
+    public class GameConstants
+    {
+        public int AuctionStartValue = 1000;
+        public int AuctionStepValue = 100;
+        public List<CustomDateTime> AuctionRoundsStartTime;
+    }
 }

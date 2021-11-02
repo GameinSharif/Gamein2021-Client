@@ -5,4 +5,5 @@ public class LoginResponse : ResponseObject
 {
     public int playerId;
     public string result;
+    public Utils.Team team;
 }

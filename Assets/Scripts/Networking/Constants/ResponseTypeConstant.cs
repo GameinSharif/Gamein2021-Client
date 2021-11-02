@@ -16,4 +16,10 @@ public enum ResponseTypeConstant
     BUY_DC = 13,
     SELL_DC = 14,
     GET_STORAGE_PRODUCTS = 15,
+    NEW_PROVIDER_NEGOTIATION = 16,
+    GET_ALL_AUCTIONS = 17,
+    BID_FOR_AUCTION = 18,
+    TERMINATE_OFFER = 19,
+    NEW_MESSAGE = 20,
+    GET_All_CHATS = 21
 }

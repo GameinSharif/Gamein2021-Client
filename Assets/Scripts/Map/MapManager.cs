@@ -6,10 +6,12 @@ using Mapbox.Utils;
 using Mapbox.Examples;
 using System;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
+    public static Vector2 SnapToLocaltionOnOpenMap;
 
     private AbstractMap _abstractMap;
     private QuadTreeCameraMovement _quadTreeCameraMovement;
@@ -29,9 +31,11 @@ public class MapManager : MonoBehaviour
     private readonly float _spawnScale = 10f;
     private readonly float _onMapMarkerVerticalDistanceFromMap = 2;
 
+    public Camera Camera;
     public List<GameObject> IsMapTypeSelectedGameObjects;
     [Space]
     public GameObject MapAgenetMarkerPrefab;
+    public GameObject OnMapMarkersParent;
     public List<MapUtils.MapAgentMarker> MapAgentMarkers;
     [Space]
     public GameObject MapLinePrefab;
@@ -42,6 +46,12 @@ public class MapManager : MonoBehaviour
         Instance = this;
         _abstractMap = FindObjectOfType<AbstractMap>();
         _quadTreeCameraMovement = FindObjectOfType<QuadTreeCameraMovement>();
+
+        var canvases = FindObjectsOfType<Canvas>();
+        foreach (Canvas canvas in canvases)
+        {
+            canvas.worldCamera = Camera.main;
+        }
     }
 
     private void Start()
@@ -56,10 +66,15 @@ public class MapManager : MonoBehaviour
 
         //ChangeMapAgentType(_onMapMarkers[0], MapUtils.MapAgentMarker.AgentType.Storage);
 
-        SnapToLocation(new Vector2(46, 2));
+        if (SnapToLocaltionOnOpenMap != null)
+        {
+            SnapToLocation(SnapToLocaltionOnOpenMap);
+        }
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
+
+        MainMenuManager.IsLoadingMap = false;
     }
 
     private void InitializeGameDataOnMap()
@@ -67,7 +82,7 @@ public class MapManager : MonoBehaviour
         for (int i=0; i < GameDataManager.Instance.GameinCustomers.Count; i++)
         {
             Utils.GameinCustomer gameinCustomer = GameDataManager.Instance.GameinCustomers[i];
-            SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), i, gameinCustomer.name);
+            SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), gameinCustomer.id, gameinCustomer.name);
         }
 
         for (int i = 0; i < GameDataManager.Instance.DCDtos.Count; i++)
@@ -77,6 +92,23 @@ public class MapManager : MonoBehaviour
                     : MapUtils.MapAgentMarker.AgentType.MyDistributionCenter,
                 new Vector2d(dcDto.latitude, dcDto.longitude), dcDto.DCId, dcDto.name);
         }
+
+        Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
+        for (int i = 0; i < GameDataManager.Instance.Factories.Count; i++)
+        {
+            Utils.Factory factory = GameDataManager.Instance.Factories[i];
+            if (factory.country == country)
+            {
+                SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.NoOwnerFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
+
+            }
+            else
+            {
+                SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
+            }
+        }
+
+        UpdateAllAuctions();
 
         //TODO do the same thing for other map markers
     }
@@ -91,12 +123,12 @@ public class MapManager : MonoBehaviour
 
     private void InitializeMap()
     {
-        int lastMapTypeIndex = PlayerPrefs.GetInt("LastMapTypeIndex", 0);
+        int lastMapTypeIndex = PlayerPrefs.GetInt("LastMapTypeIndex", 2);
         _currnetMapTypeIndex = lastMapTypeIndex;
         _abstractMap.ImageLayer.SetProperties((ImagerySourceType)_currnetMapTypeIndex, _useRetina, _useCompression, _useMipMap);
         SetMapTypesActiveStatus();
 
-        int mapZoomIndex = PlayerPrefs.GetInt("MapZoomIndex", 0);
+        int mapZoomIndex = PlayerPrefs.GetInt("MapZoomIndex", 3);
         _currnetZoomAmountIndex = mapZoomIndex;
         _abstractMap.SetZoom(_possibleZoomAmounts[_currnetZoomAmountIndex]);
 
@@ -163,17 +195,18 @@ public class MapManager : MonoBehaviour
         {
             if (mapAgentMarker.MapAgentType == agentType)
             {
-                var instance = Instantiate(MapAgenetMarkerPrefab);
+                var instance = Instantiate(MapAgenetMarkerPrefab, OnMapMarkersParent.transform);
                 instance.GetComponent<MaterialSetter>().Initialize(mapAgentMarker, name);
                 
                 instance.transform.localPosition = _abstractMap.GeoToWorldPosition(location) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);
                 instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-                _onMapMarkers.Add(new MapUtils.OnMapMarker(location, instance, mapAgentMarker, index));
+                MapUtils.OnMapMarker onMapMarker = new MapUtils.OnMapMarker(location, instance, mapAgentMarker, index);
+                _onMapMarkers.Add(onMapMarker);
             }
         }
     }
 
-    public void ChangeMapAgentType(MapUtils.OnMapMarker onMapMarker, MapUtils.MapAgentMarker.AgentType newAgentType, string name)
+    public void ChangeMapAgentType(MapUtils.OnMapMarker onMapMarker, MapUtils.MapAgentMarker.AgentType newAgentType, string name = null)
     {
         foreach (MapUtils.MapAgentMarker mapAgentMarker in MapAgentMarkers)
         {
@@ -185,6 +218,70 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public void UpdateAuctionData(int factoryId)
+    {
+        foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+        {
+            if (onMapMarker.MapAgentMarker.MapAgentType.ToString().Contains("Factory") && onMapMarker.Index == factoryId)
+            {
+                UpdateFactory(onMapMarker);
+            }
+        }
+    }
+
+    public void UpdateAllAuctions()
+    {
+        foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+        {
+            if (onMapMarker.MapAgentMarker.MapAgentType.ToString().Contains("Factory"))
+            {
+                UpdateFactory(onMapMarker);
+            }
+        }
+    }
+
+    public void UpdateFactory(MapUtils.OnMapMarker onMapMarker)
+    {
+        int factoryId = onMapMarker.Index;
+        Utils.Auction auction = GameDataManager.Instance.GetAuctionByFactoryId(factoryId);
+        if (auction == null) //This factory has no bid yet.
+        {
+            onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().SetAuctionValues(auction, onMapMarker);
+
+            return;
+        }
+
+        bool isForThisTeam = auction.highestBidTeamId == PlayerPrefs.GetInt("TeamId");
+        bool isDifferentCountry = GameDataManager.Instance.GetFactoryById(auction.factoryId).country.ToString() != PlayerPrefs.GetString("Country");
+        bool isOver = auction.auctionBidStatus == Utils.AuctionBidStatus.Over;
+        if (isOver)
+        {
+            ChangeMapAgentType(onMapMarker,
+                isForThisTeam
+                    ? MapUtils.MapAgentMarker.AgentType.MyFactory
+                    : MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory);
+        } 
+        else if (isForThisTeam)
+        {
+            ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.MyFactory);
+        } 
+        else if (isDifferentCountry) 
+        {
+            ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory);
+        }
+        else
+        {
+            ChangeMapAgentType(onMapMarker, MapUtils.MapAgentMarker.AgentType.OtherFactory);
+        }
+
+        onMapMarker.SpawnedObject.GetComponent<EachAuctionController>().SetAuctionValues(auction, onMapMarker);
+    }
+
+    public MapUtils.OnMapMarker GetOnMapMarkerById(int id)
+    {
+        return _onMapMarkers.First(marker => marker.Index == id);
+    }
+    
     public void UpdateMarkersLocation()
     {
         foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)

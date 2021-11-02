@@ -14,4 +14,9 @@ public enum RequestTypeConstant
     BUY_DC = 11,
     SELL_DC = 12,
     GET_STORAGE_PRODUCTS = 13,
+    NEW_PROVIDER_NEGOTIATION = 14,
+    BID_FOR_AUCTION = 15,
+    TERMINATE_OFFER = 16,
+    NEW_MESSAGE = 17,
+    GET_All_CHATS = 18
 }

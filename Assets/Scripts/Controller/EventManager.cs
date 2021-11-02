@@ -82,8 +82,39 @@ public class EventManager : MonoBehaviour
     }
 
     public event Action<GetStorageProductsResponse> OnGetStorageProductsResponseEvent;
+
     public void OnGetStorageProductsResponse(GetStorageProductsResponse getStorageProductsResponse)
     {
         OnGetStorageProductsResponseEvent?.Invoke(getStorageProductsResponse);
+    }
+
+    public event Action<NewProviderResponse> OnNewProviderResponseEvent;
+    public void OnNewProviderResponse(NewProviderResponse newProviderResponse)
+    {
+        OnNewProviderResponseEvent?.Invoke(newProviderResponse);
+    }
+
+    public event Action<BidForAuctionResponse> OnBidForAuctionResponseEvent;
+    public void OnBidForAuctionResponse(BidForAuctionResponse bidForAuctionResponse)
+    {
+        OnBidForAuctionResponseEvent?.Invoke(bidForAuctionResponse);
+    }
+
+    public event Action<GetAllAuctionsResponse> OnGetAllAuctionsResponseEvent;
+    public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
+    {
+        OnGetAllAuctionsResponseEvent?.Invoke(getAllAuctionsResponse);
+    }
+
+    public event Action<NewMessageResponse> OnNewMessageResponseEvent;
+    public void OnNewMessageResponse(NewMessageResponse newMessageResponse)
+    {
+        OnNewMessageResponseEvent?.Invoke(newMessageResponse);
+    }
+
+    public event Action<GetAllChatsResponse> OnGetAllChatsResponseEvent;
+    public void OnGetAllChatsResponse(GetAllChatsResponse getAllChatsResponse)
+    {
+        OnGetAllChatsResponseEvent?.Invoke(getAllChatsResponse);
     }
 }

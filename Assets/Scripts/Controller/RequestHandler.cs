@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using UnityEngine;
 
 public class RequestHandler
@@ -13,19 +15,19 @@ public class RequestHandler
                 EventManager.Instance.OnConnectionResponse(connectionResponse);
                 break;
             case ResponseTypeConstant.LOGIN:
-                LoginResponse loginResponseObject = JsonUtility.FromJson<LoginResponse>(responseJson);
-                EventManager.Instance.OnLoginResponse(loginResponseObject);
+                LoginResponse loginResponse = JsonConvert.DeserializeObject(responseJson, typeof(LoginResponse), new StringEnumConverter()) as LoginResponse;
+                EventManager.Instance.OnLoginResponse(loginResponse);
                 break;
             case ResponseTypeConstant.NEW_OFFER:
                 NewOfferResponse newOfferResponse = JsonUtility.FromJson<NewOfferResponse>(responseJson);
                 EventManager.Instance.OnNewOfferResponse(newOfferResponse);
                 break;
             case ResponseTypeConstant.GET_OFFERS:
-                GetOffersResponse getOffersResponse = JsonUtility.FromJson<GetOffersResponse>(responseJson);
+                GetOffersResponse getOffersResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetOffersResponse), new StringEnumConverter()) as GetOffersResponse;
                 EventManager.Instance.OnGetOffersResponse(getOffersResponse);
                 break;
             case ResponseTypeConstant.GET_GAME_DATA:
-                GetGameDataResponse getGameDataResponse = JsonUtility.FromJson<GetGameDataResponse>(responseJson);
+                GetGameDataResponse getGameDataResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetGameDataResponse), new StringEnumConverter()) as GetGameDataResponse;
                 EventManager.Instance.OnGetGameDataResponse(getGameDataResponse);
                 break;
             case ResponseTypeConstant.GET_CURRENT_WEEK_DEMANDS:
@@ -46,7 +48,8 @@ public class RequestHandler
                 //TODO
                 break;
             case ResponseTypeConstant.NEW_PROVIDER:
-                //TODO
+                NewProviderResponse newProviderResponse = JsonUtility.FromJson<NewProviderResponse>(responseJson);
+                EventManager.Instance.OnNewProviderResponse(newProviderResponse);
                 break;
             case ResponseTypeConstant.GET_PROVIDERS:
                 GetProvidersResponse getProvidersResponse = JsonUtility.FromJson<GetProvidersResponse>(responseJson);
@@ -67,6 +70,28 @@ public class RequestHandler
                 GetStorageProductsResponse getStorageProductsResponse =
                     JsonUtility.FromJson<GetStorageProductsResponse>(responseJson);
                 EventManager.Instance.OnGetStorageProductsResponse(getStorageProductsResponse);
+                break;
+            case ResponseTypeConstant.NEW_PROVIDER_NEGOTIATION:
+                //TODO
+                break;
+            case ResponseTypeConstant.GET_ALL_AUCTIONS:
+                GetAllAuctionsResponse getAllAuctionsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetAllAuctionsResponse), new StringEnumConverter()) as GetAllAuctionsResponse;
+                EventManager.Instance.OnGetAllAuctionsResponse(getAllAuctionsResponse);
+                break;
+            case ResponseTypeConstant.BID_FOR_AUCTION:
+                BidForAuctionResponse bidForAuctionResponse = JsonConvert.DeserializeObject(responseJson, typeof(BidForAuctionResponse), new StringEnumConverter()) as BidForAuctionResponse;
+                EventManager.Instance.OnBidForAuctionResponse(bidForAuctionResponse);
+                break;
+            case ResponseTypeConstant.TERMINATE_OFFER:
+                //TODO
+                break;
+            case ResponseTypeConstant.NEW_MESSAGE:
+                NewMessageResponse newMessageResponse = JsonUtility.FromJson<NewMessageResponse>(responseJson);
+                EventManager.Instance.OnNewMessageResponse(newMessageResponse);
+                break;
+            case ResponseTypeConstant.GET_All_CHATS:
+                GetAllChatsResponse getAllChatsResponse = JsonUtility.FromJson<GetAllChatsResponse>(responseJson);
+                EventManager.Instance.OnGetAllChatsResponse(getAllChatsResponse);
                 break;
         }
     }
