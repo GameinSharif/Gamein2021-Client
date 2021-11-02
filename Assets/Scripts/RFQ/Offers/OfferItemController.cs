@@ -12,7 +12,8 @@ public class OfferItemController : MonoBehaviour
     public RTLTextMeshPro costPerUnit;
     public RTLTextMeshPro totalPrice;
     public RTLTextMeshPro offerDeadline;
-    public Localize OfferStatusLocalize;
+    public GameObject offerStatusGameObject;
+    public Localize offerStatusLocalize;
 
     public GameObject RemoveOfferButtonGameObject;
     public GameObject AcceptOfferButtonGameObject;
@@ -21,6 +22,13 @@ public class OfferItemController : MonoBehaviour
 
     public void SetInfo(int no, string teamName, string productNameKey, int volume, float costPerUnit, CustomDate offerDeadline, Utils.OfferStatus offerStatus)
     {
+        offerStatusLocalize.SetKey(offerStatus.ToString());
+
+        SetInfo(no, teamName, productNameKey, volume, costPerUnit, offerDeadline);
+    }
+
+    public void SetInfo(int no, string teamName, string productNameKey, int volume, float costPerUnit, CustomDate offerDeadline)
+    {
         this.no.text = no.ToString();
         this.teamName.text = teamName;
         productNameLocalize.SetKey("product_" + productNameKey);
@@ -28,29 +36,37 @@ public class OfferItemController : MonoBehaviour
         this.costPerUnit.text = costPerUnit.ToString("0.00");
         totalPrice.text = (volume * costPerUnit).ToString("0.00");
         this.offerDeadline.text = offerDeadline.ToString();
-
-        //TODO OfferStatus
     }
 
     public void SetInfo(int no, Utils.Offer offer)
     {
-        SetInfo(
-            no: no,
-            teamName: GameDataManager.Instance.GetTeamName(offer.teamId),
-            productNameKey: GameDataManager.Instance.GetProductById(offer.productId).name,
-            volume: offer.volume,
-            costPerUnit: offer.costPerUnit,
-            offerDeadline: offer.offerDeadline,
-            offerStatus: offer.offerStatus
-        );
-
         if (PlayerPrefs.GetInt("TeamId") == offer.teamId)
         {
+            SetInfo(
+                no: no,
+                teamName: GameDataManager.Instance.GetTeamName(offer.teamId),
+                productNameKey: GameDataManager.Instance.GetProductById(offer.productId).name,
+                volume: offer.volume,
+                costPerUnit: offer.costPerUnit,
+                offerDeadline: offer.offerDeadline,
+                offerStatus: offer.offerStatus
+            );
+
             RemoveOfferButtonGameObject.SetActive(true);
             AcceptOfferButtonGameObject.SetActive(false);
         }
         else
         {
+            SetInfo(
+                no: no,
+                teamName: GameDataManager.Instance.GetTeamName(offer.teamId),
+                productNameKey: GameDataManager.Instance.GetProductById(offer.productId).name,
+                volume: offer.volume,
+                costPerUnit: offer.costPerUnit,
+                offerDeadline: offer.offerDeadline
+            );
+
+            offerStatusGameObject.SetActive(false);
             RemoveOfferButtonGameObject.SetActive(false);
             AcceptOfferButtonGameObject.SetActive(true);
         }
@@ -58,9 +74,13 @@ public class OfferItemController : MonoBehaviour
         _offer = offer;
     }
 
-
-    public void OnAcceptOfferClicked()
+    public void OnAcceptOfferButtonClick()
     {
-        // TODO
+        //TODO
+    }
+
+    public void OnRemoveOfferButtonClick()
+    {
+        //TODO
     }
 }
