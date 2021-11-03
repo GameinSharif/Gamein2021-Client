@@ -9,8 +9,8 @@ public class OffersController : MonoBehaviour
 {
     public static OffersController Instance;
 
-    [HideInInspector] List<Utils.Offer> MyTeamOffers;
-    [HideInInspector] List<Utils.Offer> OtherTeamsOffers;
+    [HideInInspector] public List<Utils.Offer> MyTeamOffers;
+    [HideInInspector] public List<Utils.Offer> OtherTeamsOffers;
 
     public GameObject offerItemPrefab;
 
@@ -27,11 +27,13 @@ public class OffersController : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnGetOffersResponseEvent += OnGetOffersResponseReceived;
+        EventManager.Instance.OnTerminateOfferResponseEvent += OnTerminateOfferResponseRecieved;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnGetOffersResponseEvent -= OnGetOffersResponseReceived;
+        EventManager.Instance.OnTerminateOfferResponseEvent -= OnTerminateOfferResponseRecieved;
     }
 
     public void OnGetOffersResponseReceived(GetOffersResponse getOffersResponse)
@@ -101,6 +103,17 @@ public class OffersController : MonoBehaviour
         foreach (GameObject gameObject in _spawnedGameObjects)
         {
             gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTerminateOfferResponseRecieved(TerminateOfferResponse terminateOfferResponse)
+    {
+        foreach (Utils.Offer offer in MyTeamOffers)
+        {
+            if (offer.id == terminateOfferResponse.terminatedOfferId)
+            {
+                offer.offerStatus = Utils.OfferStatus.TERMINATED;
+            }
         }
     }
 

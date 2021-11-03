@@ -87,6 +87,12 @@ public class EventManager : MonoBehaviour
         OnGetAllAuctionsResponseEvent?.Invoke(getAllAuctionsResponse);
     }
 
+    public event Action<TerminateOfferResponse> OnTerminateOfferResponseEvent;
+    public void OnTerminateOfferResponse(TerminateOfferResponse terminateOfferResponse)
+    {
+        OnTerminateOfferResponseEvent?.Invoke(terminateOfferResponse);
+    }
+
     public event Action<NewMessageResponse> OnNewMessageResponseEvent;
     public void OnNewMessageResponse(NewMessageResponse newMessageResponse)
     {

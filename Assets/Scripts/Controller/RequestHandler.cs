@@ -70,7 +70,8 @@ public class RequestHandler
                 EventManager.Instance.OnBidForAuctionResponse(bidForAuctionResponse);
                 break;
             case ResponseTypeConstant.TERMINATE_OFFER:
-                //TODO
+                TerminateOfferResponse terminateOfferResponse = JsonUtility.FromJson<TerminateOfferResponse>(responseJson);
+                EventManager.Instance.OnTerminateOfferResponse(terminateOfferResponse);
                 break;
             case ResponseTypeConstant.NEW_MESSAGE:
                 NewMessageResponse newMessageResponse = JsonUtility.FromJson<NewMessageResponse>(responseJson);

@@ -19,6 +19,17 @@ public class OfferItemController : MonoBehaviour
     public GameObject AcceptOfferButtonGameObject;
 
     private Utils.Offer _offer;
+    private bool _isSendingTerminateOrAccept = false;
+
+    private void OnEnable()
+    {
+        EventManager.Instance.OnTerminateOfferResponseEvent += OnTerminateOfferResponseRecieved;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnTerminateOfferResponseEvent -= OnTerminateOfferResponseRecieved;
+    }
 
     public void SetInfo(int no, string teamName, string productNameKey, int volume, float costPerUnit, CustomDate offerDeadline, Utils.OfferStatus offerStatus)
     {
@@ -52,7 +63,14 @@ public class OfferItemController : MonoBehaviour
                 offerStatus: offer.offerStatus
             );
 
-            RemoveOfferButtonGameObject.SetActive(true);
+            if (offer.offerStatus == Utils.OfferStatus.ACTIVE)
+            {
+                RemoveOfferButtonGameObject.SetActive(true);
+            }
+            else
+            {
+                RemoveOfferButtonGameObject.SetActive(false);
+            }
             AcceptOfferButtonGameObject.SetActive(false);
         }
         else
@@ -72,15 +90,38 @@ public class OfferItemController : MonoBehaviour
         }
 
         _offer = offer;
+        _isSendingTerminateOrAccept = false;
     }
 
     public void OnAcceptOfferButtonClick()
     {
+        if (_isSendingTerminateOrAccept)
+        {
+            return;
+        }
+
+        _isSendingTerminateOrAccept = true;
         //TODO
     }
 
     public void OnRemoveOfferButtonClick()
     {
-        //TODO
+        if (_isSendingTerminateOrAccept)
+        {
+            return;
+        }
+
+        _isSendingTerminateOrAccept = true;
+        TerminateOfferRequest terminateOfferRequest = new TerminateOfferRequest(RequestTypeConstant.TERMINATE_OFFER, _offer.id);
+        RequestManager.Instance.SendRequest(terminateOfferRequest);
+    }
+
+    private void OnTerminateOfferResponseRecieved(TerminateOfferResponse terminateOfferResponse)
+    {
+        if (_offer.id == terminateOfferResponse.terminatedOfferId)
+        {
+            offerStatusLocalize.SetKey("TERMINATED");
+            RemoveOfferButtonGameObject.SetActive(false);
+        }
     }
 }
