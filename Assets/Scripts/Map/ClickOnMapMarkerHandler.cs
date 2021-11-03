@@ -8,5 +8,6 @@ public class ClickOnMapMarkerHandler : MonoBehaviour
     {
         //TODO conditions for all map marker types
         GetComponentInParent<EachAuctionController>().OnFactoryButtonClick();
+        GetComponentInParent<EachDcController>().OnDcMarkerClicked();
     }
 }
