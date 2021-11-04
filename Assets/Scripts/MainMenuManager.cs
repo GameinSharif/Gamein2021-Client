@@ -34,6 +34,9 @@ public class MainMenuManager : MonoBehaviour
         GetProvidersRequest getProvidersRequest = new GetProvidersRequest(RequestTypeConstant.GET_PROVIDERS);
         RequestManager.Instance.SendRequest(getProvidersRequest);
 
+        GetNegotiationsRequest getNegotiationsRequest = new GetNegotiationsRequest(RequestTypeConstant.GET_NEGOTIATIONS);
+        RequestManager.Instance.SendRequest(getNegotiationsRequest);
+
         GetContractsRequest getContractsRequest = new GetContractsRequest(RequestTypeConstant.GET_CONTRACTS);
         RequestManager.Instance.SendRequest(getContractsRequest);
     }

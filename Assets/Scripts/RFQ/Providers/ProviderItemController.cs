@@ -19,6 +19,16 @@ public class ProviderItemController : MonoBehaviour
     private Utils.Provider _provider;
     private bool _isSendingTerminateOrAccept = false;
 
+    private void OnEnable()
+    {
+        EventManager.Instance.OnRemoveProviderResponseEvent += OnRemoveProviderResponseRecieved;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnRemoveProviderResponseEvent -= OnRemoveProviderResponseRecieved;
+    }
+
     public void SetInfo(int no, string teamName, string productNameKey, int capacity, float price, Utils.ProviderState providerState)
     {
         providerStateLocalize.SetKey(providerState.ToString());
@@ -93,6 +103,23 @@ public class ProviderItemController : MonoBehaviour
         }
 
         _isSendingTerminateOrAccept = true;
-        //TODO
+        RemoveProviderRequest removeProviderRequest = new RemoveProviderRequest(RequestTypeConstant.REMOVE_PROVIDER, _provider.id);
+        RequestManager.Instance.SendRequest(removeProviderRequest);
+    }
+
+    private void OnRemoveProviderResponseRecieved(RemoveProviderResponse removeProviderResponse)
+    {
+        if (removeProviderResponse.result == "Success")
+        {
+            if (_provider.id == removeProviderResponse.removedProviderId)
+            {
+                providerStateLocalize.SetKey("TERMINATED");
+                RemoveProviderButtonGameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            //TODO show error
+        }
     }
 }

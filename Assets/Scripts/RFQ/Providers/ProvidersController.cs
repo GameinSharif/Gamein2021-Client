@@ -28,11 +28,13 @@ public class ProvidersController : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnGetProvidersResponseEvent += OnGetProvidersResponse;
+        EventManager.Instance.OnRemoveProviderResponseEvent += OnRemoveProviderResponseRecieved;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnGetProvidersResponseEvent -= OnGetProvidersResponse;
+        EventManager.Instance.OnRemoveProviderResponseEvent -= OnRemoveProviderResponseRecieved;
     }
 
     public void OnGetProvidersResponse(GetProvidersResponse getProvidersResponse)
@@ -102,6 +104,17 @@ public class ProvidersController : MonoBehaviour
         foreach (GameObject gameObject in _spawnedGameObjects)
         {
             gameObject.SetActive(false);
+        }
+    }
+
+    private void OnRemoveProviderResponseRecieved(RemoveProviderResponse removeProviderResponse)
+    {
+        foreach (Utils.Provider provider in MyTeamProviders)
+        {
+            if (provider.id == removeProviderResponse.removedProviderId)
+            {
+                provider.state = Utils.ProviderState.TERMINATED;
+            }
         }
     }
 

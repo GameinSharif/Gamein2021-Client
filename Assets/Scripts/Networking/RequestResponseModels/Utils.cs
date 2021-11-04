@@ -48,15 +48,15 @@ public class Utils
 
     public enum NegotiationState
     {
-        CLOSED, DEAL, IN_PROGRESS, PENDING
+        CLOSED, DEAL, IN_PROGRESS
     }
 
     [Serializable]
     public class Negotiation
     {
         public int id;
-        public int demanderTeamId;
-        public int supplierTeamId;
+        public int demanderId;
+        public int supplierId;
         public int productId;
         public int amount;
         public float costPerUnitDemander;

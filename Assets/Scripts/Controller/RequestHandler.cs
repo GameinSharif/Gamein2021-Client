@@ -42,7 +42,8 @@ public class RequestHandler
                 //TODO
                 break;
             case ResponseTypeConstant.GET_NEGOTIATIONS:
-                //TODO
+                GetNegotiationsResponse getNegotiationsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetNegotiationsResponse), new StringEnumConverter()) as GetNegotiationsResponse;
+                EventManager.Instance.OnGetNegotiationsResponse(getNegotiationsResponse);
                 break;
             case ResponseTypeConstant.EDIT_NEGOTIATION_COST_PER_UNIT:
                 //TODO
@@ -56,7 +57,8 @@ public class RequestHandler
                 EventManager.Instance.OnGetProvidersResponse(getProvidersResponse);
                 break;
             case ResponseTypeConstant.REMOVE_PROVIDER:
-                //TODO
+                RemoveProviderResponse removeProviderResponse = JsonUtility.FromJson<RemoveProviderResponse>(responseJson);
+                EventManager.Instance.OnRemoveProviderResponse(removeProviderResponse);
                 break;
             case ResponseTypeConstant.NEW_PROVIDER_NEGOTIATION:
                 //TODO

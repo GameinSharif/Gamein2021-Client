@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,81 +7,107 @@ using TMPro;
 
 public class NegotiationsController : MonoBehaviour
 {
-    public GameObject negotiationOfferItemPrefab;
-    public Transform scrollPanel;
-    
-    public GameObject negotiationSelectedOfferItemPrefab;
-    public Transform offerPanel;
+    public static NegotiationsController Instance;
 
-    public GameObject sendNewOfferPopUp;
-    public TMP_InputField offerPopUpInputField1;
-    public TMP_InputField offerPopUpInputField2;
-    public TMP_InputField offerPopUpInputField3;
-    public TMP_Dropdown offerPopUpDropdown;
-    public DatePicker date1;
-    public DatePicker date2;
-    public DatePicker date3;
-    public RTLTextMeshPro[] dates;
- 
-    private void Awake()
+    [HideInInspector] public List<Utils.Negotiation> SupplyNegotiations;
+    [HideInInspector] public List<Utils.Negotiation> DemandNegotiations;
+
+    public GameObject NegotiationItemPrefab;
+
+    public GameObject SupplyNegotiationsScrollViewParent;
+    public GameObject DemandNegotiationsScrollViewParent;
+
+    private List<GameObject> _spawnedGameObjects = new List<GameObject>();
+
+    void Awake()
     {
-        DestroySelectedOfferInPanel();
-        DestroyAllChildrenInScrollPanel();
-        SetOfferPopUpActive(false);
+        Instance = this;
     }
-    
-    //public void AddToList(OfferViewModel offer)
-    //{
-    //    var createdItem = Instantiate(negotiationOfferItemPrefab, scrollPanel);
-    //    var controller = createdItem.GetComponent<NegotiationOfferItemController>();
-    //    controller.SetInfo(scrollPanel.transform.childCount, offer);
-    //    RectTransform createdItemRectTransform = createdItem.GetComponent<RectTransform>();
-    //    float height = -123.3697f;
-    //    createdItemRectTransform.anchoredPosition = new Vector2(0, (float) scrollPanel.transform.childCount * height);
-    //    createdItem.gameObject.SetActive(true);
-    //}
 
-    private void DestroyAllChildrenInScrollPanel()
+    private void OnEnable()
     {
-        foreach (Transform child in scrollPanel.transform)
+        EventManager.Instance.OnGetNegotiationsResponseEvent += OnGetNegotiationsResponseReceived;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnGetNegotiationsResponseEvent -= OnGetNegotiationsResponseReceived;
+    }
+
+    public void OnGetNegotiationsResponseReceived(GetNegotiationsResponse getNegotiationsResponse)
+    {
+        DeactiveAllChildrenInScrollPanel();
+        SupplyNegotiations = new List<Utils.Negotiation>();
+        DemandNegotiations = new List<Utils.Negotiation>();
+
+        int teamId = PlayerPrefs.GetInt("TeamId");
+        foreach(Utils.Negotiation negotiation in getNegotiationsResponse.negotiations)
         {
-            Destroy(child.gameObject);
+            if (negotiation.supplierId == teamId)
+            {
+                SupplyNegotiations.Add(negotiation);
+            }
+            else if (negotiation.demanderId == teamId)
+            {
+                DemandNegotiations.Add( negotiation);
+            }
+        }
+
+        SupplyNegotiations.Reverse();
+        DemandNegotiations.Reverse();
+
+        for (int i=0;i < SupplyNegotiations.Count; i++)
+        {
+            AddSupplyNegotiationToList(SupplyNegotiations[i], i + 1);
+        }
+        for (int i = 0; i < DemandNegotiations.Count; i++)
+        {
+            AddDemandNegotiationToList(DemandNegotiations[i], i + 1);
         }
     }
-    
-    //public void ShowSelectedOffer(OfferViewModel offer)
-    //{
-    //    DestroySelectedOfferInPanel();
-    //    var createdItem = Instantiate(negotiationSelectedOfferItemPrefab, offerPanel);
-    //    var controller = createdItem.GetComponent<NegotiationOfferItemController>();
-    //    controller.SetInfo(offer);
-    //}
 
-    private void DestroySelectedOfferInPanel()
+    private void AddSupplyNegotiationToList(Utils.Negotiation negotiation, int index)
     {
-        foreach (Transform child in offerPanel.transform)
+        GameObject createdItem = GetItem(SupplyNegotiationsScrollViewParent);
+        createdItem.transform.SetSiblingIndex(index);
+
+        NegotiationItemController controller = createdItem.GetComponent<NegotiationItemController>();
+        controller.SetSupplyNegotiationInfo(index, negotiation);
+
+        createdItem.SetActive(true);
+    }
+
+    private void AddDemandNegotiationToList(Utils.Negotiation negotiation, int index)
+    {
+        GameObject createdItem = GetItem(DemandNegotiationsScrollViewParent);
+        createdItem.transform.SetSiblingIndex(index);
+
+        NegotiationItemController controller = createdItem.GetComponent<NegotiationItemController>();
+        controller.SetDemandNegotiationInfo(index, negotiation);
+
+        createdItem.SetActive(true);
+    }
+
+    private GameObject GetItem(GameObject parent)
+    {
+        foreach (GameObject gameObject in _spawnedGameObjects)
         {
-            Destroy(child.gameObject);
+            if (!gameObject.activeSelf)
+            {
+                return gameObject;
+            }
         }
-    }
-    
-    public void OnSendOfferButtonClicked()
-    {
-        SetOfferPopUpActive(true);
+
+        GameObject newItem = Instantiate(NegotiationItemPrefab, parent.transform);
+        _spawnedGameObjects.Add(newItem);
+        return newItem;
     }
 
-    public void OnOfferPopUpCloseClicked()
+    private void DeactiveAllChildrenInScrollPanel()
     {
-        SetOfferPopUpActive(false);
-    }
-
-    private void SetOfferPopUpActive(bool value)
-    {
-        sendNewOfferPopUp.SetActive(value);
-    }
-    
-    public void OnPlaceOfferButtonClicked()
-    {
-        //TODO
+        foreach (GameObject gameObject in _spawnedGameObjects)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
