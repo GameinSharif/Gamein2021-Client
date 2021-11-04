@@ -127,6 +127,34 @@ public class Utils
         public int sales;
     }
 
+    public enum TransportNodeType
+    {
+        SUPPLIER, GAMEIN_CUSTOMER, DC, FACTORY
+    }
+    
+    [Serializable]
+    public class ContractSupplierDetail
+    {
+        public int id;
+        public CustomDateTime contractDate;
+        public int boughtAmount;
+        public int pricePerUnit;
+        public TransportNodeType transportNodeType;
+    }
+
+    [Serializable]
+    public class ContractSupplier
+    {
+        public int id;
+        public int supplierId;
+        public int teamId;
+        public int materialId;
+        public ContractType contractType;
+        public List<ContractSupplierDetail> contractSupplierDetails;
+        public int terminatePenalty;
+        public bool isTerminated;
+    }
+
     public enum ProductType
     {
         RawMaterial,

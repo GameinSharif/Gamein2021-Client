@@ -15,5 +15,6 @@ public enum RequestTypeConstant
     BID_FOR_AUCTION = 12,
     TERMINATE_OFFER = 13,
     NEW_MESSAGE = 14,
-    GET_All_CHATS = 15
+    GET_All_CHATS = 15,
+    GET_CONTRACT_SUPPLIERS = 16
 }
