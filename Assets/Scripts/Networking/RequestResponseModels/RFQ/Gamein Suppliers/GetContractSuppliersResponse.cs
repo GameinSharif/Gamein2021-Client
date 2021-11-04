@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 [Serializable]
-public class GetContractSupplierResponse : ResponseObject
+public class GetContractSuppliersResponse : ResponseObject
 {
     public List<Utils.ContractSupplier> ContractSuppliers;
 }

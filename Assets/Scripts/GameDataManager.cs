@@ -56,6 +56,7 @@ public class GameDataManager : MonoBehaviour
     public void OnGetCurrentWeekSuppliesResponse(GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse)
     {
         CurrentWeekSupplies = getCurrentWeekSuppliesResponse.currentWeekSupplies;
+        //TODO update suppliers in the table
     }
     
     public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
@@ -106,6 +107,30 @@ public class GameDataManager : MonoBehaviour
             }
         }
         return "Team";
+    }
+    
+    public string GetSupplierName(int supplierId)
+    {
+        foreach (Utils.Supplier supplier in GameinSuppliers)
+        {
+            if (supplierId == supplier.id)
+            {
+                return supplier.name;
+            }
+        }
+        return "Supplier";
+    }
+    
+    public string GetProductName(int productId)
+    {
+        foreach (Utils.Product product in Products)
+        {
+            if (productId == product.id)
+            {
+                return product.name;
+            }
+        }
+        return "Product";
     }
 
     public Utils.Product GetProductById(int id)
