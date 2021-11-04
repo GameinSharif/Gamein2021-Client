@@ -36,6 +36,7 @@ public class GameDataManager : MonoBehaviour
     {
         Teams = getGameDataResponse.teams;
         GameinCustomers = getGameDataResponse.gameinCustomers;
+        GameinSuppliers = getGameDataResponse.suppliers;
         Products = getGameDataResponse.products;
 
         Factories = getGameDataResponse.factories;
@@ -43,7 +44,6 @@ public class GameDataManager : MonoBehaviour
         GameConstants = getGameDataResponse.gameConstants;
 
         GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
-        //TODO the gamein suppliers
     }
 
     public void OnGetCurrentWeekDemandsResponse(GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse)

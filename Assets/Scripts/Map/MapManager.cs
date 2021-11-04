@@ -84,6 +84,12 @@ public class MapManager : MonoBehaviour
             SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), gameinCustomer.id, gameinCustomer.name);
         }
 
+        for (int i=0; i < GameDataManager.Instance.GameinSuppliers.Count; i++)
+        {
+            Utils.Supplier gameinSupplier = GameDataManager.Instance.GameinSuppliers[i];
+            SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Supplier, new Vector2d(gameinSupplier.latitude, gameinSupplier.longitude), gameinSupplier.id, gameinSupplier.name);
+        }
+        
         Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
         for (int i = 0; i < GameDataManager.Instance.Factories.Count; i++)
         {
@@ -282,16 +288,7 @@ public class MapManager : MonoBehaviour
             spawnedObject.transform.localPosition = _abstractMap.GeoToWorldPosition(location) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);
         }
     }
-
-    public void ShowSuppliersOnMap()
-    {
-        for (int i=0; i < GameDataManager.Instance.GameinSuppliers.Count; i++)
-        {
-            Utils.Supplier gameinSupplier = GameDataManager.Instance.GameinSuppliers[i];
-            SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Supplier, new Vector2d(gameinSupplier.latitude, gameinSupplier.longitude), gameinSupplier.id, gameinSupplier.name);
-        }
-    }
-
+    
     #endregion
 
     #region SnapToLocation
