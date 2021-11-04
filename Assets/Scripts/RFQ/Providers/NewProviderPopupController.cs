@@ -19,6 +19,7 @@ public class NewProviderPopupController : MonoBehaviour
     public TMP_InputField MaxPriceOnRecordInputfield;
 
     private int _selectedProductId = 0;
+    private bool _isSendingRequest = false;
 
     private void Awake()
     {
@@ -37,6 +38,7 @@ public class NewProviderPopupController : MonoBehaviour
 
     private void OnNewProviderResponse(NewProviderResponse newProviderResponse)
     {
+        _isSendingRequest = false;
         if (newProviderResponse.result == "Success")
         {
             ProvidersController.Instance.AddMyProviderToList(newProviderResponse.newProvider);
@@ -51,6 +53,7 @@ public class NewProviderPopupController : MonoBehaviour
 
     public void OnOpenNewProviderPopupClick()
     {
+        _isSendingRequest = false;
         //TODO clear inputfields
 
         SetProducts();
@@ -93,6 +96,12 @@ public class NewProviderPopupController : MonoBehaviour
 
     public void OnDoneButtonClick()
     {
+        if (_isSendingRequest)
+        {
+            return;
+        }
+        _isSendingRequest = true;
+
         string capacity = CapacityInputfield.text;
         string price = PriceInputfield.text;
         if (string.IsNullOrEmpty(capacity) || string.IsNullOrEmpty(price) || _selectedProductId == 0)

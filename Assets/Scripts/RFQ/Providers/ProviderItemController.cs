@@ -92,7 +92,7 @@ public class ProviderItemController : MonoBehaviour
         }
 
         _isSendingTerminateOrAccept = true;
-        //TODO
+        NewNegotiationPopupController.Instance.OpenNewNegotiationPopup(_provider);
     }
 
     public void OnRemoveProviderButtonClick()

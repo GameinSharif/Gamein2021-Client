@@ -66,6 +66,21 @@ public class NegotiationsController : MonoBehaviour
         }
     }
 
+    public void AddNegotiationToList(Utils.Negotiation negotiation)
+    {
+        int teamId = PlayerPrefs.GetInt("TeamId");
+        if (negotiation.supplierId == teamId)
+        {
+            SupplyNegotiations.Add(negotiation);
+            AddSupplyNegotiationToList(negotiation, SupplyNegotiations.Count);
+        }
+        else if (negotiation.demanderId == teamId)
+        {
+            DemandNegotiations.Add(negotiation);
+            AddDemandNegotiationToList(negotiation, DemandNegotiations.Count);
+        }
+    }
+
     private void AddSupplyNegotiationToList(Utils.Negotiation negotiation, int index)
     {
         GameObject createdItem = GetItem(SupplyNegotiationsScrollViewParent);

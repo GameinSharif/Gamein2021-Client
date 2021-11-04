@@ -61,7 +61,8 @@ public class RequestHandler
                 EventManager.Instance.OnRemoveProviderResponse(removeProviderResponse);
                 break;
             case ResponseTypeConstant.NEW_PROVIDER_NEGOTIATION:
-                //TODO
+                NewProviderNegotiationResponse newProviderNegotiationResponse = JsonConvert.DeserializeObject(responseJson, typeof(NewProviderNegotiationResponse), new StringEnumConverter()) as NewProviderNegotiationResponse;
+                EventManager.Instance.OnNewProviderNegotiationResponse(newProviderNegotiationResponse);
                 break;
             case ResponseTypeConstant.GET_ALL_AUCTIONS:
                 GetAllAuctionsResponse getAllAuctionsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetAllAuctionsResponse), new StringEnumConverter()) as GetAllAuctionsResponse;
