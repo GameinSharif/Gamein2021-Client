@@ -283,6 +283,15 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public void ShowSuppliersOnMap()
+    {
+        for (int i=0; i < GameDataManager.Instance.GameinSuppliers.Count; i++)
+        {
+            Utils.Supplier gameinSupplier = GameDataManager.Instance.GameinSuppliers[i];
+            SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Supplier, new Vector2d(gameinSupplier.latitude, gameinSupplier.longitude), gameinSupplier.id, gameinSupplier.name);
+        }
+    }
+
     #endregion
 
     #region SnapToLocation

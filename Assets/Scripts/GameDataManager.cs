@@ -10,12 +10,14 @@ public class GameDataManager : MonoBehaviour
 
     [HideInInspector] public List<Utils.Team> Teams;
     [HideInInspector] public List<Utils.GameinCustomer> GameinCustomers;
+    [HideInInspector] public List<Utils.Supplier> GameinSuppliers;
     [HideInInspector] public List<Utils.Product> Products;
 
     [HideInInspector] public List<Utils.Auction> Auctions;
     [HideInInspector] public List<Utils.Factory> Factories;
 
     [HideInInspector] public List<Utils.WeekDemand> CurrentWeekDemands;
+    [HideInInspector] public List<Utils.WeekSupply> CurrentWeekSupplies;
 
     [HideInInspector] public Utils.GameConstants GameConstants;
 
@@ -26,6 +28,7 @@ public class GameDataManager : MonoBehaviour
         Instance = this;
         EventManager.Instance.OnGetGameDataResponseEvent += OnGetGameDataResponse;
         EventManager.Instance.OnGetCurrentWeekDemandsResponseEvent += OnGetCurrentWeekDemandsResponse;
+        EventManager.Instance.OnGetCurrentWeekSuppliesResponseEvent += OnGetCurrentWeekSuppliesResponse;
         EventManager.Instance.OnGetAllAuctionsResponseEvent += OnGetAllAuctionsResponse;
     }
 
@@ -40,6 +43,7 @@ public class GameDataManager : MonoBehaviour
         GameConstants = getGameDataResponse.gameConstants;
 
         GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
+        //TODO the gamein suppliers
     }
 
     public void OnGetCurrentWeekDemandsResponse(GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse)
@@ -49,6 +53,11 @@ public class GameDataManager : MonoBehaviour
         //TODO update for active demands of a gamein customer
     }
 
+    public void OnGetCurrentWeekSuppliesResponse(GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse)
+    {
+        CurrentWeekSupplies = getCurrentWeekSuppliesResponse.currentWeekSupplies;
+    }
+    
     public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
     {
         Auctions = getAllAuctionsResponse.auctions;

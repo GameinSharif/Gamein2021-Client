@@ -57,6 +57,13 @@ public class EventManager : MonoBehaviour
         OnGetCurrentWeekDemandsResponseEvent?.Invoke(getCurrentWeekDemandsResponse);
     }
 
+    public event Action<GetCurrentWeekSuppliesResponse> OnGetCurrentWeekSuppliesResponseEvent;
+
+    public void OnGetCurrentWeekSuppliesResponse(GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse)
+    {
+        OnGetCurrentWeekSuppliesResponseEvent?.Invoke(getCurrentWeekSuppliesResponse);
+    }
+
     public event Action<GetContractsResponse> OnGetContractsResponseEvent;
     public void OnGetContractsResponse(GetContractsResponse getContractsResponse)
     {

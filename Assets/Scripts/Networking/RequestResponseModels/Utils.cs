@@ -104,6 +104,28 @@ public class Utils
         public int productId;
         public int amount;
     }
+    
+    [Serializable]
+    public class Supplier
+    {
+        public int id;
+        public String name;
+        public Country country;
+        public List<int> materials;
+        public double latitude;
+        public double longitude;
+    }
+    
+    [Serializable]
+    public class WeekSupply
+    {
+        public int id;
+        public int week;
+        public Supplier supplier;
+        public int productId;
+        public int price;
+        public int sales;
+    }
 
     public enum ProductType
     {
