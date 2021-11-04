@@ -13,6 +13,11 @@ public class Utils
         public int factoryId;
     }
 
+    public enum ProviderState
+    {
+        ACTIVE, TERMINATED
+    }
+
     [Serializable]
     public class Provider
     {
@@ -21,6 +26,7 @@ public class Utils
         public int productId;
         public int capacity;
         public float price;
+        public ProviderState state;
     }
 
     public enum OfferStatus

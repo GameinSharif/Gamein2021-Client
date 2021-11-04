@@ -52,7 +52,7 @@ public class RequestHandler
                 EventManager.Instance.OnNewProviderResponse(newProviderResponse);
                 break;
             case ResponseTypeConstant.GET_PROVIDERS:
-                GetProvidersResponse getProvidersResponse = JsonUtility.FromJson<GetProvidersResponse>(responseJson);
+                GetProvidersResponse getProvidersResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetProvidersResponse), new StringEnumConverter()) as GetProvidersResponse;
                 EventManager.Instance.OnGetProvidersResponse(getProvidersResponse);
                 break;
             case ResponseTypeConstant.REMOVE_PROVIDER:
