@@ -12,10 +12,17 @@ public class ContractSupplierItemController : MonoBehaviour
     public RTLTextMeshPro contractType;
     //public Localize OfferStatusLocalize;
 
-    public GameObject DetailsButtonGameObject;
+    public GameObject ShowDetailsButtonGameObject;
+    public GameObject HideDetailsButtonGameObject;
     public GameObject TerminateContractButtonGameObject;
+    public GameObject DetailsParent;
+    public GameObject DetailItemsParent;
 
+    public GameObject ContractSupplierDetailItemPrefab;
+    
     private Utils.ContractSupplier _contractSupplier;
+    private List<Utils.ContractSupplierDetail> _contractSupplierDetails;
+    private List<GameObject> _spawnedDetailsGameObjects = new List<GameObject>();
 
     public void SetInfo(int no, string supplierName,  string productName, string contractType)
     {
@@ -40,22 +47,81 @@ public class ContractSupplierItemController : MonoBehaviour
         if (contractSupplier.contractType == Utils.ContractType.LONGTERM)
         {
             TerminateContractButtonGameObject.SetActive(true);
-            DetailsButtonGameObject.SetActive(true);
+            ShowDetailsButtonGameObject.SetActive(true);
+            HideDetailsButtonGameObject.SetActive(false);
         }
         else
         {
             TerminateContractButtonGameObject.SetActive(false);
-            DetailsButtonGameObject.SetActive(true);
+            ShowDetailsButtonGameObject.SetActive(true);
+            HideDetailsButtonGameObject.SetActive(false);
         }
 
+        SetContractDetails();
+        DetailsParent.SetActive(false);
         _contractSupplier = contractSupplier;
     }
 
-
-    public void OnDetailsButtonClicked()
+    public void SetContractDetails()
     {
-        // TODO
+        _contractSupplierDetails = _contractSupplier.contractSupplierDetails;
+        DeactiveAllChildrenInScrollPanel();
+        for (int i = 0; i < _contractSupplierDetails.Count; i++)
+        {
+            AddContractItemToList(_contractSupplierDetails[i], i + 1);
+        }
     }
+
+    private void DeactiveAllChildrenInScrollPanel()
+    {
+        foreach (GameObject gameObject in _spawnedDetailsGameObjects)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+    
+    private void AddContractItemToList(Utils.ContractSupplierDetail contractSupplierDetail, int index)
+    {
+        GameObject createdItem = GetItem(DetailItemsParent);
+        createdItem.transform.SetSiblingIndex(index);
+
+        ContractSupplierDetailItemController controller = createdItem.GetComponent<ContractSupplierDetailItemController>();
+        controller.SetInfo(index, contractSupplierDetail);
+
+        createdItem.SetActive(true);
+    }
+
+    private GameObject GetItem(GameObject parent)
+    {
+        foreach (GameObject gameObject in _spawnedDetailsGameObjects)
+        {
+            if (!gameObject.activeSelf)
+            {
+                return gameObject;
+            }
+        }
+
+        GameObject newItem;
+        newItem = Instantiate(ContractSupplierDetailItemPrefab, parent.transform);
+        _spawnedDetailsGameObjects.Add(newItem);
+        return newItem;
+    }
+
+    
+    public void OnShowDetailsButtonClicked()
+    {
+        DetailsParent.SetActive(false);
+        ShowDetailsButtonGameObject.SetActive(false);
+        HideDetailsButtonGameObject.SetActive(true);
+    }
+
+    public void OnHideDetailsButtonClicked()
+    {
+        DetailsParent.SetActive(false);
+        ShowDetailsButtonGameObject.SetActive(true);
+        HideDetailsButtonGameObject.SetActive(false);
+    }
+    
     public void OnTerminateButtonClicked()
     {
         // TODO
