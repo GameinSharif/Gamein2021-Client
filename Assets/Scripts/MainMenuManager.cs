@@ -36,6 +36,9 @@ public class MainMenuManager : MonoBehaviour
 
         GetContractsRequest getContractsRequest = new GetContractsRequest(RequestTypeConstant.GET_CONTRACTS);
         RequestManager.Instance.SendRequest(getContractsRequest);
+
+        GetContractSuppliersRequest getContractSuppliersRequest = new GetContractSuppliersRequest(RequestTypeConstant.GET_CONTRACT_SUPPLIERS);
+        RequestManager.Instance.SendRequest(getContractSuppliersRequest);
     }
 
     public void OnLoadMapSceneButtonClick()

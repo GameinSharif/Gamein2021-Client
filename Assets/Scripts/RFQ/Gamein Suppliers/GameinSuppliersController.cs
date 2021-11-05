@@ -37,7 +37,7 @@ public class GameinSuppliersController : MonoBehaviour
         EventManager.Instance.OnGetContractSuppliersResponseEvent -= OnGetContractSuppliersResponse;
     }
 
-    public void OnGetCurrentWeekSuppliesResponseReceived(GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse)
+    public void OnGetCurrentWeekSuppliesResponseReceived()
     {
         //TODO
     }
@@ -114,10 +114,5 @@ public class GameinSuppliersController : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
-    }
-
-    public void OnRefreshButtonClicked()
-    {
-        RequestManager.Instance.SendRequest(new GetContractSuppliersRequest(RequestTypeConstant.GET_CONTRACT_SUPPLIERS));
     }
 }
