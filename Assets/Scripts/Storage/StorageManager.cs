@@ -6,7 +6,12 @@ public class StorageManager : MonoBehaviour
 {
     public static StorageManager Instance;
 
-    private List<Utils.Storage> storages;
+    public List<Utils.Storage> Storages
+    {
+        get;
+        private set;
+    }
+    
 
     private void Awake()
     {
@@ -25,7 +30,7 @@ public class StorageManager : MonoBehaviour
 
     private void OnGetStorageProductsResponse(GetStorageProductsResponse getStorageProductsResponse)
     {
-        storages = getStorageProductsResponse.storageProducts;
+        Storages = getStorageProductsResponse.storageProducts;
     }
     
     

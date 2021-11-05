@@ -55,14 +55,4 @@ public class DCManager : MonoBehaviour
     {
         return SceneManager.GetSceneAt(SceneManager.sceneCount - 1).name.Contains("Map");
     }
-
-    public void SendBuyRequest(Utils.DCDto dcDto)
-    {
-        RequestManager.Instance.SendRequest(new BuyDCRequest(RequestTypeConstant.BUY_DC, dcDto.DCId));
-    }
-
-    public void SendSellRequest(Utils.DCDto dcDto)
-    {
-        RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, dcDto.DCId));
-    }
 }

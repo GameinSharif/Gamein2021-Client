@@ -60,8 +60,7 @@ public class PoolingSystem<T>
         var gameObject = GetAvailableGameObject();
         
         initializerAction.Invoke(gameObject, index, data);
-        
-        gameObject.transform.SetSiblingIndex(index);
+
         gameObject.SetActive(true);
         counter++;
     }
@@ -95,9 +94,9 @@ public class PoolingSystem<T>
     
     public void RemoveAll()
     {
-        foreach (GameObject child in parent)
+        foreach (Transform child in parent)
         {
-            child.SetActive(false);
+            child.gameObject.SetActive(false);
         }
 
         counter = 0;
