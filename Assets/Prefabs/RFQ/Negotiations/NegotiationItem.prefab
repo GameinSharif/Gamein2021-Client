@@ -111,6 +111,8 @@ MonoBehaviour:
   demanderCostPerUnit: {fileID: 1765143154170890027}
   supplierCostPerUnit: {fileID: 1765143155343116223}
   negotiationStatusLocalize: {fileID: 1765143154878539790}
+  openActionsButtonGameObject: {fileID: 8452855750696178398}
+  PricePerUnitInputfield: {fileID: 1765143155209020164}
   actionsGameObjects: {fileID: 1765143154210180518}
 --- !u!1 &1765143153387025468
 GameObject:
@@ -1911,7 +1913,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1765143154649443417}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3024304314184645676}
+        m_TargetAssemblyTypeName: NegotiationItemController, Assembly-CSharp
+        m_MethodName: OnChangePriceButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1765143154701421556
 GameObject:
   m_ObjectHideFlags: 0
@@ -3734,7 +3748,7 @@ GameObject:
   - component: {fileID: 8452855750696178395}
   - component: {fileID: 8452855750696178392}
   m_Layer: 0
-  m_Name: Accept
+  m_Name: Show
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

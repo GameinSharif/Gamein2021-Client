@@ -87,6 +87,12 @@ public class EventManager : MonoBehaviour
         OnNewProviderNegotiationResponseEvent?.Invoke(newProviderNegotiationResponse);
     }
 
+    public event Action<EditNegotiationCostPerUnitResponse> OnEditNegotiationCostPerUnitResponseEvent;
+    public void OnEditNegotiationCostPerUnitResponse(EditNegotiationCostPerUnitResponse editNegotiationCostPerUnitResponse)
+    {
+        OnEditNegotiationCostPerUnitResponseEvent?.Invoke(editNegotiationCostPerUnitResponse);
+    }
+
     public event Action<RemoveProviderResponse> OnRemoveProviderResponseEvent;
     public void OnRemoveProviderResponse(RemoveProviderResponse removeProviderResponse)
     {

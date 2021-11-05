@@ -38,7 +38,7 @@ public class RequestHandler
                 GetContractsResponse getContractsResponse = JsonUtility.FromJson<GetContractsResponse>(responseJson);
                 EventManager.Instance.OnGetContractsResponse(getContractsResponse);
                 break;
-            case ResponseTypeConstant.NEW_NEGOTIATION:
+            case ResponseTypeConstant.ACCEPT_OFFER:
                 //TODO
                 break;
             case ResponseTypeConstant.GET_NEGOTIATIONS:
@@ -46,7 +46,8 @@ public class RequestHandler
                 EventManager.Instance.OnGetNegotiationsResponse(getNegotiationsResponse);
                 break;
             case ResponseTypeConstant.EDIT_NEGOTIATION_COST_PER_UNIT:
-                //TODO
+                EditNegotiationCostPerUnitResponse editNegotiationCostPerUnitResponse = JsonConvert.DeserializeObject(responseJson, typeof(EditNegotiationCostPerUnitResponse), new StringEnumConverter()) as EditNegotiationCostPerUnitResponse;
+                EventManager.Instance.OnEditNegotiationCostPerUnitResponse(editNegotiationCostPerUnitResponse);
                 break;
             case ResponseTypeConstant.NEW_PROVIDER:
                 NewProviderResponse newProviderResponse = JsonUtility.FromJson<NewProviderResponse>(responseJson);

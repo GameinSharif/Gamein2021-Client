@@ -8,14 +8,13 @@ public class ProvidersController : MonoBehaviour
 {
     public static ProvidersController Instance;
 
-    [HideInInspector] List<Utils.Provider> MyTeamProviders;
-    [HideInInspector] List<Utils.Provider> OtherTeamsProviders;
-
     public GameObject providerItemPrefab;
 
     public GameObject MyTeamProvidersScrollViewParent;
     public GameObject OtherTeamsProvidersScrollViewParent;
 
+    private List<ProviderItemController> _myTeamProviderItemControllers = new List<ProviderItemController>();
+    private List<ProviderItemController> _otherTeamsProviderItemControllers = new List<ProviderItemController>();
     private List<GameObject> _spawnedGameObjects = new List<GameObject>();
 
     private void Awake()
@@ -28,38 +27,38 @@ public class ProvidersController : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnGetProvidersResponseEvent += OnGetProvidersResponse;
-        EventManager.Instance.OnRemoveProviderResponseEvent += OnRemoveProviderResponseRecieved;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnGetProvidersResponseEvent -= OnGetProvidersResponse;
-        EventManager.Instance.OnRemoveProviderResponseEvent -= OnRemoveProviderResponseRecieved;
     }
 
     public void OnGetProvidersResponse(GetProvidersResponse getProvidersResponse)
     {
-        MyTeamProviders = getProvidersResponse.myTeamProviders;
-        OtherTeamsProviders = getProvidersResponse.otherTeamsProviders;
+        List<Utils.Provider> myTeamProviders = getProvidersResponse.myTeamProviders;
+        List<Utils.Provider> otherTeamsProviders = getProvidersResponse.otherTeamsProviders;
 
-        MyTeamProviders.Reverse();
-        OtherTeamsProviders.Reverse();
+        myTeamProviders.Reverse();
+        otherTeamsProviders.Reverse();
 
+        _myTeamProviderItemControllers.Clear();
+        _otherTeamsProviderItemControllers.Clear();
         DeactiveAllChildrenInScrollPanel();
-        for (int i=0;i < MyTeamProviders.Count; i++)
+
+        for (int i=0;i < myTeamProviders.Count; i++)
         {
-            AddMyProviderToList(MyTeamProviders[i], i + 1);
+            AddMyProviderToList(myTeamProviders[i], i + 1);
         }
-        for (int i = 0; i < OtherTeamsProviders.Count; i++)
+        for (int i = 0; i < otherTeamsProviders.Count; i++)
         {
-            AddOtherProviderToList(OtherTeamsProviders[i], i + 1);
+            AddOtherProviderToList(otherTeamsProviders[i], i + 1);
         }
     }
 
     public void AddMyProviderToList(Utils.Provider provider)
     {
-        MyTeamProviders.Add(provider);
-        AddMyProviderToList(provider, MyTeamProviders.Count);
+        AddMyProviderToList(provider, _myTeamProviderItemControllers.Count);
     }
 
     private void AddMyProviderToList(Utils.Provider provider, int index)
@@ -70,6 +69,7 @@ public class ProvidersController : MonoBehaviour
         ProviderItemController controller = createdItem.GetComponent<ProviderItemController>();
         controller.SetInfo(index, provider);
 
+        _myTeamProviderItemControllers.Add(controller);
         createdItem.SetActive(true);
     }
 
@@ -81,6 +81,7 @@ public class ProvidersController : MonoBehaviour
         ProviderItemController controller = createdItem.GetComponent<ProviderItemController>();
         controller.SetInfo(index, provider);
 
+        _otherTeamsProviderItemControllers.Add(controller);
         createdItem.SetActive(true);
     }
 
@@ -104,17 +105,6 @@ public class ProvidersController : MonoBehaviour
         foreach (GameObject gameObject in _spawnedGameObjects)
         {
             gameObject.SetActive(false);
-        }
-    }
-
-    private void OnRemoveProviderResponseRecieved(RemoveProviderResponse removeProviderResponse)
-    {
-        foreach (Utils.Provider provider in MyTeamProviders)
-        {
-            if (provider.id == removeProviderResponse.removedProviderId)
-            {
-                provider.state = Utils.ProviderState.TERMINATED;
-            }
         }
     }
 

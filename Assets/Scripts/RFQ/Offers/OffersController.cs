@@ -9,14 +9,13 @@ public class OffersController : MonoBehaviour
 {
     public static OffersController Instance;
 
-    [HideInInspector] public List<Utils.Offer> MyTeamOffers;
-    [HideInInspector] public List<Utils.Offer> OtherTeamsOffers;
-
     public GameObject offerItemPrefab;
 
     public GameObject MyTeamOffersScrollViewParent;
     public GameObject OtherTeamsOffersScrollViewParent;
 
+    private List<OfferItemController> _myTeamOfferItemControllers = new List<OfferItemController>();
+    private List<OfferItemController> _otherTeamsOfferItemControllers = new List<OfferItemController>();
     private List<GameObject> _spawnedGameObjects = new List<GameObject>();
 
     void Awake()
@@ -27,38 +26,38 @@ public class OffersController : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnGetOffersResponseEvent += OnGetOffersResponseReceived;
-        EventManager.Instance.OnTerminateOfferResponseEvent += OnTerminateOfferResponseRecieved;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnGetOffersResponseEvent -= OnGetOffersResponseReceived;
-        EventManager.Instance.OnTerminateOfferResponseEvent -= OnTerminateOfferResponseRecieved;
     }
 
     public void OnGetOffersResponseReceived(GetOffersResponse getOffersResponse)
     {
-        MyTeamOffers = getOffersResponse.myTeamOffers;
-        OtherTeamsOffers = getOffersResponse.otherTeamsOffers;
+        List<Utils.Offer> myTeamOffers = getOffersResponse.myTeamOffers;
+        List<Utils.Offer> otherTeamsOffers = getOffersResponse.otherTeamsOffers;
 
-        MyTeamOffers.Reverse();
-        OtherTeamsOffers.Reverse();
+        myTeamOffers.Reverse();
+        otherTeamsOffers.Reverse();
 
+        _myTeamOfferItemControllers.Clear();
+        _otherTeamsOfferItemControllers.Clear();
         DeactiveAllChildrenInScrollPanel();
-        for (int i = 0; i < MyTeamOffers.Count; i++)
+
+        for (int i = 0; i < myTeamOffers.Count; i++)
         {
-            AddMyOfferToList(MyTeamOffers[i], i + 1);
+            AddMyOfferToList(myTeamOffers[i], i + 1);
         }
-        for (int i = 0; i < OtherTeamsOffers.Count; i++)
+        for (int i = 0; i < otherTeamsOffers.Count; i++)
         {
-            AddOtherOfferToList(OtherTeamsOffers[i], i + 1);
+            AddOtherOfferToList(otherTeamsOffers[i], i + 1);
         }
     }
 
     public void AddMyOfferToList(Utils.Offer offer)
     {
-        MyTeamOffers.Add(offer);
-        AddMyOfferToList(offer, MyTeamOffers.Count);
+        AddMyOfferToList(offer, _myTeamOfferItemControllers.Count);
     }
 
     private void AddMyOfferToList(Utils.Offer offer, int index)
@@ -69,6 +68,7 @@ public class OffersController : MonoBehaviour
         OfferItemController controller = createdItem.GetComponent<OfferItemController>();
         controller.SetInfo(index, offer);
 
+        _myTeamOfferItemControllers.Add(controller);
         createdItem.SetActive(true);
     }
 
@@ -80,6 +80,7 @@ public class OffersController : MonoBehaviour
         OfferItemController controller = createdItem.GetComponent<OfferItemController>();
         controller.SetInfo(index, offer);
 
+        _otherTeamsOfferItemControllers.Add(controller);
         createdItem.SetActive(true);
     }
 
@@ -103,17 +104,6 @@ public class OffersController : MonoBehaviour
         foreach (GameObject gameObject in _spawnedGameObjects)
         {
             gameObject.SetActive(false);
-        }
-    }
-
-    private void OnTerminateOfferResponseRecieved(TerminateOfferResponse terminateOfferResponse)
-    {
-        foreach (Utils.Offer offer in MyTeamOffers)
-        {
-            if (offer.id == terminateOfferResponse.terminatedOfferId)
-            {
-                offer.offerStatus = Utils.OfferStatus.TERMINATED;
-            }
         }
     }
 
