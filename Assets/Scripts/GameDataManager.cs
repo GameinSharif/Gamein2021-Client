@@ -56,7 +56,7 @@ public class GameDataManager : MonoBehaviour
     public void OnGetCurrentWeekSuppliesResponse(GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse)
     {
         CurrentWeekSupplies = getCurrentWeekSuppliesResponse.currentWeekSupplies;
-        GameinSuppliersController.Instance.UpdateSupplies(CurrentWeekSupplies);
+        GameinSuppliersController.Instance.UpdateSupplies();
     }
     
     public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)

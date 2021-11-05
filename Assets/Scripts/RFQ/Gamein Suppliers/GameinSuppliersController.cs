@@ -11,18 +11,18 @@ public class GameinSuppliersController : MonoBehaviour
     public static GameinSuppliersController Instance;
 
     [HideInInspector] List<Utils.ContractSupplier> MyContractSuppliers;
-    [HideInInspector] List<Utils.Product> Ingredients;
+    [HideInInspector] List<Utils.Product> RawProducts;
 
-    public GameObject ingredientItemPrefab;
-    public GameObject ingredientContractItemPrefab;
+    public GameObject rawProductItemPrefab;
+    public GameObject contractSupplierItemPrefab;
 
-    public GameObject ContractSuppliersScrollViewParent;
-    public GameObject IngredientsScrollViewParent;
+    public GameObject contractSuppliersScrollViewParent;
+    public GameObject rawProductsScrollViewParent;
 
     public GameObject gameinSuppliersCanvas;
     
     private List<GameObject> _spawnedContractGameObjects = new List<GameObject>();
-    private List<GameObject> _spawnedIngredientGameObjects = new List<GameObject>();
+    private List<GameObject> _spawnedRawProductGameObjects = new List<GameObject>();
 
     void Awake()
     {
@@ -39,10 +39,14 @@ public class GameinSuppliersController : MonoBehaviour
         EventManager.Instance.OnGetContractSuppliersResponseEvent -= OnGetContractSuppliersResponse;
     }
 
-    public void UpdateSupplies(List<Utils.WeekSupply> weekSupplies)
+    public void UpdateSupplies()
     {
-        List<Utils.Product> rawProducts = GameDataManager.Instance.GetRawProducts();
-        
+        RawProducts = GameDataManager.Instance.GetRawProducts();
+        DeactiveAllChildrenInScrollPanel(false);
+        for (int i = 0; i < RawProducts.Count; i++)
+        {
+            AddRawProductItemToList(RawProducts[i], i + 1);
+        }
     }
     
     public void OnGetContractSuppliersResponse(GetContractSuppliersResponse getContractSuppliersResponse)
@@ -56,9 +60,20 @@ public class GameinSuppliersController : MonoBehaviour
         }
     }
     
+    private void AddRawProductItemToList(Utils.Product product, int index)
+    {
+        GameObject createdItem = GetItem(rawProductsScrollViewParent, false);
+        createdItem.transform.SetSiblingIndex(index);
+
+        RawProductItemController controller = createdItem.GetComponent<RawProductItemController>();
+        controller.SetInfo(index, product);
+
+        createdItem.SetActive(true);
+    }
+    
     private void AddContractItemToList(Utils.ContractSupplier contractSupplier, int index)
     {
-        GameObject createdItem = GetItem(ContractSuppliersScrollViewParent, true);
+        GameObject createdItem = GetItem(contractSuppliersScrollViewParent, true);
         createdItem.transform.SetSiblingIndex(index);
 
         ContractSupplierItemController controller = createdItem.GetComponent<ContractSupplierItemController>();
@@ -66,7 +81,7 @@ public class GameinSuppliersController : MonoBehaviour
 
         createdItem.SetActive(true);
     }
-
+    
     private GameObject GetItem(GameObject parent, bool isContract)
     {
         GameObject newItem;
@@ -81,12 +96,12 @@ public class GameinSuppliersController : MonoBehaviour
                 }
             }
         
-            newItem = Instantiate(ingredientContractItemPrefab, parent.transform);
+            newItem = Instantiate(contractSupplierItemPrefab, parent.transform);
             _spawnedContractGameObjects.Add(newItem);
         }
-        else //TODO not like this
+        else
         {
-            foreach (GameObject gameObject in _spawnedIngredientGameObjects)
+            foreach (GameObject gameObject in _spawnedRawProductGameObjects)
             {
                 if (!gameObject.activeSelf)
                 {
@@ -94,10 +109,9 @@ public class GameinSuppliersController : MonoBehaviour
                 }
             }
 
-            newItem = Instantiate(ingredientItemPrefab, parent.transform);
-            _spawnedIngredientGameObjects.Add(newItem);
+            newItem = Instantiate(rawProductItemPrefab, parent.transform);
+            _spawnedRawProductGameObjects.Add(newItem);
         }
-
         return newItem;
     }
 
@@ -110,9 +124,9 @@ public class GameinSuppliersController : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
-        else //TODO not how it should be done for the ingredients
+        else
         {
-            foreach (GameObject gameObject in _spawnedIngredientGameObjects)
+            foreach (GameObject gameObject in _spawnedRawProductGameObjects)
             {
                 gameObject.SetActive(false);
             }
