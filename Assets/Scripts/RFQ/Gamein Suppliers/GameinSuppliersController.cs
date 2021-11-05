@@ -19,6 +19,8 @@ public class GameinSuppliersController : MonoBehaviour
     public GameObject ContractSuppliersScrollViewParent;
     public GameObject IngredientsScrollViewParent;
 
+    public GameObject gameinSuppliersCanvas;
+    
     private List<GameObject> _spawnedContractGameObjects = new List<GameObject>();
     private List<GameObject> _spawnedIngredientGameObjects = new List<GameObject>();
 
@@ -37,9 +39,10 @@ public class GameinSuppliersController : MonoBehaviour
         EventManager.Instance.OnGetContractSuppliersResponseEvent -= OnGetContractSuppliersResponse;
     }
 
-    public void OnGetCurrentWeekSuppliesResponseReceived()
+    public void UpdateSupplies(List<Utils.WeekSupply> weekSupplies)
     {
-        //TODO
+        List<Utils.Product> rawProducts = GameDataManager.Instance.GetRawProducts();
+        
     }
     
     public void OnGetContractSuppliersResponse(GetContractSuppliersResponse getContractSuppliersResponse)
@@ -115,4 +118,10 @@ public class GameinSuppliersController : MonoBehaviour
             }
         }
     }
+
+    public void SetGameinSuppliersCanvasActive(bool active)
+    {
+        gameinSuppliersCanvas.SetActive(active);
+    }
+    
 }

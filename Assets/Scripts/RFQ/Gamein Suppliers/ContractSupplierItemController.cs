@@ -68,7 +68,7 @@ public class ContractSupplierItemController : MonoBehaviour
         DeactiveAllChildrenInScrollPanel();
         for (int i = 0; i < _contractSupplierDetails.Count; i++)
         {
-            AddContractItemToList(_contractSupplierDetails[i], i + 1);
+            AddContractDetailItemToList(_contractSupplierDetails[i], i + 1);
         }
     }
 
@@ -80,7 +80,7 @@ public class ContractSupplierItemController : MonoBehaviour
         }
     }
     
-    private void AddContractItemToList(Utils.ContractSupplierDetail contractSupplierDetail, int index)
+    private void AddContractDetailItemToList(Utils.ContractSupplierDetail contractSupplierDetail, int index)
     {
         GameObject createdItem = GetItem(DetailItemsParent);
         createdItem.transform.SetSiblingIndex(index);
@@ -110,7 +110,7 @@ public class ContractSupplierItemController : MonoBehaviour
     
     public void OnShowDetailsButtonClicked()
     {
-        DetailsParent.SetActive(false);
+        DetailsParent.SetActive(true);
         ShowDetailsButtonGameObject.SetActive(false);
         HideDetailsButtonGameObject.SetActive(true);
     }

@@ -33,8 +33,8 @@ public class ContractSupplierDetailItemController : MonoBehaviour
             date: contractSupplierDetail.contractDate.ToString(),
             //productNameKey: GameDataManager.Instance.GetProductById(offer.productId).name,
             amount: contractSupplierDetail.boughtAmount.ToString(), 
-            costPerUnit: contractSupplierDetail.pricePerUnit.ToString(),
-            finalCost: (contractSupplierDetail.pricePerUnit * contractSupplierDetail.boughtAmount).ToString()
+            costPerUnit: contractSupplierDetail.pricePerUnit + "$",
+            finalCost: (contractSupplierDetail.pricePerUnit * contractSupplierDetail.boughtAmount) + "$"
         );
         
         _contractSupplierDetail = contractSupplierDetail;

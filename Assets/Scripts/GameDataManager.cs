@@ -56,7 +56,7 @@ public class GameDataManager : MonoBehaviour
     public void OnGetCurrentWeekSuppliesResponse(GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse)
     {
         CurrentWeekSupplies = getCurrentWeekSuppliesResponse.currentWeekSupplies;
-        //TODO update suppliers in the table
+        GameinSuppliersController.Instance.UpdateSupplies(CurrentWeekSupplies);
     }
     
     public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
@@ -131,6 +131,16 @@ public class GameDataManager : MonoBehaviour
             }
         }
         return "Product";
+    }
+
+    public List<Utils.Product> GetRawProducts()
+    {
+        return Products.Where(p => p.productType == Utils.ProductType.RawMaterial) as List<Utils.Product>;
+    }
+
+    public List<Utils.WeekSupply> GetCurrentWeekRawProductSupplies(int rawProductId)
+    {
+        return CurrentWeekSupplies.Where(s => s.productId == rawProductId) as List<Utils.WeekSupply>;
     }
 
     public Utils.Product GetProductById(int id)
