@@ -53,7 +53,7 @@ public class RawProductSupplyItemController : MonoBehaviour
 
     public void OnMakeADealWithSupplierButtonClicked()
     {
-        
+        MakeADealWithSupplierPopupController.Instance.OnOpenMakeADealPopupClick(_weekSupply);
     }
 
 }

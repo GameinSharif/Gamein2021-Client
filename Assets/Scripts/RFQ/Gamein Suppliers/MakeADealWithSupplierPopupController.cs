@@ -7,26 +7,26 @@ using System.Linq;
 using RTLTMPro;
 using UnityEngine.UI;
 
-public class MakeAdealWithSupplierPopupController : MonoBehaviour
+public class MakeADealWithSupplierPopupController : MonoBehaviour
 {
-    public static MakeAdealWithSupplierPopupController Instance;
+    public static MakeADealWithSupplierPopupController Instance;
 
-    public GameObject MakeAdealWithSupplierPopupCanvas;
-    public GameObject LongtermModeParent;
+    public GameObject makeADealWithSupplierPopupCanvas;
+    public GameObject longtermModeParent;
 
-    public Image ProductImage;
-    public Localize ProductNameLocalize;
+    public Image productImage;
+    public Localize productNameLocalize;
     public TMP_InputField amount;
-    public RTLTextMeshPro PricePerUnit;
-    public RTLTextMeshPro TotalPrice;
-    public RTLTextMeshPro FinalPrice;
-    public DatePicker arrivalDate;
+    public RTLTextMeshPro pricePerUnit;
+    public RTLTextMeshPro totalPrice;
+    public RTLTextMeshPro finalPrice;
+    public DatePicker arrivalDate; //TODO calculate it and then show it
     public ToggleGroup repetition;
     public ToggleGroup transportationMode;
     public TMP_InputField numberOfRepetition;
-    public RTLTextMeshPro penalty;
+    public RTLTextMeshPro penalty; //TODO calculate it and then show it
 
-    public Utils.WeekSupply weekSupply;
+    private Utils.WeekSupply _weekSupply;
 
     private void Awake()
     {
@@ -49,7 +49,7 @@ public class MakeAdealWithSupplierPopupController : MonoBehaviour
         {
             GameinSuppliersController.Instance.AddContractItemToList(newContractSupplierResponse.contractSupplier);
 
-            MakeAdealWithSupplierPopupCanvas.SetActive(false);
+            makeADealWithSupplierPopupCanvas.SetActive(false);
         }
         else
         {
@@ -59,16 +59,16 @@ public class MakeAdealWithSupplierPopupController : MonoBehaviour
 
     public void OnOpenMakeADealPopupClick(Utils.WeekSupply weekSupply)
     {
-        this.weekSupply = weekSupply;
+        this._weekSupply = weekSupply;
         
         //TODO clear inputfields
         
         Utils.Product product = GameDataManager.Instance.GetProductById(weekSupply.productId);
-        ProductNameLocalize.SetKey("product_" + product.name);
-        PricePerUnit.text = weekSupply.price + "$";
-        ProductImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
+        productNameLocalize.SetKey("product_" + product.name);
+        pricePerUnit.text = weekSupply.price + "$";
+        productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
         
-        MakeAdealWithSupplierPopupCanvas.SetActive(true);
+        makeADealWithSupplierPopupCanvas.SetActive(true);
     }
     
     public void OnAmountValueChange()
@@ -79,12 +79,12 @@ public class MakeAdealWithSupplierPopupController : MonoBehaviour
             return;
         }
 
-        int total = int.Parse(amount) * weekSupply.price;
+        int total = int.Parse(amount) * _weekSupply.price;
         //TODO calculate transportation cost
         int transportationCost = 100;
         int final = total + transportationCost;
-        TotalPrice.text = total.ToString("0.00") + "$";
-        FinalPrice.text = final.ToString("0.00") + "$";
+        totalPrice.text = total.ToString("0.00") + "$";
+        finalPrice.text = final.ToString("0.00") + "$";
     }
 
     private Utils.VehicleType GetTransportationMode()
@@ -108,18 +108,10 @@ public class MakeAdealWithSupplierPopupController : MonoBehaviour
     public void OnRepetitionToggleChange()
     {
         Toggle mode = repetition.ActiveToggles().FirstOrDefault();
-        if (mode.name == "Once")
-        {
-            LongtermModeParent.SetActive(false);
-        }
-        else
-        {
-            LongtermModeParent.SetActive(true);
-            //TODO clear input fields
-        }
+        longtermModeParent.SetActive(mode.name != "Once");
     }
 
-    public int GetRepetitionWeeks()
+    private int GetRepetitionWeeks()
     {
         Toggle mode = repetition.ActiveToggles().FirstOrDefault();
         if (mode.name == "Once")
@@ -145,7 +137,7 @@ public class MakeAdealWithSupplierPopupController : MonoBehaviour
             return;
         }
         int amountInt = int.Parse(this.amount.text);
-        NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_SUPPLIER, weekSupply, weeks, amountInt, vehicleType);
+        NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_SUPPLIER, _weekSupply, weeks, amountInt, vehicleType);
         RequestManager.Instance.SendRequest(newContractSupplier);
     }
 }
