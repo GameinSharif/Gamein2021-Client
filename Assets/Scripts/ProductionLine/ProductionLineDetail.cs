@@ -7,8 +7,10 @@ namespace ProductionLine
     {
         #region UI
 
+        public Button startProductionButton;
+        public Button qualityUpgradeButton;
+        public Button efficiencyUpgradeButton;
         public Button scrapButton;
-        public Image productionLineAvatar;
 
         #endregion
 
@@ -20,13 +22,27 @@ namespace ProductionLine
 
         public void SetData(Utils.ProductionLineDto data)
         {
-            this.Data = data;
-        }
+            Data = data;
+            if (data.qualityLevel == 2)
+                qualityUpgradeButton.interactable = false;
+            else
+                qualityUpgradeButton.interactable = true;
 
-        public void UpdateData(Utils.ProductionLineDto data)
-        {
-            this.Data = data;
-            //TODO: update card            
+            if (data.efficiencyLevel == 2)
+                efficiencyUpgradeButton.interactable = false;
+            else
+                efficiencyUpgradeButton.interactable = true;
+            
+            if (data.status == ProductionLineStatus.SCRAPPED)
+            {
+                startProductionButton.interactable = false;
+                scrapButton.interactable = false;
+            }
+            else
+            {
+                startProductionButton.interactable = true;
+                scrapButton.interactable = true;
+            }
         }
 
         public void ScrapProductionLine()

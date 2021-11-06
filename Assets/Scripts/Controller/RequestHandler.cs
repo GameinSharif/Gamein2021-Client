@@ -59,30 +59,37 @@ public class RequestHandler
             case ResponseTypeConstant.REMOVE_PROVIDER:
                 //TODO
                 break;
+            case ResponseTypeConstant.GET_ALL_AUCTIONS:
+                break;
             case ResponseTypeConstant.GET_PRODUCTION_LINES:
                 EventManager.Instance.OnGetProductionLinesResponse(
                     JsonConvert.DeserializeObject(responseJson, typeof(GetProductionLinesResponse),
                         new StringEnumConverter()) as GetProductionLinesResponse);
                 break;
             case ResponseTypeConstant.CONSTRUCT_PRODUCTION_LINE:
-                EventManager.Instance.OnConstructProductionLineResponse(
-                    JsonUtility.FromJson<ConstructProductionLineResponse>(responseJson));
+                EventManager.Instance.OnConstructProductionLineResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(ConstructProductionLineResponse),
+                    new StringEnumConverter()) as ConstructProductionLineResponse);
                 break;
             case ResponseTypeConstant.SCRAP_PRODUCTION_LINE:
-                EventManager.Instance.OnScrapProductionLineResponse(
-                    JsonUtility.FromJson<ScrapProductionLineResponse>(responseJson));
+                EventManager.Instance.OnScrapProductionLineResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(ScrapProductionLineResponse),
+                    new StringEnumConverter()) as ScrapProductionLineResponse);
                 break;
             case ResponseTypeConstant.START_PRODUCTION:
-                EventManager.Instance.OnStartProductionResponse(
-                    JsonUtility.FromJson<StartProductionResponse>(responseJson));
+                EventManager.Instance.OnStartProductionResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(StartProductionResponse),
+                    new StringEnumConverter()) as StartProductionResponse);
                 break;
             case ResponseTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY:
-                EventManager.Instance.OnUpgradeProductionLineQualityResponse(
-                    JsonUtility.FromJson<UpgradeProductionLineQualityResponse>(responseJson));
+                EventManager.Instance.OnUpgradeProductionLineQualityResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(UpgradeProductionLineQualityResponse),
+                    new StringEnumConverter()) as UpgradeProductionLineQualityResponse);
                 break;
             case ResponseTypeConstant.UPGRADE_PRODUCTION_LINE_EFFICIENCY:
-                EventManager.Instance.OnUpgradeProductionLineEfficiencyResponse(
-                    JsonUtility.FromJson<UpgradeProductionLineEfficiencyResponse>(responseJson));
+                EventManager.Instance.OnUpgradeProductionLineEfficiencyResponse(JsonConvert.DeserializeObject(
+                    responseJson, typeof(UpgradeProductionLineEfficiencyResponse),
+                    new StringEnumConverter()) as UpgradeProductionLineEfficiencyResponse);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
