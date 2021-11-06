@@ -87,7 +87,7 @@ public class Utils
     {
         public int id;
         public string categoryIds; //for SemiFinishedProducts only
-        public int productionLineId; //for SemiFinishedProducts & Finished only
+        public int productionLineTemplateId; //for SemiFinishedProducts & Finished only
         public ProductType productType;
         public string name;
         public int volumetricUnit;

@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace ProductionLine
@@ -12,6 +15,10 @@ namespace ProductionLine
         public Button efficiencyUpgradeButton;
         public Button scrapButton;
 
+        public GameObject startProductionPopup;
+        public TMP_Dropdown productId_I;
+        public TMP_InputField productAmount_I;
+
         #endregion
 
         #region fields
@@ -20,42 +27,50 @@ namespace ProductionLine
 
         #endregion
 
+        private void Awake()
+        {
+            startProductionPopup.SetActive(false);
+        }
+
         public void SetData(Utils.ProductionLineDto data)
         {
             Data = data;
-            if (data.qualityLevel == 2)
-                qualityUpgradeButton.interactable = false;
-            else
-                qualityUpgradeButton.interactable = true;
 
-            if (data.efficiencyLevel == 2)
-                efficiencyUpgradeButton.interactable = false;
-            else
-                efficiencyUpgradeButton.interactable = true;
-            
-            if (data.status == ProductionLineStatus.SCRAPPED)
-            {
-                startProductionButton.interactable = false;
-                scrapButton.interactable = false;
-            }
-            else
-            {
-                startProductionButton.interactable = true;
-                scrapButton.interactable = true;
-            }
+            qualityUpgradeButton.interactable = data.qualityLevel != 2;
+
+            efficiencyUpgradeButton.interactable = data.efficiencyLevel != 2;
+
+            startProductionButton.interactable = data.status == ProductionLineStatus.ACTIVE;
+            scrapButton.interactable = data.status == ProductionLineStatus.ACTIVE;
+
+            if (data.products.Count > 0) startProductionButton.interactable = false;
         }
 
-        public void ScrapProductionLine()
+
+        public void PopupStartProduction()
         {
-            var request = new ScarpProductionLineRequest(RequestTypeConstant.SCRAP_PRODUCTION_LINE, Data.id);
-            RequestManager.Instance.SendRequest(request);
+            productId_I.options.Clear();
+            var products = GameDataManager.Instance.Products.Where(c => c.productionLineTemplateId == Data.productionLineTemplateId).ToList();
+            foreach (var product in products)
+            {
+                productId_I.options.Add(new TMP_Dropdown.OptionData(product.id.ToString()));
+            }
+            startProductionPopup.SetActive(true);
         }
 
-        public void StartProduction(int productId, int amount)
+        public void ClosePopup()
         {
-            //TODO: check money
+            startProductionPopup.SetActive(false);
+        }
+
+        public void StartProduction()
+        {
+            int productId = int.Parse(productId_I.options[productId_I.value].text);
+            int amount = int.Parse(productAmount_I.text);
+            //TODO: check money and materials
             var request = new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, Data.id, productId, amount);
             RequestManager.Instance.SendRequest(request);
+            startProductionPopup.SetActive(false);
         }
 
         public void UpgradeProductionLineEfficiency()
@@ -73,6 +88,13 @@ namespace ProductionLine
             var request =
                 new UpgradeProductionLineQualityRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY, Data.id);
             RequestManager.Instance.SendRequest(request);
+        }
+
+        public void ScrapProductionLine()
+        {
+            var request = new ScarpProductionLineRequest(RequestTypeConstant.SCRAP_PRODUCTION_LINE, Data.id);
+            RequestManager.Instance.SendRequest(request);
+            //TODO: add money
         }
     }
 }
