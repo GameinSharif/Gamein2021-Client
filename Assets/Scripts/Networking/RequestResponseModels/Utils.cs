@@ -118,8 +118,8 @@ public class Utils
         public int id;
         public int productId;
         public int amount;
-        public DateTime startDate;
-        public DateTime endDate;
+        public CustomDate startDate;
+        public CustomDate endDate;
     }
     
     [Serializable]

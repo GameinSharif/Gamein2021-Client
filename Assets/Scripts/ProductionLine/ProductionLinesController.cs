@@ -7,11 +7,11 @@ namespace ProductionLine
 {
     public class ProductionLinesController : MonoBehaviour
     {
-        public GameObject productionLineCardPrefab;
+        public GameObject productionLineRowPrefab;
         public Transform cardsParent;
         
         //private List<Utils.ProductionLineDto> productionLines;
-        private List<ProductionLineCard> productionLineCards = new List<ProductionLineCard>();
+        private List<ProductionLineTableRow> productionLineTableRows = new List<ProductionLineTableRow>();
 
         private void Awake()
         {
@@ -23,8 +23,7 @@ namespace ProductionLine
             EventManager.Instance.OnUpgradeProductionLineEfficiencyResponseEvent += OnUpgradeProductionLineEfficiencyResponse;
             EventManager.Instance.OnUpgradeProductionLineQualityResponseEvent += OnUpgradeProductionLineQualityResponse;
         }
-    
-
+        
         private static void GetProductionLines()
         {
             var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
@@ -45,39 +44,39 @@ namespace ProductionLine
         {
             foreach (var productionLineData in response.productionLines)
             {
-                var current = Instantiate(productionLineCardPrefab, cardsParent).GetComponent<ProductionLineCard>();
+                var current = Instantiate(productionLineRowPrefab, cardsParent).GetComponent<ProductionLineTableRow>();
                 current.SetData(productionLineData);
-                productionLineCards.Add(current);
+                productionLineTableRows.Add(current);
             }
         }
         private void OnConstructProductionLineResponse(ConstructProductionLineResponse response)
         {
-            if(productionLineCards.Select(c => c.Data).Contains( response.productionLine)) return;
-            var current = Instantiate(productionLineCardPrefab, cardsParent).GetComponent<ProductionLineCard>();
+            if(productionLineTableRows.Select(c => c.Data).Contains( response.productionLine)) return;
+            var current = Instantiate(productionLineRowPrefab, cardsParent).GetComponent<ProductionLineTableRow>();
             current.SetData(response.productionLine);
-            productionLineCards.Add(current);
+            productionLineTableRows.Add(current);
         }
         private void OnScrapProductionLineResponse(ScrapProductionLineResponse response)
         {
-            var current = productionLineCards.FirstOrDefault(e => e.Data.id == response.productionLine.id);
+            var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             if(current is null) return;
-            productionLineCards.Remove(current);
+            productionLineTableRows.Remove(current);
             Destroy(current.gameObject);
         }
         private void OnStartProductionResponse(StartProductionResponse response)
         {
-            var current = productionLineCards.FirstOrDefault(e => e.Data.id == response.productionLine.id);
-            current?.UpdateData(response.productionLine);
+            var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
+            current?.SetData(response.productionLine);
         }
         private void OnUpgradeProductionLineEfficiencyResponse(UpgradeProductionLineEfficiencyResponse response)
         {
-            var current = productionLineCards.FirstOrDefault(e => e.Data.id == response.productionLine.id);
-            current?.UpdateData(response.productionLine);
+            var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
+            current?.SetData(response.productionLine);
         }
         private void OnUpgradeProductionLineQualityResponse(UpgradeProductionLineQualityResponse response)
         {
-            var current = productionLineCards.FirstOrDefault(e => e.Data.id == response.productionLine.id);
-            current?.UpdateData(response.productionLine);
+            var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
+            current?.SetData(response.productionLine);
         }
         
         #endregion

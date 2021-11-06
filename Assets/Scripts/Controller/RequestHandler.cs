@@ -1,4 +1,6 @@
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using UnityEngine;
 
 public class RequestHandler
@@ -59,7 +61,8 @@ public class RequestHandler
                 break;
             case ResponseTypeConstant.GET_PRODUCTION_LINES:
                 EventManager.Instance.OnGetProductionLinesResponse(
-                    JsonUtility.FromJson<GetProductionLinesResponse>(responseJson));
+                    JsonConvert.DeserializeObject(responseJson, typeof(GetProductionLinesResponse),
+                        new StringEnumConverter()) as GetProductionLinesResponse);
                 break;
             case ResponseTypeConstant.CONSTRUCT_PRODUCTION_LINE:
                 EventManager.Instance.OnConstructProductionLineResponse(

@@ -64,6 +64,7 @@ public class LoginManager : MonoBehaviour
             loginError.SetKey("login_error_info");
             loginError.gameObject.SetActive(true);
         }
+        
     }
 
     public void print(string s)

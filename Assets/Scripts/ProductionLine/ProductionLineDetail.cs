@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ProductionLine
 {
-    public class ProductionLineCard : MonoBehaviour
+    public class ProductionLineDetail : MonoBehaviour
     {
         #region UI
 

@@ -16,6 +16,7 @@ public class RequestManager : MonoBehaviour
     public void SendRequest(RequestObject requestObject)
     {
         var request = JsonUtility.ToJson(requestObject);
+        Debug.Log("sent: " + request);
         StartCoroutine(Send(request));
     }
 
