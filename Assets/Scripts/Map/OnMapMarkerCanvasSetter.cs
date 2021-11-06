@@ -8,7 +8,7 @@ public class OnMapMarkerCanvasSetter : MonoBehaviour
 
     private void Start()
     {
-        canvas.worldCamera = Camera.allCameras[0];
+        canvas.worldCamera = Camera.allCameras[1];
         canvas.sortingOrder = 1;
     }
 }
