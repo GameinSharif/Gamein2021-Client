@@ -16,5 +16,6 @@ public enum RequestTypeConstant
     TERMINATE_OFFER = 13,
     NEW_MESSAGE = 14,
     GET_All_CHATS = 15,
-    GET_CONTRACT_SUPPLIERS = 16
+    GET_CONTRACT_SUPPLIERS = 16,
+    NEW_CONTRACT_SUPPLIER = 17
 }

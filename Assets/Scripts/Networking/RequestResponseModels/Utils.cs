@@ -116,6 +116,11 @@ public class Utils
         public double longitude;
     }
     
+    public enum VehicleType
+    {
+        AIRPLANE, TRUCK, TRAIN, VANET
+    }
+    
     [Serializable]
     public class WeekSupply
     {

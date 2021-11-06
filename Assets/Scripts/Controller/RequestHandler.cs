@@ -42,6 +42,10 @@ public class RequestHandler
                 GetContractSuppliersResponse getContractSuppliersResponse = JsonUtility.FromJson<GetContractSuppliersResponse>(responseJson);
                 EventManager.Instance.OnGetContractSuppliersResponse(getContractSuppliersResponse);
                 break;
+            case ResponseTypeConstant.NEW_CONTRACT_SUPPLIER:
+                NewContractSupplierResponse newContractSupplierResponse = JsonUtility.FromJson<NewContractSupplierResponse>(responseJson);
+                EventManager.Instance.OnNewContractSupplierResponse(newContractSupplierResponse);
+                break;
             case ResponseTypeConstant.GET_CONTRACTS:
                 GetContractsResponse getContractsResponse = JsonUtility.FromJson<GetContractsResponse>(responseJson);
                 EventManager.Instance.OnGetContractsResponse(getContractsResponse);

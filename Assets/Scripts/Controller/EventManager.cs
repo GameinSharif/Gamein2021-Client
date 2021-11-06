@@ -68,6 +68,12 @@ public class EventManager : MonoBehaviour
     {
         OnGetContractSuppliersResponseEvent?.Invoke(getContractSuppliersResponse);
     }
+    
+    public event Action<NewContractSupplierResponse> OnNewContractSupplierResponseEvent;
+    public void OnNewContractSupplierResponse(NewContractSupplierResponse newContractSupplierResponse)
+    {
+        OnNewContractSupplierResponseEvent?.Invoke(newContractSupplierResponse);
+    }
 
     public event Action<GetContractsResponse> OnGetContractsResponseEvent;
     public void OnGetContractsResponse(GetContractsResponse getContractsResponse)

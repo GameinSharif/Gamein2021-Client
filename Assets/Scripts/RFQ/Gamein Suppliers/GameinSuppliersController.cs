@@ -70,6 +70,12 @@ public class GameinSuppliersController : MonoBehaviour
 
         createdItem.SetActive(true);
     }
+
+    public void AddContractItemToList(Utils.ContractSupplier contractSupplier)
+    {
+        MyContractSuppliers.Add(contractSupplier);
+        AddContractItemToList(contractSupplier, MyContractSuppliers.Count);
+    }
     
     private void AddContractItemToList(Utils.ContractSupplier contractSupplier, int index)
     {
