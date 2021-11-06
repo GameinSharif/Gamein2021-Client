@@ -5,6 +5,7 @@ using UnityEngine;
 using RTLTMPro;
 using UnityEditor;
 using UnityEngine.UI;
+using TMPro;
 
 public class EachAuctionController : MonoBehaviour
 {
@@ -14,10 +15,12 @@ public class EachAuctionController : MonoBehaviour
     public RTLTextMeshPro highestBidAmount;
     public Localize highestBidAmountLocalize;
     public Localize minRaiseAmount;
+    public TMP_InputField raiseAmountInputFiled;
 
     private bool _isClickable = false;
     private Utils.Auction _auction;
     private MapUtils.OnMapMarker _onMapMarker;
+    private bool _isSendingRequest = false;
 
     public void OnFactoryButtonClick()
     {
@@ -29,6 +32,7 @@ public class EachAuctionController : MonoBehaviour
 
     public void SetAuctionValues(Utils.Auction auction, MapUtils.OnMapMarker onMapMarker)
     {
+        _isSendingRequest = false;
         if (onMapMarker.MapAgentMarker.MapAgentType == MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory || (auction != null && auction.auctionBidStatus == Utils.AuctionBidStatus.Over))
         {
             _isClickable = false;
@@ -62,11 +66,11 @@ public class EachAuctionController : MonoBehaviour
 
             if (auction != null)
             {
-                minRaiseAmount.SetKey("auction_min_raise", auction.highestBid.ToString()); //TODO change this to last step amount
+                minRaiseAmount.SetKey("auction_min_raise", auction.lastRaiseAmount.ToString());
             }
             else
             {
-                minRaiseAmount.SetKey("auction_min_raise", GameDataManager.Instance.GameConstants.AuctionStartValue.ToString()); //TODO change this to last step amount
+                minRaiseAmount.SetKey("auction_min_raise", GameDataManager.Instance.GameConstants.AuctionStartValue.ToString());
             }
 
             bidHigherGameObject.SetActive(true);
@@ -86,9 +90,28 @@ public class EachAuctionController : MonoBehaviour
     
     public void OnBidButtonClicked()
     {
-        //TODO use inputfield
+        if (_isSendingRequest)
+        {
+            return;
+        }
+        _isSendingRequest = true;
+
+        string raise = raiseAmountInputFiled.text;
+        if (string.IsNullOrEmpty(raise))
+        {
+            //TODO show error
+            return;
+        }
+
+        int raiseAmount = int.Parse(raise);
+        if ((_auction == null && raiseAmount < GameDataManager.Instance.GameConstants.AuctionStartValue) || (_auction != null && raiseAmount < _auction.lastRaiseAmount))
+        {
+            //TODO show error
+            return;
+        }
+
         int factoryId = _onMapMarker.Index;
-        BidForAuctionRequest bidHigherRequest = new BidForAuctionRequest(RequestTypeConstant.BID_FOR_AUCTION, factoryId);
+        BidForAuctionRequest bidHigherRequest = new BidForAuctionRequest(RequestTypeConstant.BID_FOR_AUCTION, factoryId, raiseAmount);
         RequestManager.Instance.SendRequest(bidHigherRequest);
     }
 }

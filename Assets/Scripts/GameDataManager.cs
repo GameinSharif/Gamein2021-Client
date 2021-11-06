@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +22,15 @@ public class GameDataManager : MonoBehaviour
 
     public List<Sprite> ProductSprites;
 
+    private int _auctionCurrentRound = 0;
+
     private void Awake()
     {
         Instance = this;
         EventManager.Instance.OnGetGameDataResponseEvent += OnGetGameDataResponse;
         EventManager.Instance.OnGetCurrentWeekDemandsResponseEvent += OnGetCurrentWeekDemandsResponse;
         EventManager.Instance.OnGetAllAuctionsResponseEvent += OnGetAllAuctionsResponse;
+        EventManager.Instance.OnAuctionFinishedResponseEvent += OnAuctionFinishedResponse;
     }
 
     public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
@@ -55,6 +59,33 @@ public class GameDataManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "MapScene")
             MapManager.Instance.UpdateAllAuctions();
+
+        _auctionCurrentRound = 0;
+        foreach(CustomDateTime customDateTime in GameConstants.AuctionRoundsStartTime)
+        {
+            if (DateTime.Now >= customDateTime.ToDateTime())
+            {
+                _auctionCurrentRound++;
+            }
+        }
+
+        //TODO update auction remained time
+    }
+
+    public void OnAuctionFinishedResponse(AuctionFinishedResponse auctionFinishedResponse)
+    {
+        Teams = auctionFinishedResponse.teams;
+
+        int teamId = PlayerPrefs.GetInt("TeamId");
+        foreach (Utils.Team team in Teams)
+        {
+            if (team.id == teamId)
+            {
+                PlayerPrefs.SetInt("FactoryId", team.factoryId);
+            }
+        }
+
+        SceneManager.UnloadScene("MapScene");
     }
     
     public Utils.Auction GetAuctionByFactoryId(int id)
@@ -74,14 +105,19 @@ public class GameDataManager : MonoBehaviour
             Auctions.Add(auction);
         }
 
-        MapManager.Instance.UpdateAuctionData(auction.factoryId);
+        MapManager.Instance.UpdateAllAuctions();
     }
     
     public Utils.Factory GetFactoryById(int id)
     {
         return Factories.First(f => f.id == id);
     }
-    
+
+    public Utils.Team GetTeamById(int id)
+    {
+        return Teams.First(t => t.id == id);
+    }
+
     public List<Utils.WeekDemand> GetCurrentWeekDemands(int gameinCustomerId)
     {
         return CurrentWeekDemands.Where(d => d.gameinCustomer.id == gameinCustomerId) as List<Utils.WeekDemand>;
@@ -99,8 +135,20 @@ public class GameDataManager : MonoBehaviour
         return "Team";
     }
 
+    public Vector2 GetMyTeamLocaionOnMap()
+    {
+        int teamId = PlayerPrefs.GetInt("TeamId");
+        Utils.Factory factory = GetFactoryById(GetTeamById(teamId).factoryId);
+        return new Vector2((float)factory.latitude, (float)factory.longitude);
+    }
+
     public Utils.Product GetProductById(int id)
     {
         return Products.First(p => p.id == id);
+    }
+
+    public bool IsAuctionOver()
+    {
+        return DateTime.Now > GameConstants.AuctionRoundsStartTime[GameConstants.AuctionRoundsStartTime.Count - 1].ToDateTime().AddSeconds(GameConstants.AuctionRoundDurationSeconds);
     }
 }

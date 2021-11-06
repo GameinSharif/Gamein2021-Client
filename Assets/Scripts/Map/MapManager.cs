@@ -69,6 +69,10 @@ public class MapManager : MonoBehaviour
         {
             SnapToLocation(SnapToLocaltionOnOpenMap);
         }
+        else
+        {
+            SnapToLocation(GameDataManager.Instance.GetMyTeamLocaionOnMap());
+        }
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
@@ -84,22 +88,42 @@ public class MapManager : MonoBehaviour
             SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), gameinCustomer.id, gameinCustomer.name);
         }
 
-        Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
-        for (int i = 0; i < GameDataManager.Instance.Factories.Count; i++)
+        if (GameDataManager.Instance.IsAuctionOver())
         {
-            Utils.Factory factory = GameDataManager.Instance.Factories[i];
-            if (factory.country == country)
+            int teamId = PlayerPrefs.GetInt("TeamId");
+            for (int i = 0; i < GameDataManager.Instance.Teams.Count; i++)
             {
-                SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.NoOwnerFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
-
-            }
-            else
-            {
-                SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
+                Utils.Team team = GameDataManager.Instance.Teams[i];
+                Utils.Factory factory = GameDataManager.Instance.GetFactoryById(team.factoryId);
+                if (team.id == teamId)
+                {
+                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.MyFactory, new Vector2d(factory.latitude, factory.longitude), team.id, team.teamName);
+                }
+                else
+                {
+                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.OtherFactory, new Vector2d(factory.latitude, factory.longitude), team.id, team.teamName);
+                }
             }
         }
+        else
+        {
+            Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
+            for (int i = 0; i < GameDataManager.Instance.Factories.Count; i++)
+            {
+                Utils.Factory factory = GameDataManager.Instance.Factories[i];
+                if (factory.country == country)
+                {
+                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.NoOwnerFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
 
-        UpdateAllAuctions();
+                }
+                else
+                {
+                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
+                }
+            }
+
+            UpdateAllAuctions();
+        }
 
         //TODO do the same thing for other map markers
     }
@@ -205,17 +229,6 @@ public class MapManager : MonoBehaviour
             {
                 onMapMarker.MapAgentMarker = mapAgentMarker;
                 onMapMarker.SpawnedObject.GetComponent<MaterialSetter>().SetMaterial(mapAgentMarker.MarkerMaterial);
-            }
-        }
-    }
-
-    public void UpdateAuctionData(int factoryId)
-    {
-        foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
-        {
-            if (onMapMarker.MapAgentMarker.MapAgentType.ToString().Contains("Factory") && onMapMarker.Index == factoryId)
-            {
-                UpdateFactory(onMapMarker);
             }
         }
     }

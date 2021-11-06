@@ -81,9 +81,13 @@ public class RequestHandler
                 NewMessageResponse newMessageResponse = JsonUtility.FromJson<NewMessageResponse>(responseJson);
                 EventManager.Instance.OnNewMessageResponse(newMessageResponse);
                 break;
-            case ResponseTypeConstant.GET_All_CHATS:
+            case ResponseTypeConstant.GET_ALL_CHATS:
                 GetAllChatsResponse getAllChatsResponse = JsonUtility.FromJson<GetAllChatsResponse>(responseJson);
                 EventManager.Instance.OnGetAllChatsResponse(getAllChatsResponse);
+                break;
+            case ResponseTypeConstant.AUCTION_FINISHED:
+                AuctionFinishedResponse auctionFinishedResponse = JsonConvert.DeserializeObject(responseJson, typeof(AuctionFinishedResponse), new StringEnumConverter()) as AuctionFinishedResponse;
+                EventManager.Instance.OnAuctionFinishedResponse(auctionFinishedResponse);
                 break;
         }
     }

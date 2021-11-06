@@ -111,6 +111,12 @@ public class EventManager : MonoBehaviour
         OnGetAllAuctionsResponseEvent?.Invoke(getAllAuctionsResponse);
     }
 
+    public event Action<AuctionFinishedResponse> OnAuctionFinishedResponseEvent;
+    public void OnAuctionFinishedResponse(AuctionFinishedResponse auctionFinishedResponse)
+    {
+        OnAuctionFinishedResponseEvent?.Invoke(auctionFinishedResponse);
+    }
+
     public event Action<TerminateOfferResponse> OnTerminateOfferResponseEvent;
     public void OnTerminateOfferResponse(TerminateOfferResponse terminateOfferResponse)
     {

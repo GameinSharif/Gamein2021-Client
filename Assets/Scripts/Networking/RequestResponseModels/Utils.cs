@@ -169,13 +169,15 @@ public class Utils
         public int factoryId;
         public int highestBid;
         public int highestBidTeamId;
+        public int lastRaiseAmount;
         public AuctionBidStatus auctionBidStatus;
     }
 
     public class GameConstants
     {
-        public int AuctionStartValue = 1000;
-        public int AuctionStepValue = 100;
+        public int AuctionStartValue;
+        public int AuctionInitialStepValue;
+        public int AuctionRoundDurationSeconds;
         public List<CustomDateTime> AuctionRoundsStartTime;
     }
 }

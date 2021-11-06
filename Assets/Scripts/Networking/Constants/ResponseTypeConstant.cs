@@ -18,5 +18,6 @@ public enum ResponseTypeConstant
     BID_FOR_AUCTION = 15,
     TERMINATE_OFFER = 16,
     NEW_MESSAGE = 17,
-    GET_All_CHATS = 18
+    GET_ALL_CHATS = 18,
+    AUCTION_FINISHED = 33
 }
