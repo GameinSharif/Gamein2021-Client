@@ -10,6 +10,8 @@ public class MainMenuManager : MonoBehaviour
     public static MainMenuManager Instance;
     public static bool IsLoadingMap;
 
+    public GameObject MainMenuCanvasGameObject;
+
     private void Awake()
     {
         Instance = this;

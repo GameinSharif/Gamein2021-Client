@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Mapbox.Unity.Map;
 using Mapbox.Utils;
 using Mapbox.Examples;
@@ -338,5 +339,11 @@ public class MapManager : MonoBehaviour
     }
 
     #endregion
+
+    public void OnBackToMainMenuButtonClick()
+    {
+        MainMenuManager.Instance.MainMenuCanvasGameObject.SetActive(true);
+        SceneManager.UnloadScene("MapScene");
+    }
 
 }
