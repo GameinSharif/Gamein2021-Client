@@ -19,5 +19,7 @@ public enum ResponseTypeConstant
     TERMINATE_OFFER = 16,
     NEW_MESSAGE = 17,
     GET_ALL_CHATS = 18,
+    GET_TEAM_TRANSPORTS = 30,
+    TRANSPORT_STATE_CHANGED = 31,
     AUCTION_FINISHED = 33
 }

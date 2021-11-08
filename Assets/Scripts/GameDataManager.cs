@@ -12,6 +12,7 @@ public class GameDataManager : MonoBehaviour
     [HideInInspector] public List<Utils.Team> Teams;
     [HideInInspector] public List<Utils.GameinCustomer> GameinCustomers;
     [HideInInspector] public List<Utils.Product> Products;
+    [HideInInspector] public List<Utils.Vehicle> Vehicles;
 
     [HideInInspector] public List<Utils.Auction> Auctions;
     [HideInInspector] public List<Utils.Factory> Factories;
@@ -38,7 +39,7 @@ public class GameDataManager : MonoBehaviour
         Teams = getGameDataResponse.teams;
         GameinCustomers = getGameDataResponse.gameinCustomers;
         Products = getGameDataResponse.products;
-
+        Vehicles = getGameDataResponse.vehicles;
         Factories = getGameDataResponse.factories;
 
         GameConstants = getGameDataResponse.gameConstants;

@@ -85,6 +85,14 @@ public class RequestHandler
                 GetAllChatsResponse getAllChatsResponse = JsonUtility.FromJson<GetAllChatsResponse>(responseJson);
                 EventManager.Instance.OnGetAllChatsResponse(getAllChatsResponse);
                 break;
+            case ResponseTypeConstant.GET_TEAM_TRANSPORTS:
+                GetTeamTransportsResponse getTeamTransportsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetTeamTransportsResponse), new StringEnumConverter()) as GetTeamTransportsResponse;
+                EventManager.Instance.OnGetTeamTransportsResponse(getTeamTransportsResponse);
+                break;
+            case ResponseTypeConstant.TRANSPORT_STATE_CHANGED:
+                TransportStateChangedResponse transportStateChangedResponse = JsonConvert.DeserializeObject(responseJson, typeof(TransportStateChangedResponse), new StringEnumConverter()) as TransportStateChangedResponse;
+                EventManager.Instance.OnTransportStateChangedResponse(transportStateChangedResponse);
+                break;
             case ResponseTypeConstant.AUCTION_FINISHED:
                 AuctionFinishedResponse auctionFinishedResponse = JsonConvert.DeserializeObject(responseJson, typeof(AuctionFinishedResponse), new StringEnumConverter()) as AuctionFinishedResponse;
                 EventManager.Instance.OnAuctionFinishedResponse(auctionFinishedResponse);
