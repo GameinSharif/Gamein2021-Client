@@ -42,19 +42,17 @@ public class Localize : MonoBehaviour
 
     [SerializeField] private LocalizedString LocalizedString;
 
-    public bool ValueSetBefore = false;
+    private bool _valueSetBefore = false;
 
     void Start()
     {
-        ValueSetBefore = false;
-
         int currentLanguageIndex = (int)LocalizationManager.GetCurrentLanguage();
         ApplyLocalization(currentLanguageIndex, false);
     }
 
     public void ApplyLocalization(int currentLanguageIndex, bool editMode)
     {
-        if (ValueSetBefore && !editMode)
+        if (_valueSetBefore && !editMode)
         {
             return;
         }
@@ -241,6 +239,7 @@ public class Localize : MonoBehaviour
         if (replaceStrings.Length != 0)
         {
             List<int> hashIndexes = GetAllCharacterIndexes('#');
+
             int replacedStringLen = 0;
             for (int i = 0; i < hashIndexes.Count; i++)
             {
@@ -258,7 +257,7 @@ public class Localize : MonoBehaviour
         RTLTextMeshPro RTLTextMeshPro = GetComponent<RTLTextMeshPro>();
         RTLTextMeshPro.text = value;
 
-        ValueSetBefore = true;
+        _valueSetBefore = true;
     }
 
     private List<int> GetAllCharacterIndexes(char character)

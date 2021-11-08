@@ -76,10 +76,7 @@ public class LocalizationManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         LanguageDescriptions = new DescriptionAttributes<LocalizedLanguage>().Descriptions.ToList();
-    }
 
-    private void Start()
-    {
         string language = PlayerPrefs.GetString("Language");
         switch (language)
         {
@@ -91,7 +88,6 @@ public class LocalizationManager : MonoBehaviour
                 CurrentLanguage = LocalizedLanguage.Farsi;
                 break;
         }
-
     }
 
     public static void Init()
@@ -224,11 +220,19 @@ public class LocalizationManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void ChangeLanguage()
+    public void SetLanguage(string language)
     {
-        CurrentLanguage = (CurrentLanguage == LocalizedLanguage.Farsi) ? LocalizedLanguage.English : LocalizedLanguage.Farsi;
-        PlayerPrefs.SetString("Language", CurrentLanguage.ToString());
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        PlayerPrefs.SetString("Language", language);
+        switch (language)
+        {
+            case "English":
+                CurrentLanguage = LocalizedLanguage.English;
+                break;
+            case "Farsi":
+            default:
+                CurrentLanguage = LocalizedLanguage.Farsi;
+                break;
+        }
     }
 
     public void SetFontAndMaterial(LocalizedLanguage language, int textTypeIndex, ref RTLTextMeshPro RTLTextMeshPro)
@@ -259,28 +263,12 @@ public class LocalizationManager : MonoBehaviour
             Instance = GameObject.FindObjectOfType<LocalizationManager>();
         }
 
-        //RTLTextMeshPro[] rtl = Resources.FindObjectsOfTypeAll<RTLTextMeshPro>();
-        //Color32 color = new Color32(251, 246, 221, 255);
-        //foreach (RTLTextMeshPro rTLTextMeshPro in rtl)
-        //{
-        //    if (rTLTextMeshPro.color.r == 1 && rTLTextMeshPro.color.g == 1 && rTLTextMeshPro.color.b == 1)
-        //    {
-        //        rTLTextMeshPro.color = color;
-        //    }
-        //    //rTLTextMeshPro.alignment = TextAlignmentOptions.Midline;
-        //    //rTLTextMeshPro.font = Instance.FarsiFontAsset;
-        //    rTLTextMeshPro.lineSpacing = 30;
-        //    rTLTextMeshPro.raycastTarget = false;
-        //     Localize localize = rTLTextMeshPro.gameObject.GetComponent<Localize>();
-        //    if (localize != null)
-        //    {
-        //        localize.ApplyLocalization(1, true);
-        //    }
-        //    else
-        //    {
-        //        rTLTextMeshPro.fontSharedMaterial = Instance.FarsiMaterialPresets[4];
-        //    }
-        //}
+        RTLTextMeshPro[] rtl = Resources.FindObjectsOfTypeAll<RTLTextMeshPro>();
+        foreach (RTLTextMeshPro rTLTextMeshPro in rtl)
+        {
+            rTLTextMeshPro.font = Instance.EnglishFontAsset;
+            rTLTextMeshPro.fontSharedMaterial = Instance.EnglishMaterialPresets[0];
+        }
     }
 
     void OnValidate()

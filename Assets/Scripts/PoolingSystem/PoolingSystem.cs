@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class PoolingSystem<T>
@@ -91,6 +90,16 @@ public class PoolingSystem<T>
         child.SetSiblingIndex(parent.childCount - 1);
         child.gameObject.SetActive(false);
         counter--;
+    }
+    
+    public void RemoveAll()
+    {
+        foreach (GameObject child in parent)
+        {
+            child.SetActive(false);
+        }
+
+        counter = 0;
     }
     
 }

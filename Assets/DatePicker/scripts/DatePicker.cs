@@ -1,5 +1,5 @@
 using System;
-using TMPro;
+using RTLTMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DatePicker : MonoBehaviour
 {
     public GameObject DatePickerPanelPrefab;
-    public TMP_Text currentSelectedDate;
+    public RTLTextMeshPro currentSelectedDate;
 
     public DateTime Value
     {
@@ -15,7 +15,7 @@ public class DatePicker : MonoBehaviour
         set
         {
             this.value = value;
-            currentSelectedDate.text = value.ToString("MM/dd/yyyy");
+            currentSelectedDate.text = value.ToString("yyyy-MM-dd");
         }
     }
 
@@ -25,7 +25,6 @@ public class DatePicker : MonoBehaviour
 
     private void Start()
     {
-        currentSelectedDate.text = "Choose date ...";
         GetComponent<Button>().onClick.AddListener(OnClicked);
     }
 
@@ -33,7 +32,7 @@ public class DatePicker : MonoBehaviour
     {
         if (panelOpened) return;
 
-        panel = Instantiate(DatePickerPanelPrefab, transform.position, Quaternion.identity, transform)
+        panel = Instantiate(DatePickerPanelPrefab, transform)
             .GetComponent<DatePickerPanel>();
         panelOpened = true;
 
@@ -51,18 +50,4 @@ public class DatePicker : MonoBehaviour
         panelOpened = false;
     }
 
-
-    #region GameObjectMenu
-
-    [MenuItem("GameObject/UI/Date Picker", false, 0)]
-    public static void CreateDatePicker()
-    {
-        GameObject prefab = Resources.Load<GameObject>("DatePicker");
-        if (prefab == null) return;
-
-        GameObject go = Instantiate(prefab, Selection.activeTransform);
-        go.name = "Date Picker";
-    }
-
-    #endregion
 }

@@ -16,6 +16,11 @@ public class CustomDateTime
     {
         return date.day.ToString().PadLeft(2, '0') + "/" + date.month.ToString().PadLeft(2, '0') + "/" + date.year.ToString().PadLeft(4, '0');
     }
+
+    public DateTime ToDateTime()
+    {
+        return new DateTime(date.year, date.month, date.day, time.hour, time.minute, time.second);
+    }
 }
 
 [Serializable]
@@ -30,6 +35,12 @@ public class CustomDate
         this.year = year;
         this.month = month;
         this.day = day;
+    }
+
+    override
+    public string ToString()
+    {
+        return year.ToString("0000") + "/" + month.ToString("00") + "/" + day.ToString("00");
     }
 }
 

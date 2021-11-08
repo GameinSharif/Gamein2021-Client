@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,110 +7,145 @@ using TMPro;
 
 public class NegotiationsController : MonoBehaviour
 {
-    public GameObject negotiationOfferItemPrefab;
-    public Transform scrollPanel;
-    
-    public GameObject negotiationSelectedOfferItemPrefab;
-    public Transform offerPanel;
+    public static NegotiationsController Instance;
 
-    public GameObject sendNewOfferPopUp;
-    public TMP_InputField offerPopUpInputField1;
-    public TMP_InputField offerPopUpInputField2;
-    public TMP_InputField offerPopUpInputField3;
-    public TMP_Dropdown offerPopUpDropdown;
-    public DatePicker date1;
-    public DatePicker date2;
-    public DatePicker date3;
-    public RTLTextMeshPro[] dates;
+    public GameObject NegotiationItemPrefab;
 
-    
-    private void Awake()
+    public GameObject SupplyNegotiationsScrollViewParent;
+    public GameObject DemandNegotiationsScrollViewParent;
+
+    private List<NegotiationItemController> _supplyNegotiationItemControllers = new List<NegotiationItemController>();
+    private List<NegotiationItemController> _demandNegotiationItemControllers = new List<NegotiationItemController>();
+    private List<GameObject> _spawnedGameObjects = new List<GameObject>();
+
+    void Awake()
     {
-        DestroySelectedOfferInPanel();
-        DestroyAllChildrenInScrollPanel();
-        TestFunc();
-        SetOfferPopUpActive(false);
+        Instance = this;
     }
 
-    public void TestFunc()
+    private void OnEnable()
     {
-        OfferViewModel offer = new OfferViewModel("test", "T3", 2000, 5, 10000, "09/11/2021",
-            "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.INPROGRESS);
-        AddToList(offer);
-        
-        OfferViewModel offer2 = new OfferViewModel("bhkbkk", "T32", 500, 5, 10000, "09/11/2021",
-            "09/12/2021", "20/11/2021", Frequency.ONCE, State.INPROGRESS);
-        AddToList(offer2);
-        
-        OfferViewModel offer3 = new OfferViewModel("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
-            "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
-        AddToList(offer3);
-        
-        OfferViewModel offer4 = new OfferViewModel("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
-            "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
-        AddToList(offer4);
-        
-        OfferViewModel offer5 = new OfferViewModel("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
-            "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
-        AddToList(offer5);
-        
-        OfferViewModel offer6 = new OfferViewModel("kbllbjlb", "T", 2, 5, 10000, "09/11/2021",
-            "09/12/2021", "20/11/2021", Frequency.MONTHLY, State.DEAL);
-        AddToList(offer6);
-    }
-    
-    public void AddToList(OfferViewModel offer)
-    {
-        var createdItem = Instantiate(negotiationOfferItemPrefab, scrollPanel);
-        var controller = createdItem.GetComponent<NegotiationOfferItemController>();
-        controller.SetInfo(scrollPanel.transform.childCount, offer);
-        RectTransform createdItemRectTransform = createdItem.GetComponent<RectTransform>();
-        float height = -123.3697f;
-        createdItemRectTransform.anchoredPosition = new Vector2(0, (float) scrollPanel.transform.childCount * height);
-        createdItem.gameObject.SetActive(true);
+        EventManager.Instance.OnGetNegotiationsResponseEvent += OnGetNegotiationsResponseReceived;
+        EventManager.Instance.OnEditNegotiationCostPerUnitResponseEvent += OnEditNegotiationCostPerUnitResponseReceived;
     }
 
-    private void DestroyAllChildrenInScrollPanel()
+    private void OnDisable()
     {
-        foreach (Transform child in scrollPanel.transform)
+        EventManager.Instance.OnGetNegotiationsResponseEvent -= OnGetNegotiationsResponseReceived;
+        EventManager.Instance.OnEditNegotiationCostPerUnitResponseEvent -= OnEditNegotiationCostPerUnitResponseReceived;
+    }
+
+    public void OnGetNegotiationsResponseReceived(GetNegotiationsResponse getNegotiationsResponse)
+    {
+        _supplyNegotiationItemControllers.Clear();
+        _demandNegotiationItemControllers.Clear();
+        DeactiveAllChildrenInScrollPanel();
+
+        List<Utils.Negotiation> supplyNegotiations = new List<Utils.Negotiation>();
+        List<Utils.Negotiation> demandNegotiations = new List<Utils.Negotiation>();
+
+        int teamId = PlayerPrefs.GetInt("TeamId");
+        foreach(Utils.Negotiation negotiation in getNegotiationsResponse.negotiations)
         {
-            Destroy(child.gameObject);
+            if (negotiation.supplierId == teamId)
+            {
+                supplyNegotiations.Add(negotiation);
+            }
+            else if (negotiation.demanderId == teamId)
+            {
+                demandNegotiations.Add( negotiation);
+            }
+        }
+
+        supplyNegotiations.Reverse();
+        demandNegotiations.Reverse();
+
+        for (int i=0;i < supplyNegotiations.Count; i++)
+        {
+            AddSupplyNegotiationToList(supplyNegotiations[i], i + 1);
+        }
+        for (int i = 0; i < demandNegotiations.Count; i++)
+        {
+            AddDemandNegotiationToList(demandNegotiations[i], i + 1);
         }
     }
-    
-    public void ShowSelectedOffer(OfferViewModel offer)
-    {
-        DestroySelectedOfferInPanel();
-        var createdItem = Instantiate(negotiationSelectedOfferItemPrefab, offerPanel);
-        var controller = createdItem.GetComponent<NegotiationOfferItemController>();
-        controller.SetInfo(offer);
-    }
 
-    private void DestroySelectedOfferInPanel()
+    private void OnEditNegotiationCostPerUnitResponseReceived(EditNegotiationCostPerUnitResponse editNegotiationCostPerUnitResponse)
     {
-        foreach (Transform child in offerPanel.transform)
+        if (editNegotiationCostPerUnitResponse.negotiation != null)
         {
-            Destroy(child.gameObject);
+            foreach (NegotiationItemController negotiationItemController in _supplyNegotiationItemControllers)
+            {
+                negotiationItemController.OnEditNegotiationCostPerUnitResponseReceived(editNegotiationCostPerUnitResponse.negotiation);
+            }
+            foreach (NegotiationItemController negotiationItemController in _demandNegotiationItemControllers)
+            {
+                negotiationItemController.OnEditNegotiationCostPerUnitResponseReceived(editNegotiationCostPerUnitResponse.negotiation);
+            }
+        }
+        else
+        {
+            //TODO show error
         }
     }
-    
-    public void OnSendOfferButtonClicked()
+
+    public void AddNegotiationToList(Utils.Negotiation negotiation)
     {
-        SetOfferPopUpActive(true);
+        int teamId = PlayerPrefs.GetInt("TeamId");
+        if (negotiation.supplierId == teamId)
+        {
+            AddSupplyNegotiationToList(negotiation, _supplyNegotiationItemControllers.Count);
+        }
+        else if (negotiation.demanderId == teamId)
+        {
+            AddDemandNegotiationToList(negotiation, _demandNegotiationItemControllers.Count);
+        }
     }
 
-    public void OnOfferPopUpCloseClicked()
+    private void AddSupplyNegotiationToList(Utils.Negotiation negotiation, int index)
     {
-        SetOfferPopUpActive(false);
+        GameObject createdItem = GetItem(SupplyNegotiationsScrollViewParent);
+        createdItem.transform.SetSiblingIndex(index);
+
+        NegotiationItemController controller = createdItem.GetComponent<NegotiationItemController>();
+        controller.SetSupplyNegotiationInfo(index, negotiation);
+
+        _supplyNegotiationItemControllers.Add(controller);
+        createdItem.SetActive(true);
     }
 
-    private void SetOfferPopUpActive(bool value)
+    private void AddDemandNegotiationToList(Utils.Negotiation negotiation, int index)
     {
-        sendNewOfferPopUp.SetActive(value);
+        GameObject createdItem = GetItem(DemandNegotiationsScrollViewParent);
+        createdItem.transform.SetSiblingIndex(index);
+
+        NegotiationItemController controller = createdItem.GetComponent<NegotiationItemController>();
+        controller.SetDemandNegotiationInfo(index, negotiation);
+
+        _demandNegotiationItemControllers.Add(controller);
+        createdItem.SetActive(true);
     }
-    
-    public void OnPlaceOfferButtonClicked()
+
+    private GameObject GetItem(GameObject parent)
     {
-        //TODO
+        foreach (GameObject gameObject in _spawnedGameObjects)
+        {
+            if (!gameObject.activeSelf)
+            {
+                return gameObject;
+            }
+        }
+
+        GameObject newItem = Instantiate(NegotiationItemPrefab, parent.transform);
+        _spawnedGameObjects.Add(newItem);
+        return newItem;
+    }
+
+    private void DeactiveAllChildrenInScrollPanel()
+    {
+        foreach (GameObject gameObject in _spawnedGameObjects)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
