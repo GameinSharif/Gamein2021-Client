@@ -89,7 +89,7 @@ public class GameDataManager : MonoBehaviour
             }
         }
 
-        SceneManager.UnloadScene("MapScene");
+        SceneManager.UnloadSceneAsync("MapScene");
     }
     
     public Utils.Auction GetAuctionByFactoryId(int id)

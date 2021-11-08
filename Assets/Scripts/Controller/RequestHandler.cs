@@ -91,8 +91,6 @@ public class RequestHandler
                 AuctionFinishedResponse auctionFinishedResponse = JsonConvert.DeserializeObject(responseJson, typeof(AuctionFinishedResponse), new StringEnumConverter()) as AuctionFinishedResponse;
                 EventManager.Instance.OnAuctionFinishedResponse(auctionFinishedResponse);
                 break;
-            case ResponseTypeConstant.GET_ALL_AUCTIONS:
-                break;
             case ResponseTypeConstant.GET_PRODUCTION_LINES:
                 EventManager.Instance.OnGetProductionLinesResponse(
                     JsonConvert.DeserializeObject(responseJson, typeof(GetProductionLinesResponse),

@@ -17,7 +17,8 @@ public class Utils
 
     public enum ProviderState
     {
-        ACTIVE, TERMINATED
+        ACTIVE,
+        TERMINATED
     }
 
     [Serializable]
@@ -33,7 +34,10 @@ public class Utils
 
     public enum OfferStatus
     {
-        ACTIVE, ACCEPTED, TERMINATED, PASSED_DEADLINE
+        ACTIVE,
+        ACCEPTED,
+        TERMINATED,
+        PASSED_DEADLINE
     }
 
     [Serializable]
@@ -50,7 +54,9 @@ public class Utils
 
     public enum NegotiationState
     {
-        CLOSED, DEAL, IN_PROGRESS
+        CLOSED,
+        DEAL,
+        IN_PROGRESS
     }
 
     [Serializable]
@@ -129,7 +135,9 @@ public class Utils
         public ProductType productType;
         public string name;
         public int volumetricUnit;
-        public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 36)
+
+        public List<ProductIngredient>
+            ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 36)
     }
 
     [Serializable]
@@ -181,7 +189,8 @@ public class Utils
         public int AuctionInitialStepValue;
         public int AuctionRoundDurationSeconds;
         public List<CustomDateTime> AuctionRoundsStartTime;
-    
+    }
+
     [Serializable]
     public class ProductionLineDto
     {
@@ -193,16 +202,17 @@ public class Utils
         public int efficiencyLevel;
         public ProductionLineStatus status;
     }
-    
+
     [Serializable]
-    public class ProductionLineProductDto {
+    public class ProductionLineProductDto
+    {
         public int id;
         public int productId;
         public int amount;
         public CustomDate startDate;
         public CustomDate endDate;
     }
-    
+
     [Serializable]
     public class ProductionLineTemplate
     {

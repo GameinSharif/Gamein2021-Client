@@ -343,7 +343,7 @@ public class MapManager : MonoBehaviour
     public void OnBackToMainMenuButtonClick()
     {
         MainMenuManager.Instance.MainMenuCanvasGameObject.SetActive(true);
-        SceneManager.UnloadScene("MapScene");
+        SceneManager.UnloadSceneAsync("MapScene");
     }
 
 }
