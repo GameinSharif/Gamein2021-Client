@@ -59,20 +59,13 @@ public class MapManager : MonoBehaviour
         InitializeMap();
         InitializeGameDataOnMap();
 
-        //SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(0, 0), 0);
-        //SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(35, 50), 1);
-
-        //SetMapLine(MapUtils.MapLine.LineType.StorageToShop, _onMapMarkers[0], _onMapMarkers[1]);
-
-        //ChangeMapAgentType(_onMapMarkers[0], MapUtils.MapAgentMarker.AgentType.Storage);
-
-        if (SnapToLocaltionOnOpenMap != null)
+        if (SnapToLocaltionOnOpenMap != Vector2.zero)
         {
             SnapToLocation(SnapToLocaltionOnOpenMap);
         }
         else
         {
-            SnapToLocation(GameDataManager.Instance.GetMyTeamLocaionOnMap());
+            SnapToMyTeamLocation();
         }
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
@@ -81,9 +74,40 @@ public class MapManager : MonoBehaviour
         MainMenuManager.IsLoadingMap = false;
     }
 
+    //Also called by a button in MapScene
+    public void SnapToMyTeamLocation()
+    {
+        SnapToLocation(GameDataManager.Instance.GetMyTeamLocaionOnMap());
+    }
+
     private void InitializeGameDataOnMap()
     {
-        for (int i=0; i < GameDataManager.Instance.GameinCustomers.Count; i++)
+        InitializeMapMarkers();
+        InitializeLines();
+    }
+
+    private void InitializeLines()
+    {
+        for (int i=0;i < TransportManager.Instance.Transports.Count; i++)
+        {
+            Utils.Transport transport = TransportManager.Instance.Transports[i];
+            if (transport.transportState == Utils.TransportState.IN_WAY)
+            {
+                MapUtils.OnMapMarker sourceNode = GetOnMapMarkerByTypeAndId(transport.sourceType, transport.sourceId);
+                Debug.Log(transport.sourceType);
+                Debug.Log(transport.sourceId);
+                MapUtils.OnMapMarker destinationNode = GetOnMapMarkerByTypeAndId(transport.destinationType, transport.destinationId);
+                Debug.Log(destinationNode.Index);
+
+                //TODO different material for different lineTypes
+                SetMapLine(MapUtils.MapLine.LineType.FactoryToFactory, sourceNode, destinationNode);
+            }
+        }
+    }
+
+    private void InitializeMapMarkers()
+    {
+        for (int i = 0; i < GameDataManager.Instance.GameinCustomers.Count; i++)
         {
             Utils.GameinCustomer gameinCustomer = GameDataManager.Instance.GameinCustomers[i];
             SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), gameinCustomer.id, gameinCustomer.name);
@@ -95,14 +119,18 @@ public class MapManager : MonoBehaviour
             for (int i = 0; i < GameDataManager.Instance.Teams.Count; i++)
             {
                 Utils.Team team = GameDataManager.Instance.Teams[i];
+                if (team.factoryId == 0)
+                {
+                    continue;
+                }
                 Utils.Factory factory = GameDataManager.Instance.GetFactoryById(team.factoryId);
                 if (team.id == teamId)
                 {
-                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.MyFactory, new Vector2d(factory.latitude, factory.longitude), team.id, team.teamName);
+                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.MyFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, team.teamName);
                 }
                 else
                 {
-                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.OtherFactory, new Vector2d(factory.latitude, factory.longitude), team.id, team.teamName);
+                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.OtherFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, team.teamName);
                 }
             }
         }
@@ -286,7 +314,52 @@ public class MapManager : MonoBehaviour
     {
         return _onMapMarkers.First(marker => marker.Index == id);
     }
-    
+
+    public MapUtils.OnMapMarker GetOnMapMarkerByTypeAndId(Utils.TransportNodeType transportNodeType, int transportNodeId)
+    {
+        switch (transportNodeType)
+        {
+            case Utils.TransportNodeType.SUPPLIER:
+                foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+                {
+                    if (onMapMarker.MapAgentMarker.MapAgentType == MapUtils.MapAgentMarker.AgentType.Supplier && onMapMarker.Index == transportNodeId)
+                    {
+                        return onMapMarker;
+                    }
+                }
+                break;
+            case Utils.TransportNodeType.GAMEIN_CUSTOMER:
+                foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+                {
+                    if (onMapMarker.MapAgentMarker.MapAgentType == MapUtils.MapAgentMarker.AgentType.GameinCustomer && onMapMarker.Index == transportNodeId)
+                    {
+                        return onMapMarker;
+                    }
+                }
+                break;
+            case Utils.TransportNodeType.DC:
+                foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+                {
+                    if (onMapMarker.MapAgentMarker.MapAgentType.ToString().Contains("DistributionCenter") && onMapMarker.Index == transportNodeId)
+                    {
+                        return onMapMarker;
+                    }
+                }
+                break;
+            case Utils.TransportNodeType.FACTORY:
+                foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+                {
+                    if (onMapMarker.MapAgentMarker.MapAgentType.ToString().Contains("Factory") && onMapMarker.Index == transportNodeId)
+                    {
+                        return onMapMarker;
+                    }
+                }
+                break;
+        }
+
+        return null;
+    }
+
     public void UpdateMarkersLocation()
     {
         foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
@@ -305,6 +378,14 @@ public class MapManager : MonoBehaviour
     {
         Vector2d vector2d = new Vector2d(location.x, location.y);
         _abstractMap.SetCenterLatitudeLongitude(vector2d);
+        try
+        {
+            _abstractMap.UpdateMap();
+        }
+        catch (Exception)
+        {
+            //just ignore this
+        }
     }
 
     #endregion

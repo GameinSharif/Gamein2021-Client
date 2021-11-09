@@ -143,6 +143,27 @@ public class GameDataManager : MonoBehaviour
         return new Vector2((float)factory.latitude, (float)factory.longitude);
     }
 
+    public Vector2 GetLocationByTypeAndId(Utils.TransportNodeType transportNodeType, int transportNodeId)
+    {
+        switch (transportNodeType)
+        {
+            case Utils.TransportNodeType.SUPPLIER:
+                //Todo
+                break;
+            case Utils.TransportNodeType.GAMEIN_CUSTOMER:
+                Utils.GameinCustomer gameinCustomer = GameinCustomers.First(c => c.id == transportNodeId);
+                return new Vector2((float)gameinCustomer.latitude, (float)gameinCustomer.longitude);
+            case Utils.TransportNodeType.DC:
+                //TODO
+                break;
+            case Utils.TransportNodeType.FACTORY:
+                Utils.Factory factory = Factories.First(f => f.id == transportNodeId);
+                return new Vector2((float)factory.latitude, (float)factory.longitude);
+        }
+
+        return Vector2.zero;
+    }
+
     public Utils.Product GetProductById(int id)
     {
         return Products.First(p => p.id == id);

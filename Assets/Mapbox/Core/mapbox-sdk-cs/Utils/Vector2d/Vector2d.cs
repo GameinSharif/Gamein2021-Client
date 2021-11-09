@@ -3,8 +3,9 @@ namespace Mapbox.Utils
     using Mapbox.Json;
     using System;
 	using System.Globalization;
+    using UnityEngine;
 
-	[Serializable]
+    [Serializable]
 	public struct Vector2d
 	{
 		public const double kEpsilon = 1E-05d;
@@ -106,6 +107,12 @@ namespace Mapbox.Utils
 		{
 			this.x = x;
 			this.y = y;
+		}
+
+		public Vector2d(Vector2 vector2)
+        {
+			this.x = vector2.x;
+			this.y = vector2.y;
 		}
 
 		public static Vector2d operator +(Vector2d a, Vector2d b)
