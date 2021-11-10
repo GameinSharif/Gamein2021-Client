@@ -38,11 +38,11 @@ public class RequestHandler
                 GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse = JsonUtility.FromJson<GetCurrentWeekSuppliesResponse>(responseJson);
                 EventManager.Instance.OnGetCurrentWeekSuppliesResponse(getCurrentWeekSuppliesResponse);
                 break;
-            case ResponseTypeConstant.GET_CONTRACT_SUPPLIERS:
+            case ResponseTypeConstant.GET_CONTRACTS_WITH_SUPPLIER:
                 GetContractSuppliersResponse getContractSuppliersResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetContractSuppliersResponse), new StringEnumConverter()) as GetContractSuppliersResponse;
                 EventManager.Instance.OnGetContractSuppliersResponse(getContractSuppliersResponse);
                 break;
-            case ResponseTypeConstant.NEW_CONTRACT_SUPPLIER:
+            case ResponseTypeConstant.NEW_CONTRACT_WITH_SUPPLIER:
                 NewContractSupplierResponse newContractSupplierResponse = JsonConvert.DeserializeObject(responseJson, typeof(NewContractSupplierResponse), new StringEnumConverter()) as NewContractSupplierResponse;
                 EventManager.Instance.OnNewContractSupplierResponse(newContractSupplierResponse);
                 break;

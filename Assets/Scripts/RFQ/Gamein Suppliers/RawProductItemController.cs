@@ -6,7 +6,6 @@ using RTLTMPro;
 public class RawProductItemController : MonoBehaviour
 {
     public RTLTextMeshPro no;
-    public RTLTextMeshPro productName;
     public Localize productNameLocalize;
 
     public GameObject ShowSuppliesButtonGameObject;
@@ -23,12 +22,13 @@ public class RawProductItemController : MonoBehaviour
     public void SetInfo(int no, string productName)
     {
         this.no.text = no.ToString();
-        this.productName.text = productName;
         productNameLocalize.SetKey("product_" + productName);
     }
 
     public void SetInfo(int no, Utils.Product rawProduct)
     {
+        _rawProduct = rawProduct;
+
         SetInfo(
             no: no,
             productName: rawProduct.name
@@ -38,7 +38,6 @@ public class RawProductItemController : MonoBehaviour
         HideSuppliesButtonGameObject.SetActive(false);
         SetSupplies();
         SuppliesParent.SetActive(false);
-        _rawProduct = rawProduct;
     }
 
     public void SetSupplies()

@@ -127,7 +127,7 @@ public class Utils
     {
         public int id;
         public int week;
-        public Supplier supplier;
+        public int supplierId;
         public int productId;
         public int price;
         public int sales;

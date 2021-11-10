@@ -7,8 +7,7 @@ public class ContractSupplierItemController : MonoBehaviour
 {
     public RTLTextMeshPro no;
     public RTLTextMeshPro supplierName;
-    //public Localize productNameLocalize;
-    public RTLTextMeshPro productName;
+    public Localize productNameLocalize;
     public RTLTextMeshPro contractType;
     //public Localize OfferStatusLocalize;
 
@@ -24,12 +23,11 @@ public class ContractSupplierItemController : MonoBehaviour
     private List<Utils.ContractSupplierDetail> _contractSupplierDetails;
     private List<GameObject> _spawnedDetailsGameObjects = new List<GameObject>();
 
-    public void SetInfo(int no, string supplierName,  string productName, string contractType)
+    public void SetInfo(int no, string supplierName,  string productNameKey, string contractType)
     {
         this.no.text = no.ToString();
         this.supplierName.text = supplierName;
-        //productNameLocalize.SetKey("product_" + productNameKey);
-        this.productName.text = productName;
+        productNameLocalize.SetKey("product_" + productNameKey);
         this.contractType.text = contractType;
         
     }
@@ -39,8 +37,7 @@ public class ContractSupplierItemController : MonoBehaviour
         SetInfo(
             no: no,
             supplierName: GameDataManager.Instance.GetSupplierName(contractSupplier.supplierId),
-            //productNameKey: GameDataManager.Instance.GetProductById(offer.productId).name,
-            productName: GameDataManager.Instance.GetProductName(contractSupplier.materialId), 
+            productNameKey: GameDataManager.Instance.GetProductById(contractSupplier.materialId).name,
             contractType: contractSupplier.contractType.ToString()
         );
 

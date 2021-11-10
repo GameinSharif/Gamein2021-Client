@@ -10,7 +10,7 @@ public class GameinSuppliersController : MonoBehaviour
 {
     public static GameinSuppliersController Instance;
 
-    [HideInInspector] List<Utils.ContractSupplier> MyContractSuppliers;
+    [HideInInspector] List<Utils.ContractSupplier> MyContractSuppliers = new List<Utils.ContractSupplier>();
     [HideInInspector] List<Utils.Product> RawProducts;
 
     public GameObject rawProductItemPrefab;
@@ -51,8 +51,7 @@ public class GameinSuppliersController : MonoBehaviour
     
     public void OnGetContractSuppliersResponse(GetContractSuppliersResponse getContractSuppliersResponse)
     {
-        int teamId = PlayerPrefs.GetInt("TeamId");
-        MyContractSuppliers = getContractSuppliersResponse.ContractSuppliers.Where(d => d.teamId == teamId) as List<Utils.ContractSupplier>;
+        MyContractSuppliers = getContractSuppliersResponse.contractsSupplier;
         DeactiveAllChildrenInScrollPanel(true);
         for (int i = 0; i < MyContractSuppliers.Count; i++)
         {

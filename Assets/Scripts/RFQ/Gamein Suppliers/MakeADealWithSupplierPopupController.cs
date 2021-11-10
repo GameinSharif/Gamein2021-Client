@@ -18,13 +18,13 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     public Localize productNameLocalize;
     public TMP_InputField amount;
     public RTLTextMeshPro pricePerUnit;
-    public RTLTextMeshPro totalPrice;
-    public RTLTextMeshPro finalPrice;
+    public TMP_InputField totalPrice;
+    public TMP_InputField finalPrice;
     public DatePicker arrivalDate; //TODO calculate it and then show it
     public ToggleGroup repetition;
     public ToggleGroup transportationMode;
     public TMP_InputField numberOfRepetition;
-    public RTLTextMeshPro penalty; //TODO calculate it and then show it
+    public TMP_InputField penalty; //TODO calculate it and then show it
 
     private Utils.WeekSupply _weekSupply;
 
@@ -137,7 +137,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
             return;
         }
         int amountInt = int.Parse(this.amount.text);
-        NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_SUPPLIER, _weekSupply, weeks, amountInt, vehicleType);
+        NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_WITH_SUPPLIER, _weekSupply, weeks, amountInt, vehicleType);
         RequestManager.Instance.SendRequest(newContractSupplier);
     }
 }

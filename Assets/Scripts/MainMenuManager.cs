@@ -11,6 +11,9 @@ public class MainMenuManager : MonoBehaviour
     public static bool IsLoadingMap;
 
     public GameObject MainMenuCanvasGameObject;
+    public GameObject TradeParentGameObject;
+
+    [HideInInspector] public bool IsInTradePage = false;
 
     private void Awake()
     {
@@ -33,6 +36,8 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnOpenTradePageButtonClick()
     {
+        IsInTradePage = true;
+
         GetOffersRequest getOffersRequest = new GetOffersRequest(RequestTypeConstant.GET_OFFERS);
         RequestManager.Instance.SendRequest(getOffersRequest);
 
@@ -45,8 +50,10 @@ public class MainMenuManager : MonoBehaviour
         GetContractsRequest getContractsRequest = new GetContractsRequest(RequestTypeConstant.GET_CONTRACTS);
         RequestManager.Instance.SendRequest(getContractsRequest);
 
-        GetContractSuppliersRequest getContractSuppliersRequest = new GetContractSuppliersRequest(RequestTypeConstant.GET_CONTRACT_SUPPLIERS);
+        GetContractSuppliersRequest getContractSuppliersRequest = new GetContractSuppliersRequest(RequestTypeConstant.GET_CONTRACTS_WITH_SUPPLIER);
         RequestManager.Instance.SendRequest(getContractSuppliersRequest);
+
+        GameinSuppliersController.Instance.UpdateSupplies();
     }
 
     public void OnLoadMapSceneButtonClick()
@@ -58,13 +65,23 @@ public class MainMenuManager : MonoBehaviour
 
         IsLoadingMap = true;
 
-        var canvases = FindObjectsOfType<Canvas>();
-        foreach (Canvas canvas in canvases)
+        GameObject[] gameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+        foreach (GameObject gameObject in gameObjects)
         {
-            canvas.gameObject.SetActive(false);
+            if (gameObject.GetComponent<Canvas>() != null)
+            {
+                gameObject.SetActive(false);
+            }
         }
 
+        TradeParentGameObject.SetActive(false);
+
         SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
+    }
+
+    public void OnBackToMainMenuFromTrade()
+    {
+        IsInTradePage = false;
     }
 
     //TODO for other pages

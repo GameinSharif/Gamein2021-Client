@@ -14,7 +14,7 @@ public class NewContractSupplierRequest : RequestObject
 
     public NewContractSupplierRequest(RequestTypeConstant requestTypeConstant, Utils.WeekSupply weekSupply, int weeks, int amount, Utils.VehicleType vehicleType) : base(requestTypeConstant)
     {
-        supplierId = weekSupply.supplier.id;
+        supplierId = weekSupply.supplierId;
         materialId = weekSupply.productId;
         hasInsurance = true; //TODO what is it
         this.amount = amount;

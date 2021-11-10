@@ -7,7 +7,6 @@ public class RawProductSupplyItemController : MonoBehaviour
 {
     public RTLTextMeshPro no;
     public RTLTextMeshPro supplierName;
-    //public Localize productNameLocalize;
     public RTLTextMeshPro costPerUnit;
 
     public GameObject showOnMapButton;
@@ -19,7 +18,6 @@ public class RawProductSupplyItemController : MonoBehaviour
     {
         this.no.text = no.ToString();
         this.supplierName.text = supplierName;
-        //productNameLocalize.SetKey("product_" + productNameKey);
         this.costPerUnit.text = costPerUnit;
     }
 
@@ -27,9 +25,8 @@ public class RawProductSupplyItemController : MonoBehaviour
     {
         SetInfo(
             no: no,
-            supplierName: weekSupply.supplier.name,
-            //productNameKey: GameDataManager.Instance.GetProductById(offer.productId).name,
-            costPerUnit: weekSupply.price + "$"
+            supplierName: GameDataManager.Instance.GetSupplierById(weekSupply.supplierId).name,
+            costPerUnit: weekSupply.price.ToString("0.00")
         );
         
         _weekSupply = weekSupply;
@@ -42,13 +39,12 @@ public class RawProductSupplyItemController : MonoBehaviour
 
     public void LoadMap()
     {
-        float x = (float)_weekSupply.supplier.latitude;
-        float y = (float)_weekSupply.supplier.longitude;
+        float x = (float)GameDataManager.Instance.GetSupplierById(_weekSupply.supplierId).latitude;
+        float y = (float)GameDataManager.Instance.GetSupplierById(_weekSupply.supplierId).longitude;
         MapManager.SnapToLocaltionOnOpenMap = new Vector2(x, y);
 
+        MainMenuManager.Instance.IsInTradePage = false;
         MainMenuManager.Instance.OnLoadMapSceneButtonClick();
-
-        GameinSuppliersController.Instance.SetGameinSuppliersCanvasActive(false);
     }
 
     public void OnMakeADealWithSupplierButtonClicked()

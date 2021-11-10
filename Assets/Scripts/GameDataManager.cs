@@ -61,7 +61,11 @@ public class GameDataManager : MonoBehaviour
     public void OnGetCurrentWeekSuppliesResponse(GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse)
     {
         CurrentWeekSupplies = getCurrentWeekSuppliesResponse.currentWeekSupplies;
-        GameinSuppliersController.Instance.UpdateSupplies();
+
+        if (MainMenuManager.Instance.IsInTradePage)
+        {
+            GameinSuppliersController.Instance.UpdateSupplies();
+        }
     }
     
     public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
@@ -157,6 +161,11 @@ public class GameDataManager : MonoBehaviour
         }
         return "Supplier";
     }
+
+    public Utils.Supplier GetSupplierById(int supplierId)
+    {
+        return GameinSuppliers.FirstOrDefault(s => s.id == supplierId);
+    }
     
     public string GetProductName(int productId)
     {
@@ -172,12 +181,12 @@ public class GameDataManager : MonoBehaviour
 
     public List<Utils.Product> GetRawProducts()
     {
-        return Products.Where(p => p.productType == Utils.ProductType.RawMaterial) as List<Utils.Product>;
+        return Products.Where(p => p.productType == Utils.ProductType.RawMaterial).ToList();
     }
 
     public List<Utils.WeekSupply> GetCurrentWeekRawProductSupplies(int rawProductId)
     {
-        return CurrentWeekSupplies.Where(s => s.productId == rawProductId) as List<Utils.WeekSupply>;
+        return CurrentWeekSupplies.Where(s => s.productId == rawProductId).ToList();
     }
 
     public Vector2 GetMyTeamLocaionOnMap()
