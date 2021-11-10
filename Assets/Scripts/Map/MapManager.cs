@@ -12,6 +12,7 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
     public static Vector2 SnapToLocaltionOnOpenMap;
+    public static bool IsInMap = false;
 
     private AbstractMap _abstractMap;
     private QuadTreeCameraMovement _quadTreeCameraMovement;
@@ -39,7 +40,12 @@ public class MapManager : MonoBehaviour
     public List<MapUtils.MapAgentMarker> MapAgentMarkers;
     [Space]
     public GameObject MapLinePrefab;
+    public GameObject MapLinesParent;
     public List<MapUtils.MapLine> MapLines;
+    [Space]
+    public GameObject SnapToMyTeamLocationButtonGameObject;
+
+    private List<GameObject> _linesSpawnedObjects = new List<GameObject>();
 
     private void Awake()
     {
@@ -72,6 +78,7 @@ public class MapManager : MonoBehaviour
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
 
         MainMenuManager.IsLoadingMap = false;
+        IsInMap = true;
     }
 
     //Also called by a button in MapScene
@@ -94,13 +101,10 @@ public class MapManager : MonoBehaviour
             if (transport.transportState == Utils.TransportState.IN_WAY)
             {
                 MapUtils.OnMapMarker sourceNode = GetOnMapMarkerByTypeAndId(transport.sourceType, transport.sourceId);
-                Debug.Log(transport.sourceType);
-                Debug.Log(transport.sourceId);
                 MapUtils.OnMapMarker destinationNode = GetOnMapMarkerByTypeAndId(transport.destinationType, transport.destinationId);
-                Debug.Log(destinationNode.Index);
+                MapUtils.MapLine.LineType lineType = GetMapLineType(sourceNode, destinationNode);
 
-                //TODO different material for different lineTypes
-                SetMapLine(MapUtils.MapLine.LineType.FactoryToFactory, sourceNode, destinationNode);
+                SetMapLine(lineType, sourceNode, destinationNode);
             }
         }
     }
@@ -115,6 +119,8 @@ public class MapManager : MonoBehaviour
 
         if (GameDataManager.Instance.IsAuctionOver())
         {
+            SnapToMyTeamLocationButtonGameObject.SetActive(true);
+
             int teamId = PlayerPrefs.GetInt("TeamId");
             for (int i = 0; i < GameDataManager.Instance.Teams.Count; i++)
             {
@@ -136,6 +142,8 @@ public class MapManager : MonoBehaviour
         }
         else
         {
+            SnapToMyTeamLocationButtonGameObject.SetActive(false);
+
             Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
             for (int i = 0; i < GameDataManager.Instance.Factories.Count; i++)
             {
@@ -398,7 +406,8 @@ public class MapManager : MonoBehaviour
         {
             if (mapLine.MapLineType == lineType)
             {
-                var instance = Instantiate(MapLinePrefab);
+                var instance = GetLine();
+                instance.GetComponent<LineMaterialSetter>().SetMaterial(mapLine.LineMaterial);
 
                 LineRenderer lineRenderer = instance.GetComponent<LineRenderer>();
                 lineRenderer.SetPosition(0, start.SpawnedObject.transform.position);
@@ -407,6 +416,19 @@ public class MapManager : MonoBehaviour
                 _onMapLines.Add(new MapUtils.OnMapLine(start, end, lineRenderer));
             }
         }
+    }
+
+    private GameObject GetLine()
+    {
+        foreach (GameObject gameObject in _linesSpawnedObjects)
+        {
+            if (!gameObject.activeSelf)
+            {
+                return gameObject;
+            }
+        }
+
+        return Instantiate(MapLinePrefab, MapLinesParent.transform);
     }
 
     public void UpdateLinesLocation()
@@ -419,10 +441,58 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public void UpdateLine(Utils.Transport transport)
+    {
+        MapUtils.OnMapMarker sourceNode = GetOnMapMarkerByTypeAndId(transport.sourceType, transport.sourceId);
+        MapUtils.OnMapMarker destinationNode = GetOnMapMarkerByTypeAndId(transport.destinationType, transport.destinationId);
+        MapUtils.MapLine.LineType lineType = GetMapLineType(sourceNode, destinationNode);
+
+        foreach (MapUtils.OnMapLine onMapLine in _onMapLines)
+        {
+            if (onMapLine.Start == sourceNode && onMapLine.End == destinationNode)
+            {
+                switch (transport.transportState)
+                {
+                    case Utils.TransportState.IN_WAY:
+                        ChangeLineType(onMapLine, lineType);
+                        return;
+                    case Utils.TransportState.SUCCESSFUL:
+                    case Utils.TransportState.CRUSHED:
+                        ChangeLineType(onMapLine, MapUtils.MapLine.LineType.SupplyChain);
+                        return;
+                    case Utils.TransportState.PENDING:
+                        //Do nothing
+                        break;
+                }
+            }
+        }
+
+        SetMapLine(lineType, sourceNode, destinationNode);
+    }
+
+    public void ChangeLineType(MapUtils.OnMapLine onMapLine, MapUtils.MapLine.LineType newLineType)
+    {
+        foreach (MapUtils.MapLine mapLine in MapLines)
+        {
+            if (mapLine.MapLineType == newLineType)
+            {
+                onMapLine.LineRenderer.gameObject.GetComponent<LineMaterialSetter>().SetMaterial(mapLine.LineMaterial);
+            }
+        }
+    }
+
+    public MapUtils.MapLine.LineType GetMapLineType(MapUtils.OnMapMarker sourceNode, MapUtils.OnMapMarker destinationNode)
+    {
+        //TODO
+        return MapUtils.MapLine.LineType.FactoryToFactory;
+    }
+
     #endregion
 
     public void OnBackToMainMenuButtonClick()
     {
+        IsInMap = false;
+
         MainMenuManager.Instance.MainMenuCanvasGameObject.SetActive(true);
         SceneManager.UnloadScene("MapScene");
     }

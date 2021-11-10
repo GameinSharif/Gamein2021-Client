@@ -27,12 +27,37 @@ public class TransportManager : MonoBehaviour
     private void OnGetTransportsResponseReceived(GetTeamTransportsResponse getTeamTransportsResponse)
     {
         Transports = getTeamTransportsResponse.myTeamTransports;
-
-        //update in a list or something
     }
 
     private void OnTransportStateChangedResponseReceived(TransportStateChangedResponse transportStateChangedResponse)
     {
-        //TODO
+        Utils.Transport transport = GetTransportById(transportStateChangedResponse.transport.id);
+        switch (transportStateChangedResponse.transport.transportState)
+        {
+            case Utils.TransportState.IN_WAY:
+                transport.transportState = Utils.TransportState.IN_WAY;
+                break;
+            case Utils.TransportState.SUCCESSFUL:
+                Transports.Remove(transport);
+                //TODO notification or something
+                break;
+            case Utils.TransportState.CRUSHED:
+                Transports.Remove(transport);
+                //TODO notification or something
+                break;
+            case Utils.TransportState.PENDING:
+                Transports.Add(transportStateChangedResponse.transport);
+                break;
+        }
+
+        if (MapManager.IsInMap)
+        {
+            MapManager.Instance.UpdateLine(transportStateChangedResponse.transport);
+        }
+    }
+
+    private Utils.Transport GetTransportById(int id)
+    {
+        return Transports.Find(t => t.id == id);
     }
 }
