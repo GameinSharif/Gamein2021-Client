@@ -122,9 +122,8 @@ public class MapManager : MonoBehaviour
             Utils.Supplier gameinSupplier = GameDataManager.Instance.GameinSuppliers[i];
             SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Supplier, new Vector2d(gameinSupplier.latitude, gameinSupplier.longitude), gameinSupplier.id, gameinSupplier.name);
         }
-        
-        Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
-        for (int i = 0; i < GameDataManager.Instance.Factories.Count; i++)
+
+        if (GameDataManager.Instance.IsAuctionOver())
         {
             SnapToMyTeamLocationButtonGameObject.SetActive(true);
 

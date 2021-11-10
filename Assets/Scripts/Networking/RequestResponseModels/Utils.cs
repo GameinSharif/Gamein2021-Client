@@ -115,16 +115,11 @@ public class Utils
     public class Supplier
     {
         public int id;
-        public String name;
+        public string name;
         public Country country;
         public List<int> materials;
         public double latitude;
         public double longitude;
-    }
-    
-    public enum VehicleType
-    {
-        AIRPLANE, TRUCK, TRAIN, VANET
     }
     
     [Serializable]
@@ -136,11 +131,6 @@ public class Utils
         public int productId;
         public int price;
         public int sales;
-    }
-
-    public enum TransportNodeType
-    {
-        SUPPLIER, GAMEIN_CUSTOMER, DC, FACTORY
     }
     
     [Serializable]
