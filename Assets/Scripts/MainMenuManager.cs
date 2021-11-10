@@ -10,12 +10,17 @@ public class MainMenuManager : MonoBehaviour
     public static MainMenuManager Instance;
     public static bool IsLoadingMap;
 
+    public GameObject MainMenuCanvasGameObject;
+
     private void Awake()
     {
         Instance = this;
         
         GetGameDataRequest getGameDataRequest = new GetGameDataRequest(RequestTypeConstant.GET_GAME_DATA);
         RequestManager.Instance.SendRequest(getGameDataRequest);
+
+        GetTeamTransportsRequest getTeamTransportsRequest = new GetTeamTransportsRequest(RequestTypeConstant.GET_TEAM_TRANSPORTS);
+        RequestManager.Instance.SendRequest(getTeamTransportsRequest);
     }
 
     private void Start()
@@ -33,6 +38,9 @@ public class MainMenuManager : MonoBehaviour
 
         GetProvidersRequest getProvidersRequest = new GetProvidersRequest(RequestTypeConstant.GET_PROVIDERS);
         RequestManager.Instance.SendRequest(getProvidersRequest);
+
+        GetNegotiationsRequest getNegotiationsRequest = new GetNegotiationsRequest(RequestTypeConstant.GET_NEGOTIATIONS);
+        RequestManager.Instance.SendRequest(getNegotiationsRequest);
 
         GetContractsRequest getContractsRequest = new GetContractsRequest(RequestTypeConstant.GET_CONTRACTS);
         RequestManager.Instance.SendRequest(getContractsRequest);

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Mapbox.Unity.Map;
 using Mapbox.Utils;
 using Mapbox.Examples;
@@ -11,6 +12,7 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
     public static Vector2 SnapToLocaltionOnOpenMap;
+    public static bool IsInMap = false;
 
     private AbstractMap _abstractMap;
     private QuadTreeCameraMovement _quadTreeCameraMovement;
@@ -38,7 +40,12 @@ public class MapManager : MonoBehaviour
     public List<MapUtils.MapAgentMarker> MapAgentMarkers;
     [Space]
     public GameObject MapLinePrefab;
+    public GameObject MapLinesParent;
     public List<MapUtils.MapLine> MapLines;
+    [Space]
+    public GameObject SnapToMyTeamLocationButtonGameObject;
+
+    private List<GameObject> _linesSpawnedObjects = new List<GameObject>();
 
     private void Awake()
     {
@@ -58,27 +65,53 @@ public class MapManager : MonoBehaviour
         InitializeMap();
         InitializeGameDataOnMap();
 
-        //SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(0, 0), 0);
-        //SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.Manufacturer, new Vector2(35, 50), 1);
-
-        //SetMapLine(MapUtils.MapLine.LineType.StorageToShop, _onMapMarkers[0], _onMapMarkers[1]);
-
-        //ChangeMapAgentType(_onMapMarkers[0], MapUtils.MapAgentMarker.AgentType.Storage);
-
-        if (SnapToLocaltionOnOpenMap != null)
+        if (SnapToLocaltionOnOpenMap != Vector2.zero)
         {
             SnapToLocation(SnapToLocaltionOnOpenMap);
+        }
+        else
+        {
+            SnapToMyTeamLocation();
         }
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
 
         MainMenuManager.IsLoadingMap = false;
+        IsInMap = true;
+    }
+
+    //Also called by a button in MapScene
+    public void SnapToMyTeamLocation()
+    {
+        SnapToLocation(GameDataManager.Instance.GetMyTeamLocaionOnMap());
     }
 
     private void InitializeGameDataOnMap()
     {
-        for (int i=0; i < GameDataManager.Instance.GameinCustomers.Count; i++)
+        InitializeMapMarkers();
+        InitializeLines();
+    }
+
+    private void InitializeLines()
+    {
+        for (int i=0;i < TransportManager.Instance.Transports.Count; i++)
+        {
+            Utils.Transport transport = TransportManager.Instance.Transports[i];
+            if (transport.transportState == Utils.TransportState.IN_WAY)
+            {
+                MapUtils.OnMapMarker sourceNode = GetOnMapMarkerByTypeAndId(transport.sourceType, transport.sourceId);
+                MapUtils.OnMapMarker destinationNode = GetOnMapMarkerByTypeAndId(transport.destinationType, transport.destinationId);
+                MapUtils.MapLine.LineType lineType = GetMapLineType(sourceNode, destinationNode);
+
+                SetMapLine(lineType, sourceNode, destinationNode);
+            }
+        }
+    }
+
+    private void InitializeMapMarkers()
+    {
+        for (int i = 0; i < GameDataManager.Instance.GameinCustomers.Count; i++)
         {
             Utils.GameinCustomer gameinCustomer = GameDataManager.Instance.GameinCustomers[i];
             SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), gameinCustomer.id, gameinCustomer.name);
@@ -93,19 +126,48 @@ public class MapManager : MonoBehaviour
         Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
         for (int i = 0; i < GameDataManager.Instance.Factories.Count; i++)
         {
-            Utils.Factory factory = GameDataManager.Instance.Factories[i];
-            if (factory.country == country)
-            {
-                SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.NoOwnerFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
+            SnapToMyTeamLocationButtonGameObject.SetActive(true);
 
-            }
-            else
+            int teamId = PlayerPrefs.GetInt("TeamId");
+            for (int i = 0; i < GameDataManager.Instance.Teams.Count; i++)
             {
-                SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
+                Utils.Team team = GameDataManager.Instance.Teams[i];
+                if (team.factoryId == 0)
+                {
+                    continue;
+                }
+                Utils.Factory factory = GameDataManager.Instance.GetFactoryById(team.factoryId);
+                if (team.id == teamId)
+                {
+                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.MyFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, team.teamName);
+                }
+                else
+                {
+                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.OtherFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, team.teamName);
+                }
             }
         }
+        else
+        {
+            SnapToMyTeamLocationButtonGameObject.SetActive(false);
 
-        UpdateAllAuctions();
+            Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
+            for (int i = 0; i < GameDataManager.Instance.Factories.Count; i++)
+            {
+                Utils.Factory factory = GameDataManager.Instance.Factories[i];
+                if (factory.country == country)
+                {
+                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.NoOwnerFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
+
+                }
+                else
+                {
+                    SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory, new Vector2d(factory.latitude, factory.longitude), factory.id, factory.name);
+                }
+            }
+
+            UpdateAllAuctions();
+        }
 
         //TODO do the same thing for other map markers
     }
@@ -215,17 +277,6 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void UpdateAuctionData(int factoryId)
-    {
-        foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
-        {
-            if (onMapMarker.MapAgentMarker.MapAgentType.ToString().Contains("Factory") && onMapMarker.Index == factoryId)
-            {
-                UpdateFactory(onMapMarker);
-            }
-        }
-    }
-
     public void UpdateAllAuctions()
     {
         foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
@@ -278,7 +329,52 @@ public class MapManager : MonoBehaviour
     {
         return _onMapMarkers.First(marker => marker.Index == id);
     }
-    
+
+    public MapUtils.OnMapMarker GetOnMapMarkerByTypeAndId(Utils.TransportNodeType transportNodeType, int transportNodeId)
+    {
+        switch (transportNodeType)
+        {
+            case Utils.TransportNodeType.SUPPLIER:
+                foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+                {
+                    if (onMapMarker.MapAgentMarker.MapAgentType == MapUtils.MapAgentMarker.AgentType.Supplier && onMapMarker.Index == transportNodeId)
+                    {
+                        return onMapMarker;
+                    }
+                }
+                break;
+            case Utils.TransportNodeType.GAMEIN_CUSTOMER:
+                foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+                {
+                    if (onMapMarker.MapAgentMarker.MapAgentType == MapUtils.MapAgentMarker.AgentType.GameinCustomer && onMapMarker.Index == transportNodeId)
+                    {
+                        return onMapMarker;
+                    }
+                }
+                break;
+            case Utils.TransportNodeType.DC:
+                foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+                {
+                    if (onMapMarker.MapAgentMarker.MapAgentType.ToString().Contains("DistributionCenter") && onMapMarker.Index == transportNodeId)
+                    {
+                        return onMapMarker;
+                    }
+                }
+                break;
+            case Utils.TransportNodeType.FACTORY:
+                foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+                {
+                    if (onMapMarker.MapAgentMarker.MapAgentType.ToString().Contains("Factory") && onMapMarker.Index == transportNodeId)
+                    {
+                        return onMapMarker;
+                    }
+                }
+                break;
+        }
+
+        return null;
+    }
+
     public void UpdateMarkersLocation()
     {
         foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
@@ -297,6 +393,14 @@ public class MapManager : MonoBehaviour
     {
         Vector2d vector2d = new Vector2d(location.x, location.y);
         _abstractMap.SetCenterLatitudeLongitude(vector2d);
+        try
+        {
+            _abstractMap.UpdateMap();
+        }
+        catch (Exception)
+        {
+            //just ignore this
+        }
     }
 
     #endregion
@@ -309,7 +413,8 @@ public class MapManager : MonoBehaviour
         {
             if (mapLine.MapLineType == lineType)
             {
-                var instance = Instantiate(MapLinePrefab);
+                var instance = GetLine();
+                instance.GetComponent<LineMaterialSetter>().SetMaterial(mapLine.LineMaterial);
 
                 LineRenderer lineRenderer = instance.GetComponent<LineRenderer>();
                 lineRenderer.SetPosition(0, start.SpawnedObject.transform.position);
@@ -318,6 +423,19 @@ public class MapManager : MonoBehaviour
                 _onMapLines.Add(new MapUtils.OnMapLine(start, end, lineRenderer));
             }
         }
+    }
+
+    private GameObject GetLine()
+    {
+        foreach (GameObject gameObject in _linesSpawnedObjects)
+        {
+            if (!gameObject.activeSelf)
+            {
+                return gameObject;
+            }
+        }
+
+        return Instantiate(MapLinePrefab, MapLinesParent.transform);
     }
 
     public void UpdateLinesLocation()
@@ -330,6 +448,60 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public void UpdateLine(Utils.Transport transport)
+    {
+        MapUtils.OnMapMarker sourceNode = GetOnMapMarkerByTypeAndId(transport.sourceType, transport.sourceId);
+        MapUtils.OnMapMarker destinationNode = GetOnMapMarkerByTypeAndId(transport.destinationType, transport.destinationId);
+        MapUtils.MapLine.LineType lineType = GetMapLineType(sourceNode, destinationNode);
+
+        foreach (MapUtils.OnMapLine onMapLine in _onMapLines)
+        {
+            if (onMapLine.Start == sourceNode && onMapLine.End == destinationNode)
+            {
+                switch (transport.transportState)
+                {
+                    case Utils.TransportState.IN_WAY:
+                        ChangeLineType(onMapLine, lineType);
+                        return;
+                    case Utils.TransportState.SUCCESSFUL:
+                    case Utils.TransportState.CRUSHED:
+                        ChangeLineType(onMapLine, MapUtils.MapLine.LineType.SupplyChain);
+                        return;
+                    case Utils.TransportState.PENDING:
+                        //Do nothing
+                        break;
+                }
+            }
+        }
+
+        SetMapLine(lineType, sourceNode, destinationNode);
+    }
+
+    public void ChangeLineType(MapUtils.OnMapLine onMapLine, MapUtils.MapLine.LineType newLineType)
+    {
+        foreach (MapUtils.MapLine mapLine in MapLines)
+        {
+            if (mapLine.MapLineType == newLineType)
+            {
+                onMapLine.LineRenderer.gameObject.GetComponent<LineMaterialSetter>().SetMaterial(mapLine.LineMaterial);
+            }
+        }
+    }
+
+    public MapUtils.MapLine.LineType GetMapLineType(MapUtils.OnMapMarker sourceNode, MapUtils.OnMapMarker destinationNode)
+    {
+        //TODO
+        return MapUtils.MapLine.LineType.FactoryToFactory;
+    }
+
     #endregion
+
+    public void OnBackToMainMenuButtonClick()
+    {
+        IsInMap = false;
+
+        MainMenuManager.Instance.MainMenuCanvasGameObject.SetActive(true);
+        SceneManager.UnloadScene("MapScene");
+    }
 
 }

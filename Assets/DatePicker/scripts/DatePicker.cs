@@ -50,18 +50,4 @@ public class DatePicker : MonoBehaviour
         panelOpened = false;
     }
 
-
-    #region GameObjectMenu
-
-    [MenuItem("GameObject/UI/Date Picker", false, 0)]
-    public static void CreateDatePicker()
-    {
-        GameObject prefab = Resources.Load<GameObject>("DatePicker");
-        if (prefab == null) return;
-
-        GameObject go = Instantiate(prefab, Selection.activeTransform);
-        go.name = "Date Picker";
-    }
-
-    #endregion
 }

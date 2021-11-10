@@ -19,6 +19,7 @@ public class NewOfferPopupController : MonoBehaviour
     public DatePicker OfferDeadline;
 
     private int _selectedProductId = 0;
+    private bool _isSendingRequest = false;
 
     private void Awake()
     {
@@ -37,6 +38,7 @@ public class NewOfferPopupController : MonoBehaviour
 
     private void OnNewOfferResponse(NewOfferResponse newOfferResponse)
     {
+        _isSendingRequest = false;
         if (newOfferResponse.offer != null)
         {
             OffersController.Instance.AddMyOfferToList(newOfferResponse.offer);
@@ -51,6 +53,8 @@ public class NewOfferPopupController : MonoBehaviour
 
     public void OnOpenNewOfferPopupClick()
     {
+        _isSendingRequest = false;
+
         //TODO clear inputfields
 
         SetProducts();
@@ -103,6 +107,12 @@ public class NewOfferPopupController : MonoBehaviour
 
     public void OnDoneButtonClick()
     {
+        if (_isSendingRequest)
+        {
+            return;
+        }
+        _isSendingRequest = true;
+
         string volume = VolumeInputfield.text;
         string price = PricePerUnitInputfield.text;
         string date = OfferDeadline.currentSelectedDate.text;
