@@ -146,4 +146,10 @@ public class EventManager : MonoBehaviour
     {
         OnTransportStateChangedResponseEvent?.Invoke(transportStateChangedResponse);
     }
+
+    public event Action<ServerTimeResponse> OnServerTimeResponseEvent;
+    public void OnServerTimeResponse(ServerTimeResponse serverTimeResponse)
+    {
+        OnServerTimeResponseEvent?.Invoke(serverTimeResponse);
+    }
 }

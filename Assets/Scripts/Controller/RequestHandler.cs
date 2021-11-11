@@ -97,6 +97,10 @@ public class RequestHandler
                 AuctionFinishedResponse auctionFinishedResponse = JsonConvert.DeserializeObject(responseJson, typeof(AuctionFinishedResponse), new StringEnumConverter()) as AuctionFinishedResponse;
                 EventManager.Instance.OnAuctionFinishedResponse(auctionFinishedResponse);
                 break;
+            case ResponseTypeConstant.SERVER_TIME:
+                ServerTimeResponse serverTimeResponse = JsonUtility.FromJson<ServerTimeResponse>(responseJson);
+                EventManager.Instance.OnServerTimeResponse(serverTimeResponse);
+                break;
         }
     }
 }
