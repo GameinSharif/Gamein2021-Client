@@ -38,25 +38,28 @@ public class RequestHandler
                 GetContractsResponse getContractsResponse = JsonUtility.FromJson<GetContractsResponse>(responseJson);
                 EventManager.Instance.OnGetContractsResponse(getContractsResponse);
                 break;
-            case ResponseTypeConstant.NEW_NEGOTIATION:
+            case ResponseTypeConstant.ACCEPT_OFFER:
                 //TODO
                 break;
             case ResponseTypeConstant.GET_NEGOTIATIONS:
-                //TODO
+                GetNegotiationsResponse getNegotiationsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetNegotiationsResponse), new StringEnumConverter()) as GetNegotiationsResponse;
+                EventManager.Instance.OnGetNegotiationsResponse(getNegotiationsResponse);
                 break;
             case ResponseTypeConstant.EDIT_NEGOTIATION_COST_PER_UNIT:
-                //TODO
+                EditNegotiationCostPerUnitResponse editNegotiationCostPerUnitResponse = JsonConvert.DeserializeObject(responseJson, typeof(EditNegotiationCostPerUnitResponse), new StringEnumConverter()) as EditNegotiationCostPerUnitResponse;
+                EventManager.Instance.OnEditNegotiationCostPerUnitResponse(editNegotiationCostPerUnitResponse);
                 break;
             case ResponseTypeConstant.NEW_PROVIDER:
                 NewProviderResponse newProviderResponse = JsonUtility.FromJson<NewProviderResponse>(responseJson);
                 EventManager.Instance.OnNewProviderResponse(newProviderResponse);
                 break;
             case ResponseTypeConstant.GET_PROVIDERS:
-                GetProvidersResponse getProvidersResponse = JsonUtility.FromJson<GetProvidersResponse>(responseJson);
+                GetProvidersResponse getProvidersResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetProvidersResponse), new StringEnumConverter()) as GetProvidersResponse;
                 EventManager.Instance.OnGetProvidersResponse(getProvidersResponse);
                 break;
             case ResponseTypeConstant.REMOVE_PROVIDER:
-                //TODO
+                RemoveProviderResponse removeProviderResponse = JsonUtility.FromJson<RemoveProviderResponse>(responseJson);
+                EventManager.Instance.OnRemoveProviderResponse(removeProviderResponse);
                 break;
             case ResponseTypeConstant.BUY_DC:
                 BuyDCResponse buyDcResponse = JsonUtility.FromJson<BuyDCResponse>(responseJson);
@@ -72,7 +75,8 @@ public class RequestHandler
                 EventManager.Instance.OnGetStorageProductsResponse(getStorageProductsResponse);
                 break;
             case ResponseTypeConstant.NEW_PROVIDER_NEGOTIATION:
-                //TODO
+                NewProviderNegotiationResponse newProviderNegotiationResponse = JsonConvert.DeserializeObject(responseJson, typeof(NewProviderNegotiationResponse), new StringEnumConverter()) as NewProviderNegotiationResponse;
+                EventManager.Instance.OnNewProviderNegotiationResponse(newProviderNegotiationResponse);
                 break;
             case ResponseTypeConstant.GET_ALL_AUCTIONS:
                 GetAllAuctionsResponse getAllAuctionsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetAllAuctionsResponse), new StringEnumConverter()) as GetAllAuctionsResponse;
@@ -83,15 +87,28 @@ public class RequestHandler
                 EventManager.Instance.OnBidForAuctionResponse(bidForAuctionResponse);
                 break;
             case ResponseTypeConstant.TERMINATE_OFFER:
-                //TODO
+                TerminateOfferResponse terminateOfferResponse = JsonUtility.FromJson<TerminateOfferResponse>(responseJson);
+                EventManager.Instance.OnTerminateOfferResponse(terminateOfferResponse);
                 break;
             case ResponseTypeConstant.NEW_MESSAGE:
                 NewMessageResponse newMessageResponse = JsonUtility.FromJson<NewMessageResponse>(responseJson);
                 EventManager.Instance.OnNewMessageResponse(newMessageResponse);
                 break;
-            case ResponseTypeConstant.GET_All_CHATS:
+            case ResponseTypeConstant.GET_ALL_CHATS:
                 GetAllChatsResponse getAllChatsResponse = JsonUtility.FromJson<GetAllChatsResponse>(responseJson);
                 EventManager.Instance.OnGetAllChatsResponse(getAllChatsResponse);
+                break;
+            case ResponseTypeConstant.GET_TEAM_TRANSPORTS:
+                GetTeamTransportsResponse getTeamTransportsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetTeamTransportsResponse), new StringEnumConverter()) as GetTeamTransportsResponse;
+                EventManager.Instance.OnGetTeamTransportsResponse(getTeamTransportsResponse);
+                break;
+            case ResponseTypeConstant.TRANSPORT_STATE_CHANGED:
+                TransportStateChangedResponse transportStateChangedResponse = JsonConvert.DeserializeObject(responseJson, typeof(TransportStateChangedResponse), new StringEnumConverter()) as TransportStateChangedResponse;
+                EventManager.Instance.OnTransportStateChangedResponse(transportStateChangedResponse);
+                break;
+            case ResponseTypeConstant.AUCTION_FINISHED:
+                AuctionFinishedResponse auctionFinishedResponse = JsonConvert.DeserializeObject(responseJson, typeof(AuctionFinishedResponse), new StringEnumConverter()) as AuctionFinishedResponse;
+                EventManager.Instance.OnAuctionFinishedResponse(auctionFinishedResponse);
                 break;
         }
     }

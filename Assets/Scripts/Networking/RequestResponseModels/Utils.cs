@@ -13,6 +13,11 @@ public class Utils
         public int factoryId;
     }
 
+    public enum ProviderState
+    {
+        ACTIVE, TERMINATED
+    }
+
     [Serializable]
     public class Provider
     {
@@ -21,6 +26,7 @@ public class Utils
         public int productId;
         public int capacity;
         public float price;
+        public ProviderState state;
     }
 
     public enum OfferStatus
@@ -42,15 +48,15 @@ public class Utils
 
     public enum NegotiationState
     {
-        CLOSED, DEAL, IN_PROGRESS, PENDING
+        CLOSED, DEAL, IN_PROGRESS
     }
 
     [Serializable]
     public class Negotiation
     {
         public int id;
-        public int demanderTeamId;
-        public int supplierTeamId;
+        public int demanderId;
+        public int supplierId;
         public int productId;
         public int amount;
         public float costPerUnitDemander;
@@ -202,13 +208,56 @@ public class Utils
         public int factoryId;
         public int highestBid;
         public int highestBidTeamId;
+        public int lastRaiseAmount;
         public AuctionBidStatus auctionBidStatus;
     }
 
     public class GameConstants
     {
-        public int AuctionStartValue = 1000;
-        public int AuctionStepValue = 100;
+        public int AuctionStartValue;
+        public int AuctionInitialStepValue;
+        public int AuctionRoundDurationSeconds;
         public List<CustomDateTime> AuctionRoundsStartTime;
+    }
+
+    public enum VehicleType
+    {
+        AIRPLANE, TRUCK, TRAIN, VANET
+    }
+
+    public class Vehicle
+    {
+        public int id;
+        public VehicleType vehicleType;
+        public int speed;
+        public int capacity;
+        public int costPerKilometer;
+        public float coefficient;
+    }
+
+    public enum TransportNodeType
+    {
+        SUPPLIER, GAMEIN_CUSTOMER, DC, FACTORY
+    }
+
+    public enum TransportState
+    {
+        SUCCESSFUL, IN_WAY, CRUSHED, PENDING
+    }
+
+    public class Transport
+    {
+        public int id;
+        public VehicleType vehicleType;
+        public TransportNodeType sourceType;
+        public int sourceId;
+        public TransportNodeType destinationType;
+        public int destinationId;
+        public CustomDate startDate;
+        public CustomDate endDate;
+        public bool hasInsurance;
+        public TransportState transportState;
+        public int contentProductId;
+        public int contentProductAmount;
     }
 }

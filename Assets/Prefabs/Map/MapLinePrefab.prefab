@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5860706683937244220}
   - component: {fileID: 5860706683937244223}
+  - component: {fileID: 3909559357060291910}
   m_Layer: 0
   m_Name: MapLinePrefab
   m_TagString: Untagged
@@ -129,3 +130,16 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 0
   m_Loop: 0
+--- !u!114 &3909559357060291910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5860706683937244222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cea31471ee2e7945b7b5ddec5b045fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LineRenderer: {fileID: 5860706683937244223}

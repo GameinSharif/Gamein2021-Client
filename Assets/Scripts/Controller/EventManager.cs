@@ -94,6 +94,30 @@ public class EventManager : MonoBehaviour
         OnNewProviderResponseEvent?.Invoke(newProviderResponse);
     }
 
+    public event Action<GetNegotiationsResponse> OnGetNegotiationsResponseEvent;
+    public void OnGetNegotiationsResponse(GetNegotiationsResponse getNegotiationsResponse)
+    {
+        OnGetNegotiationsResponseEvent?.Invoke(getNegotiationsResponse);
+    }
+
+    public event Action<NewProviderNegotiationResponse> OnNewProviderNegotiationResponseEvent;
+    public void OnNewProviderNegotiationResponse(NewProviderNegotiationResponse newProviderNegotiationResponse)
+    {
+        OnNewProviderNegotiationResponseEvent?.Invoke(newProviderNegotiationResponse);
+    }
+
+    public event Action<EditNegotiationCostPerUnitResponse> OnEditNegotiationCostPerUnitResponseEvent;
+    public void OnEditNegotiationCostPerUnitResponse(EditNegotiationCostPerUnitResponse editNegotiationCostPerUnitResponse)
+    {
+        OnEditNegotiationCostPerUnitResponseEvent?.Invoke(editNegotiationCostPerUnitResponse);
+    }
+
+    public event Action<RemoveProviderResponse> OnRemoveProviderResponseEvent;
+    public void OnRemoveProviderResponse(RemoveProviderResponse removeProviderResponse)
+    {
+        OnRemoveProviderResponseEvent?.Invoke(removeProviderResponse);
+    }
+
     public event Action<BidForAuctionResponse> OnBidForAuctionResponseEvent;
     public void OnBidForAuctionResponse(BidForAuctionResponse bidForAuctionResponse)
     {
@@ -106,6 +130,18 @@ public class EventManager : MonoBehaviour
         OnGetAllAuctionsResponseEvent?.Invoke(getAllAuctionsResponse);
     }
 
+    public event Action<AuctionFinishedResponse> OnAuctionFinishedResponseEvent;
+    public void OnAuctionFinishedResponse(AuctionFinishedResponse auctionFinishedResponse)
+    {
+        OnAuctionFinishedResponseEvent?.Invoke(auctionFinishedResponse);
+    }
+
+    public event Action<TerminateOfferResponse> OnTerminateOfferResponseEvent;
+    public void OnTerminateOfferResponse(TerminateOfferResponse terminateOfferResponse)
+    {
+        OnTerminateOfferResponseEvent?.Invoke(terminateOfferResponse);
+    }
+
     public event Action<NewMessageResponse> OnNewMessageResponseEvent;
     public void OnNewMessageResponse(NewMessageResponse newMessageResponse)
     {
@@ -116,5 +152,17 @@ public class EventManager : MonoBehaviour
     public void OnGetAllChatsResponse(GetAllChatsResponse getAllChatsResponse)
     {
         OnGetAllChatsResponseEvent?.Invoke(getAllChatsResponse);
+    }
+
+    public event Action<GetTeamTransportsResponse> OnGetTeamTransportsResponseEvent;
+    public void OnGetTeamTransportsResponse(GetTeamTransportsResponse getTeamTransportsResponse)
+    {
+        OnGetTeamTransportsResponseEvent?.Invoke(getTeamTransportsResponse);
+    }
+
+    public event Action<TransportStateChangedResponse> OnTransportStateChangedResponseEvent;
+    public void OnTransportStateChangedResponse(TransportStateChangedResponse transportStateChangedResponse)
+    {
+        OnTransportStateChangedResponseEvent?.Invoke(transportStateChangedResponse);
     }
 }

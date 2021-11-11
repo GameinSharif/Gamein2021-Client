@@ -7,7 +7,7 @@ public enum ResponseTypeConstant
     GET_GAME_DATA = 4,
     GET_CURRENT_WEEK_DEMANDS = 5,
     GET_CONTRACTS = 6,
-    NEW_NEGOTIATION = 7,
+    ACCEPT_OFFER = 7,
     GET_NEGOTIATIONS = 8,
     EDIT_NEGOTIATION_COST_PER_UNIT = 9,
     NEW_PROVIDER = 10,
@@ -21,5 +21,8 @@ public enum ResponseTypeConstant
     BID_FOR_AUCTION = 18,
     TERMINATE_OFFER = 19,
     NEW_MESSAGE = 20,
-    GET_All_CHATS = 21
+    GET_ALL_CHATS = 21,
+    GET_TEAM_TRANSPORTS = 22,
+    TRANSPORT_STATE_CHANGED = 23,
+    AUCTION_FINISHED = 24
 }

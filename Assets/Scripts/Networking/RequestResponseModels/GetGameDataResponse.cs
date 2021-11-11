@@ -9,5 +9,7 @@ public class GetGameDataResponse : ResponseObject
     public List<Utils.Product> products;
     public List<Utils.DCDto> dcDtos;
     public List<Utils.Factory> factories;
+    public List<Utils.Vehicle> vehicles;
+    
     public Utils.GameConstants gameConstants;
 }

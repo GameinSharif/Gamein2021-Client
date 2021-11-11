@@ -19,6 +19,8 @@ public class LoginManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        Screen.fullScreen = false;
     }
 
     private void Start()

@@ -12,6 +12,7 @@ public class GameDataManager : MonoBehaviour
     [HideInInspector] public List<Utils.Team> Teams;
     [HideInInspector] public List<Utils.GameinCustomer> GameinCustomers;
     [HideInInspector] public List<Utils.Product> Products;
+    [HideInInspector] public List<Utils.Vehicle> Vehicles;
 
     [HideInInspector] public List<Utils.Auction> Auctions;
     [HideInInspector] public List<Utils.Factory> Factories;
@@ -24,12 +25,15 @@ public class GameDataManager : MonoBehaviour
 
     public List<Sprite> ProductSprites;
 
+    private int _auctionCurrentRound = 0;
+
     private void Awake()
     {
         Instance = this;
         EventManager.Instance.OnGetGameDataResponseEvent += OnGetGameDataResponse;
         EventManager.Instance.OnGetCurrentWeekDemandsResponseEvent += OnGetCurrentWeekDemandsResponse;
         EventManager.Instance.OnGetAllAuctionsResponseEvent += OnGetAllAuctionsResponse;
+        EventManager.Instance.OnAuctionFinishedResponseEvent += OnAuctionFinishedResponse;
     }
 
     public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
@@ -38,7 +42,7 @@ public class GameDataManager : MonoBehaviour
         GameinCustomers = getGameDataResponse.gameinCustomers;
         Products = getGameDataResponse.products;
         DCDtos = getGameDataResponse.dcDtos;
-
+        Vehicles = getGameDataResponse.vehicles;
         Factories = getGameDataResponse.factories;
 
         GameConstants = getGameDataResponse.gameConstants;
@@ -59,6 +63,33 @@ public class GameDataManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "MapScene")
             MapManager.Instance.UpdateAllAuctions();
+
+        _auctionCurrentRound = 0;
+        foreach(CustomDateTime customDateTime in GameConstants.AuctionRoundsStartTime)
+        {
+            if (DateTime.Now >= customDateTime.ToDateTime())
+            {
+                _auctionCurrentRound++;
+            }
+        }
+
+        //TODO update auction remained time
+    }
+
+    public void OnAuctionFinishedResponse(AuctionFinishedResponse auctionFinishedResponse)
+    {
+        Teams = auctionFinishedResponse.teams;
+
+        int teamId = PlayerPrefs.GetInt("TeamId");
+        foreach (Utils.Team team in Teams)
+        {
+            if (team.id == teamId)
+            {
+                PlayerPrefs.SetInt("FactoryId", team.factoryId);
+            }
+        }
+
+        SceneManager.UnloadScene("MapScene");
     }
     
     public Utils.Auction GetAuctionByFactoryId(int id)
@@ -78,14 +109,19 @@ public class GameDataManager : MonoBehaviour
             Auctions.Add(auction);
         }
 
-        MapManager.Instance.UpdateAuctionData(auction.factoryId);
+        MapManager.Instance.UpdateAllAuctions();
     }
     
     public Utils.Factory GetFactoryById(int id)
     {
         return Factories.First(f => f.id == id);
     }
-    
+
+    public Utils.Team GetTeamById(int id)
+    {
+        return Teams.First(t => t.id == id);
+    }
+
     public List<Utils.WeekDemand> GetCurrentWeekDemands(int gameinCustomerId)
     {
         return CurrentWeekDemands.Where(d => d.gameinCustomer.id == gameinCustomerId) as List<Utils.WeekDemand>;
@@ -103,8 +139,41 @@ public class GameDataManager : MonoBehaviour
         return "Team";
     }
 
+    public Vector2 GetMyTeamLocaionOnMap()
+    {
+        int teamId = PlayerPrefs.GetInt("TeamId");
+        Utils.Factory factory = GetFactoryById(GetTeamById(teamId).factoryId);
+        return new Vector2((float)factory.latitude, (float)factory.longitude);
+    }
+
+    public Vector2 GetLocationByTypeAndId(Utils.TransportNodeType transportNodeType, int transportNodeId)
+    {
+        switch (transportNodeType)
+        {
+            case Utils.TransportNodeType.SUPPLIER:
+                //Todo
+                break;
+            case Utils.TransportNodeType.GAMEIN_CUSTOMER:
+                Utils.GameinCustomer gameinCustomer = GameinCustomers.First(c => c.id == transportNodeId);
+                return new Vector2((float)gameinCustomer.latitude, (float)gameinCustomer.longitude);
+            case Utils.TransportNodeType.DC:
+                //TODO
+                break;
+            case Utils.TransportNodeType.FACTORY:
+                Utils.Factory factory = Factories.First(f => f.id == transportNodeId);
+                return new Vector2((float)factory.latitude, (float)factory.longitude);
+        }
+
+        return Vector2.zero;
+    }
+
     public Utils.Product GetProductById(int id)
     {
         return Products.First(p => p.id == id);
+    }
+
+    public bool IsAuctionOver()
+    {
+        return DateTime.Now > GameConstants.AuctionRoundsStartTime[GameConstants.AuctionRoundsStartTime.Count - 1].ToDateTime().AddSeconds(GameConstants.AuctionRoundDurationSeconds);
     }
 }

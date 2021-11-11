@@ -23,21 +23,21 @@ public class BidForAuctionManager : MonoBehaviour
     {
         if (bidForAuctionResponse.result == "success")
         {
-            int teamId = PlayerPrefs.GetInt("TeamId");
-            if (bidForAuctionResponse.auction.highestBidTeamId == teamId)
-            {
-                if (SceneManager.GetActiveScene().name == "MapScene")
-                {
-                    successfulResult.SetActive(true);
-                    unsuccessfulResult.SetActive(false);
-                    bidResultPopUp.SetActive(true);
-                }
-            }
+            //int teamId = PlayerPrefs.GetInt("TeamId");
+            //if (bidForAuctionResponse.auction.highestBidTeamId == teamId)
+            //{
+            //    if (MapManager.IsInMap)
+            //    {
+            //        successfulResult.SetActive(true);
+            //        unsuccessfulResult.SetActive(false);
+            //        bidResultPopUp.SetActive(true);
+            //    }
+            //}
             GameDataManager.Instance.UpdateAuctionElement(bidForAuctionResponse.auction);
         }
         else
         {
-            if (SceneManager.GetActiveScene().name == "MapScene")
+            if (MapManager.IsInMap)
             {
                 successfulResult.SetActive(false);
                 unsuccessfulResult.SetActive(true);
