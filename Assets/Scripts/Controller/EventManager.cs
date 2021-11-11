@@ -152,4 +152,17 @@ public class EventManager : MonoBehaviour
     {
         OnServerTimeResponseEvent?.Invoke(serverTimeResponse);
     }
+
+    public event Action<GameTimeResponse> OnGameTimeResponseEvent;
+    public void OnGameTimeResponse(GameTimeResponse gameTimeResponse)
+    {
+        OnGameTimeResponseEvent?.Invoke(gameTimeResponse);
+    }
+    
+    public event Action<MoneyUpdateResponse> OnMoneyUpdateResponseEvent;
+    public void OnMoneyUpdateResponse(MoneyUpdateResponse moneyUpdateResponse)
+    {
+        OnMoneyUpdateResponseEvent?.Invoke(moneyUpdateResponse);
+    }
+
 }

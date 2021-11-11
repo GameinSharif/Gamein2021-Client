@@ -101,6 +101,14 @@ public class RequestHandler
                 ServerTimeResponse serverTimeResponse = JsonUtility.FromJson<ServerTimeResponse>(responseJson);
                 EventManager.Instance.OnServerTimeResponse(serverTimeResponse);
                 break;
+            case ResponseTypeConstant.GAME_TIME:
+                GameTimeResponse gameTimeResponse = JsonUtility.FromJson<GameTimeResponse>(responseJson);
+                EventManager.Instance.OnGameTimeResponse(gameTimeResponse);
+                break;
+            case ResponseTypeConstant.MONEY_UPDATE:
+                MoneyUpdateResponse moneyUpdateResponse = JsonUtility.FromJson<MoneyUpdateResponse>(responseJson);
+                EventManager.Instance.OnMoneyUpdateResponse(moneyUpdateResponse);
+                break;
         }
     }
 }
