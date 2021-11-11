@@ -39,7 +39,8 @@ public class RequestHandler
                 EventManager.Instance.OnGetContractsResponse(getContractsResponse);
                 break;
             case ResponseTypeConstant.ACCEPT_OFFER:
-                //TODO
+                AcceptOfferResponse acceptOfferResponse = JsonUtility.FromJson<AcceptOfferResponse>(responseJson);
+                EventManager.Instance.OnAcceptOfferResponse(acceptOfferResponse);
                 break;
             case ResponseTypeConstant.GET_NEGOTIATIONS:
                 GetNegotiationsResponse getNegotiationsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetNegotiationsResponse), new StringEnumConverter()) as GetNegotiationsResponse;

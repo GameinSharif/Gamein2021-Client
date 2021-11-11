@@ -164,5 +164,11 @@ public class EventManager : MonoBehaviour
     {
         OnMoneyUpdateResponseEvent?.Invoke(moneyUpdateResponse);
     }
+    
+    public event Action<AcceptOfferResponse> OnAcceptOfferResponseEvent;
+    public void OnAcceptOfferResponse(AcceptOfferResponse acceptOfferResponse)
+    {
+        OnAcceptOfferResponseEvent?.Invoke(acceptOfferResponse);
+    }
 
 }

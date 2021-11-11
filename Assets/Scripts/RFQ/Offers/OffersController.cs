@@ -13,9 +13,11 @@ public class OffersController : MonoBehaviour
 
     public GameObject MyTeamOffersScrollViewParent;
     public GameObject OtherTeamsOffersScrollViewParent;
+    public GameObject AcceptedOffersScrollViewParent;
 
     private List<OfferItemController> _myTeamOfferItemControllers = new List<OfferItemController>();
     private List<OfferItemController> _otherTeamsOfferItemControllers = new List<OfferItemController>();
+    private List<OfferItemController> _acceptedOfferItemControllers = new List<OfferItemController>();
     private List<GameObject> _spawnedGameObjects = new List<GameObject>();
 
     void Awake()
@@ -37,12 +39,16 @@ public class OffersController : MonoBehaviour
     {
         List<Utils.Offer> myTeamOffers = getOffersResponse.myTeamOffers;
         List<Utils.Offer> otherTeamsOffers = getOffersResponse.otherTeamsOffers;
+        List<Utils.Offer> acceptedOffers = getOffersResponse.acceptedOffersByMyTeam;
 
         myTeamOffers.Reverse();
         otherTeamsOffers.Reverse();
+        acceptedOffers.Reverse();
 
         _myTeamOfferItemControllers.Clear();
         _otherTeamsOfferItemControllers.Clear();
+        _acceptedOfferItemControllers.Clear();
+        
         DeactiveAllChildrenInScrollPanel();
 
         for (int i = 0; i < myTeamOffers.Count; i++)
@@ -53,11 +59,16 @@ public class OffersController : MonoBehaviour
         {
             AddOtherOfferToList(otherTeamsOffers[i], i + 1);
         }
+
+        for (int i = 0; i < acceptedOffers.Count; i++)
+        {
+            AddAcceptedOfferToList(acceptedOffers[i], i + 1);
+        }
     }
 
     public void AddMyOfferToList(Utils.Offer offer)
     {
-        AddMyOfferToList(offer, _myTeamOfferItemControllers.Count);
+        AddMyOfferToList(offer, _myTeamOfferItemControllers.Count + 1);
     }
 
     private void AddMyOfferToList(Utils.Offer offer, int index)
@@ -82,6 +93,23 @@ public class OffersController : MonoBehaviour
 
         _otherTeamsOfferItemControllers.Add(controller);
         createdItem.SetActive(true);
+    }
+
+    private void AddAcceptedOfferToList(Utils.Offer offer, int index)
+    {
+        GameObject createdItem = GetItem(AcceptedOffersScrollViewParent);
+        createdItem.transform.SetSiblingIndex(index);
+        
+        OfferItemController controller = createdItem.GetComponent<OfferItemController>();
+        controller.SetInfo(index, offer);
+        
+        _acceptedOfferItemControllers.Add(controller);
+        createdItem.SetActive(true);
+    }
+
+    public void AddAcceptedOfferToList(Utils.Offer offer)
+    {
+        AddAcceptedOfferToList(offer, _acceptedOfferItemControllers.Count + 1);
     }
 
     private GameObject GetItem(GameObject parent)

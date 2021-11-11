@@ -10,7 +10,7 @@ public class MainHeaderManager : MonoBehaviour
     public CustomDate gameDate = new CustomDate(0,0,0);
 
     public GameObject header;
-    public RTLTextMeshPro moneyText;
+    public RTLTextMeshPro moneyRTLTMP;
     public RTLTextMeshPro gameDateText;
 
     private void Awake()
@@ -23,7 +23,7 @@ public class MainHeaderManager : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(header);
-        SetMoney();
+        Money = 0; // test
         SetDate();
     }
 
@@ -35,19 +35,24 @@ public class MainHeaderManager : MonoBehaviour
 
     private void OnMoneyUpdateReceived(MoneyUpdateResponse moneyUpdateResponse)
     {
-        PlayerPrefs.SetInt("Money", moneyUpdateResponse.money);
-        SetMoney();
+        Money = moneyUpdateResponse.money;
     }
 
-    private void SetMoney()
+    public int Money
     {
-        moneyText.text = PlayerPrefs.GetInt("Money", 0) + "$";
+        set
+        {
+            PlayerPrefs.SetInt("Money", value);
+            moneyRTLTMP.text = value + "$";
+        }
+
+        get => PlayerPrefs.GetInt("Money", 0);
     }
 
     private void SetDate()
     {
-        gameDateText.text = gameDate.year + "\\" +
-                            gameDate.month.ToString().PadLeft(2, '0') + "\\" + 
+        gameDateText.text = gameDate.year + "/" +
+                            gameDate.month.ToString().PadLeft(2, '0') + "/" + 
                             gameDate.day.ToString().PadLeft(2, '0');
     }
 }
