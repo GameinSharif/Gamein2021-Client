@@ -13,8 +13,10 @@ namespace ProductionLine
         public Transform tableParent;
 
         public ProductionLineDetail productionLineDetail;
-        public int currentDetailId = -1;
+        public Transform constructButton;
+        public GameObject constructPopup;
 
+        private int currentDetailId = -1;
         private List<ProductionLineTableRow> productionLineTableRows = new List<ProductionLineTableRow>();
 
         private void Awake()
@@ -54,12 +56,13 @@ namespace ProductionLine
                 productionLineDetail.gameObject.SetActive(false);
                 return;
             }
+
             currentDetailId = id;
             productionLineDetail.gameObject.SetActive(true);
             productionLineDetail.SetData(productionLine.Data);
         }
-        
-        public void UpdateDetails(Utils.ProductionLineDto data)
+
+        private void UpdateDetails(Utils.ProductionLineDto data)
         {
             if (currentDetailId == data.id)
             {
@@ -67,16 +70,35 @@ namespace ProductionLine
             }
         }
 
+        private void UpdateRowNumbers()
+        {
+            for (int i = 0; i < productionLineTableRows.Count; i++)
+            {
+                productionLineTableRows[i].SetRowNumber(i + 1);
+            }
+
+            constructButton.SetAsLastSibling();
+        }
+        
+        public void PopupConstructProductionLine()
+        {
+            constructPopup.SetActive(true);
+        }
+
         #region response events functions
 
         private void OnGetProductionLinesResponse(GetProductionLinesResponse response)
         {
-            foreach (var productionLineData in response.productionLines)
+            foreach (var item in response.productionLines
+                    .Where(c => c.status == ProductionLineStatus.ACTIVE))
             {
+                if (item.status == ProductionLineStatus.SCRAPPED) continue;
                 var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
-                current.SetData(productionLineData);
+                current.SetData(item);
                 productionLineTableRows.Add(current);
             }
+
+            UpdateRowNumbers();
         }
 
         private void OnConstructProductionLineResponse(ConstructProductionLineResponse response)
@@ -85,6 +107,7 @@ namespace ProductionLine
             var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
             current.SetData(response.productionLine, true);
             productionLineTableRows.Add(current);
+            UpdateRowNumbers();
         }
 
         private void OnScrapProductionLineResponse(ScrapProductionLineResponse response)
@@ -93,7 +116,8 @@ namespace ProductionLine
             if (current is null) return;
             productionLineTableRows.Remove(current);
             Destroy(current.gameObject);
-            
+            UpdateRowNumbers();
+
             ShowDetails(-1);
         }
 
