@@ -146,4 +146,29 @@ public class EventManager : MonoBehaviour
     {
         OnTransportStateChangedResponseEvent?.Invoke(transportStateChangedResponse);
     }
+
+    public event Action<ServerTimeResponse> OnServerTimeResponseEvent;
+    public void OnServerTimeResponse(ServerTimeResponse serverTimeResponse)
+    {
+        OnServerTimeResponseEvent?.Invoke(serverTimeResponse);
+    }
+
+    public event Action<GameTimeResponse> OnGameTimeResponseEvent;
+    public void OnGameTimeResponse(GameTimeResponse gameTimeResponse)
+    {
+        OnGameTimeResponseEvent?.Invoke(gameTimeResponse);
+    }
+    
+    public event Action<MoneyUpdateResponse> OnMoneyUpdateResponseEvent;
+    public void OnMoneyUpdateResponse(MoneyUpdateResponse moneyUpdateResponse)
+    {
+        OnMoneyUpdateResponseEvent?.Invoke(moneyUpdateResponse);
+    }
+    
+    public event Action<AcceptOfferResponse> OnAcceptOfferResponseEvent;
+    public void OnAcceptOfferResponse(AcceptOfferResponse acceptOfferResponse)
+    {
+        OnAcceptOfferResponseEvent?.Invoke(acceptOfferResponse);
+    }
+
 }

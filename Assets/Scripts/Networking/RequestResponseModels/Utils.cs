@@ -127,7 +127,7 @@ public class Utils
         public ProductType productType;
         public string name;
         public int volumetricUnit;
-        public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 36)
+        public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 27)
     }
 
     [Serializable]
@@ -179,6 +179,9 @@ public class Utils
         public int AuctionInitialStepValue;
         public int AuctionRoundDurationSeconds;
         public List<CustomDateTime> AuctionRoundsStartTime;
+        public int rawMaterialCapacity;
+        public int semiFinishedProductCapacity;
+        public int finishedProductCapacity;
     }
 
     public enum VehicleType
