@@ -23,6 +23,16 @@ public class ContractSupplierItemController : MonoBehaviour
     private List<Utils.ContractSupplierDetail> _contractSupplierDetails;
     private List<GameObject> _spawnedDetailsGameObjects = new List<GameObject>();
 
+    private void OnEnable()
+    {
+        EventManager.Instance.OnTerminateLongtermContractSupplierResponseEvent += OnTerminateLongtermContractSupplierResponseReceived;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnTerminateLongtermContractSupplierResponseEvent -= OnTerminateLongtermContractSupplierResponseReceived;
+    }
+    
     public void SetInfo(int no, string supplierName,  string productNameKey, string contractType)
     {
         this.no.text = no.ToString();
@@ -121,6 +131,19 @@ public class ContractSupplierItemController : MonoBehaviour
     
     public void OnTerminateButtonClicked()
     {
-        // TODO
+        TerminateLongtermContractSupplierRequest terminateLongtermContractSupplier = new TerminateLongtermContractSupplierRequest(RequestTypeConstant.TERMINATE_LONGTERM_CONTRACT_WITH_SUPPLIER, _contractSupplier.id);
+        RequestManager.Instance.SendRequest(terminateLongtermContractSupplier);
+    }
+    
+    private void OnTerminateLongtermContractSupplierResponseReceived(TerminateLongtermContractSupplierResponse terminateLongtermContractSupplierResponse)
+    {
+        if (_contractSupplier.id == terminateLongtermContractSupplierResponse.contractId)
+        {
+            if (terminateLongtermContractSupplierResponse.result == "Successful")
+            {
+                //TODO show that contract was terminated visually
+                TerminateContractButtonGameObject.SetActive(false);
+            }
+        }
     }
 }

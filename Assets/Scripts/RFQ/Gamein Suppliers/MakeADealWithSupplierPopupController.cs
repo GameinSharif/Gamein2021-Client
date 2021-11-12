@@ -20,7 +20,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     public RTLTextMeshPro pricePerUnit;
     public TMP_InputField totalPrice;
     public TMP_InputField finalPrice;
-    public DatePicker arrivalDate; //TODO calculate it and then show it
+    public TMP_InputField arrivalDate; //TODO calculate it and then show it
     public ToggleGroup repetition;
     public ToggleGroup transportationMode;
     public TMP_InputField numberOfRepetition;

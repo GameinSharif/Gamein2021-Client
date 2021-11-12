@@ -89,6 +89,10 @@ public class RequestHandler
                 TerminateOfferResponse terminateOfferResponse = JsonUtility.FromJson<TerminateOfferResponse>(responseJson);
                 EventManager.Instance.OnTerminateOfferResponse(terminateOfferResponse);
                 break;
+            case ResponseTypeConstant.TERMINATE_LONGTERM_CONTRACT_WITH_SUPPLIER:
+                TerminateLongtermContractSupplierResponse terminateLongtermContractSupplierResponse = JsonUtility.FromJson<TerminateLongtermContractSupplierResponse>(responseJson);
+                EventManager.Instance.OnTerminateLongtermContractSupplierResponse(terminateLongtermContractSupplierResponse);
+                break;
             case ResponseTypeConstant.NEW_MESSAGE:
                 NewMessageResponse newMessageResponse = JsonUtility.FromJson<NewMessageResponse>(responseJson);
                 EventManager.Instance.OnNewMessageResponse(newMessageResponse);
