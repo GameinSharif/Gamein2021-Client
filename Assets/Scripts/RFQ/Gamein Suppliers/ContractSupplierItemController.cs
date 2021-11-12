@@ -137,11 +137,11 @@ public class ContractSupplierItemController : MonoBehaviour
     
     private void OnTerminateLongtermContractSupplierResponseReceived(TerminateLongtermContractSupplierResponse terminateLongtermContractSupplierResponse)
     {
-        if (_contractSupplier.id == terminateLongtermContractSupplierResponse.contractId)
+        if (_contractSupplier.id == terminateLongtermContractSupplierResponse.contractSupplier.id)
         {
             if (terminateLongtermContractSupplierResponse.result == "Successful")
             {
-                //TODO show that contract was terminated visually
+                //TODO show that contract was terminated visually and take the penalty
                 TerminateContractButtonGameObject.SetActive(false);
             }
         }

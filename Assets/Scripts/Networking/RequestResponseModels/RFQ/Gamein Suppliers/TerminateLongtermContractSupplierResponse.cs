@@ -4,6 +4,5 @@
 public class TerminateLongtermContractSupplierResponse : ResponseObject
 {
     public String result;
-    public int penalty;
-    public int contractId;
+    public Utils.ContractSupplier contractSupplier;
 }
