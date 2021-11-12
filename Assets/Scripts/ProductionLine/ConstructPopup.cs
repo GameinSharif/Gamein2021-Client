@@ -1,4 +1,5 @@
 ﻿using System;
+using RTLTMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,12 +11,16 @@ namespace ProductionLine
         public Transform choicesParent;
         private int currentSelected = -1;
 
+        private ToggleGroup _toggleGroup;
+        
         private void Awake()
         {
+            print(GameDataManager.Instance.ProductionLineTemplates.Count);
             foreach (var template in GameDataManager.Instance.ProductionLineTemplates)
             {
                 var c = Instantiate(choicePrefab, choicesParent);
                 c.GetComponent<Button>().onClick.AddListener(() => { currentSelected = template.id; });
+                c.GetComponentInChildren<RTLTextMeshPro>().text = template.name;
             }
         }
 
