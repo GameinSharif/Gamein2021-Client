@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RTLTMPro;
 using TMPro;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class DcTabController : MonoBehaviour
     public static DcTabController Instance;
 
     private PoolingSystem<Tuple<Utils.Product, int>> _pool;
+    private List<StorageProductController> _itemControllers;
     private Utils.Storage _dc;
 
     public Transform scrollPanel;
@@ -18,12 +20,13 @@ public class DcTabController : MonoBehaviour
     
     public GameObject actionPopup;
     public TMP_InputField amountInputField;
-    private int? _currentSelectedProductIndex;
+    private Utils.Product _currentSelectedProduct;
 
     private void Awake()
     {
         Instance = this;
         _pool = new PoolingSystem<Tuple<Utils.Product, int>>(scrollPanel, storageProductPrefab, InitializeDcProduct, 25);
+        _itemControllers = new List<StorageProductController>(25);
     }
 
     public void Initialize(Utils.Storage dc)
@@ -31,30 +34,31 @@ public class DcTabController : MonoBehaviour
         _dc = dc;
         dcName.text = "DC " + _dc.DCId;
         
+        _itemControllers.Clear();
         _pool.RemoveAll();
         foreach (Utils.StorageProduct storageProduct in _dc.storageProducts)
         {
             _pool.Add(new Tuple<Utils.Product, int>(GameDataManager.Instance.GetProductById(storageProduct.productId), storageProduct.amount));
         }
         
-        LayoutRebuilder.ForceRebuildLayoutImmediate(scrollPanel as RectTransform);
+        RebuildListLayout();
         
         OnClosePopupButtonClicked();
     }
 
-    public void OnDcProductClicked(int index)
+    public void OnDcProductClicked(Utils.Product product)
     {
-        _currentSelectedProductIndex = index;
+        _currentSelectedProduct = product;
         actionPopup.SetActive(true);
     }
 
     private void InitializeDcProduct(GameObject theGameObject, int index, Tuple<Utils.Product, int> productTuple)
     {
-        var controller = theGameObject.GetComponent<StorageProductController>();
-        controller.SetInfo(index, Utils.StorageType.DC);
-
         var (product, amount) = productTuple;
         
+        var controller = theGameObject.GetComponent<StorageProductController>();
+        controller.SetInfo(product, Utils.StorageType.DC);
+
         controller.name.text = product.name;
         controller.available.text = amount.ToString();
         
@@ -62,12 +66,14 @@ public class DcTabController : MonoBehaviour
         int coming = 0;
         controller.coming.text = coming.ToString();
         controller.total.text = (coming + amount).ToString();
+        
+        _itemControllers.Add(controller);
     }
 
     public void OnSendButtonClicked()
     {
         //TODO send request to server
-        //We have the storage product index from _currentSelectedProductIndex
+        //We have the storage product index from _currentSelectedProduct
         //and we have the amount from amountInputField
     }
 
@@ -80,6 +86,37 @@ public class DcTabController : MonoBehaviour
     {
         actionPopup.SetActive(false);
         amountInputField.text = "";
-        _currentSelectedProductIndex = null;
+        _currentSelectedProduct = null;
+    }
+    
+    public void ChangeProductInList(Utils.StorageProduct storageProduct)
+    {
+        foreach (var controller in _itemControllers)
+        {
+            if (controller.Product.id == storageProduct.productId)
+            {
+                if (storageProduct.amount == 0)
+                {
+                    _pool.Remove(controller.gameObject);
+                    RebuildListLayout();
+                }
+                else
+                {
+                    controller.available.text = storageProduct.amount.ToString();
+                    int coming = int.Parse(controller.coming.OriginalText);
+                    controller.total.text = (coming + storageProduct.amount).ToString();
+                }
+                return;
+            }
+        }
+        
+        var product = GameDataManager.Instance.GetProductById(storageProduct.productId);
+        _pool.Add(new Tuple<Utils.Product, int>(product, storageProduct.amount));
+        RebuildListLayout();
+    }
+    
+    private void RebuildListLayout()
+    {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(scrollPanel as RectTransform);
     }
 }

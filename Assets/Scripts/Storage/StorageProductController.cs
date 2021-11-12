@@ -9,12 +9,14 @@ public class StorageProductController : MonoBehaviour
     public RTLTextMeshPro coming;
     public RTLTextMeshPro total;
 
-    private int _index;
+    private Utils.Product _product;
     private Utils.StorageType _storageType;
 
-    public void SetInfo(int index, Utils.StorageType storageType)
+    public Utils.Product Product => _product;
+
+    public void SetInfo(Utils.Product product, Utils.StorageType storageType)
     {
-        _index = index;
+        _product = product;
         _storageType = storageType;
     }
 
@@ -23,10 +25,10 @@ public class StorageProductController : MonoBehaviour
         switch (_storageType)
         {
             case Utils.StorageType.DC:
-                DcTabController.Instance.OnDcProductClicked(_index);
+                DcTabController.Instance.OnDcProductClicked(_product);
                 break;
             case Utils.StorageType.WAREHOUSE:
-                WarehouseTabController.Instance.OnWarehouseProductClicked(_index);
+                WarehouseTabController.Instance.OnWarehouseProductClicked(_product);
                 break;
         }
     }

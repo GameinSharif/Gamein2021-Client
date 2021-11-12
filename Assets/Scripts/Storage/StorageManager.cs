@@ -32,6 +32,33 @@ public class StorageManager : MonoBehaviour
     {
         Storages = getStorageProductsResponse.storageProducts;
     }
-    
+
+    public void ChangeStockInStorage(int dcId, int productId, int amountToAddOrSubtract)
+    {
+        var storage = Storages.Find(st => st.DCId == dcId);
+        if (storage == null)
+        {
+            //show error?
+            return;
+        }
+
+        var product = storage.storageProducts.Find(p => p.productId == productId);
+
+        if (product == null)
+        {
+            product = new Utils.StorageProduct {productId = productId, amount = amountToAddOrSubtract};
+            storage.storageProducts.Add(product);
+        }
+        else
+        {
+            product.amount += amountToAddOrSubtract;
+            if (product.amount == 0)
+            {
+                storage.storageProducts.Remove(product);
+            }
+        }
+        
+        StorageTabSelector.Instance.ApplyStockChangeToUI(storage, product);
+    }
     
 }

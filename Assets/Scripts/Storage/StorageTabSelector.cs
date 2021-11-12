@@ -14,6 +14,7 @@ public class StorageTabSelector : MonoBehaviour
     public GameObject tabPrefab;
 
     private PoolingSystem<string> _pool;
+    private int? _currentSelectedStorageId = null;
     private void Awake()
     {
         Instance = this;
@@ -61,6 +62,7 @@ public class StorageTabSelector : MonoBehaviour
             new Utils.Product {id = 2, productType = Utils.ProductType.SemiFinished, name = "Sugar Water"},
             new Utils.Product {id = 3, productType = Utils.ProductType.Finished, name = "Coca-Cola"},
             new Utils.Product {id = 4, productType = Utils.ProductType.Finished, name = "Pepsi"},
+            new Utils.Product {id = 5, productType = Utils.ProductType.Finished, name = "Chocolate"},
         };
     }
 
@@ -89,6 +91,8 @@ public class StorageTabSelector : MonoBehaviour
     public void OnTabClicked(int index)
     {
         var storage = StorageManager.Instance.Storages[index];
+        _currentSelectedStorageId = storage.DCId;
+        
         switch (storage.type)
         {
             case Utils.StorageType.DC:
@@ -101,6 +105,22 @@ public class StorageTabSelector : MonoBehaviour
                 warehouseTabView.SetActive(true);
                 WarehouseTabController.Instance.Initialize(storage);
                 break;
+        }
+    }
+
+    public void ApplyStockChangeToUI(Utils.Storage updatedStorage, Utils.StorageProduct updatedProduct)
+    {
+        if (_currentSelectedStorageId == null || _currentSelectedStorageId != updatedStorage.DCId)
+        {
+            return;
+        }
+
+        if (updatedStorage.type == Utils.StorageType.DC && dcTabView.activeInHierarchy)
+        {
+            DcTabController.Instance.ChangeProductInList(updatedProduct);
+        } else if (updatedStorage.type == Utils.StorageType.WAREHOUSE && warehouseTabView.activeInHierarchy)
+        {
+            WarehouseTabController.Instance.ChangeProductInList(updatedProduct);
         }
     }
 }
