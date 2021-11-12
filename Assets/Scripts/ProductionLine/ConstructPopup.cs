@@ -15,7 +15,6 @@ namespace ProductionLine
         
         private void Awake()
         {
-            print(GameDataManager.Instance.ProductionLineTemplates.Count);
             foreach (var template in GameDataManager.Instance.ProductionLineTemplates)
             {
                 var c = Instantiate(choicePrefab, choicesParent);

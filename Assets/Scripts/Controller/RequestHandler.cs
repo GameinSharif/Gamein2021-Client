@@ -41,7 +41,8 @@ public class RequestHandler
                 EventManager.Instance.OnGetContractsResponse(getContractsResponse);
                 break;
             case ResponseTypeConstant.ACCEPT_OFFER:
-                //TODO
+                AcceptOfferResponse acceptOfferResponse = JsonUtility.FromJson<AcceptOfferResponse>(responseJson);
+                EventManager.Instance.OnAcceptOfferResponse(acceptOfferResponse);
                 break;
             case ResponseTypeConstant.GET_NEGOTIATIONS:
                 GetNegotiationsResponse getNegotiationsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetNegotiationsResponse), new StringEnumConverter()) as GetNegotiationsResponse;
@@ -128,6 +129,18 @@ public class RequestHandler
                 EventManager.Instance.OnUpgradeProductionLineEfficiencyResponse(JsonConvert.DeserializeObject(
                     responseJson, typeof(UpgradeProductionLineEfficiencyResponse),
                     new StringEnumConverter()) as UpgradeProductionLineEfficiencyResponse);
+                break;
+            case ResponseTypeConstant.SERVER_TIME:
+                ServerTimeResponse serverTimeResponse = JsonUtility.FromJson<ServerTimeResponse>(responseJson);
+                EventManager.Instance.OnServerTimeResponse(serverTimeResponse);
+                break;
+            case ResponseTypeConstant.GAME_TIME:
+                GameTimeResponse gameTimeResponse = JsonUtility.FromJson<GameTimeResponse>(responseJson);
+                EventManager.Instance.OnGameTimeResponse(gameTimeResponse);
+                break;
+            case ResponseTypeConstant.MONEY_UPDATE:
+                MoneyUpdateResponse moneyUpdateResponse = JsonUtility.FromJson<MoneyUpdateResponse>(responseJson);
+                EventManager.Instance.OnMoneyUpdateResponse(moneyUpdateResponse);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
