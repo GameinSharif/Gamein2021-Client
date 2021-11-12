@@ -228,4 +228,44 @@ public class Utils
         public int productionCostPerOneProduct;
         public List<QualityLevel> qualityLevels;
     }
+    public enum VehicleType
+    {
+        AIRPLANE, TRUCK, TRAIN, VANET
+    }
+
+    public class Vehicle
+    {
+        public int id;
+        public VehicleType vehicleType;
+        public int speed;
+        public int capacity;
+        public int costPerKilometer;
+        public float coefficient;
+    }
+
+    public enum TransportNodeType
+    {
+        SUPPLIER, GAMEIN_CUSTOMER, DC, FACTORY
+    }
+
+    public enum TransportState
+    {
+        SUCCESSFUL, IN_WAY, CRUSHED, PENDING
+    }
+
+    public class Transport
+    {
+        public int id;
+        public VehicleType vehicleType;
+        public TransportNodeType sourceType;
+        public int sourceId;
+        public TransportNodeType destinationType;
+        public int destinationId;
+        public CustomDate startDate;
+        public CustomDate endDate;
+        public bool hasInsurance;
+        public TransportState transportState;
+        public int contentProductId;
+        public int contentProductAmount;
+    }
 }

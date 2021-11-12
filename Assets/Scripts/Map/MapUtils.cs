@@ -47,7 +47,8 @@ public class MapUtils
     {
         public enum LineType
         {
-            FactoryToFactory
+            FactoryToFactory,
+            SupplyChain
         }
 
         public LineType MapLineType;

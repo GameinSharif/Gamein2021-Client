@@ -155,6 +155,17 @@ public class EventManager : MonoBehaviour
         OnGetAllChatsResponseEvent?.Invoke(getAllChatsResponse);
     }
 
+    public event Action<GetTeamTransportsResponse> OnGetTeamTransportsResponseEvent;
+    public void OnGetTeamTransportsResponse(GetTeamTransportsResponse getTeamTransportsResponse)
+    {
+        OnGetTeamTransportsResponseEvent?.Invoke(getTeamTransportsResponse);
+    }
+
+    public event Action<TransportStateChangedResponse> OnTransportStateChangedResponseEvent;
+    public void OnTransportStateChangedResponse(TransportStateChangedResponse transportStateChangedResponse)
+    {
+        OnTransportStateChangedResponseEvent?.Invoke(transportStateChangedResponse);
+    }
     public event Action<GetProductionLinesResponse> OnGetProductionLinesResponseEvent;
 
     public void OnGetProductionLinesResponse(GetProductionLinesResponse response)

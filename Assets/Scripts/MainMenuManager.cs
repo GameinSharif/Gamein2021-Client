@@ -18,6 +18,9 @@ public class MainMenuManager : MonoBehaviour
         
         GetGameDataRequest getGameDataRequest = new GetGameDataRequest(RequestTypeConstant.GET_GAME_DATA);
         RequestManager.Instance.SendRequest(getGameDataRequest);
+
+        GetTeamTransportsRequest getTeamTransportsRequest = new GetTeamTransportsRequest(RequestTypeConstant.GET_TEAM_TRANSPORTS);
+        RequestManager.Instance.SendRequest(getTeamTransportsRequest);
     }
 
     private void Start()

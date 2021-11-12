@@ -12,6 +12,7 @@ public class GameDataManager : MonoBehaviour
     [HideInInspector] public List<Utils.Team> Teams;
     [HideInInspector] public List<Utils.GameinCustomer> GameinCustomers;
     [HideInInspector] public List<Utils.Product> Products;
+    [HideInInspector] public List<Utils.Vehicle> Vehicles;
     [HideInInspector] public List<Utils.ProductionLineTemplate> ProductionLineTemplates;
 
     [HideInInspector] public List<Utils.Auction> Auctions;
@@ -39,6 +40,7 @@ public class GameDataManager : MonoBehaviour
         Teams = getGameDataResponse.teams;
         GameinCustomers = getGameDataResponse.gameinCustomers;
         Products = getGameDataResponse.products;
+        Vehicles = getGameDataResponse.vehicles;
         ProductionLineTemplates = getGameDataResponse.productionLineTemplates;
 
         Debug.Log(ProductionLineTemplates);
@@ -144,6 +146,27 @@ public class GameDataManager : MonoBehaviour
         int teamId = PlayerPrefs.GetInt("TeamId");
         Utils.Factory factory = GetFactoryById(GetTeamById(teamId).factoryId);
         return new Vector2((float)factory.latitude, (float)factory.longitude);
+    }
+
+    public Vector2 GetLocationByTypeAndId(Utils.TransportNodeType transportNodeType, int transportNodeId)
+    {
+        switch (transportNodeType)
+        {
+            case Utils.TransportNodeType.SUPPLIER:
+                //Todo
+                break;
+            case Utils.TransportNodeType.GAMEIN_CUSTOMER:
+                Utils.GameinCustomer gameinCustomer = GameinCustomers.First(c => c.id == transportNodeId);
+                return new Vector2((float)gameinCustomer.latitude, (float)gameinCustomer.longitude);
+            case Utils.TransportNodeType.DC:
+                //TODO
+                break;
+            case Utils.TransportNodeType.FACTORY:
+                Utils.Factory factory = Factories.First(f => f.id == transportNodeId);
+                return new Vector2((float)factory.latitude, (float)factory.longitude);
+        }
+
+        return Vector2.zero;
     }
 
     public Utils.Product GetProductById(int id)
