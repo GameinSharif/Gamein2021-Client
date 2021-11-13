@@ -12,6 +12,7 @@ public class Utils
         public string teamName;
         public Country country;
         public int factoryId;
+        public float credit;
     }
 
     public enum ProviderState
@@ -211,14 +212,16 @@ public class Utils
     [Serializable]
     public class Storage
     {
-        public StorageType type;
-        public int DCId;
-        public List<StorageProduct> storageProducts;
+        public int id;
+        public int buildingId;
+        public bool dc;
+        public List<StorageProduct> products;
     }
 
     [Serializable]
     public class StorageProduct
     {
+        public int id;
         public int productId;
         public int amount;
     }

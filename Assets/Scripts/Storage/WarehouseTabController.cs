@@ -33,7 +33,7 @@ public class WarehouseTabController : MonoBehaviour
     public void Initialize(Utils.Storage warehouse)
     {
         _warehouse = warehouse;
-        warehouseName.text = "Warehouse " + _warehouse.DCId;
+        warehouseName.text = "Warehouse " + _warehouse.id;
         
         OnRawChanged(true);
         
@@ -123,7 +123,7 @@ public class WarehouseTabController : MonoBehaviour
     {
         var list = new List<Tuple<Utils.Product, int>>();
         
-        foreach (var storageProduct in _warehouse.storageProducts)
+        foreach (var storageProduct in _warehouse.products)
         {
             var product = GameDataManager.Instance.GetProductById(storageProduct.productId);
             if (product.productType == type)

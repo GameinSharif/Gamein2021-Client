@@ -62,6 +62,12 @@ public class MainMenuManager : MonoBehaviour
         RequestManager.Instance.SendRequest(request);
     }
 
+    public void OnOpenStoragePageButtonClick()
+    {
+        var request = new GetStorageProductsRequest(RequestTypeConstant.GET_STORAGES);
+        RequestManager.Instance.SendRequest(request);
+    }
+
     public void OnLoadMapSceneButtonClick()
     {
         if (IsLoadingMap)

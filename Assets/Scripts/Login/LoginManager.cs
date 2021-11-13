@@ -83,6 +83,7 @@ public class LoginManager : MonoBehaviour
             PlayerPrefs.SetInt("TeamId", loginResponse.team.id);
             PlayerPrefs.SetInt("FactoryId", loginResponse.team.factoryId); //Is 0 if player has no factory
             PlayerPrefs.SetString("Country", loginResponse.team.country.ToString());
+            PlayerPrefs.SetFloat("Money", loginResponse.team.credit);
 
             SceneManager.LoadScene("MenuScene");
         }
