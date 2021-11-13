@@ -56,6 +56,12 @@ public class MainMenuManager : MonoBehaviour
         GameinSuppliersController.Instance.UpdateSupplies();
     }
 
+    public void OnOpenProductionLinesPageButtonClick()
+    {
+        var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
+        RequestManager.Instance.SendRequest(request);
+    }
+
     public void OnLoadMapSceneButtonClick()
     {
         if (IsLoadingMap)

@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class RequestHandler
     public static void HandleServerResponse(string responseJson)
     {
         ResponseObject responseObject = JsonUtility.FromJson<ResponseObject>(responseJson);
-        ResponseTypeConstant responseTypeConstant = (ResponseTypeConstant)responseObject.responseTypeConstant;
+        ResponseTypeConstant responseTypeConstant = (ResponseTypeConstant) responseObject.responseTypeConstant;
         switch (responseTypeConstant)
         {
             case ResponseTypeConstant.CONNECTION:
@@ -31,7 +32,8 @@ public class RequestHandler
                 EventManager.Instance.OnGetGameDataResponse(getGameDataResponse);
                 break;
             case ResponseTypeConstant.GET_CURRENT_WEEK_DEMANDS:
-                GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse = JsonUtility.FromJson<GetCurrentWeekDemandsResponse>(responseJson);
+                GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse =
+                    JsonUtility.FromJson<GetCurrentWeekDemandsResponse>(responseJson);
                 EventManager.Instance.OnGetCurrentWeekDemandsResponse(getCurrentWeekDemandsResponse);
                 break;
             case ResponseTypeConstant.GET_CURRENT_WEEK_SUPPLIES:
@@ -51,7 +53,8 @@ public class RequestHandler
                 EventManager.Instance.OnGetContractsResponse(getContractsResponse);
                 break;
             case ResponseTypeConstant.ACCEPT_OFFER:
-                //TODO
+                AcceptOfferResponse acceptOfferResponse = JsonUtility.FromJson<AcceptOfferResponse>(responseJson);
+                EventManager.Instance.OnAcceptOfferResponse(acceptOfferResponse);
                 break;
             case ResponseTypeConstant.GET_NEGOTIATIONS:
                 GetNegotiationsResponse getNegotiationsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetNegotiationsResponse), new StringEnumConverter()) as GetNegotiationsResponse;
@@ -112,6 +115,51 @@ public class RequestHandler
             case ResponseTypeConstant.AUCTION_FINISHED:
                 AuctionFinishedResponse auctionFinishedResponse = JsonConvert.DeserializeObject(responseJson, typeof(AuctionFinishedResponse), new StringEnumConverter()) as AuctionFinishedResponse;
                 EventManager.Instance.OnAuctionFinishedResponse(auctionFinishedResponse);
+                break;
+            case ResponseTypeConstant.GET_PRODUCTION_LINES:
+                EventManager.Instance.OnGetProductionLinesResponse(
+                    JsonConvert.DeserializeObject(responseJson, typeof(GetProductionLinesResponse),
+                        new StringEnumConverter()) as GetProductionLinesResponse);
+                break;
+            case ResponseTypeConstant.CONSTRUCT_PRODUCTION_LINE:
+                EventManager.Instance.OnConstructProductionLineResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(ConstructProductionLineResponse),
+                    new StringEnumConverter()) as ConstructProductionLineResponse);
+                break;
+            case ResponseTypeConstant.SCRAP_PRODUCTION_LINE:
+                EventManager.Instance.OnScrapProductionLineResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(ScrapProductionLineResponse),
+                    new StringEnumConverter()) as ScrapProductionLineResponse);
+                break;
+            case ResponseTypeConstant.START_PRODUCTION:
+                EventManager.Instance.OnStartProductionResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(StartProductionResponse),
+                    new StringEnumConverter()) as StartProductionResponse);
+                break;
+            case ResponseTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY:
+                EventManager.Instance.OnUpgradeProductionLineQualityResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(UpgradeProductionLineQualityResponse),
+                    new StringEnumConverter()) as UpgradeProductionLineQualityResponse);
+                break;
+            case ResponseTypeConstant.UPGRADE_PRODUCTION_LINE_EFFICIENCY:
+                EventManager.Instance.OnUpgradeProductionLineEfficiencyResponse(JsonConvert.DeserializeObject(
+                    responseJson, typeof(UpgradeProductionLineEfficiencyResponse),
+                    new StringEnumConverter()) as UpgradeProductionLineEfficiencyResponse);
+                break;
+            case ResponseTypeConstant.SERVER_TIME:
+                ServerTimeResponse serverTimeResponse = JsonUtility.FromJson<ServerTimeResponse>(responseJson);
+                EventManager.Instance.OnServerTimeResponse(serverTimeResponse);
+                break;
+            case ResponseTypeConstant.GAME_TIME:
+                GameTimeResponse gameTimeResponse = JsonUtility.FromJson<GameTimeResponse>(responseJson);
+                EventManager.Instance.OnGameTimeResponse(gameTimeResponse);
+                break;
+            case ResponseTypeConstant.MONEY_UPDATE:
+                MoneyUpdateResponse moneyUpdateResponse = JsonUtility.FromJson<MoneyUpdateResponse>(responseJson);
+                EventManager.Instance.OnMoneyUpdateResponse(moneyUpdateResponse);
+                break;
+            default:
+                Debug.LogWarning(responseJson);
                 break;
         }
     }

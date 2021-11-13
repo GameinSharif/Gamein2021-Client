@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using ProductionLine;
 
 public class Utils
 {
@@ -15,7 +16,8 @@ public class Utils
 
     public enum ProviderState
     {
-        ACTIVE, TERMINATED
+        ACTIVE,
+        TERMINATED
     }
 
     [Serializable]
@@ -31,7 +33,10 @@ public class Utils
 
     public enum OfferStatus
     {
-        ACTIVE, ACCEPTED, TERMINATED, PASSED_DEADLINE
+        ACTIVE,
+        ACCEPTED,
+        TERMINATED,
+        PASSED_DEADLINE
     }
 
     [Serializable]
@@ -48,7 +53,9 @@ public class Utils
 
     public enum NegotiationState
     {
-        CLOSED, DEAL, IN_PROGRESS
+        CLOSED,
+        DEAL,
+        IN_PROGRESS
     }
 
     [Serializable]
@@ -168,11 +175,11 @@ public class Utils
     {
         public int id;
         public string categoryIds; //for SemiFinishedProducts only
-        public int productionLineId; //for SemiFinishedProducts & Finished only
+        public int productionLineTemplateId; //for SemiFinishedProducts & Finished only
         public ProductType productType;
         public string name;
         public int volumetricUnit;
-        public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 36)
+        public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 27)
     }
 
     [Serializable]
@@ -224,6 +231,62 @@ public class Utils
         public int AuctionInitialStepValue;
         public int AuctionRoundDurationSeconds;
         public List<CustomDateTime> AuctionRoundsStartTime;
+        public int rawMaterialCapacity;
+        public int semiFinishedProductCapacity;
+        public int finishedProductCapacity;
+    }
+
+    [Serializable]
+    public class ProductionLineDto
+    {
+        public int id;
+        public int productionLineTemplateId;
+        public int teamId;
+        public List<ProductionLineProductDto> products;
+        public int qualityLevel;
+        public int efficiencyLevel;
+        public ProductionLineStatus status;
+    }
+
+    [Serializable]
+    public class ProductionLineProductDto
+    {
+        public int id;
+        public int productId;
+        public int amount;
+        public CustomDate startDate;
+        public CustomDate endDate;
+    }
+
+    [Serializable]
+    public class EfficiencyLevel
+    {
+        public int efficiencyPercentage;
+        public int upgradeCost;
+    }
+
+    [Serializable]
+    public class QualityLevel
+    {
+        public int upgradeCost;
+        public double brandIncreaseRatioPerProduct;
+    }
+
+    [Serializable]
+    public class ProductionLineTemplate
+    {
+        public int id;
+        public string name;
+        public int constructionCost;
+        public int constructRequiredDays;
+        public int scrapPrice;
+        public int batchSize;
+        public int dailyProductionRate;
+        public List<EfficiencyLevel> efficiencyLevels;
+        public int weeklyMaintenanceCost;
+        public int setupCost;
+        public int productionCostPerOneProduct;
+        public List<QualityLevel> qualityLevels;
     }
 
     public enum VehicleType

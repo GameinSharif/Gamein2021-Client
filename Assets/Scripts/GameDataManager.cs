@@ -14,6 +14,7 @@ public class GameDataManager : MonoBehaviour
     [HideInInspector] public List<Utils.Supplier> GameinSuppliers;
     [HideInInspector] public List<Utils.Product> Products;
     [HideInInspector] public List<Utils.Vehicle> Vehicles;
+    [HideInInspector] public List<Utils.ProductionLineTemplate> ProductionLineTemplates;
 
     [HideInInspector] public List<Utils.Auction> Auctions;
     [HideInInspector] public List<Utils.Factory> Factories;
@@ -44,6 +45,10 @@ public class GameDataManager : MonoBehaviour
         GameinSuppliers = getGameDataResponse.suppliers;
         Products = getGameDataResponse.products;
         Vehicles = getGameDataResponse.vehicles;
+        ProductionLineTemplates = getGameDataResponse.productionLineTemplates;
+
+        Debug.Log(ProductionLineTemplates);
+
         Factories = getGameDataResponse.factories;
 
         GameConstants = getGameDataResponse.gameConstants;
@@ -100,7 +105,7 @@ public class GameDataManager : MonoBehaviour
             }
         }
 
-        SceneManager.UnloadScene("MapScene");
+        SceneManager.UnloadSceneAsync("MapScene");
     }
     
     public Utils.Auction GetAuctionByFactoryId(int id)

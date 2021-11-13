@@ -500,7 +500,7 @@ public class MapManager : MonoBehaviour
         IsInMap = false;
 
         MainMenuManager.Instance.MainMenuCanvasGameObject.SetActive(true);
-        SceneManager.UnloadScene("MapScene");
+        SceneManager.UnloadSceneAsync("MapScene");
     }
 
 }

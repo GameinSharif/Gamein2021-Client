@@ -91,6 +91,7 @@ public class LoginManager : MonoBehaviour
             LoginErrorLocalize.SetKey("login_error_info");
             LoginErrorLocalize.gameObject.SetActive(true);
         }
+        
     }
 
     public void print(string s)

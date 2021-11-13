@@ -12,4 +12,5 @@ public class GetGameDataResponse : ResponseObject
     public List<Utils.Vehicle> vehicles;
 
     public Utils.GameConstants gameConstants;
+    public List<Utils.ProductionLineTemplate> productionLineTemplates;
 }

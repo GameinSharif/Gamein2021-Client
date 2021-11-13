@@ -38,4 +38,7 @@ public enum ResponseTypeConstant
     ADD_PRODUCT = 35,
     REMOVE_PRODUCT = 36,
     GET_STORAGES = 37,
+    SERVER_TIME = 40,
+    GAME_TIME = 41,
+    MONEY_UPDATE = 42,
 }
