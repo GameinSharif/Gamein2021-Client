@@ -7,15 +7,13 @@ public class MaterialSetter : MonoBehaviour
     [SerializeField] private MeshRenderer MeshRenderer;
     [SerializeField] private TextMesh textMesh;
 
-    public void Initialize(MapUtils.MapAgentMarker mapAgentMarker, string name)
+    public void Initialize(MapUtils.MapAgentMarker mapAgentMarker, string name = null)
     {
         MeshRenderer.material = mapAgentMarker.MarkerMaterial;
-        textMesh.text = name;
+        if (name != null)
+        {
+            textMesh.text = name;
+        }
         textMesh.color = mapAgentMarker.TextColor;
-    }
-
-    public void SetMaterial(Material material)
-    {
-        MeshRenderer.material = material;
     }
 }

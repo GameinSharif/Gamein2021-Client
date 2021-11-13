@@ -6,6 +6,7 @@ using Mapbox.Unity.Map;
 using Mapbox.Utils;
 using Mapbox.Examples;
 using System;
+using UnityEngine.SceneManagement;
 using System.Linq;
 
 public class MapManager : MonoBehaviour
@@ -117,6 +118,24 @@ public class MapManager : MonoBehaviour
             SetMapAgentMarker(MapUtils.MapAgentMarker.AgentType.GameinCustomer, new Vector2d(gameinCustomer.latitude, gameinCustomer.longitude), gameinCustomer.id, gameinCustomer.name);
         }
 
+        for (int i = 0; i < GameDataManager.Instance.DCDtos.Count; i++)
+        {
+            Utils.DCDto dcDto = GameDataManager.Instance.DCDtos[i];
+            
+            MapUtils.MapAgentMarker.AgentType agentType;
+            if (dcDto.ownerTeamId == null)
+            {
+                agentType = MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter;
+            } else if (dcDto.ownerTeamId == PlayerPrefs.GetInt("TeamId"))
+            {
+                agentType = MapUtils.MapAgentMarker.AgentType.MyDistributionCenter;
+            }
+            else
+            {
+                agentType = MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter;
+            }
+            
+            SetMapAgentMarker(agentType, new Vector2d(dcDto.latitude, dcDto.longitude), dcDto.DCId, dcDto.name);
         for (int i=0; i < GameDataManager.Instance.GameinSuppliers.Count; i++)
         {
             Utils.Supplier gameinSupplier = GameDataManager.Instance.GameinSuppliers[i];
@@ -166,8 +185,9 @@ public class MapManager : MonoBehaviour
             }
 
             UpdateAllAuctions();
+            
         }
-
+        InitializeAllDCs();
         //TODO do the same thing for other map markers
     }
 
@@ -264,14 +284,14 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void ChangeMapAgentType(MapUtils.OnMapMarker onMapMarker, MapUtils.MapAgentMarker.AgentType newAgentType)
+    public void ChangeMapAgentType(MapUtils.OnMapMarker onMapMarker, MapUtils.MapAgentMarker.AgentType newAgentType, string name = null)
     {
         foreach (MapUtils.MapAgentMarker mapAgentMarker in MapAgentMarkers)
         {
             if (mapAgentMarker.MapAgentType == newAgentType)
             {
                 onMapMarker.MapAgentMarker = mapAgentMarker;
-                onMapMarker.SpawnedObject.GetComponent<MaterialSetter>().SetMaterial(mapAgentMarker.MarkerMaterial);
+                onMapMarker.SpawnedObject.GetComponent<MaterialSetter>().Initialize(mapAgentMarker, name);
             }
         }
     }
@@ -383,7 +403,50 @@ public class MapManager : MonoBehaviour
             spawnedObject.transform.localPosition = _abstractMap.GeoToWorldPosition(location) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);
         }
     }
-    
+
+    private void InitializeAllDCs()
+    {
+        foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+        {
+            switch (onMapMarker.MapAgentMarker.MapAgentType)
+            {
+                case MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter:
+                case MapUtils.MapAgentMarker.AgentType.MyDistributionCenter:
+                case MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter:
+                    
+                    Utils.DCDto dcDto = GameDataManager.Instance.DCDtos.Find(dto => dto.DCId == onMapMarker.Index);
+                    onMapMarker.SpawnedObject.GetComponent<EachDcController>().SetValues(dcDto, onMapMarker.MapAgentMarker.MapAgentType);
+                    break;
+            }
+        }
+    }
+
+    public void UpdateDtoMarker(Utils.DCDto dcDto, bool isSold)
+    {
+        MapUtils.OnMapMarker onMapMarker = _onMapMarkers.Find(marker =>
+            marker.Index == dcDto.DCId &&
+            (marker.MapAgentMarker.MapAgentType == MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter ||
+             marker.MapAgentMarker.MapAgentType == MapUtils.MapAgentMarker.AgentType.MyDistributionCenter ||
+             marker.MapAgentMarker.MapAgentType == MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter));
+        
+        MapUtils.MapAgentMarker.AgentType agentType;
+        if (dcDto.ownerTeamId == null)
+        {
+            agentType = MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter;
+        } else if (dcDto.ownerTeamId == PlayerPrefs.GetInt("TeamId"))
+        {
+            agentType = MapUtils.MapAgentMarker.AgentType.MyDistributionCenter;
+        }
+        else
+        {
+            agentType = MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter;
+        }
+
+        ChangeMapAgentType(onMapMarker, agentType, name);
+        
+        onMapMarker.SpawnedObject.GetComponent<EachDcController>().SetValues(dcDto, onMapMarker.MapAgentMarker.MapAgentType);
+    }
+
     #endregion
 
     #region SnapToLocation

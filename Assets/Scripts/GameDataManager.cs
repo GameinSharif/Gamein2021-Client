@@ -22,6 +22,8 @@ public class GameDataManager : MonoBehaviour
     [HideInInspector] public List<Utils.WeekDemand> CurrentWeekDemands;
     [HideInInspector] public List<Utils.WeekSupply> CurrentWeekSupplies;
 
+    
+    [HideInInspector] public List<Utils.DCDto> DCDtos;
     [HideInInspector] public Utils.GameConstants GameConstants;
 
     public List<Sprite> ProductSprites;
@@ -44,6 +46,7 @@ public class GameDataManager : MonoBehaviour
         GameinCustomers = getGameDataResponse.gameinCustomers;
         GameinSuppliers = getGameDataResponse.suppliers;
         Products = getGameDataResponse.products;
+        DCDtos = getGameDataResponse.dcDtos;
         Vehicles = getGameDataResponse.vehicles;
         ProductionLineTemplates = getGameDataResponse.productionLineTemplates;
 

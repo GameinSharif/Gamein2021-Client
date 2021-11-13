@@ -76,6 +76,19 @@ public class RequestHandler
                 RemoveProviderResponse removeProviderResponse = JsonUtility.FromJson<RemoveProviderResponse>(responseJson);
                 EventManager.Instance.OnRemoveProviderResponse(removeProviderResponse);
                 break;
+            case ResponseTypeConstant.BUY_DC:
+                BuyDCResponse buyDcResponse = JsonUtility.FromJson<BuyDCResponse>(responseJson);
+                EventManager.Instance.OnBuyDCResponse(buyDcResponse);
+                break;
+            case ResponseTypeConstant.SELL_DC:
+                SellDCResponse sellDcResponse = JsonUtility.FromJson<SellDCResponse>(responseJson);
+                EventManager.Instance.OnSellDCResponse(sellDcResponse);
+                break;
+            case ResponseTypeConstant.GET_STORAGE_PRODUCTS:
+                GetStorageProductsResponse getStorageProductsResponse =
+                    JsonUtility.FromJson<GetStorageProductsResponse>(responseJson);
+                EventManager.Instance.OnGetStorageProductsResponse(getStorageProductsResponse);
+                break;
             case ResponseTypeConstant.NEW_PROVIDER_NEGOTIATION:
                 NewProviderNegotiationResponse newProviderNegotiationResponse = JsonConvert.DeserializeObject(responseJson, typeof(NewProviderNegotiationResponse), new StringEnumConverter()) as NewProviderNegotiationResponse;
                 EventManager.Instance.OnNewProviderNegotiationResponse(newProviderNegotiationResponse);

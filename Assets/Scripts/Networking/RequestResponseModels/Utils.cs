@@ -188,6 +188,45 @@ public class Utils
         public int productId;
         public int amount;
     }
+    
+    [Serializable]
+    public class DCDto
+    {
+        public int DCId;
+        public int? ownerTeamId;
+        public string name;
+        public DCType type;
+        public double latitude;
+        public double longitude;
+        public int purchasePrice;
+        public int sellPrice;
+    }
+
+    public enum DCType
+    {
+        MIDDLE, FINAL
+    }
+
+    [Serializable]
+    public class Storage
+    {
+        public StorageType type;
+        public int DCId;
+        public List<StorageProduct> storageProducts;
+    }
+
+    [Serializable]
+    public class StorageProduct
+    {
+        public int productId;
+        public int amount;
+    }
+    
+    public enum StorageType
+    {
+        WAREHOUSE, DC
+    }
+
 
     public enum Country
     {
