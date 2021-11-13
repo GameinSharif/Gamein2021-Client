@@ -137,9 +137,9 @@ public class Utils
     public class ContractSupplierDetail
     {
         public int id;
-        public CustomDateTime contractDate;
+        public CustomDate contractDate;
         public int boughtAmount;
-        public int pricePerUnit;
+        public float pricePerUnit;
         public TransportNodeType transportNodeType;
     }
 

@@ -222,6 +222,11 @@ public class GameDataManager : MonoBehaviour
         return Products.First(p => p.id == id);
     }
 
+    public Utils.Vehicle GetVehicleByType(Utils.VehicleType vehicleType)
+    {
+        return Vehicles.First(v => v.vehicleType == vehicleType);
+    }
+
     public bool IsAuctionOver()
     {
         return DateTime.Now > GameConstants.AuctionRoundsStartTime[GameConstants.AuctionRoundsStartTime.Count - 1].ToDateTime().AddSeconds(GameConstants.AuctionRoundDurationSeconds);

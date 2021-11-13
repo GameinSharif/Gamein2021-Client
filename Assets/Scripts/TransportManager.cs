@@ -35,7 +35,14 @@ public class TransportManager : MonoBehaviour
         switch (transportStateChangedResponse.transport.transportState)
         {
             case Utils.TransportState.IN_WAY:
-                transport.transportState = Utils.TransportState.IN_WAY;
+                if (transport == null)
+                {
+                    Transports.Add(transportStateChangedResponse.transport);
+                }
+                else
+                {
+                    transport.transportState = Utils.TransportState.IN_WAY;
+                }
                 break;
             case Utils.TransportState.SUCCESSFUL:
                 Transports.Remove(transport);

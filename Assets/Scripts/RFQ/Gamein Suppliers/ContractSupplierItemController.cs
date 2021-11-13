@@ -64,9 +64,9 @@ public class ContractSupplierItemController : MonoBehaviour
             HideDetailsButtonGameObject.SetActive(false);
         }
 
+        _contractSupplier = contractSupplier;
         SetContractDetails();
         DetailsParent.SetActive(false);
-        _contractSupplier = contractSupplier;
     }
 
     public void SetContractDetails()

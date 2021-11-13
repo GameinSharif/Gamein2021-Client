@@ -128,6 +128,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     
     public void OnDoneButtonClick()
     {
+        Debug.LogWarning(1);
         string amountText = amount.text;
         Utils.VehicleType vehicleType = GetTransportationMode();
         int weeks = GetRepetitionWeeks();
@@ -136,8 +137,10 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
             //TODO show error
             return;
         }
+        Debug.LogWarning(2);
+        Debug.LogWarning(vehicleType);
         int amountInt = int.Parse(this.amount.text);
-        NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_WITH_SUPPLIER, _weekSupply, weeks, amountInt, vehicleType);
+        NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_WITH_SUPPLIER, _weekSupply, weeks, amountInt, GameDataManager.Instance.GetVehicleByType(vehicleType).id);
         RequestManager.Instance.SendRequest(newContractSupplier);
     }
 }
