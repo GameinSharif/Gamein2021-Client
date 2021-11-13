@@ -114,7 +114,7 @@ public class Utils
     {
         public int id;
         public int week;
-        public GameinCustomer gameinCustomer;
+        public int gameinCustomerId;
         public int productId;
         public int amount;
     }

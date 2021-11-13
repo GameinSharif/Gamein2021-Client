@@ -54,6 +54,7 @@ public class MainMenuManager : MonoBehaviour
         RequestManager.Instance.SendRequest(getContractSuppliersRequest);
 
         GameinSuppliersController.Instance.UpdateSupplies();
+        GameinCustomersController.Instance.UpdateDemands();
     }
 
     public void OnOpenProductionLinesPageButtonClick()
