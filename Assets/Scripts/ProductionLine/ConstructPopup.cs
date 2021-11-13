@@ -11,8 +11,6 @@ namespace ProductionLine
         public Transform choicesParent;
         private int currentSelected = -1;
 
-        private ToggleGroup _toggleGroup;
-        
         private void Awake()
         {
             foreach (var template in GameDataManager.Instance.ProductionLineTemplates)
