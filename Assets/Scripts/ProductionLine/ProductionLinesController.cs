@@ -22,7 +22,6 @@ namespace ProductionLine
         private void Awake()
         {
             Instance = this;
-            GetProductionLines();
             EventManager.Instance.OnGetProductionLinesResponseEvent += OnGetProductionLinesResponse;
             EventManager.Instance.OnConstructProductionLineResponseEvent += OnConstructProductionLineResponse;
             EventManager.Instance.OnScrapProductionLineResponseEvent += OnScrapProductionLineResponse;
@@ -31,12 +30,6 @@ namespace ProductionLine
                 OnUpgradeProductionLineEfficiencyResponse;
             EventManager.Instance.OnUpgradeProductionLineQualityResponseEvent += OnUpgradeProductionLineQualityResponse;
             productionLineDetail.gameObject.SetActive(false);
-        }
-
-        private static void GetProductionLines()
-        {
-            var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
-            RequestManager.Instance.SendRequest(request);
         }
 
         public void ConstructProductionLine(int productionLineTemplateId)

@@ -143,7 +143,8 @@ public class RequestHandler
                 EventManager.Instance.OnMoneyUpdateResponse(moneyUpdateResponse);
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                Debug.LogWarning(responseJson);
+                break;
         }
     }
 }

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using ProductionLine;
-using QualityLevel = ProductionLine.QualityLevel;
 
 public class Utils
 {
@@ -215,11 +214,26 @@ public class Utils
     }
 
     [Serializable]
+    public class EfficiencyLevel
+    {
+        public int efficiencyPercentage;
+        public int upgradeCost;
+    }
+
+    [Serializable]
+    public class QualityLevel
+    {
+        public int upgradeCost;
+        public double brandIncreaseRatioPerProduct;
+    }
+
+    [Serializable]
     public class ProductionLineTemplate
     {
         public int id;
         public string name;
         public int constructionCost;
+        public int constructRequiredDays;
         public int scrapPrice;
         public int batchSize;
         public int dailyProductionRate;
@@ -229,6 +243,7 @@ public class Utils
         public int productionCostPerOneProduct;
         public List<QualityLevel> qualityLevels;
     }
+
     public enum VehicleType
     {
         AIRPLANE, TRUCK, TRAIN, VANET

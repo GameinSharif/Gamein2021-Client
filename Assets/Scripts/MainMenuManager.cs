@@ -46,6 +46,12 @@ public class MainMenuManager : MonoBehaviour
         RequestManager.Instance.SendRequest(getContractsRequest);
     }
 
+    public void OnOpenProductionLinesPageButtonClick()
+    {
+        var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
+        RequestManager.Instance.SendRequest(request);
+    }
+
     public void OnLoadMapSceneButtonClick()
     {
         if (IsLoadingMap)
@@ -63,12 +69,4 @@ public class MainMenuManager : MonoBehaviour
 
         SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
     }
-
-    //button
-    public void GoToProductionLineMenu()
-    {
-        SceneManager.LoadScene("ProductionLine");
-    }
-
-    //TODO for other pages
 }
