@@ -31,4 +31,6 @@ public enum RequestTypeConstant
     ADD_PRODUCT = 28,
     REMOVE_PRODUCT = 29,
     GET_STORAGES = 30,
+    NEW_CONTRACT = 31,
+    TERMINATE_CONTRACT = 32
 }

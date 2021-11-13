@@ -6,9 +6,9 @@ public class EachDcController : MonoBehaviour
 
     private bool _isClickable = false;
     private MapUtils.MapAgentMarker.AgentType _agentType;
-    private Utils.DCDto _dcDto;
+    private Utils.DC _dcDto;
 
-    public void SetValues(Utils.DCDto dcDto, MapUtils.MapAgentMarker.AgentType agentType)
+    public void SetValues(Utils.DC dcDto, MapUtils.MapAgentMarker.AgentType agentType)
     {
         _agentType = agentType;
         _dcDto = dcDto;
@@ -18,7 +18,7 @@ public class EachDcController : MonoBehaviour
         {
             _isClickable = true;
             sellPrice.text = _dcDto.sellPrice.ToString();
-            buyPrice.text = _dcDto.purchasePrice.ToString();
+            buyPrice.text = _dcDto.buyingPrice.ToString();
         }
         
     }
@@ -48,7 +48,7 @@ public class EachDcController : MonoBehaviour
     public void SellButtonPressed()
     {
         CloseAll();
-        RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, _dcDto.DCId));
+        RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, _dcDto.id));
     }
     
 
@@ -60,7 +60,7 @@ public class EachDcController : MonoBehaviour
     public void BuyButtonPressed()
     {
         CloseAll();
-        RequestManager.Instance.SendRequest(new BuyDCRequest(RequestTypeConstant.BUY_DC, _dcDto.DCId));
+        RequestManager.Instance.SendRequest(new BuyDCRequest(RequestTypeConstant.BUY_DC, _dcDto.id));
     }
 
     private void CloseAll()

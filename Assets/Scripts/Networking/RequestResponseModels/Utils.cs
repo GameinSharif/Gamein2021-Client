@@ -190,21 +190,22 @@ public class Utils
     }
     
     [Serializable]
-    public class DCDto
+    public class DC
     {
-        public int DCId;
-        public int? ownerTeamId;
+        public int id;
+        public int? ownerId;
         public string name;
         public DCType type;
         public double latitude;
         public double longitude;
-        public int purchasePrice;
+        public int buyingPrice;
         public int sellPrice;
+        public int capacity;
     }
 
     public enum DCType
     {
-        MIDDLE, FINAL
+        SemiFinished, Finished
     }
 
     [Serializable]

@@ -30,7 +30,7 @@ public class StorageManager : MonoBehaviour
 
     private void OnGetStorageProductsResponse(GetStorageProductsResponse getStorageProductsResponse)
     {
-        Storages = getStorageProductsResponse.storageProducts;
+        Storages = getStorageProductsResponse.storages;
     }
 
     public void ChangeStockInStorage(int dcId, int productId, int amountToAddOrSubtract)

@@ -275,4 +275,11 @@ public class EventManager : MonoBehaviour
     {
         OnUpgradeProductionLineQualityResponseEvent?.Invoke(response);
     }
+    
+    public event Action<GetAllActiveDcResponse> OnGetAllActiveDcResponseEvent;
+
+    public void OnGetAllActiveDcResponse(GetAllActiveDcResponse response)
+    {
+        OnGetAllActiveDcResponseEvent?.Invoke(response);
+    }
 }

@@ -84,7 +84,7 @@ public class RequestHandler
                 SellDCResponse sellDcResponse = JsonUtility.FromJson<SellDCResponse>(responseJson);
                 EventManager.Instance.OnSellDCResponse(sellDcResponse);
                 break;
-            case ResponseTypeConstant.GET_STORAGE_PRODUCTS:
+            case ResponseTypeConstant.GET_STORAGES:
                 GetStorageProductsResponse getStorageProductsResponse =
                     JsonUtility.FromJson<GetStorageProductsResponse>(responseJson);
                 EventManager.Instance.OnGetStorageProductsResponse(getStorageProductsResponse);
@@ -128,6 +128,10 @@ public class RequestHandler
             case ResponseTypeConstant.AUCTION_FINISHED:
                 AuctionFinishedResponse auctionFinishedResponse = JsonConvert.DeserializeObject(responseJson, typeof(AuctionFinishedResponse), new StringEnumConverter()) as AuctionFinishedResponse;
                 EventManager.Instance.OnAuctionFinishedResponse(auctionFinishedResponse);
+                break;
+            case ResponseTypeConstant.GET_ALL_ACTIVE_DC:
+                GetAllActiveDcResponse getAllActiveDcResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetAllActiveDcResponse), new StringEnumConverter()) as GetAllActiveDcResponse;
+                EventManager.Instance.OnGetAllActiveDcResponse(getAllActiveDcResponse);
                 break;
             case ResponseTypeConstant.GET_PRODUCTION_LINES:
                 EventManager.Instance.OnGetProductionLinesResponse(

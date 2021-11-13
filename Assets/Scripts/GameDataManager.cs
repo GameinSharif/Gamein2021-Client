@@ -23,7 +23,7 @@ public class GameDataManager : MonoBehaviour
     [HideInInspector] public List<Utils.WeekSupply> CurrentWeekSupplies;
 
     
-    [HideInInspector] public List<Utils.DCDto> DCDtos;
+    [HideInInspector] public List<Utils.DC> DCs;
     [HideInInspector] public Utils.GameConstants GameConstants;
 
     public List<Sprite> ProductSprites;
@@ -38,6 +38,7 @@ public class GameDataManager : MonoBehaviour
         EventManager.Instance.OnGetCurrentWeekSuppliesResponseEvent += OnGetCurrentWeekSuppliesResponse;
         EventManager.Instance.OnGetAllAuctionsResponseEvent += OnGetAllAuctionsResponse;
         EventManager.Instance.OnAuctionFinishedResponseEvent += OnAuctionFinishedResponse;
+        EventManager.Instance.OnGetAllActiveDcResponseEvent += OnGetAllActiveDCsResponse;
     }
 
     public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
@@ -46,7 +47,6 @@ public class GameDataManager : MonoBehaviour
         GameinCustomers = getGameDataResponse.gameinCustomers;
         GameinSuppliers = getGameDataResponse.suppliers;
         Products = getGameDataResponse.products;
-        DCDtos = getGameDataResponse.dcDtos;
         Vehicles = getGameDataResponse.vehicles;
         ProductionLineTemplates = getGameDataResponse.productionLineTemplates;
 
@@ -57,6 +57,11 @@ public class GameDataManager : MonoBehaviour
         GameConstants = getGameDataResponse.gameConstants;
 
         GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
+    }
+
+    public void OnGetAllActiveDCsResponse(GetAllActiveDcResponse getAllActiveDcResponse)
+    {
+        DCs = getAllActiveDcResponse.dcs;
     }
 
     public void OnGetCurrentWeekDemandsResponse(GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse)

@@ -44,11 +44,11 @@ public class DCManager : MonoBehaviour
         }
     }
 
-    private void UpdateGameData(Utils.DCDto dcDto)
+    private void UpdateGameData(Utils.DC dcDto)
     {
-        Utils.DCDto oldDto = GameDataManager.Instance.DCDtos.Find(dto => dto.DCId == dcDto.DCId);
-        GameDataManager.Instance.DCDtos.Remove(oldDto);
-        GameDataManager.Instance.DCDtos.Add(dcDto);
+        Utils.DC oldDto = GameDataManager.Instance.DCs.Find(dto => dto.id == dcDto.id);
+        GameDataManager.Instance.DCs.Remove(oldDto);
+        GameDataManager.Instance.DCs.Add(dcDto);
     }
 
     private bool IsInMapScene()
