@@ -1,7 +1,7 @@
 ﻿namespace ProductionLine
 {
     public enum ProductionLineStatus {
-        ACTIVE, SCRAPPED
+        ACTIVE, SCRAPPED, IN_CONSTRUCTION
     }
     
     public enum QualityLevel {
