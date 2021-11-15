@@ -200,7 +200,7 @@ public class Utils
         public double latitude;
         public double longitude;
         public int buyingPrice;
-        public int sellPrice;
+        public int sellingPrice;
         public int capacity;
     }
 

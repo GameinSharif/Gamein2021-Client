@@ -77,11 +77,11 @@ public class RequestHandler
                 EventManager.Instance.OnRemoveProviderResponse(removeProviderResponse);
                 break;
             case ResponseTypeConstant.BUY_DC:
-                BuyDCResponse buyDcResponse = JsonUtility.FromJson<BuyDCResponse>(responseJson);
+                BuyDCResponse buyDcResponse = JsonConvert.DeserializeObject(responseJson, typeof(BuyDCResponse), new StringEnumConverter()) as BuyDCResponse;
                 EventManager.Instance.OnBuyDCResponse(buyDcResponse);
                 break;
             case ResponseTypeConstant.SELL_DC:
-                SellDCResponse sellDcResponse = JsonUtility.FromJson<SellDCResponse>(responseJson);
+                SellDCResponse sellDcResponse = JsonConvert.DeserializeObject(responseJson, typeof(SellDCResponse), new StringEnumConverter()) as SellDCResponse;
                 EventManager.Instance.OnSellDCResponse(sellDcResponse);
                 break;
             case ResponseTypeConstant.GET_STORAGES:

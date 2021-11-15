@@ -3,29 +3,41 @@ using UnityEngine;
 
 public class EachDcController : MonoBehaviour
 {
+    public GameObject sellPopup;
+    public RTLTextMeshPro sellPrice;
+    [Space(10)]
+    public GameObject buyPopup;
+    public RTLTextMeshPro buyPrice;
 
     private bool _isClickable = false;
     private MapUtils.MapAgentMarker.AgentType _agentType;
-    private Utils.DC _dcDto;
+    private Utils.DC _dc;
 
-    public void SetValues(Utils.DC dcDto, MapUtils.MapAgentMarker.AgentType agentType)
+    private bool _isSendingRequest = false;
+
+    public void SetValues(Utils.DC dc, MapUtils.MapAgentMarker.AgentType agentType)
     {
+        _isSendingRequest = false;
         _agentType = agentType;
-        _dcDto = dcDto;
+        _dc = dc;
 
         if (_agentType == MapUtils.MapAgentMarker.AgentType.MyDistributionCenter ||
             _agentType == MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter)
         {
             _isClickable = true;
-            sellPrice.text = _dcDto.sellPrice.ToString();
-            buyPrice.text = _dcDto.buyingPrice.ToString();
+            sellPrice.text = _dc.sellingPrice.ToString();
+            buyPrice.text = _dc.buyingPrice.ToString();
         }
-        
+        else
+        {
+            _isClickable = false;
+        }
+
+        CloseAll();
     }
 
     public void OnDcMarkerClicked()
-    {
-        
+    {      
         if (!_isClickable)
         {
             return;
@@ -38,29 +50,29 @@ public class EachDcController : MonoBehaviour
         else if (_agentType == MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter)
         {
             buyPopup.SetActive(true);
-        }
-        
+        }    
     }
-
-    public GameObject sellPopup;
-    public RTLTextMeshPro sellPrice;
 
     public void SellButtonPressed()
     {
-        CloseAll();
-        RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, _dcDto.id));
-    }
-    
+        if (_isSendingRequest)
+        {
+            return;
+        }
+        _isSendingRequest = true;
 
-    [Space(10)]
-    
-    public GameObject buyPopup;
-    public RTLTextMeshPro buyPrice;
+        RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, _dc.id));
+    }
 
     public void BuyButtonPressed()
     {
-        CloseAll();
-        RequestManager.Instance.SendRequest(new BuyDCRequest(RequestTypeConstant.BUY_DC, _dcDto.id));
+        if (_isSendingRequest)
+        {
+            return;
+        }
+        _isSendingRequest = true;
+
+        RequestManager.Instance.SendRequest(new BuyDCRequest(RequestTypeConstant.BUY_DC, _dc.id));
     }
 
     private void CloseAll()

@@ -3,6 +3,6 @@
 [Serializable]
 public class BuyDCResponse : ResponseObject
 {
-    public Utils.DC dcDto;
+    public Utils.DC dc;
     public string result;
 }
