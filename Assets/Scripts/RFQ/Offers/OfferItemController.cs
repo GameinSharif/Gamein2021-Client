@@ -129,10 +129,16 @@ public class OfferItemController : MonoBehaviour
         {
             return;
         }
-
-        _isSendingTerminateOrAccept = true;
-        AcceptOfferRequest acceptOfferRequest = new AcceptOfferRequest(_offer.id);
-        RequestManager.Instance.SendRequest(acceptOfferRequest);
+        
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                _isSendingTerminateOrAccept = true;
+                AcceptOfferRequest acceptOfferRequest = new AcceptOfferRequest(_offer.id);
+                RequestManager.Instance.SendRequest(acceptOfferRequest);
+            }
+        });
     }
 
     private void OnAcceptOfferResponse(AcceptOfferResponse acceptOfferResponse)
