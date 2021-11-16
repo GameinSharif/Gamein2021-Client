@@ -16,7 +16,7 @@ public class WarehouseTabController : MonoBehaviour
     public Transform scrollPanel;
     public GameObject storageProductPrefab;
 
-    public RTLTextMeshPro warehouseName;
+    public Localize warehouseNameLoccalize;
     
     public GameObject actionPopup;
     public TMP_InputField amountInputField;
@@ -33,7 +33,7 @@ public class WarehouseTabController : MonoBehaviour
     public void Initialize(Utils.Storage warehouse)
     {
         _warehouse = warehouse;
-        warehouseName.text = "Warehouse " + _warehouse.id;
+        warehouseNameLoccalize.SetKey("Storage_Type_WAREHOUSE");
         
         OnRawChanged(true);
         
@@ -65,7 +65,7 @@ public class WarehouseTabController : MonoBehaviour
         var controller = theGameObject.GetComponent<StorageProductController>();
         controller.SetInfo(product, Utils.StorageType.WAREHOUSE);
 
-        controller.name.text = product.name;
+        controller.nameLocalize.SetKey("product_" + product.name);
         controller.available.text = amount.ToString();
         
         //TODO get coming amount

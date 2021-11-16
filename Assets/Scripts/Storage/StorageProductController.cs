@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StorageProductController : MonoBehaviour
 {
-    public RTLTextMeshPro name;
+    public Localize nameLocalize;
     public RTLTextMeshPro available;
     public RTLTextMeshPro coming;
     public RTLTextMeshPro total;

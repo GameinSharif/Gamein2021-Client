@@ -228,7 +228,8 @@ public class Utils
     
     public enum StorageType
     {
-        WAREHOUSE, DC
+        WAREHOUSE = 0,
+        DC = 1,
     }
 
 

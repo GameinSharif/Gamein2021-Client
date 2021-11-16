@@ -16,7 +16,7 @@ public class DcTabController : MonoBehaviour
     public Transform scrollPanel;
     public GameObject storageProductPrefab;
 
-    public RTLTextMeshPro dcName;
+    public Localize dcNameLocalize;
     
     public GameObject actionPopup;
     public TMP_InputField amountInputField;
@@ -32,7 +32,7 @@ public class DcTabController : MonoBehaviour
     public void Initialize(Utils.Storage dc)
     {
         _dc = dc;
-        dcName.text = "DC " + _dc.id;
+        dcNameLocalize.SetKey("Storage_Type_DC", _dc.buildingId.ToString());
         
         _itemControllers.Clear();
         _pool.RemoveAll();
@@ -59,7 +59,7 @@ public class DcTabController : MonoBehaviour
         var controller = theGameObject.GetComponent<StorageProductController>();
         controller.SetInfo(product, Utils.StorageType.DC);
 
-        controller.name.text = product.name;
+        controller.nameLocalize.SetKey("product_" + product.name);
         controller.available.text = amount.ToString();
         
         //TODO get coming amount

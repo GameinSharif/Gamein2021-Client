@@ -31,7 +31,8 @@ public class StorageTabSelector : MonoBehaviour
         _pool.RemoveAll();
         foreach (var storage in StorageManager.Instance.Storages)
         {
-            _pool.Add(storage.dc + " " + storage.id);
+            string name = ((Utils.StorageType)(storage.dc ? 1 : 0)).ToString();
+            _pool.Add(name + " " + storage.buildingId);
         }
     }
 
@@ -39,7 +40,15 @@ public class StorageTabSelector : MonoBehaviour
     {
         var controller = theGameObject.GetComponent<StorageTabItemController>();
         controller.SetIndex(index);
-        controller.name.text = tabName;
+        string[] tabNameParts = tabName.Split(' ');
+        if (tabNameParts[0] == Utils.StorageType.DC.ToString())
+        {
+            controller.nameLocalize.SetKey("Storage_Type_" + tabNameParts[0], tabNameParts[1]);
+        }
+        else
+        {
+            controller.nameLocalize.SetKey("Storage_Type_" + tabNameParts[0]);
+        }
 
         theGameObject.GetComponent<Toggle>().group = selector.gameObject.GetComponent<ToggleGroup>();
     }
