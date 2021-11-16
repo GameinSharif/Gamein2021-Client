@@ -63,10 +63,17 @@ namespace ProductionLine
         {
             int amount = int.Parse(productAmount_I.text);
             //TODO: check money and materials
-            var request =
-                new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, data.id, selectedProduct, amount);
-            RequestManager.Instance.SendRequest(request);
-            CloseButton();
+            
+            DialogManager.Instance.ShowConfirmDialog(agreed =>
+            {
+                if (agreed)
+                {
+                    var request =
+                        new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, data.id, selectedProduct, amount);
+                    RequestManager.Instance.SendRequest(request);
+                    CloseButton();
+                }
+            });
         }
 
         public void CloseButton()

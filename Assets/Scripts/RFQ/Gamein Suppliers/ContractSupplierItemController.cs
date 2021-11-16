@@ -131,8 +131,14 @@ public class ContractSupplierItemController : MonoBehaviour
     
     public void OnTerminateButtonClicked()
     {
-        TerminateLongtermContractSupplierRequest terminateLongtermContractSupplier = new TerminateLongtermContractSupplierRequest(RequestTypeConstant.TERMINATE_LONGTERM_CONTRACT_WITH_SUPPLIER, _contractSupplier.id);
-        RequestManager.Instance.SendRequest(terminateLongtermContractSupplier);
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                TerminateLongtermContractSupplierRequest terminateLongtermContractSupplier = new TerminateLongtermContractSupplierRequest(RequestTypeConstant.TERMINATE_LONGTERM_CONTRACT_WITH_SUPPLIER, _contractSupplier.id);
+                RequestManager.Instance.SendRequest(terminateLongtermContractSupplier);
+            }
+        });
     }
     
     private void OnTerminateLongtermContractSupplierResponseReceived(TerminateLongtermContractSupplierResponse terminateLongtermContractSupplierResponse)

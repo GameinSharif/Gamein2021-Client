@@ -35,9 +35,16 @@ namespace ProductionLine
         public void ConstructProductionLine(int productionLineTemplateId)
         {
             //TODO: check money
-            var request = new ConstructProductionLineRequest(RequestTypeConstant.CONSTRUCT_PRODUCTION_LINE,
-                productionLineTemplateId);
-            RequestManager.Instance.SendRequest(request);
+            
+            DialogManager.Instance.ShowConfirmDialog(agreed =>
+            {
+                if (agreed)
+                {
+                    var request = new ConstructProductionLineRequest(RequestTypeConstant.CONSTRUCT_PRODUCTION_LINE,
+                        productionLineTemplateId);
+                    RequestManager.Instance.SendRequest(request);
+                }
+            });
         }
 
         public void ShowDetails(int id)

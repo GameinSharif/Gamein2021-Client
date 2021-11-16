@@ -59,9 +59,15 @@ public class EachDcController : MonoBehaviour
         {
             return;
         }
-        _isSendingRequest = true;
 
-        RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, _dc.id));
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                _isSendingRequest = true;
+                RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, _dc.id)); 
+            }
+        });
     }
 
     public void BuyButtonPressed()
@@ -70,9 +76,16 @@ public class EachDcController : MonoBehaviour
         {
             return;
         }
-        _isSendingRequest = true;
-
-        RequestManager.Instance.SendRequest(new BuyDCRequest(RequestTypeConstant.BUY_DC, _dc.id));
+        
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                _isSendingRequest = true;
+                RequestManager.Instance.SendRequest(new BuyDCRequest(RequestTypeConstant.BUY_DC, _dc.id));
+            }
+        });
+        
     }
 
     private void CloseAll()

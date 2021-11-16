@@ -54,25 +54,45 @@ namespace ProductionLine
         public void UpgradeProductionLineEfficiency()
         {
             //TODO: check money
-            var request =
-                new UpgradeProductionLineEfficiencyRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_EFFICIENCY,
-                    Data.id);
-            RequestManager.Instance.SendRequest(request);
+            
+            DialogManager.Instance.ShowConfirmDialog(agreed =>
+            {
+                if (agreed)
+                {
+                    var request =
+                        new UpgradeProductionLineEfficiencyRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_EFFICIENCY,
+                            Data.id);
+                    RequestManager.Instance.SendRequest(request); 
+                }
+            });
+            
         }
 
         public void UpgradeProductionLineQuality()
         {
             //TODO: check money
-            var request =
-                new UpgradeProductionLineQualityRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY, Data.id);
-            RequestManager.Instance.SendRequest(request);
+            
+            DialogManager.Instance.ShowConfirmDialog(agreed =>
+            {
+                if (agreed)
+                {
+                    var request =
+                        new UpgradeProductionLineQualityRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY, Data.id);
+                    RequestManager.Instance.SendRequest(request);
+                }
+            });
         }
 
         public void ScrapProductionLine()
         {
-            var request = new ScarpProductionLineRequest(RequestTypeConstant.SCRAP_PRODUCTION_LINE, Data.id);
-            RequestManager.Instance.SendRequest(request);
-            //TODO: add money
+            DialogManager.Instance.ShowConfirmDialog(agreed => {
+                if (agreed)
+                {
+                    var request = new ScarpProductionLineRequest(RequestTypeConstant.SCRAP_PRODUCTION_LINE, Data.id);
+                    RequestManager.Instance.SendRequest(request);
+                    //TODO: add money
+                }
+            });
         }
     }
 }
