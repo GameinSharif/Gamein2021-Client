@@ -44,7 +44,7 @@ public class NewNegotiationPopupController: MonoBehaviour
         }
         else
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog();
         }
     }
 
@@ -71,7 +71,7 @@ public class NewNegotiationPopupController: MonoBehaviour
         string price = PriceInputfield.text;
         if (string.IsNullOrEmpty(amount) || string.IsNullOrEmpty(price))
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
             return;
         }
 

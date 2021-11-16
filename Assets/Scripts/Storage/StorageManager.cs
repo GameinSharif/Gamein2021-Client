@@ -40,7 +40,7 @@ public class StorageManager : MonoBehaviour
         var storage = Storages.Find(st => st.id == storageId);
         if (storage == null)
         {
-            //TODO show error?
+            DialogManager.Instance.ShowErrorDialog();
             return;
         }
 
@@ -55,7 +55,7 @@ public class StorageManager : MonoBehaviour
             }
             else
             {
-                //TODO error
+                DialogManager.Instance.ShowErrorDialog();
                 return;
             }
         }

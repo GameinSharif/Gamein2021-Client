@@ -53,7 +53,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         }
         else
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog();
         }
     }
 
@@ -134,7 +134,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         int weeks = GetRepetitionWeeks();
         if (weeks < 0 || string.IsNullOrEmpty(amountText))
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
             return;
         }
         Debug.LogWarning(2);

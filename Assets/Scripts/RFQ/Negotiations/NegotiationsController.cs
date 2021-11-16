@@ -85,7 +85,7 @@ public class NegotiationsController : MonoBehaviour
         }
         else
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog();
         }
     }
 

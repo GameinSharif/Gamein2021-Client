@@ -119,7 +119,7 @@ public class ProviderItemController : MonoBehaviour
         }
         else
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog();
         }
     }
 }
