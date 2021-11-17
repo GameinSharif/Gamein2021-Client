@@ -92,4 +92,54 @@ public class StorageManager : MonoBehaviour
         }
         return 0;
     }
+
+    public int CalculateAvailableCapacity(Utils.Storage storage, Utils.ProductType productType)
+    {
+        int availableCapacity = 0;
+        if (!storage.dc)
+        {
+            if (productType == Utils.ProductType.RawMaterial)
+            {
+                availableCapacity = GameDataManager.Instance.GameConstants.rawMaterialCapacity;
+            }
+            else if (productType == Utils.ProductType.SemiFinished)
+            {
+                availableCapacity = GameDataManager.Instance.GameConstants.semiFinishedProductCapacity;
+            }
+            else if (productType == Utils.ProductType.Finished)
+            {
+                availableCapacity = GameDataManager.Instance.GameConstants.finishedProductCapacity;
+            }
+
+            availableCapacity -= CalculateCurrentOccupiedAmount(storage, productType);
+        }
+        else
+        {
+            Utils.DC dc = GameDataManager.Instance.GetDcById(storage.buildingId);
+            availableCapacity = dc.capacity;
+            if ((dc.type == Utils.DCType.SemiFinished && productType == Utils.ProductType.SemiFinished) || (dc.type == Utils.DCType.Finished && productType == Utils.ProductType.Finished))
+            {
+                availableCapacity -= CalculateCurrentOccupiedAmount(storage, productType);
+            }
+        }
+
+        int inWayProductsAmount = TransportManager.Instance.CalculateInWayProductsAmount(storage, productType);
+
+        return availableCapacity - inWayProductsAmount;
+    }
+
+    private int CalculateCurrentOccupiedAmount(Utils.Storage storage, Utils.ProductType productType)
+    {
+        int occupiedAmount = 0;
+        foreach (Utils.StorageProduct storageProduct in storage.products)
+        {
+            Utils.Product storeProduct = GameDataManager.Instance.GetProductById(storageProduct.productId);
+            if (storeProduct.productType == productType)
+            {
+                occupiedAmount -= storageProduct.amount * storeProduct.volumetricUnit;
+            }
+        }
+
+        return occupiedAmount;
+    }
 }

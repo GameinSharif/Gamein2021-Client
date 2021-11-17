@@ -142,6 +142,11 @@ public class GameDataManager : MonoBehaviour
         return Factories.First(f => f.id == id);
     }
 
+    public Utils.DC GetDcById(int id)
+    {
+        return DCs.First(f => f.id == id);
+    }
+
     public Utils.Team GetTeamById(int id)
     {
         return Teams.First(t => t.id == id);

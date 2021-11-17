@@ -70,6 +70,11 @@ public class TransportManager : MonoBehaviour
         return Transports.Find(t => t.id == id);
     }
 
+    public List<Utils.Transport> GetTransportsByDestinationTypeAndId(Utils.TransportNodeType destinationType, int destinationId)
+    {
+        return Transports.FindAll(t => t.destinationType == destinationType && t.destinationId == destinationId);
+    }
+
     private void ApplyChangesToStorage(Utils.Transport transport)
     {
         if (transport.transportState == Utils.TransportState.IN_WAY)
@@ -145,5 +150,34 @@ public class TransportManager : MonoBehaviour
         int productVolume = GameDataManager.Instance.GetProductById(productId).volumetricUnit * productAmount;
         int vehicleCount = (int)Mathf.Ceil((float)productVolume / transportVehicle.capacity);
         return vehicleCost * vehicleCount;
+    }
+
+    public int CalculateInWayProductsAmount(Utils.Storage storage, Utils.ProductType productType)
+    {
+        int amount = 0;
+        if (storage.dc)
+        {
+            List<Utils.Transport> thisDcTransports = GetTransportsByDestinationTypeAndId(Utils.TransportNodeType.DC, storage.buildingId);
+            foreach (Utils.Transport transport in thisDcTransports)
+            {
+                if (GameDataManager.Instance.GetProductById(transport.contentProductId).productType == productType)
+                {
+                    amount += transport.contentProductAmount;
+                }
+            }
+        }
+        else
+        {
+            List<Utils.Transport> thisWarehouseTransports = GetTransportsByDestinationTypeAndId(Utils.TransportNodeType.FACTORY, storage.buildingId);
+            foreach (Utils.Transport transport in thisWarehouseTransports)
+            {
+                if (GameDataManager.Instance.GetProductById(transport.contentProductId).productType == productType)
+                {
+                    amount += transport.contentProductAmount;
+                }
+            }
+        }
+
+        return amount;
     }
 }
