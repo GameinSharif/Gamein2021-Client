@@ -35,6 +35,11 @@ public class StorageManager : MonoBehaviour
         StorageTabSelector.Instance.Initialize();
     }
 
+    public Utils.Storage GetStorageByBuildingIdAndType(int buildingId, bool isDC)
+    {
+        return Storages.Find(s => s.buildingId == buildingId && s.dc == isDC);
+    }
+
     public void ChangeStockInStorage(int storageId, int productId, int amountToAddOrSubtract)
     {
         var storage = Storages.Find(st => st.id == storageId);
@@ -70,5 +75,21 @@ public class StorageManager : MonoBehaviour
         
         StorageTabSelector.Instance.ApplyStockChangeToUI(storage, product);
     }
-    
+
+    public void GetWarehouse()
+    {
+        Storages.Find(s => s.dc == false);
+    }
+
+    public int GetProductAmountByStorage(Utils.Storage storage, int productId)
+    {
+        foreach (Utils.StorageProduct storageProduct in storage.products)
+        {
+            if (storageProduct.productId == productId)
+            {
+                return storageProduct.amount;
+            }
+        }
+        return 0;
+    }
 }

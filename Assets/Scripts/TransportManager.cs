@@ -57,6 +57,8 @@ public class TransportManager : MonoBehaviour
                 break;
         }
 
+        ApplyChangesToStorage(transportStateChangedResponse.transport);
+
         if (MapManager.IsInMap)
         {
             MapManager.Instance.UpdateLine(transportStateChangedResponse.transport);
@@ -66,5 +68,49 @@ public class TransportManager : MonoBehaviour
     private Utils.Transport GetTransportById(int id)
     {
         return Transports.Find(t => t.id == id);
+    }
+
+    private void ApplyChangesToStorage(Utils.Transport transport)
+    {
+        if (transport.transportState == Utils.TransportState.IN_WAY)
+        {
+            switch (transport.sourceType)
+            {
+                case Utils.TransportNodeType.FACTORY:
+                    Utils.Storage factoryStorage = StorageManager.Instance.GetStorageByBuildingIdAndType(transport.sourceId, false);
+                    if (factoryStorage != null)
+                    {
+                        StorageManager.Instance.ChangeStockInStorage(factoryStorage.id, transport.contentProductId, -1 * transport.contentProductAmount);
+                    }
+                    break;
+                case Utils.TransportNodeType.DC:
+                    Utils.Storage dcStorage = StorageManager.Instance.GetStorageByBuildingIdAndType(transport.sourceId, true);
+                    if (dcStorage != null)
+                    {
+                        StorageManager.Instance.ChangeStockInStorage(dcStorage.id, transport.contentProductId, -1 * transport.contentProductAmount);
+                    }
+                    break;
+            }
+        }
+        else if (transport.transportState == Utils.TransportState.SUCCESSFUL)
+        {
+            switch (transport.destinationType)
+            {
+                case Utils.TransportNodeType.FACTORY:
+                    Utils.Storage factoryStorage = StorageManager.Instance.GetStorageByBuildingIdAndType(transport.destinationId, false);
+                    if (factoryStorage != null)
+                    {
+                        StorageManager.Instance.ChangeStockInStorage(factoryStorage.id, transport.contentProductId, transport.contentProductAmount);
+                    }
+                    break;
+                case Utils.TransportNodeType.DC:
+                    Utils.Storage dcStorage = StorageManager.Instance.GetStorageByBuildingIdAndType(transport.destinationId, true);
+                    if (dcStorage != null)
+                    {
+                        StorageManager.Instance.ChangeStockInStorage(dcStorage.id, transport.contentProductId, transport.contentProductAmount);
+                    }
+                    break;
+            }
+        }
     }
 }
