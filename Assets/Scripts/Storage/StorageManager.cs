@@ -76,9 +76,9 @@ public class StorageManager : MonoBehaviour
         StorageTabSelector.Instance.ApplyStockChangeToUI(storage, product);
     }
 
-    public void GetWarehouse()
+    public Utils.Storage GetWarehouse()
     {
-        Storages.Find(s => s.dc == false);
+        return Storages.Find(s => s.dc == false);
     }
 
     public int GetProductAmountByStorage(Utils.Storage storage, int productId)
