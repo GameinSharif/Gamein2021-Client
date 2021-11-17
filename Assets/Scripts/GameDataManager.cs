@@ -230,14 +230,14 @@ public class GameDataManager : MonoBehaviour
         switch (transportNodeType)
         {
             case Utils.TransportNodeType.SUPPLIER:
-                //Todo
-                break;
+                Utils.Supplier supplier = GameinSuppliers.First(s => s.id == transportNodeId);
+                return new Vector2((float)supplier.latitude, (float)supplier.longitude);
             case Utils.TransportNodeType.GAMEIN_CUSTOMER:
                 Utils.GameinCustomer gameinCustomer = GameinCustomers.First(c => c.id == transportNodeId);
                 return new Vector2((float)gameinCustomer.latitude, (float)gameinCustomer.longitude);
             case Utils.TransportNodeType.DC:
-                //TODO
-                break;
+                Utils.DC dc = DCs.First(d => d.id == transportNodeId);
+                return new Vector2((float)dc.latitude, (float)dc.longitude);
             case Utils.TransportNodeType.FACTORY:
                 Utils.Factory factory = Factories.First(f => f.id == transportNodeId);
                 return new Vector2((float)factory.latitude, (float)factory.longitude);

@@ -114,6 +114,12 @@ public class TransportManager : MonoBehaviour
         }
     }
 
+    public int CalculateTransportDuration(Vector2 sourceLocation, Vector2 destinationLocation, Utils.VehicleType vehicleType)
+    {
+        int transportDistance = GetTransportDistance(sourceLocation, destinationLocation, vehicleType);
+        return (int)Mathf.Ceil((float)transportDistance / GameDataManager.Instance.GetVehicleByType(vehicleType).speed);
+    }
+
     public int GetTransportDistance(Vector2 sourceLocation, Vector2 destinationLocation, Utils.VehicleType vehicleType)
     {
         double distance = (sourceLocation.x - destinationLocation.x) * (sourceLocation.x - destinationLocation.x);
