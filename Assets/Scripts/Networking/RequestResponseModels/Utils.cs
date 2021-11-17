@@ -181,6 +181,9 @@ public class Utils
         public string name;
         public int volumetricUnit;
         public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 27)
+        public int minPrice;
+        public int maxPrice;
+        public float maintenanceCostPerDay;
     }
 
     [Serializable]
@@ -278,6 +281,8 @@ public class Utils
         public int rawMaterialCapacity;
         public int semiFinishedProductCapacity;
         public int finishedProductCapacity;
+        public float insuranceCostFactor;
+        public int distanceConstant;
     }
 
     [Serializable]
