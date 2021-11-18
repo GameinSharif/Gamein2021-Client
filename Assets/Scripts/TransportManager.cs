@@ -180,4 +180,33 @@ public class TransportManager : MonoBehaviour
 
         return amount;
     }
+
+    public int CalculateInWayProductsAmount(Utils.Storage storage, int productId)
+    {
+        int amount = 0;
+        if (storage.dc)
+        {
+            List<Utils.Transport> thisDcTransports = GetTransportsByDestinationTypeAndId(Utils.TransportNodeType.DC, storage.buildingId);
+            foreach (Utils.Transport transport in thisDcTransports)
+            {
+                if (transport.contentProductId == productId)
+                {
+                    amount += transport.contentProductAmount;
+                }
+            }
+        }
+        else
+        {
+            List<Utils.Transport> thisWarehouseTransports = GetTransportsByDestinationTypeAndId(Utils.TransportNodeType.FACTORY, storage.buildingId);
+            foreach (Utils.Transport transport in thisWarehouseTransports)
+            {
+                if (transport.contentProductId == productId)
+                {
+                    amount += transport.contentProductAmount;
+                }
+            }
+        }
+
+        return amount;
+    }
 }

@@ -54,18 +54,12 @@ public class DcTabController : MonoBehaviour
 
     private void InitializeDcProduct(GameObject theGameObject, int index, Tuple<Utils.Product, int> productTuple)
     {
-        var (product, amount) = productTuple;
-        
+        var (product, availableAmount) = productTuple;
+        int comingAmount = TransportManager.Instance.CalculateInWayProductsAmount(_dc, product.id);
+
         var controller = theGameObject.GetComponent<StorageProductController>();
         controller.SetInfo(product, Utils.StorageType.DC);
-
-        controller.nameLocalize.SetKey("product_" + product.name);
-        controller.available.text = amount.ToString();
-        
-        //TODO get coming amount
-        int coming = 0;
-        controller.coming.text = coming.ToString();
-        controller.total.text = (coming + amount).ToString();
+        controller.SetData(availableAmount, comingAmount);
         
         _itemControllers.Add(controller);
     }

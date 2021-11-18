@@ -20,6 +20,15 @@ public class StorageProductController : MonoBehaviour
         _storageType = storageType;
     }
 
+    public void SetData(int availableAmount, int comingAmount)
+    {
+        nameLocalize.SetKey("product_" + _product.name);
+        available.text = availableAmount.ToString();
+
+        coming.text = comingAmount.ToString();
+        total.text = (availableAmount + comingAmount).ToString();
+    }
+
     public void OnClicked()
     {
         switch (_storageType)

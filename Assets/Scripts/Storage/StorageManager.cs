@@ -49,6 +49,13 @@ public class StorageManager : MonoBehaviour
             return;
         }
 
+        int availableCapacity = CalculateAvailableCapacity(storage, GameDataManager.Instance.GetProductById(productId).productType, false);
+
+        if (availableCapacity < amountToAddOrSubtract)
+        {
+            amountToAddOrSubtract = availableCapacity;
+        }
+
         var product = storage.products.Find(p => p.productId == productId);
 
         if (product == null)
@@ -93,7 +100,7 @@ public class StorageManager : MonoBehaviour
         return 0;
     }
 
-    public int CalculateAvailableCapacity(Utils.Storage storage, Utils.ProductType productType)
+    public int CalculateAvailableCapacity(Utils.Storage storage, Utils.ProductType productType, bool withInWayProductsAmount)
     {
         int availableCapacity = 0;
         if (!storage.dc)
@@ -123,9 +130,13 @@ public class StorageManager : MonoBehaviour
             }
         }
 
-        int inWayProductsAmount = TransportManager.Instance.CalculateInWayProductsAmount(storage, productType);
+        if (withInWayProductsAmount)
+        {
+            int inWayProductsAmount = TransportManager.Instance.CalculateInWayProductsAmount(storage, productType);
+            availableCapacity -= inWayProductsAmount;
+        }
 
-        return availableCapacity - inWayProductsAmount;
+        return availableCapacity;
     }
 
     private int CalculateCurrentOccupiedAmount(Utils.Storage storage, Utils.ProductType productType)
