@@ -65,7 +65,6 @@ public class NewNegotiationPopupController: MonoBehaviour
         {
             return;
         }
-        _isSendingRequest = true;
 
         string amount = AmountInputfield.text;
         string price = PriceInputfield.text;
@@ -75,7 +74,18 @@ public class NewNegotiationPopupController: MonoBehaviour
             return;
         }
 
-        NewProviderNegotiationRequest newProviderNegotiationRequest = new NewProviderNegotiationRequest(RequestTypeConstant.NEW_PROVIDER_NEGOTIATION, _provider.id, int.Parse(amount), float.Parse(price));
+        var parsedAmount = int.Parse(amount);
+        var parsedPrice = float.Parse(price);
+        var product = GameDataManager.Instance.GetProductById(_provider.productId);
+
+        if (parsedPrice > product.maxPrice || parsedPrice < product.minPrice)
+        {
+            DialogManager.Instance.ShowErrorDialog("price_min_max_error");
+            return;
+        }
+
+        _isSendingRequest = true;
+        NewProviderNegotiationRequest newProviderNegotiationRequest = new NewProviderNegotiationRequest(RequestTypeConstant.NEW_PROVIDER_NEGOTIATION, _provider.id, parsedAmount, parsedPrice);
         RequestManager.Instance.SendRequest(newProviderNegotiationRequest);
     }
 }

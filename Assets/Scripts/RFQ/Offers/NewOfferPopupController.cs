@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using ProductionLine;
 
 public class NewOfferPopupController : MonoBehaviour
 {
@@ -55,11 +56,18 @@ public class NewOfferPopupController : MonoBehaviour
     {
         _isSendingRequest = false;
 
-        //TODO clear inputfields
+        ClearInputFields();
 
         SetProducts();
 
         NewOfferPopupCanvas.SetActive(true);
+    }
+
+    private void ClearInputFields()
+    {
+        VolumeInputfield.text = "";
+        PricePerUnitInputfield.text = "";
+        TotalPriceInputfield.text = "";
     }
 
     private void SetProducts()
@@ -69,8 +77,7 @@ public class NewOfferPopupController : MonoBehaviour
         {
             if (product.productType == Utils.ProductType.SemiFinished)
             {
-                bool hasThisProductCategoryProductionLine = true;
-                //TODO
+                bool hasThisProductCategoryProductionLine = ProductionLinesDataManager.Instance.CanUseProduct(product);
 
                 ProductDetailsSetters[index].SetData(product, hasThisProductCategoryProductionLine, index, "NewOffer");
                 index++;
@@ -111,7 +118,6 @@ public class NewOfferPopupController : MonoBehaviour
         {
             return;
         }
-        _isSendingRequest = true;
 
         string volume = VolumeInputfield.text;
         string price = PricePerUnitInputfield.text;
@@ -123,11 +129,28 @@ public class NewOfferPopupController : MonoBehaviour
             return;
         }
 
+        var parsedVolume = int.Parse(volume);
+        var parsedCostPerUnit = float.Parse(price);
+        var product = GameDataManager.Instance.GetProductById(_selectedProductId);
+        
+        if (parsedCostPerUnit > product.maxPrice || parsedCostPerUnit < product.minPrice)
+        {
+            DialogManager.Instance.ShowErrorDialog("price_min_max_error");
+            return;
+        }
+
+        if (MainHeaderManager.Instance.Money < parsedCostPerUnit * parsedVolume)
+        {
+            DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+            return;
+        }
+
+        _isSendingRequest = true;
         NewOfferRequest newOfferRequest = new NewOfferRequest(RequestTypeConstant.NEW_OFFER, new Utils.Offer()
         {
             productId = _selectedProductId,
-            volume = int.Parse(volume),
-            costPerUnit = float.Parse(price),
+            volume = parsedVolume,
+            costPerUnit = parsedCostPerUnit,
             offerDeadline = new CustomDate(selectedDate.Year, selectedDate.Month, selectedDate.Day),
         });
         RequestManager.Instance.SendRequest(newOfferRequest);

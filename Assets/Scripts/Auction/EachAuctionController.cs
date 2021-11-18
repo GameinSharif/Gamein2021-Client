@@ -94,7 +94,6 @@ public class EachAuctionController : MonoBehaviour
         {
             return;
         }
-        _isSendingRequest = true;
 
         string raise = raiseAmountInputFiled.text;
         if (string.IsNullOrEmpty(raise))
@@ -110,6 +109,7 @@ public class EachAuctionController : MonoBehaviour
             return;
         }
 
+        _isSendingRequest = true;
         int factoryId = _onMapMarker.Index;
         BidForAuctionRequest bidHigherRequest = new BidForAuctionRequest(RequestTypeConstant.BID_FOR_AUCTION, factoryId, raiseAmount);
         RequestManager.Instance.SendRequest(bidHigherRequest);
