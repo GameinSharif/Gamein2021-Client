@@ -18,6 +18,7 @@ public class NewProviderPopupController : MonoBehaviour
     public TMP_InputField AveragePriceInputfield;
     public TMP_InputField MinPriceOnRecordInputfield;
     public TMP_InputField MaxPriceOnRecordInputfield;
+    public Localize minMaxLocalize;
 
     private int _selectedProductId = 0;
     private bool _isSendingRequest = false;
@@ -102,6 +103,9 @@ public class NewProviderPopupController : MonoBehaviour
         AveragePriceInputfield.text = mean.ToString();
         MaxPriceOnRecordInputfield.text = max.ToString();
         MinPriceOnRecordInputfield.text = min.ToString();
+
+        var product = GameDataManager.Instance.GetProductById(productId);
+        minMaxLocalize.SetKey("min_max_text", product.minPrice.ToString(), product.maxPrice.ToString());
     }
 
     public void DisableAllSelections()

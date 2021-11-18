@@ -18,6 +18,7 @@ public class NewOfferPopupController : MonoBehaviour
     public TMP_InputField PricePerUnitInputfield;
     public TMP_InputField TotalPriceInputfield;
     public DatePicker OfferDeadline;
+    public Localize minMaxLocalize;
 
     private int _selectedProductId = 0;
     private bool _isSendingRequest = false;
@@ -90,6 +91,9 @@ public class NewOfferPopupController : MonoBehaviour
         DisableAllSelections();
         IsSelectedGameObjects[index].SetActive(true);
         _selectedProductId = productId;
+
+        var product = GameDataManager.Instance.GetProductById(productId);
+        minMaxLocalize.SetKey("min_max_text", product.minPrice.ToString(), product.maxPrice.ToString());
     }
 
     public void OnVolumeOrPriceValueChange()

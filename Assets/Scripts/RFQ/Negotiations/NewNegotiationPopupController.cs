@@ -14,6 +14,7 @@ public class NewNegotiationPopupController: MonoBehaviour
     public Localize ProductNameLocalize;
     public TMP_InputField AmountInputfield;
     public TMP_InputField PriceInputfield;
+    public Localize minMaxLocalize;
 
     private Utils.Provider _provider;
     private bool _isSendingRequest = false;
@@ -54,6 +55,8 @@ public class NewNegotiationPopupController: MonoBehaviour
 
         ProductImage.sprite = GameDataManager.Instance.ProductSprites[provider.productId - 1];
         ProductNameLocalize.SetKey("product_" + GameDataManager.Instance.Products[provider.productId - 1].name);
+        var product = GameDataManager.Instance.GetProductById(_provider.productId);
+        minMaxLocalize.SetKey("min_max_text", product.minPrice.ToString(), product.maxPrice.ToString());
         _provider = provider;
 
         NewNegotiationPopupCanvas.SetActive(true);
