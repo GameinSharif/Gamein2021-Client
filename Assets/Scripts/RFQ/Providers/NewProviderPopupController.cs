@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -83,7 +83,11 @@ public class NewProviderPopupController : MonoBehaviour
         IsSelectedGameObjects[index].SetActive(true);
         _selectedProductId = productId;
 
-        //TODO Set Prices
+        var (mean, max, min) = CalculateMeanMaxMinByProductId(productId);
+
+        AveragePriceInputfield.text = mean.ToString();
+        MaxPriceOnRecordInputfield.text = max.ToString();
+        MinPriceOnRecordInputfield.text = min.ToString();
     }
 
     public void DisableAllSelections()
@@ -118,5 +122,33 @@ public class NewProviderPopupController : MonoBehaviour
 
         NewProviderRequest newProviderRequest = new NewProviderRequest(RequestTypeConstant.NEW_PROVIDER, _selectedProductId, int.Parse(capacity), float.Parse(price));
         RequestManager.Instance.SendRequest(newProviderRequest);
+    }
+
+    private Tuple<float, float, float> CalculateMeanMaxMinByProductId(int productId)
+    {
+        float mean = 0, min = float.MaxValue, max = float.MinValue;
+        int i = 0;
+
+        foreach (var provider in ProvidersController.Instance.otherTeamsProviders)
+        {
+            if (provider.productId != productId) continue;
+            if (provider.state == Utils.ProviderState.TERMINATED) continue;
+
+            mean = (mean * i + provider.price) / (i + 1);
+            if (provider.price > max)
+            {
+                max = provider.price;
+            } else if (provider.price < min)
+            {
+                min = provider.price;
+            }
+
+            i++;
+        }
+
+        max = max == float.MinValue ? 0 : max;
+        min = min == float.MaxValue ? 0 : min;
+
+        return new Tuple<float, float, float>(mean, max, min);
     }
 }
