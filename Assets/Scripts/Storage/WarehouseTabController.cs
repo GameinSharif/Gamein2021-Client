@@ -20,8 +20,10 @@ public class WarehouseTabController : MonoBehaviour
     
     public GameObject actionPopup;
     public TMP_InputField amountInputField;
+
     private Utils.Product _currentSelectedProduct;
     private Utils.ProductType _currentSelectedType;
+    private bool _isSendingRequest = false;
 
     private void Awake()
     {
@@ -79,7 +81,28 @@ public class WarehouseTabController : MonoBehaviour
 
     public void OnRemoveButtonClicked()
     {
-        //TODO send removeRequest to server
+        string amountText = amountInputField.text;
+        if (string.IsNullOrWhiteSpace(amountText))
+        {
+            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
+            return;
+        }
+
+        int amount = int.Parse(amountText);
+        if (amount > StorageManager.Instance.GetProductAmountByStorage(_warehouse, _currentSelectedProduct.id))
+        {
+            DialogManager.Instance.ShowErrorDialog("dialog_popup_not_enough_product");
+            return;
+        }
+
+        if (amount <= 0)
+        {
+            DialogManager.Instance.ShowErrorDialog();
+            return;
+        }
+
+        RemoveProductRequest removeProductRequest = new RemoveProductRequest(RequestTypeConstant.REMOVE_PRODUCT, false, _warehouse.buildingId, _currentSelectedProduct.id, amount);
+        RequestManager.Instance.SendRequest(removeProductRequest);
     }
 
     public void OnClosePopupButtonClicked()

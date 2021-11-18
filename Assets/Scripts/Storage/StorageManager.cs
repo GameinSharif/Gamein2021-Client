@@ -21,11 +21,13 @@ public class StorageManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnGetStorageProductsResponseEvent += OnGetStorageProductsResponse;
+        EventManager.Instance.OnRemoveProductResponseEvent += OnRemoveProductResponseReceived;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnGetStorageProductsResponseEvent -= OnGetStorageProductsResponse;
+        EventManager.Instance.OnRemoveProductResponseEvent -= OnRemoveProductResponseReceived;
     }
 
     private void OnGetStorageProductsResponse(GetStorageProductsResponse getStorageProductsResponse)
@@ -33,6 +35,24 @@ public class StorageManager : MonoBehaviour
         Storages = getStorageProductsResponse.storages;
 
         StorageTabSelector.Instance.Initialize();
+    }
+
+    private void OnRemoveProductResponseReceived(RemoveProductResponse removeProductResponse)
+    {
+        if (removeProductResponse.storage == null)
+        {
+            DialogManager.Instance.ShowErrorDialog();
+            return;
+        }
+
+        if (removeProductResponse.storage.dc)
+        {
+            DcTabController.Instance.Initialize(removeProductResponse.storage);
+        }
+        else
+        {
+            WarehouseTabController.Instance.Initialize(removeProductResponse.storage);
+        }
     }
 
     public Utils.Storage GetStorageByBuildingIdAndType(int buildingId, bool isDC)

@@ -72,7 +72,7 @@ public class TransportManager : MonoBehaviour
 
     public List<Utils.Transport> GetTransportsByDestinationTypeAndId(Utils.TransportNodeType destinationType, int destinationId)
     {
-        return Transports.FindAll(t => t.destinationType == destinationType && t.destinationId == destinationId);
+        return Transports.FindAll(t => t.destinationType == destinationType && t.destinationId == destinationId && t.transportState == Utils.TransportState.IN_WAY);
     }
 
     private void ApplyChangesToStorage(Utils.Transport transport)

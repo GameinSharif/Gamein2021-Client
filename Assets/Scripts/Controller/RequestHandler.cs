@@ -175,6 +175,16 @@ public class RequestHandler
                 MoneyUpdateResponse moneyUpdateResponse = JsonUtility.FromJson<MoneyUpdateResponse>(responseJson);
                 EventManager.Instance.OnMoneyUpdateResponse(moneyUpdateResponse);
                 break;
+            case ResponseTypeConstant.REMOVE_PRODUCT:
+                RemoveProductResponse removeProductResponse = JsonConvert.DeserializeObject(responseJson, typeof(RemoveProductResponse), new StringEnumConverter()) as RemoveProductResponse;
+                EventManager.Instance.OnRemoveProductResponse(removeProductResponse);
+                break;
+            case ResponseTypeConstant.NEW_CONTRACT:
+                //TODO
+                break;
+            case ResponseTypeConstant.TERMINATE_CONTRACT:
+                //TODO
+                break;
             default:
                 Debug.LogWarning(responseJson);
                 break;

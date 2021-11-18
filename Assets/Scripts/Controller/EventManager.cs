@@ -282,4 +282,11 @@ public class EventManager : MonoBehaviour
     {
         OnGetAllActiveDcResponseEvent?.Invoke(response);
     }
+
+    public event Action<RemoveProductResponse> OnRemoveProductResponseEvent;
+
+    public void OnRemoveProductResponse(RemoveProductResponse response)
+    {
+        OnRemoveProductResponseEvent?.Invoke(response);
+    }
 }
