@@ -10,7 +10,7 @@ namespace ProductionLine
         #region UI
 
         public RTLTextMeshPro number_T;
-        public RTLTextMeshPro name_T;
+        public Localize name_T;
         public Localize product_L;
         public RTLTextMeshPro product_T;
         public RTLTextMeshPro amount_T;
@@ -29,8 +29,8 @@ namespace ProductionLine
         public void SetData(Utils.ProductionLineDto data, bool justCreated = false)
         {
             Data = data;
-            name_T.text = GameDataManager.Instance.ProductionLineTemplates
-                .FirstOrDefault(c => c.id == Data.productionLineTemplateId)?.name;
+            name_T.SetKey("production_line_template_"+ GameDataManager.Instance.ProductionLineTemplates
+                .FirstOrDefault(c => c.id == Data.productionLineTemplateId)?.name);
             if (!justCreated)
             {
                 if (Data.products.Count > 0)
@@ -65,6 +65,11 @@ namespace ProductionLine
         public void SetRowNumber(int number)
         {
             number_T.text = number.ToString();
+        }
+
+        public void Highlight(bool on)
+        {
+            showDetailButton.interactable = !on;
         }
     }
 }

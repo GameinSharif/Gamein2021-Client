@@ -10,6 +10,7 @@ namespace ProductionLine
         public GameObject choicePrefab;
         public Transform choicesParent;
         public ToggleGroup _toggleGroup;
+        public Sprite defaultImageForChoice;
         
         private int currentSelected = -1;
 
@@ -18,8 +19,7 @@ namespace ProductionLine
             foreach (var template in GameDataManager.Instance.ProductionLineTemplates)
             {
                 var c = Instantiate(choicePrefab, choicesParent);
-                c.GetComponentInChildren<RTLTextMeshPro>().text = template.name;
-                //_toggleGroup.RegisterToggle(c.GetComponent<Toggle>());
+                c.GetComponent<ProductionLineTemplateChoice>().Setup(template.name, defaultImageForChoice, template.constructionCost);
                 c.GetComponent<Toggle>().group = _toggleGroup;
                 c.GetComponent<Toggle>().onValueChanged.AddListener(on => Select(on, template.id));
             }

@@ -58,17 +58,26 @@ namespace ProductionLine
 
         public void ShowDetails(int id)
         {
-            var productionLine = productionLineTableRows.FirstOrDefault(e => e.Data.id == id);
-            if (productionLine is null)
+            currentDetailId = -1;
+            foreach (var row in productionLineTableRows)
             {
-                currentDetailId = -1;
-                productionLineDetail.gameObject.SetActive(false);
-                return;
+                if (row.Data.id == id)
+                {
+                    currentDetailId = id;
+                    row.Highlight(true);
+                    productionLineDetail.gameObject.SetActive(true);
+                    productionLineDetail.SetData(row.Data);
+                }
+                else
+                {
+                    row.Highlight(false);
+                }
             }
 
-            currentDetailId = id;
-            productionLineDetail.gameObject.SetActive(true);
-            productionLineDetail.SetData(productionLine.Data);
+            if (currentDetailId == -1)
+            {
+                productionLineDetail.gameObject.SetActive(false);
+            }
         }
 
         private void UpdateDetails(Utils.ProductionLineDto data)
