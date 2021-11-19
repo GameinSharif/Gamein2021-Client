@@ -24,6 +24,9 @@ public class MainMenuManager : MonoBehaviour
 
         GetTeamTransportsRequest getTeamTransportsRequest = new GetTeamTransportsRequest(RequestTypeConstant.GET_TEAM_TRANSPORTS);
         RequestManager.Instance.SendRequest(getTeamTransportsRequest);
+
+        GetAllChatsRequest getAllChatsRequest = new GetAllChatsRequest();
+        RequestManager.Instance.SendRequest(getAllChatsRequest);
     }
 
     private void Start()
@@ -54,11 +57,18 @@ public class MainMenuManager : MonoBehaviour
         RequestManager.Instance.SendRequest(getContractSuppliersRequest);
 
         GameinSuppliersController.Instance.UpdateSupplies();
+        GameinCustomersController.Instance.UpdateDemands();
     }
 
     public void OnOpenProductionLinesPageButtonClick()
     {
         var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
+        RequestManager.Instance.SendRequest(request);
+    }
+
+    public void OnOpenStoragePageButtonClick()
+    {
+        var request = new GetStorageProductsRequest(RequestTypeConstant.GET_STORAGES);
         RequestManager.Instance.SendRequest(request);
     }
 

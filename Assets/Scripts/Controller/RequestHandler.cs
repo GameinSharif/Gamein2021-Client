@@ -77,11 +77,11 @@ public class RequestHandler
                 EventManager.Instance.OnRemoveProviderResponse(removeProviderResponse);
                 break;
             case ResponseTypeConstant.BUY_DC:
-                BuyDCResponse buyDcResponse = JsonUtility.FromJson<BuyDCResponse>(responseJson);
+                BuyDCResponse buyDcResponse = JsonConvert.DeserializeObject(responseJson, typeof(BuyDCResponse), new StringEnumConverter()) as BuyDCResponse;
                 EventManager.Instance.OnBuyDCResponse(buyDcResponse);
                 break;
             case ResponseTypeConstant.SELL_DC:
-                SellDCResponse sellDcResponse = JsonUtility.FromJson<SellDCResponse>(responseJson);
+                SellDCResponse sellDcResponse = JsonConvert.DeserializeObject(responseJson, typeof(SellDCResponse), new StringEnumConverter()) as SellDCResponse;
                 EventManager.Instance.OnSellDCResponse(sellDcResponse);
                 break;
             case ResponseTypeConstant.GET_STORAGES:
@@ -174,6 +174,16 @@ public class RequestHandler
             case ResponseTypeConstant.MONEY_UPDATE:
                 MoneyUpdateResponse moneyUpdateResponse = JsonUtility.FromJson<MoneyUpdateResponse>(responseJson);
                 EventManager.Instance.OnMoneyUpdateResponse(moneyUpdateResponse);
+                break;
+            case ResponseTypeConstant.REMOVE_PRODUCT:
+                RemoveProductResponse removeProductResponse = JsonConvert.DeserializeObject(responseJson, typeof(RemoveProductResponse), new StringEnumConverter()) as RemoveProductResponse;
+                EventManager.Instance.OnRemoveProductResponse(removeProductResponse);
+                break;
+            case ResponseTypeConstant.NEW_CONTRACT:
+                //TODO
+                break;
+            case ResponseTypeConstant.TERMINATE_CONTRACT:
+                //TODO
                 break;
             default:
                 Debug.LogWarning(responseJson);

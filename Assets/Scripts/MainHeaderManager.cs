@@ -23,7 +23,7 @@ public class MainHeaderManager : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(header);
-        Money = 0; // test
+        moneyRTLTMP.text = PlayerPrefs.GetFloat("Money").ToString();
         SetDate();
     }
 
@@ -38,15 +38,15 @@ public class MainHeaderManager : MonoBehaviour
         Money = moneyUpdateResponse.money;
     }
 
-    public int Money
+    public float Money
     {
         set
         {
-            PlayerPrefs.SetInt("Money", value);
+            PlayerPrefs.SetFloat("Money", value);
             moneyRTLTMP.text = value + "$";
         }
 
-        get => PlayerPrefs.GetInt("Money", 0);
+        get => PlayerPrefs.GetFloat("Money", 0f);
     }
 
     private void SetDate()

@@ -26,29 +26,31 @@ public class DCManager : MonoBehaviour
 
     private void OnBuyDCResponse(BuyDCResponse response)
     {
-        UpdateGameData(response.dcDto);
+        UpdateGameData(response.dc);
+        MainHeaderManager.Instance.Money -= response.dc.buyingPrice;
         
         if (IsInMapScene())
         {
-            MapManager.Instance.UpdateDtoMarker(response.dcDto, false);
+            MapManager.Instance.UpdateDcMarker(response.dc, false);
         }
     }
 
     private void OnSellDCResponse(SellDCResponse response)
     {
-        UpdateGameData(response.dcDto);
-        
+        UpdateGameData(response.dc);
+        MainHeaderManager.Instance.Money += response.dc.sellingPrice;
+
         if (IsInMapScene())
         {
-            MapManager.Instance.UpdateDtoMarker(response.dcDto, true);
+            MapManager.Instance.UpdateDcMarker(response.dc, true);
         }
     }
 
-    private void UpdateGameData(Utils.DC dcDto)
+    private void UpdateGameData(Utils.DC dc)
     {
-        Utils.DC oldDto = GameDataManager.Instance.DCs.Find(dto => dto.id == dcDto.id);
+        Utils.DC oldDto = GameDataManager.Instance.DCs.Find(dto => dto.id == dc.id);
         GameDataManager.Instance.DCs.Remove(oldDto);
-        GameDataManager.Instance.DCs.Add(dcDto);
+        GameDataManager.Instance.DCs.Add(dc);
     }
 
     private bool IsInMapScene()

@@ -16,8 +16,6 @@ namespace ProductionLine
         public Button scrapButton;
 
         public GameObject startProductionPopup;
-        public TMP_Dropdown productId_I;
-        public TMP_InputField productAmount_I;
 
         #endregion
 
@@ -49,52 +47,52 @@ namespace ProductionLine
 
         public void PopupStartProduction()
         {
-            productId_I.options.Clear();
-            var products = GameDataManager.Instance.Products.Where(c => c.productionLineTemplateId == Data.productionLineTemplateId).ToList();
-            foreach (var product in products)
-            {
-                productId_I.options.Add(new TMP_Dropdown.OptionData(product.id.ToString()));
-            }
             startProductionPopup.SetActive(true);
-        }
-
-        public void ClosePopup()
-        {
-            startProductionPopup.SetActive(false);
-        }
-
-        public void StartProduction()
-        {
-            int productId = int.Parse(productId_I.options[productId_I.value].text);
-            int amount = int.Parse(productAmount_I.text);
-            //TODO: check money and materials
-            var request = new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, Data.id, productId, amount);
-            RequestManager.Instance.SendRequest(request);
-            startProductionPopup.SetActive(false);
+            startProductionPopup.GetComponent<StartProductionPopup>().Setup(Data);
         }
 
         public void UpgradeProductionLineEfficiency()
         {
             //TODO: check money
-            var request =
-                new UpgradeProductionLineEfficiencyRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_EFFICIENCY,
-                    Data.id);
-            RequestManager.Instance.SendRequest(request);
+            
+            DialogManager.Instance.ShowConfirmDialog(agreed =>
+            {
+                if (agreed)
+                {
+                    var request =
+                        new UpgradeProductionLineEfficiencyRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_EFFICIENCY,
+                            Data.id);
+                    RequestManager.Instance.SendRequest(request); 
+                }
+            });
+            
         }
 
         public void UpgradeProductionLineQuality()
         {
             //TODO: check money
-            var request =
-                new UpgradeProductionLineQualityRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY, Data.id);
-            RequestManager.Instance.SendRequest(request);
+            
+            DialogManager.Instance.ShowConfirmDialog(agreed =>
+            {
+                if (agreed)
+                {
+                    var request =
+                        new UpgradeProductionLineQualityRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY, Data.id);
+                    RequestManager.Instance.SendRequest(request);
+                }
+            });
         }
 
         public void ScrapProductionLine()
         {
-            var request = new ScarpProductionLineRequest(RequestTypeConstant.SCRAP_PRODUCTION_LINE, Data.id);
-            RequestManager.Instance.SendRequest(request);
-            //TODO: add money
+            DialogManager.Instance.ShowConfirmDialog(agreed => {
+                if (agreed)
+                {
+                    var request = new ScarpProductionLineRequest(RequestTypeConstant.SCRAP_PRODUCTION_LINE, Data.id);
+                    RequestManager.Instance.SendRequest(request);
+                    //TODO: add money
+                }
+            });
         }
     }
 }

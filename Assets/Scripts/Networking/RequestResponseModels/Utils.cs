@@ -12,6 +12,7 @@ public class Utils
         public string teamName;
         public Country country;
         public int factoryId;
+        public float credit;
     }
 
     public enum ProviderState
@@ -108,7 +109,7 @@ public class Utils
     {
         public int id;
         public int week;
-        public GameinCustomer gameinCustomer;
+        public int gameinCustomerId;
         public int productId;
         public int amount;
     }
@@ -180,6 +181,9 @@ public class Utils
         public string name;
         public int volumetricUnit;
         public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 27)
+        public int minPrice;
+        public int maxPrice;
+        public float maintenanceCostPerDay;
     }
 
     [Serializable]
@@ -199,7 +203,7 @@ public class Utils
         public double latitude;
         public double longitude;
         public int buyingPrice;
-        public int sellPrice;
+        public int sellingPrice;
         public int capacity;
     }
 
@@ -211,21 +215,24 @@ public class Utils
     [Serializable]
     public class Storage
     {
-        public StorageType type;
-        public int DCId;
-        public List<StorageProduct> storageProducts;
+        public int id;
+        public int buildingId;
+        public bool dc;
+        public List<StorageProduct> products;
     }
 
     [Serializable]
     public class StorageProduct
     {
+        public int id;
         public int productId;
         public int amount;
     }
     
     public enum StorageType
     {
-        WAREHOUSE, DC
+        WAREHOUSE = 0,
+        DC = 1,
     }
 
 
@@ -274,6 +281,8 @@ public class Utils
         public int rawMaterialCapacity;
         public int semiFinishedProductCapacity;
         public int finishedProductCapacity;
+        public float insuranceCostFactor;
+        public int distanceConstant;
     }
 
     [Serializable]

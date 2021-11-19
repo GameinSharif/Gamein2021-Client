@@ -117,7 +117,7 @@ public class NegotiationItemController : MonoBehaviour
         string price = PricePerUnitInputfield.text;
         if (string.IsNullOrEmpty(price))
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
             return;
         }
 

@@ -16,12 +16,14 @@ public class WarehouseTabController : MonoBehaviour
     public Transform scrollPanel;
     public GameObject storageProductPrefab;
 
-    public RTLTextMeshPro warehouseName;
+    public Localize warehouseNameLoccalize;
     
     public GameObject actionPopup;
     public TMP_InputField amountInputField;
+
     private Utils.Product _currentSelectedProduct;
     private Utils.ProductType _currentSelectedType;
+    private bool _isSendingRequest = false;
 
     private void Awake()
     {
@@ -33,7 +35,7 @@ public class WarehouseTabController : MonoBehaviour
     public void Initialize(Utils.Storage warehouse)
     {
         _warehouse = warehouse;
-        warehouseName.text = "Warehouse " + _warehouse.DCId;
+        warehouseNameLoccalize.SetKey("Storage_Type_WAREHOUSE");
         
         OnRawChanged(true);
         
@@ -60,19 +62,13 @@ public class WarehouseTabController : MonoBehaviour
 
     public void InitializeWarehouseProduct(GameObject theGameObject, int index, Tuple<Utils.Product, int> productTuple)
     {
-        var (product, amount) = productTuple;
-        
+        var (product, availableAmount) = productTuple;
+        int comingAmount = TransportManager.Instance.CalculateInWayProductsAmount(_warehouse, product.id);
+
         var controller = theGameObject.GetComponent<StorageProductController>();
         controller.SetInfo(product, Utils.StorageType.WAREHOUSE);
+        controller.SetData(availableAmount, comingAmount);
 
-        controller.name.text = product.name;
-        controller.available.text = amount.ToString();
-        
-        //TODO get coming amount
-        int coming = 0;
-        controller.coming.text = coming.ToString();
-        controller.total.text = (coming + amount).ToString();
-        
         _itemControllers.Add(controller);
     }
     
@@ -85,7 +81,28 @@ public class WarehouseTabController : MonoBehaviour
 
     public void OnRemoveButtonClicked()
     {
-        //TODO send removeRequest to server
+        string amountText = amountInputField.text;
+        if (string.IsNullOrWhiteSpace(amountText))
+        {
+            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
+            return;
+        }
+
+        int amount = int.Parse(amountText);
+        if (amount > StorageManager.Instance.GetProductAmountByStorage(_warehouse, _currentSelectedProduct.id))
+        {
+            DialogManager.Instance.ShowErrorDialog("dialog_popup_not_enough_product");
+            return;
+        }
+
+        if (amount <= 0)
+        {
+            DialogManager.Instance.ShowErrorDialog();
+            return;
+        }
+
+        RemoveProductRequest removeProductRequest = new RemoveProductRequest(RequestTypeConstant.REMOVE_PRODUCT, false, _warehouse.buildingId, _currentSelectedProduct.id, amount);
+        RequestManager.Instance.SendRequest(removeProductRequest);
     }
 
     public void OnClosePopupButtonClicked()
@@ -123,7 +140,7 @@ public class WarehouseTabController : MonoBehaviour
     {
         var list = new List<Tuple<Utils.Product, int>>();
         
-        foreach (var storageProduct in _warehouse.storageProducts)
+        foreach (var storageProduct in _warehouse.products)
         {
             var product = GameDataManager.Instance.GetProductById(storageProduct.productId);
             if (product.productType == type)

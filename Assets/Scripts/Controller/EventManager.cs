@@ -185,14 +185,12 @@ public class EventManager : MonoBehaviour
     }
 
     public event Action<NewMessageResponse> OnNewMessageResponseEvent;
-
     public void OnNewMessageResponse(NewMessageResponse newMessageResponse)
     {
         OnNewMessageResponseEvent?.Invoke(newMessageResponse);
     }
 
     public event Action<GetAllChatsResponse> OnGetAllChatsResponseEvent;
-
     public void OnGetAllChatsResponse(GetAllChatsResponse getAllChatsResponse)
     {
         OnGetAllChatsResponseEvent?.Invoke(getAllChatsResponse);
@@ -281,5 +279,12 @@ public class EventManager : MonoBehaviour
     public void OnGetAllActiveDcResponse(GetAllActiveDcResponse response)
     {
         OnGetAllActiveDcResponseEvent?.Invoke(response);
+    }
+
+    public event Action<RemoveProductResponse> OnRemoveProductResponseEvent;
+
+    public void OnRemoveProductResponse(RemoveProductResponse response)
+    {
+        OnRemoveProductResponseEvent?.Invoke(response);
     }
 }

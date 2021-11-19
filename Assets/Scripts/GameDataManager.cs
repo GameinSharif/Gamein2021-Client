@@ -55,8 +55,6 @@ public class GameDataManager : MonoBehaviour
         Factories = getGameDataResponse.factories;
 
         GameConstants = getGameDataResponse.gameConstants;
-
-        GameinCustomersManager.Instance.InitializeGameinCustomersInShop(GameinCustomers);
     }
 
     public void OnGetAllActiveDCsResponse(GetAllActiveDcResponse getAllActiveDcResponse)
@@ -68,7 +66,10 @@ public class GameDataManager : MonoBehaviour
     {
         CurrentWeekDemands = getCurrentWeekDemandsResponse.currentWeekDemands;
 
-        //TODO update for active demands of a gamein customer
+        if (MainMenuManager.Instance.IsInTradePage)
+        {
+            GameinCustomersController.Instance.UpdateDemands();
+        }
     }
 
     public void OnGetCurrentWeekSuppliesResponse(GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse)
@@ -141,6 +142,11 @@ public class GameDataManager : MonoBehaviour
         return Factories.First(f => f.id == id);
     }
 
+    public Utils.DC GetDcById(int id)
+    {
+        return DCs.First(f => f.id == id);
+    }
+
     public Utils.Team GetTeamById(int id)
     {
         return Teams.First(t => t.id == id);
@@ -148,7 +154,7 @@ public class GameDataManager : MonoBehaviour
 
     public List<Utils.WeekDemand> GetCurrentWeekDemands(int gameinCustomerId)
     {
-        return CurrentWeekDemands.Where(d => d.gameinCustomer.id == gameinCustomerId) as List<Utils.WeekDemand>;
+        return CurrentWeekDemands.Where(d => d.gameinCustomerId == gameinCustomerId) as List<Utils.WeekDemand>;
     }
 
     public string GetTeamName(int teamId)
@@ -179,6 +185,11 @@ public class GameDataManager : MonoBehaviour
     {
         return GameinSuppliers.FirstOrDefault(s => s.id == supplierId);
     }
+
+    public Utils.GameinCustomer GetCustomerById(int id)
+    {
+        return GameinCustomers.FirstOrDefault(c => c.id == id);
+    }
     
     public Utils.GameinCustomer GetGameinCustomerById(int customerId)
     {
@@ -202,9 +213,19 @@ public class GameDataManager : MonoBehaviour
         return Products.Where(p => p.productType == Utils.ProductType.RawMaterial).ToList();
     }
 
+    public List<Utils.Product> GetFinishedProducts()
+    {
+        return Products.Where(p => p.productType == Utils.ProductType.Finished).ToList();
+    }
+
     public List<Utils.WeekSupply> GetCurrentWeekRawProductSupplies(int rawProductId)
     {
         return CurrentWeekSupplies.Where(s => s.productId == rawProductId).ToList();
+    }
+
+    public List<Utils.WeekDemand> GetCurrentWeekRawProductDemands(int rawProductId)
+    {
+        return CurrentWeekDemands.Where(d => d.productId == rawProductId).ToList();
     }
 
     public Vector2 GetMyTeamLocaionOnMap()
@@ -219,14 +240,14 @@ public class GameDataManager : MonoBehaviour
         switch (transportNodeType)
         {
             case Utils.TransportNodeType.SUPPLIER:
-                //Todo
-                break;
+                Utils.Supplier supplier = GameinSuppliers.First(s => s.id == transportNodeId);
+                return new Vector2((float)supplier.latitude, (float)supplier.longitude);
             case Utils.TransportNodeType.GAMEIN_CUSTOMER:
                 Utils.GameinCustomer gameinCustomer = GameinCustomers.First(c => c.id == transportNodeId);
                 return new Vector2((float)gameinCustomer.latitude, (float)gameinCustomer.longitude);
             case Utils.TransportNodeType.DC:
-                //TODO
-                break;
+                Utils.DC dc = DCs.First(d => d.id == transportNodeId);
+                return new Vector2((float)dc.latitude, (float)dc.longitude);
             case Utils.TransportNodeType.FACTORY:
                 Utils.Factory factory = Factories.First(f => f.id == transportNodeId);
                 return new Vector2((float)factory.latitude, (float)factory.longitude);

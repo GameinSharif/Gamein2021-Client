@@ -101,10 +101,17 @@ public class OfferItemController : MonoBehaviour
         {
             return;
         }
-
-        _isSendingTerminateOrAccept = true;
-        TerminateOfferRequest terminateOfferRequest = new TerminateOfferRequest(RequestTypeConstant.TERMINATE_OFFER, _offer.id);
-        RequestManager.Instance.SendRequest(terminateOfferRequest);
+        
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                _isSendingTerminateOrAccept = true;
+                TerminateOfferRequest terminateOfferRequest = new TerminateOfferRequest(RequestTypeConstant.TERMINATE_OFFER, _offer.id);
+                RequestManager.Instance.SendRequest(terminateOfferRequest);
+            }
+        });
+        
     }
 
     private void OnTerminateOfferResponseRecieved(TerminateOfferResponse terminateOfferResponse)
@@ -122,10 +129,16 @@ public class OfferItemController : MonoBehaviour
         {
             return;
         }
-
-        _isSendingTerminateOrAccept = true;
-        AcceptOfferRequest acceptOfferRequest = new AcceptOfferRequest(_offer.id);
-        RequestManager.Instance.SendRequest(acceptOfferRequest);
+        
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                _isSendingTerminateOrAccept = true;
+                AcceptOfferRequest acceptOfferRequest = new AcceptOfferRequest(_offer.id);
+                RequestManager.Instance.SendRequest(acceptOfferRequest);
+            }
+        });
     }
 
     private void OnAcceptOfferResponse(AcceptOfferResponse acceptOfferResponse)

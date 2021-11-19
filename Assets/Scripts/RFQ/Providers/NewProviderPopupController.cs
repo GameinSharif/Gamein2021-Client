@@ -47,7 +47,7 @@ public class NewProviderPopupController : MonoBehaviour
         }
         else
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog();
         }
     }
 
@@ -104,9 +104,15 @@ public class NewProviderPopupController : MonoBehaviour
 
         string capacity = CapacityInputfield.text;
         string price = PriceInputfield.text;
-        if (string.IsNullOrEmpty(capacity) || string.IsNullOrEmpty(price) || _selectedProductId == 0)
+        if (string.IsNullOrEmpty(capacity) || string.IsNullOrEmpty(price))
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
+            return;
+        }
+
+        if (_selectedProductId == 0)
+        {
+            DialogManager.Instance.ShowErrorDialog("no_product_selected_error");
             return;
         }
 

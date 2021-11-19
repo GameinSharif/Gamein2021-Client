@@ -47,7 +47,7 @@ public class NewOfferPopupController : MonoBehaviour
         }
         else
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog();
         }
     }
 
@@ -119,7 +119,7 @@ public class NewOfferPopupController : MonoBehaviour
         DateTime selectedDate = OfferDeadline.Value;
         if (string.IsNullOrEmpty(volume) || string.IsNullOrEmpty(price) || _selectedProductId == 0 || string.IsNullOrEmpty(date))
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog(_selectedProductId == 0 ? "no_product_selected_error" : "empty_input_field_error");
             return;
         }
 
