@@ -180,6 +180,11 @@ public class GameDataManager : MonoBehaviour
         return GameinSuppliers.FirstOrDefault(s => s.id == supplierId);
     }
     
+    public Utils.GameinCustomer GetGameinCustomerById(int customerId)
+    {
+        return GameinCustomers.FirstOrDefault(s => s.id == customerId);
+    }
+    
     public string GetProductName(int productId)
     {
         foreach (Utils.Product product in Products)

@@ -47,8 +47,8 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     {
         if (newContractSupplierResponse.result == "Successful")
         {
-            GameinSuppliersController.Instance.AddContractItemToList(newContractSupplierResponse.contractSupplier);
-
+            GameinSuppliersController.Instance.AddContractItemsToList(newContractSupplierResponse.contractSuppliers);
+            //TODO what to do with the price?
             makeADealWithSupplierPopupCanvas.SetActive(false);
         }
         else

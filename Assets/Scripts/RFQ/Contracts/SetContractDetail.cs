@@ -5,31 +5,42 @@ using RTLTMPro;
 
 public class SetContractDetail : MonoBehaviour
 {
-    [HideInInspector] public Utils.Contract ContractData;
+    [HideInInspector] public Utils.Contract contractData;
 
-    public RTLTextMeshPro RowNumberTxt;
-    public RTLTextMeshPro GameinCustomerNameTxt;
-    public RTLTextMeshPro ProductNameTxt;
-    public Localize ContractTypeLocalize;
-    public GameObject TerminateButtonGameObject;
+    public RTLTextMeshPro rowNumberTxt;
+    public RTLTextMeshPro gameinCustomerNameTxt;
+    public RTLTextMeshPro productNameTxt;
+    public RTLTextMeshPro contractDateTxt;
+    public RTLTextMeshPro supplyAmountTxt;
+    public RTLTextMeshPro pricePerUnitTxt;
+    public RTLTextMeshPro boughtAmountTxt;
+    public RTLTextMeshPro currentWeekTeamBrandTxt;
+    public RTLTextMeshPro sharePercentageTxt;
+    public RTLTextMeshPro incomePercentageTxt;
+    public RTLTextMeshPro currentWeekPriceRangeTxt;
+    public RTLTextMeshPro terminatePenaltyTxt;
+    public RTLTextMeshPro lostSalePenaltyTxt;
+    
+    public GameObject terminateButtonGameObject;
 
     public void InitializeContract(Utils.Contract contractData, int index)
     {
-        ContractData = contractData;
+        rowNumberTxt.text = (index + 1).ToString();
+        gameinCustomerNameTxt.text = GameDataManager.Instance.GetGameinCustomerById(contractData.gameinCustomerId).name;
+        productNameTxt.text = GameDataManager.Instance.Products[contractData.productId].name;
+        contractDateTxt.text = contractData.contractDate.ToString();
+        supplyAmountTxt.text = contractData.supplyAmount.ToString();
+        pricePerUnitTxt.text = contractData.pricePerUnit.ToString();
+        boughtAmountTxt.text = contractData.boughtAmount.ToString();
+        //TODO how to get brand, share, income, price range
+        currentWeekTeamBrandTxt.text = "brand";
+        sharePercentageTxt.text = "share%";
+        incomePercentageTxt.text = "income%";
+        currentWeekPriceRangeTxt.text = "range";
+        terminatePenaltyTxt.text = contractData.terminatePenalty.ToString();
+        lostSalePenaltyTxt.text = contractData.lostSalePenalty.ToString();
 
-        RowNumberTxt.text = (index + 1).ToString();
-        GameinCustomerNameTxt.text = contractData.gameinCustomer.name;
-        ProductNameTxt.text = GameDataManager.Instance.Products[contractData.productId].name;
-        ContractTypeLocalize.SetKey("contract_type_" + contractData.contractType.ToString().ToLower());
-
-        if (contractData.contractType == Utils.ContractType.LONGTERM)
-        {
-            TerminateButtonGameObject.SetActive(true);
-        }
-        else
-        {
-            TerminateButtonGameObject.SetActive(false);
-        }
+        this.contractData = contractData;
     }
 
     public void OnShowDetailsButtonClick()

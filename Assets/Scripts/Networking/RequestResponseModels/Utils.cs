@@ -84,7 +84,7 @@ public class Utils
         public int teamId;
         public int gameinCustomerId;
         public int productId;
-        private CustomDate contractDate;
+        public CustomDate contractDate;
         public int supplyAmount;
         public float pricePerUnit;
         public int boughtAmount;
