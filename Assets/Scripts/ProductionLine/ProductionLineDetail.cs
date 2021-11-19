@@ -40,8 +40,8 @@ namespace ProductionLine
 
             startProductionButton.interactable = data.status == ProductionLineStatus.ACTIVE;
             scrapButton.interactable = data.status == ProductionLineStatus.ACTIVE;
-
-            if (data.products != null && data.products.Count > 0) startProductionButton.interactable = false;
+            
+            if (data.products != null && data.products.Count > 0 && data.products.Last().endDate.ToDateTime() > MainHeaderManager.Instance.gameDate.ToDateTime()) startProductionButton.interactable = false;
         }
 
 

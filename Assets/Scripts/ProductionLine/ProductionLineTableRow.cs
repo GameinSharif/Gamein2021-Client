@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RTLTMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,40 +30,44 @@ namespace ProductionLine
         public void SetData(Utils.ProductionLineDto data, bool justCreated = false)
         {
             Data = data;
-            name_T.SetKey("production_line_template_"+ GameDataManager.Instance.ProductionLineTemplates
+            name_T.SetKey("production_line_template_" + GameDataManager.Instance.ProductionLineTemplates
                 .FirstOrDefault(c => c.id == Data.productionLineTemplateId)?.name);
-            if (!justCreated)
-            {
-                var currentProduction = Data.products.Last().endDate < TimeManager.Instance.CurrentServerTime;
-                if (Data.products.Count > 0)
-                {
-                    var last = Data.products.Count - 1;
-                    print(Data.products[last].productId);
-                    product_L.SetKey("product_" + GameDataManager.Instance.Products
-                        .FirstOrDefault(c => c.id == Data.products[last].productId)
-                        ?.name);
-                    amount_T.text = Data.products[last].amount.ToString();
-                    endDate_T.text = Data.products[last].endDate.ToString();
-                }
-                else
-                {
-                    product_T.text = "-";
-                    amount_T.text = "-";
-                    endDate_T.text = "-";
-                }
-            }
-            else
-            {
-                product_T.text = "-";
-                amount_T.text = "-";
-                endDate_T.text = "-";
-            }
-
             efficiency_L.SetKey(((EfficiencyLevel) Data.efficiencyLevel).ToString());
             quality_L.SetKey(((QualityLevel) Data.qualityLevel).ToString());
             status_T.text = Data.status.ToString();
 
             showDetailButton.onClick.AddListener(() => { ProductionLinesController.Instance.ShowDetails(Data.id); });
+            
+            if (justCreated)
+            {
+                product_T.text = "-";
+                amount_T.text = "-";
+                endDate_T.text = "-";
+                return;
+            }
+            if (Data.products.Count == 0)
+            {
+                product_T.text = "-";
+                amount_T.text = "-";
+                endDate_T.text = "-";
+                return;
+            }
+            var currentProduction =
+                Data.products.Last().endDate.ToDateTime() > MainHeaderManager.Instance.gameDate.ToDateTime()
+                    ? Data.products.Last()
+                    : null;
+            if (currentProduction is null)
+            {
+                product_T.text = "-";
+                amount_T.text = "-";
+                endDate_T.text = "-";
+                return;
+            }
+            product_L.SetKey("product_" + GameDataManager.Instance.Products
+                .FirstOrDefault(c => c.id == currentProduction.productId)
+                ?.name);
+            amount_T.text = currentProduction.amount.ToString();
+            endDate_T.text = currentProduction.endDate.ToString();
         }
 
         public void SetRowNumber(int number)

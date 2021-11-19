@@ -37,6 +37,11 @@ public class CustomDate
         this.day = day;
     }
 
+    public DateTime ToDateTime()
+    {
+        return new DateTime(year, month, day, 0, 0, 0);
+    }
+    
     override
     public string ToString()
     {

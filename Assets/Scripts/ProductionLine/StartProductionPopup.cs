@@ -16,10 +16,15 @@ namespace ProductionLine
         public ToggleGroup _toggleGroup;
         public Button start_B;
 
-        private int selectedProduct
+        private int _selectedProduct;
+        private int SelectedProduct
         {
-            get => selectedProduct;
-            set => start_B.interactable = value != -1;
+            get => _selectedProduct;
+            set
+            {
+                start_B.interactable = value != -1;
+                _selectedProduct = value;
+            }
         }
 
         private List<GameObject> choices = new List<GameObject>();
@@ -57,12 +62,12 @@ namespace ProductionLine
             }
             _toggleGroup.SetAllTogglesOff();
 
-            selectedProduct = -1;
+            SelectedProduct = -1;
         }
         
         private void Select(bool toggleOn, int productId)
         {
-            selectedProduct = toggleOn ? productId : -1;
+            SelectedProduct = toggleOn ? productId : -1;
         }
 
         public void StartButton()
@@ -74,7 +79,7 @@ namespace ProductionLine
                 return;
             }
 
-            if (!HaveEnoughMaterialForProduct(selectedProduct, amount))
+            if (!HaveEnoughMaterialForProduct(SelectedProduct, amount))
             {
                 DialogManager.Instance.ShowErrorDialog("not_enough_material_error");
                 return;
@@ -85,7 +90,7 @@ namespace ProductionLine
                 if (agreed)
                 {
                     var request =
-                        new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, data.id, selectedProduct,
+                        new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, data.id, SelectedProduct,
                             amount);
                     RequestManager.Instance.SendRequest(request);
                     CloseButton();
@@ -96,6 +101,8 @@ namespace ProductionLine
         private bool HaveEnoughMaterialForProduct(int productId, int amount)
         {
             var ingredients = GameDataManager.Instance.GetProductById(productId).ingredientsPerUnit;
+            if (ingredients is null) return true;
+            
             foreach (var ingredient in ingredients)
             {
                 if (ingredient.amount * amount * _template.batchSize >

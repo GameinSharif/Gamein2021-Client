@@ -12,11 +12,17 @@ namespace ProductionLine
         public ToggleGroup _toggleGroup;
         public Sprite defaultImageForChoice;
         public Button construct_B;
-
-        private int currentSelected
+        
+        
+        private int _currentSelected;
+        private int CurrentSelected
         {
-            get => currentSelected;
-            set => construct_B.interactable = value != -1;
+            get => _currentSelected;
+            set
+            {
+                construct_B.interactable = value != -1;
+                _currentSelected = value;
+            }
         }
 
         private void Awake()
@@ -33,17 +39,17 @@ namespace ProductionLine
         private void OnEnable()
         {
             _toggleGroup.SetAllTogglesOff();
-            currentSelected = -1;
+            CurrentSelected = -1;
         }
 
         private void Select(bool toggleOn, int templateId)
         {
-            currentSelected = toggleOn ? templateId : -1;
+            CurrentSelected = toggleOn ? templateId : -1;
         }
 
         public void ConstructButton()
         {
-            ProductionLinesController.Instance.ConstructProductionLine(currentSelected);
+            ProductionLinesController.Instance.ConstructProductionLine(CurrentSelected);
             CloseButton();
         }
 
