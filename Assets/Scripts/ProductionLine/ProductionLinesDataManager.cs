@@ -8,7 +8,7 @@ namespace ProductionLine
     {
         public static ProductionLinesDataManager Instance;
 
-        public List<Utils.ProductionLineDto> productionLineDtos;
+        [HideInInspector] public List<Utils.ProductionLineDto> productionLineDtos;
 
         private void Awake()
         {
