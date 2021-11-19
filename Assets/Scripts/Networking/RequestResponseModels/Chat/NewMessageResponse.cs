@@ -3,6 +3,7 @@
 [Serializable]
 public class NewMessageResponse : ResponseObject
 {
-    public MessageData messageDto;
-    public string message;
+    public ChatData chat;
+    public MessageData message;
+    public string result;
 }

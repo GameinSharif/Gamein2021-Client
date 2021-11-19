@@ -6,7 +6,6 @@ using Mapbox.Unity.Map;
 using Mapbox.Utils;
 using Mapbox.Examples;
 using System;
-using UnityEngine.SceneManagement;
 using System.Linq;
 
 public class MapManager : MonoBehaviour
@@ -20,7 +19,7 @@ public class MapManager : MonoBehaviour
     private List<MapUtils.OnMapMarker> _onMapMarkers = new List<MapUtils.OnMapMarker>();
     private List<MapUtils.OnMapLine> _onMapLines = new List<MapUtils.OnMapLine>();
 
-    private readonly float[] _possibleZoomAmounts = { 2, 4, 6, 8, 10 };
+    private readonly float[] _possibleZoomAmounts = { 6, 8, 9, 10 };
     private int _currnetZoomAmountIndex = 0;
     private int _currnetMapTypeIndex = 0;
 
@@ -204,7 +203,7 @@ public class MapManager : MonoBehaviour
 
     private void InitializeMap()
     {
-        int lastMapTypeIndex = PlayerPrefs.GetInt("LastMapTypeIndex", 2);
+        int lastMapTypeIndex = PlayerPrefs.GetInt("LastMapTypeIndex", 1);
         _currnetMapTypeIndex = lastMapTypeIndex;
         _abstractMap.ImageLayer.SetProperties((ImagerySourceType)_currnetMapTypeIndex, _useRetina, _useCompression, _useMipMap);
         SetMapTypesActiveStatus();
@@ -252,7 +251,7 @@ public class MapManager : MonoBehaviour
 
     public void ZoomIn()
     {
-        if (_currnetZoomAmountIndex < 4)
+        if (_currnetZoomAmountIndex < _possibleZoomAmounts.Length -1)
         {
             SetMapZoom(_currnetZoomAmountIndex + 1);
         }

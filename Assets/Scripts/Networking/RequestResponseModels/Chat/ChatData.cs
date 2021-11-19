@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class ChatData
 {
-    
     public int id;
     public CustomDateTime latestMessageDate;
     public int team1Id;
@@ -13,11 +13,17 @@ public class ChatData
 
     public string TeamName
     {
-        //TODO get team name from somewhere
-        get;
-        set;
+        get
+        {
+            return GameDataManager.Instance.GetTeamName(TheirTeamId);
+        }
     }
 
-    //TODO check team1Id and team2Id with our teamId and return theirs
-    public int TheirTeamId => team2Id;
+    public int TheirTeamId
+    {
+        get
+        {
+            return PlayerPrefs.GetInt("TeamId") == team1Id ? team2Id : team1Id;
+        }
+    }
 }

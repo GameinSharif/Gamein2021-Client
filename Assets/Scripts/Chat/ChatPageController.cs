@@ -65,9 +65,6 @@ public class ChatPageController : MonoBehaviour
 
         SendMessageToServer(inputField.text);
         
-        AddMessageToChat(new MessageData{text = inputField.text, IsFromMe = true});
-        AddMessageToChat(new MessageData{text = "wow! that is amazing :) ", IsFromMe = false});
-        
         inputField.text = "";
         inputField.Select();
         inputField.ActivateInputField();
@@ -75,7 +72,7 @@ public class ChatPageController : MonoBehaviour
 
     private void SendMessageToServer(string text)
     {
-        RequestManager.Instance.SendRequest(new NewMessageRequest(_chatData.TheirTeamId, text, new CustomDateTime(DateTime.Now)));
+        RequestManager.Instance.SendRequest(new NewMessageRequest(_chatData.TheirTeamId, text));
     }
 
     public void LoadChat(ChatData chatData)

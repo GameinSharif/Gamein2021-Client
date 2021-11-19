@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 [Serializable]
 public class MessageData
@@ -11,9 +12,15 @@ public class MessageData
 
     public bool IsFromMe
     {
-        //TODO check for teamId and remove set
-        get;
-        set;
+        get
+        {
+            return PlayerPrefs.GetInt("TeamId") == senderTeamId;
+        }
+
+        set
+        {
+            IsFromMe = value;
+        }
     }
 
     public int TheirTeamId => IsFromMe ? receiverTeamId : senderTeamId;
