@@ -24,6 +24,9 @@ public class MainMenuManager : MonoBehaviour
 
         GetTeamTransportsRequest getTeamTransportsRequest = new GetTeamTransportsRequest(RequestTypeConstant.GET_TEAM_TRANSPORTS);
         RequestManager.Instance.SendRequest(getTeamTransportsRequest);
+
+        GetAllChatsRequest getAllChatsRequest = new GetAllChatsRequest();
+        RequestManager.Instance.SendRequest(getAllChatsRequest);
     }
 
     private void Start()
