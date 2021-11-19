@@ -91,6 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   choicePrefab: {fileID: 6573773962872061326, guid: 3ee07012e72f7d446b83bb9860f666c3, type: 3}
   choicesParent: {fileID: 7449538256101879690}
+  _toggleGroup: {fileID: 496725790636100155}
 --- !u!1 &205846112
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,6 +317,7 @@ MonoBehaviour:
   choicePrefab: {fileID: 3710451119043317870, guid: 3bf95fc90d2934f419f75c7956714190, type: 3}
   choicesParent: {fileID: 516877291820688949}
   productAmount_I: {fileID: 308545605016776026}
+  _toggleGroup: {fileID: 4458858829468707821}
 --- !u!1 &1330595028
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +490,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 800, y: 800}
+  m_SizeDelta: {x: 1000, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1331001552
 CanvasRenderer:
@@ -5655,6 +5657,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7449538256101879690}
   - component: {fileID: 5758656556686305292}
+  - component: {fileID: 496725790636100155}
   m_Layer: 5
   m_Name: Choices
   m_TagString: Untagged
@@ -5702,9 +5705,22 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 250, y: 150}
-  m_Spacing: {x: 0, y: 0}
+  m_Spacing: {x: 10, y: 10}
   m_Constraint: 1
   m_ConstraintCount: 4
+--- !u!114 &496725790636100155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5882024612233142576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!1 &6327355707729717906
 GameObject:
   m_ObjectHideFlags: 0
@@ -6103,7 +6119,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 250, y: 150}
+  m_CellSize: {x: 220, y: 150}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 0
   m_ConstraintCount: 2

@@ -15,7 +15,7 @@ namespace ProductionLine
 
         public TMP_InputField productAmount_I;
 
-        private ToggleGroup _toggleGroup;
+        public ToggleGroup _toggleGroup;
         private int selectedProduct = -1;
 
         private List<GameObject> choices = new List<GameObject>();
@@ -28,7 +28,7 @@ namespace ProductionLine
             {
                 var c = Instantiate(choicePrefab, choicesParent);
                 choices.Add(c);
-                _toggleGroup.RegisterToggle(c.GetComponent<Toggle>());
+                c.GetComponent<Toggle>().group = _toggleGroup;
             }
         }
 

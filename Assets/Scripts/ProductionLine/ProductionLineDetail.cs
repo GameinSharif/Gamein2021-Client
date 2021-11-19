@@ -34,9 +34,9 @@ namespace ProductionLine
         {
             Data = data;
 
-            qualityUpgradeButton.interactable = data.qualityLevel != 2;
+            qualityUpgradeButton.interactable = data.status == ProductionLineStatus.ACTIVE && data.qualityLevel != 2;
 
-            efficiencyUpgradeButton.interactable = data.efficiencyLevel != 2;
+            efficiencyUpgradeButton.interactable = data.status == ProductionLineStatus.ACTIVE && data.efficiencyLevel != 2;
 
             startProductionButton.interactable = data.status == ProductionLineStatus.ACTIVE;
             scrapButton.interactable = data.status == ProductionLineStatus.ACTIVE;

@@ -29,13 +29,22 @@ namespace ProductionLine
             EventManager.Instance.OnUpgradeProductionLineEfficiencyResponseEvent +=
                 OnUpgradeProductionLineEfficiencyResponse;
             EventManager.Instance.OnUpgradeProductionLineQualityResponseEvent += OnUpgradeProductionLineQualityResponse;
+            EventManager.Instance.OnProductionLineConstructionCompletedResponseEvent +=
+                OnProductionLineConstructionCompletedResponse;
+            EventManager.Instance.OnProductCreationCompletedResponseEvent += OnProductCreationCompletedResponse;
+
             productionLineDetail.gameObject.SetActive(false);
         }
 
         public void ConstructProductionLine(int productionLineTemplateId)
         {
-            //TODO: check money
-            
+            if (GameDataManager.Instance.GetProductionLineTemplateById(productionLineTemplateId).constructionCost >
+                MainHeaderManager.Instance.Money)
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
+
             DialogManager.Instance.ShowConfirmDialog(agreed =>
             {
                 if (agreed)
@@ -79,7 +88,7 @@ namespace ProductionLine
 
             constructButton.SetAsLastSibling();
         }
-        
+
         public void PopupConstructProductionLine()
         {
             constructPopup.SetActive(true);
@@ -89,8 +98,20 @@ namespace ProductionLine
 
         private void OnGetProductionLinesResponse(GetProductionLinesResponse response)
         {
+            if (response.productionLines is null)
+            {
+                Debug.LogError("error while getting production lines");
+                return;
+            }
+
+            foreach (var item in productionLineTableRows)
+            {
+                Destroy(item.gameObject);
+            }
+
+            productionLineTableRows.Clear();
             foreach (var item in response.productionLines
-                    .Where(c => c.status == ProductionLineStatus.ACTIVE))
+                .Where(c => c.status != ProductionLineStatus.SCRAPPED))
             {
                 if (item.status == ProductionLineStatus.SCRAPPED) continue;
                 var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
@@ -103,6 +124,12 @@ namespace ProductionLine
 
         private void OnConstructProductionLineResponse(ConstructProductionLineResponse response)
         {
+            if (response.productionLine is null)
+            {
+                Debug.LogError("cant struct production line");
+                return;
+            }
+
             if (productionLineTableRows.Select(c => c.Data).Contains(response.productionLine)) return;
             var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
             current.SetData(response.productionLine, true);
@@ -112,6 +139,12 @@ namespace ProductionLine
 
         private void OnScrapProductionLineResponse(ScrapProductionLineResponse response)
         {
+            if (response.productionLine is null)
+            {
+                Debug.LogError("cant scrap production line");
+                return;
+            }
+
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             if (current is null) return;
             productionLineTableRows.Remove(current);
@@ -123,6 +156,12 @@ namespace ProductionLine
 
         private void OnStartProductionResponse(StartProductionResponse response)
         {
+            if (response.productionLine is null)
+            {
+                Debug.LogError("cant start production");
+                return;
+            }
+
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
@@ -130,6 +169,12 @@ namespace ProductionLine
 
         private void OnUpgradeProductionLineEfficiencyResponse(UpgradeProductionLineEfficiencyResponse response)
         {
+            if (response.productionLine is null)
+            {
+                Debug.LogError("cant upgrade efficiency production line");
+                return;
+            }
+
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
@@ -137,9 +182,27 @@ namespace ProductionLine
 
         private void OnUpgradeProductionLineQualityResponse(UpgradeProductionLineQualityResponse response)
         {
+            if (response.productionLine is null)
+            {
+                Debug.LogError("cant upgrade quality production line");
+                return;
+            }
+
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
+        }
+
+        private void OnProductionLineConstructionCompletedResponse(ProductionLineConstructionCompletedResponse response)
+        {
+            var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
+            current?.SetData(response.productionLine);
+            UpdateDetails(response.productionLine);
+        }
+
+        private void OnProductCreationCompletedResponse(ProductCreationCompletedResponse response)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
