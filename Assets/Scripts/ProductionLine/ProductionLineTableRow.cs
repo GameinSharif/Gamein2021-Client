@@ -33,13 +33,16 @@ namespace ProductionLine
                 .FirstOrDefault(c => c.id == Data.productionLineTemplateId)?.name);
             if (!justCreated)
             {
+                var currentProduction = Data.products.Last().endDate < TimeManager.Instance.CurrentServerTime;
                 if (Data.products.Count > 0)
                 {
+                    var last = Data.products.Count - 1;
+                    print(Data.products[last].productId);
                     product_L.SetKey("product_" + GameDataManager.Instance.Products
-                        .FirstOrDefault(c => c.id == Data.products[0].id)
+                        .FirstOrDefault(c => c.id == Data.products[last].productId)
                         ?.name);
-                    amount_T.text = Data.products[0].amount.ToString();
-                    endDate_T.text = Data.products[0].endDate.ToString();
+                    amount_T.text = Data.products[last].amount.ToString();
+                    endDate_T.text = Data.products[last].endDate.ToString();
                 }
                 else
                 {

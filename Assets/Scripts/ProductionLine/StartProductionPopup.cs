@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.Mapbox.Unity.MeshGeneration.Modifiers.MeshModifiers;
-using RTLTMPro;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,11 +14,18 @@ namespace ProductionLine
         public TMP_InputField productAmount_I;
 
         public ToggleGroup _toggleGroup;
-        private int selectedProduct = -1;
+        public Button start_B;
+
+        private int selectedProduct
+        {
+            get => selectedProduct;
+            set => start_B.interactable = value != -1;
+        }
 
         private List<GameObject> choices = new List<GameObject>();
 
         private Utils.ProductionLineDto data;
+        private Utils.ProductionLineTemplate _template;
 
         private void Awake()
         {
@@ -35,7 +40,7 @@ namespace ProductionLine
         public void Setup(Utils.ProductionLineDto data)
         {
             this.data = data;
-            _toggleGroup.SetAllTogglesOff();
+            _template = GameDataManager.Instance.GetProductionLineTemplateById(data.productionLineTemplateId);
             foreach (var item in choices)
             {
                 item.SetActive(false);
@@ -48,37 +53,75 @@ namespace ProductionLine
                 var product = products[i];
                 choices[i].SetActive(true);
                 choices[i].GetComponentInChildren<Localize>().SetKey("product_" + product.name);
-                choices[i].GetComponent<Toggle>().onValueChanged.AddListener(on => Select(product.id));
+                choices[i].GetComponent<Toggle>().onValueChanged.AddListener(on => Select(on, product.id));
             }
+            _toggleGroup.SetAllTogglesOff();
 
             selectedProduct = -1;
         }
-
-        private void Select(int productId)
+        
+        private void Select(bool toggleOn, int productId)
         {
-            selectedProduct = productId;
+            selectedProduct = toggleOn ? productId : -1;
         }
 
         public void StartButton()
         {
             int amount = int.Parse(productAmount_I.text);
-            //TODO: check money and materials
-            
+            if (!HaveEnoughMoneyForProduct(amount))
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
+
+            if (!HaveEnoughMaterialForProduct(selectedProduct, amount))
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_material_error");
+                return;
+            }
+
             DialogManager.Instance.ShowConfirmDialog(agreed =>
             {
                 if (agreed)
                 {
                     var request =
-                        new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, data.id, selectedProduct, amount);
+                        new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, data.id, selectedProduct,
+                            amount);
                     RequestManager.Instance.SendRequest(request);
                     CloseButton();
                 }
             });
         }
 
+        private bool HaveEnoughMaterialForProduct(int productId, int amount)
+        {
+            var ingredients = GameDataManager.Instance.GetProductById(productId).ingredientsPerUnit;
+            foreach (var ingredient in ingredients)
+            {
+                if (ingredient.amount * amount * _template.batchSize >
+                    StorageManager.Instance.GetProductAmountByStorage(StorageManager.Instance.GetWarehouse(),
+                        ingredient.productId))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool HaveEnoughMoneyForProduct(int amount)
+        {
+            return CalculateProductionCost(amount) <= MainHeaderManager.Instance.Money;
+        }
+
         public void CloseButton()
         {
             gameObject.SetActive(false);
+        }
+
+        private int CalculateProductionCost(int amount)
+        {
+            return _template.productionCostPerOneProduct * _template.batchSize * amount + _template.setupCost;
         }
     }
 }

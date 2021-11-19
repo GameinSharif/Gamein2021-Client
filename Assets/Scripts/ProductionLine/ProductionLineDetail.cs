@@ -53,7 +53,12 @@ namespace ProductionLine
 
         public void UpgradeProductionLineEfficiency()
         {
-            //TODO: check money
+            if (GameDataManager.Instance.GetProductionLineTemplateById(Data.productionLineTemplateId).efficiencyLevels[Data.efficiencyLevel+1].upgradeCost >
+                MainHeaderManager.Instance.Money)
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
             
             DialogManager.Instance.ShowConfirmDialog(agreed =>
             {
@@ -70,7 +75,12 @@ namespace ProductionLine
 
         public void UpgradeProductionLineQuality()
         {
-            //TODO: check money
+            if (GameDataManager.Instance.GetProductionLineTemplateById(Data.productionLineTemplateId).qualityLevels[Data.qualityLevel+1].upgradeCost >
+                MainHeaderManager.Instance.Money)
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
             
             DialogManager.Instance.ShowConfirmDialog(agreed =>
             {
@@ -90,7 +100,6 @@ namespace ProductionLine
                 {
                     var request = new ScarpProductionLineRequest(RequestTypeConstant.SCRAP_PRODUCTION_LINE, Data.id);
                     RequestManager.Instance.SendRequest(request);
-                    //TODO: add money
                 }
             });
         }

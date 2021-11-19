@@ -11,8 +11,13 @@ namespace ProductionLine
         public Transform choicesParent;
         public ToggleGroup _toggleGroup;
         public Sprite defaultImageForChoice;
-        
-        private int currentSelected = -1;
+        public Button construct_B;
+
+        private int currentSelected
+        {
+            get => currentSelected;
+            set => construct_B.interactable = value != -1;
+        }
 
         private void Awake()
         {
@@ -33,7 +38,6 @@ namespace ProductionLine
 
         private void Select(bool toggleOn, int templateId)
         {
-            print(templateId);
             currentSelected = toggleOn ? templateId : -1;
         }
 

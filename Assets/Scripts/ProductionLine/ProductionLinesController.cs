@@ -135,7 +135,7 @@ namespace ProductionLine
         {
             if (response.productionLine is null)
             {
-                Debug.LogError("cant struct production line");
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
                 return;
             }
 
@@ -154,6 +154,8 @@ namespace ProductionLine
                 return;
             }
 
+            MainHeaderManager.Instance.Money += GameDataManager.Instance
+                .GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).scrapPrice;
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             if (current is null) return;
             productionLineTableRows.Remove(current);
@@ -171,6 +173,8 @@ namespace ProductionLine
                 return;
             }
 
+            //TODO: decrease money
+
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
@@ -180,7 +184,7 @@ namespace ProductionLine
         {
             if (response.productionLine is null)
             {
-                Debug.LogError("cant upgrade efficiency production line");
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
                 return;
             }
 
@@ -193,7 +197,7 @@ namespace ProductionLine
         {
             if (response.productionLine is null)
             {
-                Debug.LogError("cant upgrade quality production line");
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
                 return;
             }
 
@@ -211,7 +215,13 @@ namespace ProductionLine
 
         private void OnProductCreationCompletedResponse(ProductCreationCompletedResponse response)
         {
-            throw new NotImplementedException();
+            //TODO
+            //var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productLineId);
+            //current?.SetData(response.productionLine);
+            //UpdateDetails(response.productionLine);
+
+            StorageManager.Instance.ChangeStockInStorage(StorageManager.Instance.GetWarehouse().id,
+                response.product.productId, response.product.amount);
         }
 
         #endregion
