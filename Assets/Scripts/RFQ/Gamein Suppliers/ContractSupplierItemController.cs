@@ -8,20 +8,26 @@ public class ContractSupplierItemController : MonoBehaviour
     public RTLTextMeshPro no;
     public RTLTextMeshPro supplierName;
     public Localize productNameLocalize;
-    public RTLTextMeshPro contractType;
-    //public Localize OfferStatusLocalize;
-
-    public GameObject ShowDetailsButtonGameObject;
-    public GameObject HideDetailsButtonGameObject;
+    public RTLTextMeshPro contractDate;
+    public RTLTextMeshPro currentWeekPrice;
+    public RTLTextMeshPro boughtAmount;
+    public RTLTextMeshPro transportType;
+    public RTLTextMeshPro transportCost;
+    public Localize hasInsurance;
+    public RTLTextMeshPro terminatePenalty;
+    public RTLTextMeshPro noMoneyPenalty;
+    
+    // public GameObject ShowDetailsButtonGameObject;
+    // public GameObject HideDetailsButtonGameObject;
     public GameObject TerminateContractButtonGameObject;
-    public GameObject DetailsParent;
-    public GameObject DetailItemsParent;
+    // public GameObject DetailsParent;
+    // public GameObject DetailItemsParent;
 
-    public GameObject ContractSupplierDetailItemPrefab;
+    //public GameObject ContractSupplierDetailItemPrefab;
     
     private Utils.ContractSupplier _contractSupplier;
-    private List<Utils.ContractSupplierDetail> _contractSupplierDetails;
-    private List<GameObject> _spawnedDetailsGameObjects = new List<GameObject>();
+    //private List<Utils.ContractSupplierDetail> _contractSupplierDetails;
+    //private List<GameObject> _spawnedDetailsGameObjects = new List<GameObject>();
 
     private void OnEnable()
     {
@@ -33,13 +39,19 @@ public class ContractSupplierItemController : MonoBehaviour
         EventManager.Instance.OnTerminateLongtermContractSupplierResponseEvent -= OnTerminateLongtermContractSupplierResponseReceived;
     }
     
-    public void SetInfo(int no, string supplierName,  string productNameKey, string contractType)
+    public void SetInfo(int no, string supplierName, string productNameKey, CustomDate contractDate, float currentWeekPrice, int boughtAmount, Utils.VehicleType transportType, float transportCost, bool hasInsurance, int terminatePenalty, int noMoneyPenalty)
     {
         this.no.text = no.ToString();
         this.supplierName.text = supplierName;
         productNameLocalize.SetKey("product_" + productNameKey);
-        this.contractType.text = contractType;
-        
+        this.contractDate.text = contractDate.ToString();
+        this.currentWeekPrice.text = currentWeekPrice.ToString();
+        this.boughtAmount.text = boughtAmount.ToString();
+        this.transportType.text = transportType.ToString();
+        this.transportCost.text = transportCost.ToString();
+        this.hasInsurance.SetKey(hasInsurance ? "contract_supplier_item_insurance_yes" : "contract_supplier_item_insurance_no");
+        this.terminatePenalty.text = terminatePenalty.ToString();
+        this.noMoneyPenalty.text = noMoneyPenalty.ToString();
     }
 
     public void SetInfo(int no, Utils.ContractSupplier contractSupplier)
@@ -48,27 +60,34 @@ public class ContractSupplierItemController : MonoBehaviour
             no: no,
             supplierName: GameDataManager.Instance.GetSupplierName(contractSupplier.supplierId),
             productNameKey: GameDataManager.Instance.GetProductById(contractSupplier.materialId).name,
-            contractType: contractSupplier.contractType.ToString()
+            contractDate: contractSupplier.contractDate,
+            currentWeekPrice: contractSupplier.pricePerUnit,
+            boughtAmount: contractSupplier.boughtAmount,
+            transportType: contractSupplier.transportType,
+            transportCost: contractSupplier.transportationCost,
+            hasInsurance: contractSupplier.hasInsurance,
+            terminatePenalty: contractSupplier.terminatePenalty,
+            noMoneyPenalty: contractSupplier.noMoneyPenalty
         );
 
-        if (contractSupplier.contractType == Utils.ContractType.LONGTERM)
-        {
-            TerminateContractButtonGameObject.SetActive(true);
-            ShowDetailsButtonGameObject.SetActive(true);
-            HideDetailsButtonGameObject.SetActive(false);
-        }
-        else
-        {
-            TerminateContractButtonGameObject.SetActive(false);
-            ShowDetailsButtonGameObject.SetActive(true);
-            HideDetailsButtonGameObject.SetActive(false);
-        }
+        // if (contractSupplier.contractType == Utils.ContractType.LONGTERM)
+        // {
+        //     TerminateContractButtonGameObject.SetActive(true);
+        //     ShowDetailsButtonGameObject.SetActive(true);
+        //     HideDetailsButtonGameObject.SetActive(false);
+        // }
+        // else
+        // {
+        //     TerminateContractButtonGameObject.SetActive(false);
+        //     ShowDetailsButtonGameObject.SetActive(true);
+        //     HideDetailsButtonGameObject.SetActive(false);
+        // }
 
         _contractSupplier = contractSupplier;
-        SetContractDetails();
-        DetailsParent.SetActive(false);
+        // SetContractDetails();
+        // DetailsParent.SetActive(false);
     }
-
+    /*
     public void SetContractDetails()
     {
         _contractSupplierDetails = _contractSupplier.contractSupplierDetails;
@@ -128,7 +147,7 @@ public class ContractSupplierItemController : MonoBehaviour
         ShowDetailsButtonGameObject.SetActive(true);
         HideDetailsButtonGameObject.SetActive(false);
     }
-    
+    */
     public void OnTerminateButtonClicked()
     {
         TerminateLongtermContractSupplierRequest terminateLongtermContractSupplier = new TerminateLongtermContractSupplierRequest(RequestTypeConstant.TERMINATE_LONGTERM_CONTRACT_WITH_SUPPLIER, _contractSupplier.id);
