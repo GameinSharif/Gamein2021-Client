@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class NewContractSupplierResponse : ResponseObject
 {
-    public Utils.ContractSupplier contractSupplier;
-    public string result;
+    public List<Utils.ContractSupplier> contractSuppliers;
+    public float price;
+    public String result;
 }

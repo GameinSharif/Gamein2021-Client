@@ -78,25 +78,20 @@ public class Utils
     }
 
     [Serializable]
-    public class ContractDetail
-    {
-        public int id;
-        public CustomDateTime contractDate;
-        public int maxAmount;
-        public int boughtAmount;
-        public int pricePerUnit;
-        public int lostSalePenalty;
-    }
-
-    [Serializable]
     public class Contract
     {
         public int id;
-        public GameinCustomer gameinCustomer;
+        public int teamId;
+        public int gameinCustomerId;
         public int productId;
-        public ContractType contractType;
-        public List<ContractDetail> contractDetails;
+        private CustomDate contractDate;
+        public int supplyAmount;
+        public float pricePerUnit;
+        public int boughtAmount;
+        //TODO add parameters needed after calculating shares
+        public int lostSalePenalty;
         public int terminatePenalty;
+        public bool isTerminated;
     }
 
     [Serializable]
@@ -154,13 +149,18 @@ public class Utils
     public class ContractSupplier
     {
         public int id;
+        public CustomDate contractDate;
         public int supplierId;
         public int teamId;
         public int materialId;
-        public ContractType contractType;
-        public List<ContractSupplierDetail> contractSupplierDetails;
+        public float pricePerUnit;
+        public int boughtAmount;
+        public VehicleType transportType;
+        public bool hasInsurance;
+        public float transportationCost;
         public int terminatePenalty;
         public bool isTerminated;
+        public int noMoneyPenalty;
     }
 
     public enum ProductType
