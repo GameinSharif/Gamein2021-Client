@@ -2842,11 +2842,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6423773582558799223, guid: fd359c11b24deef42a64c81b6a1c337c, type: 3}
   m_PrefabInstance: {fileID: 324815382}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &324815385 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6423773581282011795, guid: fd359c11b24deef42a64c81b6a1c337c, type: 3}
-  m_PrefabInstance: {fileID: 324815382}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &324815386 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6423773582594812379, guid: fd359c11b24deef42a64c81b6a1c337c, type: 3}
@@ -11979,7 +11974,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   makeADealWithSupplierPopupCanvas: {fileID: 2100697991}
-  longtermModeParent: {fileID: 2100697990}
   productImage: {fileID: 2100697989}
   productNameLocalize: {fileID: 2100697988}
   amount: {fileID: 2100697987}
@@ -11987,10 +11981,10 @@ MonoBehaviour:
   totalPrice: {fileID: 2100697985}
   finalPrice: {fileID: 2100697984}
   arrivalDate: {fileID: 2100697983}
-  repetition: {fileID: 2100697982}
   transportationMode: {fileID: 2100697981}
   numberOfRepetition: {fileID: 2100697980}
   penalty: {fileID: 2100697979}
+  wantsInsurance: {fileID: 0}
 --- !u!114 &1580763862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12006,7 +12000,7 @@ MonoBehaviour:
   rawProductItemPrefab: {fileID: 1753029309529033913, guid: 4ab1031612e20c94598aeb4f164c13a7, type: 3}
   contractSupplierItemPrefab: {fileID: 1753029309529033913, guid: c721920893c870c4db0b2f1c8a6bfcb1, type: 3}
   contractSuppliersScrollViewParent: {fileID: 324815386}
-  rawProductsScrollViewParent: {fileID: 324815385}
+  rawProductsScrollViewParent: {fileID: 0}
   gameinSuppliersCanvas: {fileID: 324815383}
 --- !u!4 &1580763863
 Transform:
@@ -15263,6 +15257,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -35.983
       objectReference: {fileID: 0}
+    - target: {fileID: 2580772387488009352, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580772387488009352, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580772387488009352, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1580763861}
+    - target: {fileID: 2580772387488009352, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580772387488009352, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnInsuranceToggleChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580772387488009352, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MakeADealWithSupplierPopupController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580772387488009352, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2698697548950725814, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -15355,6 +15377,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -35.983
       objectReference: {fileID: 0}
+    - target: {fileID: 3877732288210292549, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877732288210292549, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877732288210292549, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1580763861}
+    - target: {fileID: 3877732288210292549, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877732288210292549, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnInsuranceToggleChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877732288210292549, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MakeADealWithSupplierPopupController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877732288210292549, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4782797555206083733, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -15435,6 +15485,62 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -51.406006
       objectReference: {fileID: 0}
+    - target: {fileID: 6579691641384482428, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6579691641384482428, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6579691641384482428, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1580763861}
+    - target: {fileID: 6579691641384482428, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6579691641384482428, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTransportationModeToggleChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 6579691641384482428, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MakeADealWithSupplierPopupController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6579691641384482428, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6932062216928907076, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6932062216928907076, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6932062216928907076, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1580763861}
+    - target: {fileID: 6932062216928907076, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6932062216928907076, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTransportationModeToggleChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 6932062216928907076, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MakeADealWithSupplierPopupController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6932062216928907076, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7257504888873400262, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 73.487976
@@ -15470,6 +15576,34 @@ PrefabInstance:
     - target: {fileID: 8072354102945173076, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -18.601013
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239053783465761129, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239053783465761129, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239053783465761129, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1580763861}
+    - target: {fileID: 8239053783465761129, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239053783465761129, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTransportationModeToggleChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239053783465761129, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MakeADealWithSupplierPopupController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239053783465761129, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8493966069632467914, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
       propertyPath: m_Name
@@ -15607,6 +15741,34 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: MakeADealWithSupplierPopupController, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 8839019605457465580, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8839019605457465580, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8839019605457465580, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1580763861}
+    - target: {fileID: 8839019605457465580, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8839019605457465580, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnTransportationModeToggleChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 8839019605457465580, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MakeADealWithSupplierPopupController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8839019605457465580, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8980584813544089364, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -583.00006
@@ -15658,17 +15820,6 @@ MonoBehaviour:
 --- !u!114 &2100697981 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7319649959060027822, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
-  m_PrefabInstance: {fileID: 2100697978}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2100697982 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2768882315358467340, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
   m_PrefabInstance: {fileID: 2100697978}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -15754,11 +15905,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &2100697990 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5487785872309967976, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}
-  m_PrefabInstance: {fileID: 2100697978}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2100697991 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8710817870900047529, guid: 5b4626bcc39bb364fb6bf94a103dee6c, type: 3}

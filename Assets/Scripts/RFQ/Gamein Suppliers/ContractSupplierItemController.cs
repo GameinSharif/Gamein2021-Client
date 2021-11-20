@@ -166,7 +166,8 @@ public class ContractSupplierItemController : MonoBehaviour
         {
             if (terminateLongtermContractSupplierResponse.result == "Successful")
             {
-                //TODO show that contract was terminated visually and take the penalty
+                DialogManager.Instance.ShowErrorDialog("contract_supplier_successfully_terminated");
+                MainHeaderManager.Instance.Money = MainHeaderManager.Instance.Money - terminateLongtermContractSupplierResponse.contractSupplier.terminatePenalty;
                 TerminateContractButtonGameObject.SetActive(false);
             }
         }

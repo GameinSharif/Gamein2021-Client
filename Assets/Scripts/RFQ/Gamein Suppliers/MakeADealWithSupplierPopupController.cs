@@ -47,7 +47,11 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     {
         if (newContractSupplierResponse.result == "Successful")
         {
-            GameinSuppliersController.Instance.AddContractItemsToList(newContractSupplierResponse.contractSuppliers);
+            List<Utils.ContractSupplier> contractSuppliers = newContractSupplierResponse.contractSuppliers;
+            GameinSuppliersController.Instance.AddContractItemsToList(contractSuppliers);
+            Utils.ContractSupplier firstContract = contractSuppliers[0];
+            float cost = firstContract.boughtAmount * firstContract.pricePerUnit + firstContract.transportationCost;
+            MainHeaderManager.Instance.Money = MainHeaderManager.Instance.Money - cost;
             makeADealWithSupplierPopupCanvas.SetActive(false);
         }
         else
