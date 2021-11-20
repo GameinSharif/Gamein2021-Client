@@ -11,11 +11,11 @@ public class NewContractSupplierRequest : RequestObject
     public int amount;
     public int weeks;
 
-    public NewContractSupplierRequest(RequestTypeConstant requestTypeConstant, Utils.WeekSupply weekSupply, int weeks, int amount, int vehicleId) : base(requestTypeConstant)
+    public NewContractSupplierRequest(RequestTypeConstant requestTypeConstant, Utils.WeekSupply weekSupply, int weeks, int amount, int vehicleId, bool hasInsurance) : base(requestTypeConstant)
     {
         supplierId = weekSupply.supplierId;
         materialId = weekSupply.productId;
-        hasInsurance = true; //TODO what is it
+        this.hasInsurance = hasInsurance; //TODO what is it
         this.amount = amount;
         this.weeks = weeks;
         this.vehicleId = vehicleId;

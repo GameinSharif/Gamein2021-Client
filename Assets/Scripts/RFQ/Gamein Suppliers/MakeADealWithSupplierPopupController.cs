@@ -170,6 +170,18 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
 
         return final <= currentMoney;
     }
+
+    private bool StorageHasCapacity()
+    {
+        int amount = int.Parse(this.amount.text);
+        Utils.Product product = GameDataManager.Instance.GetProductById(_weekSupply.productId);
+        int neededCapacity = amount * product.volumetricUnit;
+        int teamId = PlayerPrefs.GetInt("TeamId");
+        Utils.Factory factory = GameDataManager.Instance.GetFactoryById(GameDataManager.Instance.GetTeamById(teamId).factoryId);
+        Utils.Storage storage = StorageManager.Instance.GetStorageByBuildingIdAndType(factory.id, false);
+        int capacity = StorageManager.Instance.CalculateAvailableCapacity(storage, Utils.ProductType.RawMaterial, true);
+        return neededCapacity <= capacity;
+    }
     
     public void OnDoneButtonClick()
     {
@@ -184,15 +196,21 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         }
         Debug.LogWarning(2);
         Debug.LogWarning(vehicleType);
-        if (CanAffordMakingContract())
+        if (CanAffordMakingContract() && StorageHasCapacity())
         {
             int amountInt = int.Parse(amount.text);
-            NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_WITH_SUPPLIER, _weekSupply, weeks, amountInt, GameDataManager.Instance.GetVehicleByType(vehicleType).id);
+            NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_WITH_SUPPLIER, _weekSupply, weeks, amountInt, GameDataManager.Instance.GetVehicleByType(vehicleType).id, WantsInsurance());
             RequestManager.Instance.SendRequest(newContractSupplier);
         }
-        else
+        if (!CanAffordMakingContract())
         {
             DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+        }
+
+        if (!StorageHasCapacity())
+        {
+            DialogManager.Instance.ShowErrorDialog("not_enough_capacity_error");
+
         }
     }
 }
