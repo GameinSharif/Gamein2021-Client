@@ -139,6 +139,8 @@ namespace ProductionLine
                 return;
             }
 
+            MainHeaderManager.Instance.Money -= GameDataManager.Instance
+                .GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).constructionCost;
             if (productionLineTableRows.Select(c => c.Data).Contains(response.productionLine)) return;
             var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
             current.SetData(response.productionLine, true);
@@ -173,7 +175,7 @@ namespace ProductionLine
                 return;
             }
 
-            //TODO: decrease money
+            //TODO: decrease money and material
 
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
@@ -188,6 +190,9 @@ namespace ProductionLine
                 return;
             }
 
+            MainHeaderManager.Instance.Money -= GameDataManager.Instance
+                .GetProductionLineTemplateById(response.productionLine.productionLineTemplateId)
+                .efficiencyLevels[response.productionLine.efficiencyLevel].upgradeCost;
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
@@ -201,6 +206,9 @@ namespace ProductionLine
                 return;
             }
 
+            MainHeaderManager.Instance.Money -= GameDataManager.Instance
+                .GetProductionLineTemplateById(response.productionLine.productionLineTemplateId)
+                .qualityLevels[response.productionLine.qualityLevel].upgradeCost;
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);

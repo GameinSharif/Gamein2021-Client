@@ -295,7 +295,7 @@ public class Utils
         public int qualityLevel;
         public int efficiencyLevel;
         public ProductionLineStatus status;
-        private CustomDate activationDate;
+        public CustomDate activationDate;
     }
 
     [Serializable]

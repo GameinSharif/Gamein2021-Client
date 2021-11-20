@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RTLTMPro;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,9 @@ namespace ProductionLine
 
         public TMP_InputField productAmount_I;
 
+        public RTLTextMeshPro benchSize_T, total;
+        
+        
         public ToggleGroup _toggleGroup;
         public Button start_B;
 
@@ -40,6 +44,7 @@ namespace ProductionLine
                 choices.Add(c);
                 c.GetComponent<Toggle>().group = _toggleGroup;
             }
+            productAmount_I.onValueChanged.AddListener(AmountChange);
         }
 
         public void Setup(Utils.ProductionLineDto data)
@@ -62,12 +67,25 @@ namespace ProductionLine
             }
             _toggleGroup.SetAllTogglesOff();
 
+            benchSize_T.text = "\u00D7"+_template.batchSize;
+            productAmount_I.text = "0";
+            total.text = "=" + int.Parse(productAmount_I.text) * _template.batchSize;
+            
             SelectedProduct = -1;
         }
         
         private void Select(bool toggleOn, int productId)
         {
             SelectedProduct = toggleOn ? productId : -1;
+        }
+        
+        private void AmountChange(string value)
+        {
+            if(string.IsNullOrEmpty(value))
+                productAmount_I.text = "0";
+
+            start_B.interactable = int.Parse(productAmount_I.text) > 0;
+            total.text = "=" + int.Parse(productAmount_I.text) * _template.batchSize;
         }
 
         public void StartButton()
