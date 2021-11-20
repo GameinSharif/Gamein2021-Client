@@ -53,16 +53,6 @@ public class LetterBoxer : MonoBehaviour
 
     private void AddLetterBoxingCamera()
     {
-        // check that we don't have a camera already at -100 (lowest depth) which will cause issues
-        Camera[] allCameras = FindObjectsOfType<Camera>();
-        foreach (Camera camera in allCameras)
-        {             
-            if (camera.depth == -100)
-            {
-                Debug.LogError("Found " + camera.name + " with a depth of -100. Will cause letter boxing issues. Please increase it's depth.");
-            }
-        }
-
         // create a camera to render bcakground used for matte bars
         letterBoxerCamera = new GameObject().AddComponent<Camera>();
         letterBoxerCamera.backgroundColor = matteColor;
@@ -73,7 +63,18 @@ public class LetterBoxer : MonoBehaviour
         letterBoxerCamera.allowHDR = false;
         letterBoxerCamera.allowMSAA = false;
         letterBoxerCamera.clearFlags = CameraClearFlags.Color;
-        letterBoxerCamera.name = "Letter Boxer Camera";        
+        letterBoxerCamera.name = "Letter Boxer Camera";
+
+        // check that we don't have a camera already at -100 (lowest depth) which will cause issues
+        Camera[] allCameras = FindObjectsOfType<Camera>();
+        foreach (Camera camera in allCameras)
+        {             
+            if (camera.depth == -100)
+            {
+                letterBoxerCamera.depth = -99;
+                //Debug.LogError("Found " + camera.name + " with a depth of -100. Will cause letter boxing issues. Please increase it's depth.");
+            }
+        }    
     }
 
     // based on logic here from http://gamedesigntheory.blogspot.com/2010/09/controlling-aspect-ratio-in-unity.html
