@@ -9,7 +9,7 @@ public class ChatsListController : MonoBehaviour
     private Dictionary<int, ChatData> _chatDataOfChatId;
     private Dictionary<int, ChatItemController> _controllerOfChatId;
 
-    public GameObject chatsListGameObject;
+    public GameObject chatParentGameObject;
 
     public Transform chatsListScrollPanel;
     public GameObject chatItemPrefab;
@@ -50,6 +50,12 @@ public class ChatsListController : MonoBehaviour
         {
             _chatDataOfChatId.Add(chat.TheirTeamId, chat);
         }
+
+        if (response.chats.Count == 0)
+        {
+            Debug.Log("No Chat");
+            //TODO show message in chat list to hint them how to start a chat
+        }
     }
 
     public void OnOpenChatsList()
@@ -79,6 +85,9 @@ public class ChatsListController : MonoBehaviour
             return;
         }
 
+        Debug.Log(newMessageResponse.chat.TheirTeamId);
+        Debug.Log(newMessageResponse.message.TheirTeamId);
+
         if (_chatDataOfChatId.ContainsKey(newMessageResponse.message.TheirTeamId))
         {
             var messages = _chatDataOfChatId[newMessageResponse.message.TheirTeamId].messages;
@@ -91,7 +100,9 @@ public class ChatsListController : MonoBehaviour
         else
         {
             ChatData chat = newMessageResponse.chat;
+
             _chatDataOfChatId.Add(chat.TheirTeamId, chat);
+            AddAndInitializeChatItem(chat.TheirTeamId, chat.TeamName, chat.messages[chat.messages.Count - 1].text);
         }
 
         if (ChatPageController.Instance.CurrentChatId != newMessageResponse.message.TheirTeamId &&
@@ -108,8 +119,21 @@ public class ChatsListController : MonoBehaviour
         }
     }
 
-    public void ToggleChatsList()
+    public void ToggleChatParent()
     {
-        chatsListGameObject.SetActive(!chatsListGameObject.activeSelf);
+        chatParentGameObject.SetActive(!chatParentGameObject.activeSelf);
+    }
+
+    public void OpenChatFromNegotiation(int otherTeamId)
+    {
+        chatParentGameObject.SetActive(true);
+        if (_chatDataOfChatId.ContainsKey(otherTeamId))
+        {
+            ShowChatPageWithId(_chatDataOfChatId[otherTeamId].TheirTeamId);
+        }
+        else
+        {
+            ChatPageController.Instance.LoadChat(otherTeamId);
+        }
     }
 }

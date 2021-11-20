@@ -5852,6 +5852,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1649458118591016345, guid: 62ab2f633d8046c4797a8e6b56ca9c10, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2580622885749153675, guid: 62ab2f633d8046c4797a8e6b56ca9c10, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -5966,7 +5970,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2580622886311497824, guid: 62ab2f633d8046c4797a8e6b56ca9c10, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2580622886572395875, guid: 62ab2f633d8046c4797a8e6b56ca9c10, type: 3}
       propertyPath: m_SizeDelta.y
@@ -6090,7 +6094,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5763142380775605484, guid: 62ab2f633d8046c4797a8e6b56ca9c10, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: ToggleChatsList
+      value: ToggleChatParent
       objectReference: {fileID: 0}
     - target: {fileID: 5763142380775605484, guid: 62ab2f633d8046c4797a8e6b56ca9c10, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -6343,7 +6347,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &741068692 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 2580622886311497824, guid: 62ab2f633d8046c4797a8e6b56ca9c10, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1649458118591016345, guid: 62ab2f633d8046c4797a8e6b56ca9c10, type: 3}
   m_PrefabInstance: {fileID: 741068684}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &751686217
@@ -12239,7 +12243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f017f0d43c948a4866c9fe87035f834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chatsListGameObject: {fileID: 741068692}
+  chatParentGameObject: {fileID: 741068692}
   chatsListScrollPanel: {fileID: 741068686}
   chatItemPrefab: {fileID: 1265294262119897353, guid: 8e08a628b659a7c428892f40da219da2, type: 3}
 --- !u!4 &1622234916
