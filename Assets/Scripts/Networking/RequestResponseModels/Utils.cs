@@ -71,13 +71,7 @@ public class Utils
         public float costPerUnitSupplier;
         public NegotiationState state;
     }
-
-    public enum ContractType
-    {
-        ONCE,
-        LONGTERM
-    }
-
+    
     [Serializable]
     public class Contract
     {
