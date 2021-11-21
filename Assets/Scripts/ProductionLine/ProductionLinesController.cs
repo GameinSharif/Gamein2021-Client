@@ -174,8 +174,23 @@ namespace ProductionLine
                 Debug.LogError("cant start production");
                 return;
             }
+            
+            var template =
+                GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine
+                    .productionLineTemplateId);
+            var production = response.productionLine.products.Last();
+            MainHeaderManager.Instance.Money -=
+                template.productionCostPerOneProduct * template.batchSize * production.amount + template.setupCost;
+            var ingredients = GameDataManager.Instance.GetProductById(production.productId).ingredientsPerUnit;
+            if (ingredients != null)
+            {
+                foreach (var ingredient in ingredients)
+                {
+                    StorageManager.Instance.ChangeStockInStorage(StorageManager.Instance.GetWarehouse().id,
+                        ingredient.productId, - ingredient.amount * production.amount);
+                }
+            }
 
-            //TODO: decrease money and material
 
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
