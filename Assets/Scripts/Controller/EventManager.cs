@@ -287,4 +287,10 @@ public class EventManager : MonoBehaviour
     {
         OnRemoveProductResponseEvent?.Invoke(response);
     }
+
+    public event Action<StartTransportForPlayerStoragesResponse> OnStartTransportForPlayerStoragesResponseEvent;
+    public void OnStartTransportForPlayerStoragesResponse(StartTransportForPlayerStoragesResponse response)
+    {
+        OnStartTransportForPlayerStoragesResponseEvent?.Invoke(response);
+    }
 }

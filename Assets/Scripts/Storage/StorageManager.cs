@@ -173,4 +173,10 @@ public class StorageManager : MonoBehaviour
 
         return occupiedAmount;
     }
+
+    public static void SetStorageLocalize(Localize localize, Utils.Storage storage)
+    {
+        var key = storage.dc ? "Storage_Type_DC" : "Storage_Type_WAREHOUSE";
+        localize.SetKey(key, storage.buildingId.ToString());
+    }
 }

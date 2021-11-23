@@ -47,7 +47,7 @@ public class StorageTabSelector : MonoBehaviour
         }
         else
         {
-            controller.nameLocalize.SetKey("Storage_Type_" + tabNameParts[0]);
+            controller.nameLocalize.SetKey("Storage_Type_" + tabNameParts[0], tabNameParts[1]);
         }
 
         theGameObject.GetComponent<Toggle>().group = selector.gameObject.GetComponent<ToggleGroup>();

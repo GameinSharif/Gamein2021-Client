@@ -43,4 +43,5 @@ public enum ResponseTypeConstant
     SERVER_TIME = 40,
     GAME_TIME = 41,
     MONEY_UPDATE = 42,
+    START_TRANSPORT_FOR_STORAGES = 43,
 }
