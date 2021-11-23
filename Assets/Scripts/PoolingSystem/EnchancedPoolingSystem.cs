@@ -50,7 +50,7 @@ public class EnhancedPoolingSystem<T>
     {
         foreach (GameObject gameObject in _objectsOfPrefab[i])
         {
-            if (!gameObject.activeInHierarchy)
+            if (!gameObject.activeSelf)
             {
                 return gameObject;
             }
