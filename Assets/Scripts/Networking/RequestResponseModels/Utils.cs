@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using ProductionLine;
 
 public class Utils
 {
@@ -11,11 +12,13 @@ public class Utils
         public string teamName;
         public Country country;
         public int factoryId;
+        public float credit;
     }
 
     public enum ProviderState
     {
-        ACTIVE, TERMINATED
+        ACTIVE,
+        TERMINATED
     }
 
     [Serializable]
@@ -31,7 +34,10 @@ public class Utils
 
     public enum OfferStatus
     {
-        ACTIVE, ACCEPTED, TERMINATED, PASSED_DEADLINE
+        ACTIVE,
+        ACCEPTED,
+        TERMINATED,
+        PASSED_DEADLINE
     }
 
     [Serializable]
@@ -48,7 +54,9 @@ public class Utils
 
     public enum NegotiationState
     {
-        CLOSED, DEAL, IN_PROGRESS
+        CLOSED,
+        DEAL,
+        IN_PROGRESS
     }
 
     [Serializable]
@@ -106,9 +114,54 @@ public class Utils
     {
         public int id;
         public int week;
-        public GameinCustomer gameinCustomer;
+        public int gameinCustomerId;
         public int productId;
         public int amount;
+    }
+    
+    [Serializable]
+    public class Supplier
+    {
+        public int id;
+        public string name;
+        public Country country;
+        public List<int> materials;
+        public double latitude;
+        public double longitude;
+    }
+    
+    [Serializable]
+    public class WeekSupply
+    {
+        public int id;
+        public int week;
+        public int supplierId;
+        public int productId;
+        public int price;
+        public int sales;
+    }
+    
+    [Serializable]
+    public class ContractSupplierDetail
+    {
+        public int id;
+        public CustomDate contractDate;
+        public int boughtAmount;
+        public float pricePerUnit;
+        public TransportNodeType transportNodeType;
+    }
+
+    [Serializable]
+    public class ContractSupplier
+    {
+        public int id;
+        public int supplierId;
+        public int teamId;
+        public int materialId;
+        public ContractType contractType;
+        public List<ContractSupplierDetail> contractSupplierDetails;
+        public int terminatePenalty;
+        public bool isTerminated;
     }
 
     public enum ProductType
@@ -123,11 +176,14 @@ public class Utils
     {
         public int id;
         public string categoryIds; //for SemiFinishedProducts only
-        public int productionLineId; //for SemiFinishedProducts & Finished only
+        public int productionLineTemplateId; //for SemiFinishedProducts & Finished only
         public ProductType productType;
         public string name;
         public int volumetricUnit;
-        public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 36)
+        public List<ProductIngredient> ingredientsPerUnit; //for SemiFinishedProducts & Finished only except CarbonDioxide (id = 27)
+        public int minPrice;
+        public int maxPrice;
+        public float maintenanceCostPerDay;
     }
 
     [Serializable]
@@ -138,41 +194,45 @@ public class Utils
     }
     
     [Serializable]
-    public class DCDto
+    public class DC
     {
-        public int DCId;
-        public int? ownerTeamId;
+        public int id;
+        public int? ownerId;
         public string name;
         public DCType type;
         public double latitude;
         public double longitude;
-        public int purchasePrice;
-        public int sellPrice;
+        public int buyingPrice;
+        public int sellingPrice;
+        public int capacity;
     }
 
     public enum DCType
     {
-        MIDDLE, FINAL
+        SemiFinished, Finished
     }
 
     [Serializable]
     public class Storage
     {
-        public StorageType type;
-        public int DCId;
-        public List<StorageProduct> storageProducts;
+        public int id;
+        public int buildingId;
+        public bool dc;
+        public List<StorageProduct> products;
     }
 
     [Serializable]
     public class StorageProduct
     {
+        public int id;
         public int productId;
         public int amount;
     }
     
     public enum StorageType
     {
-        WAREHOUSE, DC
+        WAREHOUSE = 0,
+        DC = 1,
     }
 
 
@@ -218,6 +278,64 @@ public class Utils
         public int AuctionInitialStepValue;
         public int AuctionRoundDurationSeconds;
         public List<CustomDateTime> AuctionRoundsStartTime;
+        public int rawMaterialCapacity;
+        public int semiFinishedProductCapacity;
+        public int finishedProductCapacity;
+        public float insuranceCostFactor;
+        public int distanceConstant;
+    }
+
+    [Serializable]
+    public class ProductionLineDto
+    {
+        public int id;
+        public int productionLineTemplateId;
+        public int teamId;
+        public List<ProductionLineProductDto> products;
+        public int qualityLevel;
+        public int efficiencyLevel;
+        public ProductionLineStatus status;
+    }
+
+    [Serializable]
+    public class ProductionLineProductDto
+    {
+        public int id;
+        public int productId;
+        public int amount;
+        public CustomDate startDate;
+        public CustomDate endDate;
+    }
+
+    [Serializable]
+    public class EfficiencyLevel
+    {
+        public int efficiencyPercentage;
+        public int upgradeCost;
+    }
+
+    [Serializable]
+    public class QualityLevel
+    {
+        public int upgradeCost;
+        public double brandIncreaseRatioPerProduct;
+    }
+
+    [Serializable]
+    public class ProductionLineTemplate
+    {
+        public int id;
+        public string name;
+        public int constructionCost;
+        public int constructRequiredDays;
+        public int scrapPrice;
+        public int batchSize;
+        public int dailyProductionRate;
+        public List<EfficiencyLevel> efficiencyLevels;
+        public int weeklyMaintenanceCost;
+        public int setupCost;
+        public int productionCostPerOneProduct;
+        public List<QualityLevel> qualityLevels;
     }
 
     public enum VehicleType

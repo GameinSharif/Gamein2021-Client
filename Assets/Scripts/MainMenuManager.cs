@@ -11,6 +11,9 @@ public class MainMenuManager : MonoBehaviour
     public static bool IsLoadingMap;
 
     public GameObject MainMenuCanvasGameObject;
+    public GameObject TradeParentGameObject;
+
+    [HideInInspector] public bool IsInTradePage = false;
 
     private void Awake()
     {
@@ -21,6 +24,9 @@ public class MainMenuManager : MonoBehaviour
 
         GetTeamTransportsRequest getTeamTransportsRequest = new GetTeamTransportsRequest(RequestTypeConstant.GET_TEAM_TRANSPORTS);
         RequestManager.Instance.SendRequest(getTeamTransportsRequest);
+
+        GetAllChatsRequest getAllChatsRequest = new GetAllChatsRequest();
+        RequestManager.Instance.SendRequest(getAllChatsRequest);
     }
 
     private void Start()
@@ -33,6 +39,8 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnOpenTradePageButtonClick()
     {
+        IsInTradePage = true;
+
         GetOffersRequest getOffersRequest = new GetOffersRequest(RequestTypeConstant.GET_OFFERS);
         RequestManager.Instance.SendRequest(getOffersRequest);
 
@@ -44,6 +52,24 @@ public class MainMenuManager : MonoBehaviour
 
         GetContractsRequest getContractsRequest = new GetContractsRequest(RequestTypeConstant.GET_CONTRACTS);
         RequestManager.Instance.SendRequest(getContractsRequest);
+
+        GetContractSuppliersRequest getContractSuppliersRequest = new GetContractSuppliersRequest(RequestTypeConstant.GET_CONTRACTS_WITH_SUPPLIER);
+        RequestManager.Instance.SendRequest(getContractSuppliersRequest);
+
+        GameinSuppliersController.Instance.UpdateSupplies();
+        GameinCustomersController.Instance.UpdateDemands();
+    }
+
+    public void OnOpenProductionLinesPageButtonClick()
+    {
+        var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
+        RequestManager.Instance.SendRequest(request);
+    }
+
+    public void OnOpenStoragePageButtonClick()
+    {
+        var request = new GetStorageProductsRequest(RequestTypeConstant.GET_STORAGES);
+        RequestManager.Instance.SendRequest(request);
     }
 
     public void OnLoadMapSceneButtonClick()
@@ -55,13 +81,23 @@ public class MainMenuManager : MonoBehaviour
 
         IsLoadingMap = true;
 
-        var canvases = FindObjectsOfType<Canvas>();
-        foreach (Canvas canvas in canvases)
+        GameObject[] gameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+        foreach (GameObject gameObject in gameObjects)
         {
-            canvas.gameObject.SetActive(false);
+            if (gameObject.GetComponent<Canvas>() != null)
+            {
+                gameObject.SetActive(false);
+            }
         }
 
+        TradeParentGameObject.SetActive(false);
+
         SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
+    }
+
+    public void OnBackToMainMenuFromTrade()
+    {
+        IsInTradePage = false;
     }
 
     //TODO for other pages

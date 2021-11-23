@@ -2,7 +2,7 @@
 using UnityEngine;
 public class StorageTabItemController : MonoBehaviour
 {
-    public RTLTextMeshPro name;
+    public Localize nameLocalize;
 
     private int _index;
 

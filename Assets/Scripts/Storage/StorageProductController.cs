@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StorageProductController : MonoBehaviour
 {
-    public RTLTextMeshPro name;
+    public Localize nameLocalize;
     public RTLTextMeshPro available;
     public RTLTextMeshPro coming;
     public RTLTextMeshPro total;
@@ -18,6 +18,15 @@ public class StorageProductController : MonoBehaviour
     {
         _product = product;
         _storageType = storageType;
+    }
+
+    public void SetData(int availableAmount, int comingAmount)
+    {
+        nameLocalize.SetKey("product_" + _product.name);
+        available.text = availableAmount.ToString();
+
+        coming.text = comingAmount.ToString();
+        total.text = (availableAmount + comingAmount).ToString();
     }
 
     public void OnClicked()

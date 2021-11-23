@@ -14,8 +14,9 @@ public class ChatPageController : MonoBehaviour
     public const int MAX_MESSAGES = 20;
     private EnhancedPoolingSystem<MessageData> _poolingSystem;
     private ChatData _chatData;
+    private int _theirTeamId; //only to initialize chat from negotiation
 
-    public int? CurrentChatId => _chatData?.TheirTeamId;
+    public int CurrentChatId => _chatData == null ? _theirTeamId : _chatData.TheirTeamId;
 
     public GameObject chatPage;
     public Transform chatScrollPanel;
@@ -65,9 +66,6 @@ public class ChatPageController : MonoBehaviour
 
         SendMessageToServer(inputField.text);
         
-        AddMessageToChat(new MessageData{text = inputField.text, IsFromMe = true});
-        AddMessageToChat(new MessageData{text = "wow! that is amazing :) ", IsFromMe = false});
-        
         inputField.text = "";
         inputField.Select();
         inputField.ActivateInputField();
@@ -75,7 +73,15 @@ public class ChatPageController : MonoBehaviour
 
     private void SendMessageToServer(string text)
     {
-        RequestManager.Instance.SendRequest(new NewMessageRequest(_chatData.TheirTeamId, text, new CustomDateTime(DateTime.Now)));
+        if (_chatData == null) 
+        {
+            RequestManager.Instance.SendRequest(new NewMessageRequest(_theirTeamId, text));
+
+        }
+        else
+        {
+            RequestManager.Instance.SendRequest(new NewMessageRequest(_chatData.TheirTeamId, text));
+        }
     }
 
     public void LoadChat(ChatData chatData)
@@ -92,6 +98,21 @@ public class ChatPageController : MonoBehaviour
             _poolingSystem.Add(messageData.IsFromMe ? 0 : 1, messageData);
         }
         
+        RebuildLayout();
+        SetOpen(true);
+    }
+
+    public void LoadChat(int otherTeamId)
+    {
+        chatPage.SetActive(true); // do not delete this; if scroll panel is not active, all children are not active as well and pooling system won't work 
+
+        _chatData = null;
+        _theirTeamId = otherTeamId;
+        teamName.text = GameDataManager.Instance.GetTeamName(otherTeamId);
+        //TODO set avatar
+
+        _poolingSystem.RemoveAll();
+
         RebuildLayout();
         SetOpen(true);
     }

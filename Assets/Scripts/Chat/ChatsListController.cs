@@ -9,6 +9,8 @@ public class ChatsListController : MonoBehaviour
     private Dictionary<int, ChatData> _chatDataOfChatId;
     private Dictionary<int, ChatItemController> _controllerOfChatId;
 
+    public GameObject chatParentGameObject;
+
     public Transform chatsListScrollPanel;
     public GameObject chatItemPrefab;
     private void Awake()
@@ -35,36 +37,6 @@ public class ChatsListController : MonoBehaviour
         EventManager.Instance.OnNewMessageResponseEvent -= OnNewMessageResponse;
     }
 
-    private void Start()
-    {
-        //test
-        for (int i = 1; i <= 20; i++)
-        {
-            TestAddChatItem(i, "Team #" + i);
-        }
-    }
-
-    //test
-    private void TestAddChatItem(int chatId, string teamName)
-    {
-        var list = new List<MessageData>
-        {
-            new MessageData{text = "hello\nwe are team " + teamName, IsFromMe = false},
-            new MessageData{text = "hey", IsFromMe = true},
-            new MessageData{text = "good for you\nnow get out", IsFromMe = true}
-        };
-
-        var chatData = new ChatData {id = chatId, TeamName = teamName, messages = list};
-        _chatDataOfChatId.Add(chatId, chatData);
-        
-        var itemController = UnityEngine.Object.Instantiate(chatItemPrefab, chatsListScrollPanel).GetComponent<ChatItemController>();
-        _controllerOfChatId.Add(chatId, itemController);
-        
-        itemController.SetData(chatId, teamName);
-        itemController.SetLastMessagePreview(list[list.Count - 1].text);
-        itemController.UnreadCount = 3;
-    }
-
     public void ShowChatPageWithId(int id)
     {
         _controllerOfChatId[id].UnreadCount = 0;
@@ -77,6 +49,12 @@ public class ChatsListController : MonoBehaviour
         foreach (ChatData chat in response.chats)
         {
             _chatDataOfChatId.Add(chat.TheirTeamId, chat);
+        }
+
+        if (response.chats.Count == 0)
+        {
+            Debug.Log("No Chat");
+            //TODO show message in chat list to hint them how to start a chat
         }
     }
 
@@ -101,31 +79,61 @@ public class ChatsListController : MonoBehaviour
 
     private void OnNewMessageResponse(NewMessageResponse newMessageResponse)
     {
-        if (_chatDataOfChatId.ContainsKey(newMessageResponse.messageDto.TheirTeamId))
+        if (newMessageResponse.chat == null)
         {
-            var messages = _chatDataOfChatId[newMessageResponse.messageDto.TheirTeamId].messages;
+            DialogManager.Instance.ShowErrorDialog();
+            return;
+        }
+
+        Debug.Log(newMessageResponse.chat.TheirTeamId);
+        Debug.Log(newMessageResponse.message.TheirTeamId);
+
+        if (_chatDataOfChatId.ContainsKey(newMessageResponse.message.TheirTeamId))
+        {
+            var messages = _chatDataOfChatId[newMessageResponse.message.TheirTeamId].messages;
             if (messages.Count >= ChatPageController.MAX_MESSAGES)
             {
                 messages.RemoveAt(0);
             }
-            messages.Add(newMessageResponse.messageDto);
+            messages.Add(newMessageResponse.message);
         }
         else
         {
-            //TODO add chat data
+            ChatData chat = newMessageResponse.chat;
+
+            _chatDataOfChatId.Add(chat.TheirTeamId, chat);
+            AddAndInitializeChatItem(chat.TheirTeamId, chat.TeamName, chat.messages[chat.messages.Count - 1].text);
         }
 
-        if (ChatPageController.Instance.CurrentChatId != newMessageResponse.messageDto.TheirTeamId &&
-            _controllerOfChatId.ContainsKey(newMessageResponse.messageDto.TheirTeamId))
+        if (ChatPageController.Instance.CurrentChatId != newMessageResponse.message.TheirTeamId &&
+            _controllerOfChatId.ContainsKey(newMessageResponse.message.TheirTeamId))
         {
-            var controller = _controllerOfChatId[newMessageResponse.messageDto.TheirTeamId];
+            var controller = _controllerOfChatId[newMessageResponse.message.TheirTeamId];
             controller.UnreadCount++;
-            controller.SetLastMessagePreview(newMessageResponse.messageDto.text);
+            controller.SetLastMessagePreview(newMessageResponse.message.text);
         }
 
-        if (ChatPageController.Instance.CurrentChatId == newMessageResponse.messageDto.TheirTeamId) // is in chat page
+        if (ChatPageController.Instance.CurrentChatId == newMessageResponse.message.TheirTeamId) // is in chat page
         {
-            ChatPageController.Instance.AddMessageToChat(newMessageResponse.messageDto);
+            ChatPageController.Instance.AddMessageToChat(newMessageResponse.message);
+        }
+    }
+
+    public void ToggleChatParent()
+    {
+        chatParentGameObject.SetActive(!chatParentGameObject.activeSelf);
+    }
+
+    public void OpenChatFromNegotiation(int otherTeamId)
+    {
+        chatParentGameObject.SetActive(true);
+        if (_chatDataOfChatId.ContainsKey(otherTeamId))
+        {
+            ShowChatPageWithId(_chatDataOfChatId[otherTeamId].TheirTeamId);
+        }
+        else
+        {
+            ChatPageController.Instance.LoadChat(otherTeamId);
         }
     }
 }

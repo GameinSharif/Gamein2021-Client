@@ -99,14 +99,14 @@ public class EachAuctionController : MonoBehaviour
         string raise = raiseAmountInputFiled.text;
         if (string.IsNullOrEmpty(raise))
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
             return;
         }
 
         int raiseAmount = int.Parse(raise);
         if ((_auction == null && raiseAmount < GameDataManager.Instance.GameConstants.AuctionStartValue) || (_auction != null && raiseAmount < _auction.lastRaiseAmount))
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog("auction_not_enough_money_error");
             return;
         }
 

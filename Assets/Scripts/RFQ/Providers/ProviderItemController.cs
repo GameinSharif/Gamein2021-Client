@@ -101,10 +101,17 @@ public class ProviderItemController : MonoBehaviour
         {
             return;
         }
+        
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                _isSendingTerminateOrAccept = true;
+                RemoveProviderRequest removeProviderRequest = new RemoveProviderRequest(RequestTypeConstant.REMOVE_PROVIDER, _provider.id);
+                RequestManager.Instance.SendRequest(removeProviderRequest);
+            }
+        });
 
-        _isSendingTerminateOrAccept = true;
-        RemoveProviderRequest removeProviderRequest = new RemoveProviderRequest(RequestTypeConstant.REMOVE_PROVIDER, _provider.id);
-        RequestManager.Instance.SendRequest(removeProviderRequest);
     }
 
     private void OnRemoveProviderResponseRecieved(RemoveProviderResponse removeProviderResponse)
@@ -119,7 +126,7 @@ public class ProviderItemController : MonoBehaviour
         }
         else
         {
-            //TODO show error
+            DialogManager.Instance.ShowErrorDialog();
         }
     }
 }

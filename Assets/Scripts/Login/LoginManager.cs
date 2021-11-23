@@ -80,9 +80,11 @@ public class LoginManager : MonoBehaviour
         if (loginResponse.result == "Successful")
         {
             PlayerPrefs.SetInt("PlayerId" , loginResponse.playerId);
+            PlayerPrefs.SetString("TeamName", loginResponse.team.teamName);
             PlayerPrefs.SetInt("TeamId", loginResponse.team.id);
             PlayerPrefs.SetInt("FactoryId", loginResponse.team.factoryId); //Is 0 if player has no factory
             PlayerPrefs.SetString("Country", loginResponse.team.country.ToString());
+            PlayerPrefs.SetFloat("Money", loginResponse.team.credit);
 
             SceneManager.LoadScene("MenuScene");
         }
@@ -91,6 +93,7 @@ public class LoginManager : MonoBehaviour
             LoginErrorLocalize.SetKey("login_error_info");
             LoginErrorLocalize.gameObject.SetActive(true);
         }
+        
     }
 
     public void print(string s)

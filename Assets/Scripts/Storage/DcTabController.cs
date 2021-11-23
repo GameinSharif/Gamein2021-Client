@@ -16,11 +16,13 @@ public class DcTabController : MonoBehaviour
     public Transform scrollPanel;
     public GameObject storageProductPrefab;
 
-    public RTLTextMeshPro dcName;
+    public Localize dcNameLocalize;
     
     public GameObject actionPopup;
     public TMP_InputField amountInputField;
+
     private Utils.Product _currentSelectedProduct;
+    private bool _isSendingRequest = false;
 
     private void Awake()
     {
@@ -32,11 +34,11 @@ public class DcTabController : MonoBehaviour
     public void Initialize(Utils.Storage dc)
     {
         _dc = dc;
-        dcName.text = "DC " + _dc.DCId;
+        dcNameLocalize.SetKey("Storage_Type_DC", _dc.buildingId.ToString());
         
         _itemControllers.Clear();
         _pool.RemoveAll();
-        foreach (Utils.StorageProduct storageProduct in _dc.storageProducts)
+        foreach (Utils.StorageProduct storageProduct in _dc.products)
         {
             _pool.Add(new Tuple<Utils.Product, int>(GameDataManager.Instance.GetProductById(storageProduct.productId), storageProduct.amount));
         }
@@ -54,18 +56,12 @@ public class DcTabController : MonoBehaviour
 
     private void InitializeDcProduct(GameObject theGameObject, int index, Tuple<Utils.Product, int> productTuple)
     {
-        var (product, amount) = productTuple;
-        
+        var (product, availableAmount) = productTuple;
+        int comingAmount = TransportManager.Instance.CalculateInWayProductsAmount(_dc, product.id);
+
         var controller = theGameObject.GetComponent<StorageProductController>();
         controller.SetInfo(product, Utils.StorageType.DC);
-
-        controller.name.text = product.name;
-        controller.available.text = amount.ToString();
-        
-        //TODO get coming amount
-        int coming = 0;
-        controller.coming.text = coming.ToString();
-        controller.total.text = (coming + amount).ToString();
+        controller.SetData(availableAmount, comingAmount);
         
         _itemControllers.Add(controller);
     }
@@ -79,7 +75,28 @@ public class DcTabController : MonoBehaviour
 
     public void OnRemoveButtonClicked()
     {
-        //TODO send removeRequest to server
+        string amountText = amountInputField.text;
+        if (string.IsNullOrWhiteSpace(amountText))
+        {
+            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
+            return;
+        }
+
+        int amount = int.Parse(amountText);
+        if (amount > StorageManager.Instance.GetProductAmountByStorage(_dc, _currentSelectedProduct.id))
+        {
+            DialogManager.Instance.ShowErrorDialog("dialog_popup_not_enough_product");
+            return;
+        }
+
+        if (amount <= 0)
+        {
+            DialogManager.Instance.ShowErrorDialog();
+            return;
+        }
+
+        RemoveProductRequest removeProductRequest = new RemoveProductRequest(RequestTypeConstant.REMOVE_PRODUCT, true, _dc.buildingId, _currentSelectedProduct.id, amount);
+        RequestManager.Instance.SendRequest(removeProductRequest);
     }
 
     public void OnClosePopupButtonClicked()

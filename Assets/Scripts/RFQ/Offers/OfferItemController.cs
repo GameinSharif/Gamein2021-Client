@@ -24,11 +24,13 @@ public class OfferItemController : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnTerminateOfferResponseEvent += OnTerminateOfferResponseRecieved;
+        EventManager.Instance.OnAcceptOfferResponseEvent += OnAcceptOfferResponse;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnTerminateOfferResponseEvent -= OnTerminateOfferResponseRecieved;
+        EventManager.Instance.OnAcceptOfferResponseEvent -= OnAcceptOfferResponse;
     }
 
     public void SetInfo(int no, string teamName, string productNameKey, int volume, float costPerUnit, CustomDate offerDeadline, Utils.OfferStatus offerStatus)
@@ -93,27 +95,23 @@ public class OfferItemController : MonoBehaviour
         _isSendingTerminateOrAccept = false;
     }
 
-    public void OnAcceptOfferButtonClick()
-    {
-        if (_isSendingTerminateOrAccept)
-        {
-            return;
-        }
-
-        _isSendingTerminateOrAccept = true;
-        //TODO
-    }
-
     public void OnRemoveOfferButtonClick()
     {
         if (_isSendingTerminateOrAccept)
         {
             return;
         }
-
-        _isSendingTerminateOrAccept = true;
-        TerminateOfferRequest terminateOfferRequest = new TerminateOfferRequest(RequestTypeConstant.TERMINATE_OFFER, _offer.id);
-        RequestManager.Instance.SendRequest(terminateOfferRequest);
+        
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                _isSendingTerminateOrAccept = true;
+                TerminateOfferRequest terminateOfferRequest = new TerminateOfferRequest(RequestTypeConstant.TERMINATE_OFFER, _offer.id);
+                RequestManager.Instance.SendRequest(terminateOfferRequest);
+            }
+        });
+        
     }
 
     private void OnTerminateOfferResponseRecieved(TerminateOfferResponse terminateOfferResponse)
@@ -122,6 +120,42 @@ public class OfferItemController : MonoBehaviour
         {
             offerStatusLocalize.SetKey("TERMINATED");
             RemoveOfferButtonGameObject.SetActive(false);
+        }
+    }
+
+    public void OnAcceptOfferButtonClick()
+    {
+        if (_isSendingTerminateOrAccept)
+        {
+            return;
+        }
+        
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                _isSendingTerminateOrAccept = true;
+                AcceptOfferRequest acceptOfferRequest = new AcceptOfferRequest(_offer.id);
+                RequestManager.Instance.SendRequest(acceptOfferRequest);
+            }
+        });
+    }
+
+    private void OnAcceptOfferResponse(AcceptOfferResponse acceptOfferResponse)
+    {
+        if (_offer.id == acceptOfferResponse.acceptedOffer.id)
+        {
+            offerStatusLocalize.SetKey("ACCEPTED");
+            AcceptOfferButtonGameObject.SetActive(false);
+            if (acceptOfferResponse.acceptedOffer.teamId != PlayerPrefs.GetInt("TeamId"))
+            {
+                OffersController.Instance.AddAcceptedOfferToList(acceptOfferResponse.acceptedOffer);
+                MainHeaderManager.Instance.Money -= (int)(acceptOfferResponse.acceptedOffer.volume * acceptOfferResponse.acceptedOffer.costPerUnit);
+            }
+            else
+            {
+                MainHeaderManager.Instance.Money += (int)(acceptOfferResponse.acceptedOffer.volume * acceptOfferResponse.acceptedOffer.costPerUnit);
+            }
         }
     }
 }

@@ -38,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 535.232, y: 0}
+  m_AnchoredPosition: {x: 341.47, y: 0}
   m_SizeDelta: {x: 320, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5852439149423620962
@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 5852439150869979601}
   - component: {fileID: 5852439150869979603}
   - component: {fileID: 5852439150869979602}
+  - component: {fileID: 5685019273235150409}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -211,8 +212,8 @@ MonoBehaviour:
 
     :)'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f153c2825e092949bbfc88c342f7685, type: 2}
-  m_sharedMaterial: {fileID: -1908425998639066346, guid: 5f153c2825e092949bbfc88c342f7685, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 159ecab0e50ff8e4da74c11a52a653b5, type: 2}
+  m_sharedMaterial: {fileID: -5449547863004890230, guid: 159ecab0e50ff8e4da74c11a52a653b5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -239,12 +240,12 @@ MonoBehaviour:
   m_fontSize: 26
   m_fontSizeBase: 26
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 26
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -288,6 +289,42 @@ MonoBehaviour:
     :)'
   fixTags: 1
   forceFix: 0
+--- !u!114 &5685019273235150409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5852439150869979600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: 
 --- !u!1 &5852439151080664290
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,8 +362,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 347.616, y: 0}
-  m_SizeDelta: {x: 695.232, y: 0}
+  m_AnchoredPosition: {x: 250.735, y: 0}
+  m_SizeDelta: {x: 501.47, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5852439151080664221
 MonoBehaviour:
