@@ -103,7 +103,8 @@ public class NegotiationItemController : MonoBehaviour
 
     public void OnChatButtonClick()
     {
-        // TODO
+        int otherTeamId = _negotiation.supplierId == PlayerPrefs.GetInt("TeamId") ? _negotiation.demanderId : _negotiation.supplierId;
+        ChatsListController.Instance.OpenChatFromNegotiation(otherTeamId);
     }
 
     public void OnChangePriceButtonClick()
