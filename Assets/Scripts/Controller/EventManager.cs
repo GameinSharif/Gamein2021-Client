@@ -80,6 +80,19 @@ public class EventManager : MonoBehaviour
     {
         OnNewContractSupplierResponseEvent?.Invoke(newContractSupplierResponse);
     }
+    
+    public event Action<NewContractResponse> OnNewContractResponseEvent;
+    public void OnNewContractResponse(NewContractResponse newContractResponse)
+    {
+        OnNewContractResponseEvent?.Invoke(newContractResponse);
+    }
+    
+     
+    public event Action<TerminateLongtermContractResponse> OnTerminateLongtermContractResponseEvent;
+    public void OnTerminateLongtermContractResponse(TerminateLongtermContractResponse terminateLongtermContractResponse)
+    {
+        OnTerminateLongtermContractResponseEvent?.Invoke(terminateLongtermContractResponse);
+    }
 
     public event Action<GetContractsResponse> OnGetContractsResponseEvent;
 

@@ -17,14 +17,8 @@ public class MakeADealWithDemanderPopupController : MonoBehaviour
     public Image productImage;
     public Localize productNameLocalize;
     public TMP_InputField amount;
-    public RTLTextMeshPro pricePerUnit;
-    public TMP_InputField totalPrice;
-    public TMP_InputField finalPrice;
-    public TMP_InputField arrivalDate;
-    public ToggleGroup transportationMode;
     public TMP_InputField numberOfRepetition;
-    public TMP_InputField penalty; //TODO calculate?
-    public ToggleGroup wantsInsurance;
+    public TMP_InputField price;
 
     private Utils.WeekDemand _weekDemand;
 
@@ -35,23 +29,22 @@ public class MakeADealWithDemanderPopupController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.OnNewContractSupplierResponseEvent += OnNewContractSupplierResponse;
+        EventManager.Instance.OnNewContractResponseEvent += OnNewContractResponse;
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.OnNewContractSupplierResponseEvent -= OnNewContractSupplierResponse;
+        EventManager.Instance.OnNewContractResponseEvent -= OnNewContractResponse;
     }
 
-    private void OnNewContractSupplierResponse(NewContractSupplierResponse newContractSupplierResponse)
+    private void OnNewContractResponse(NewContractResponse newContractResponse)
     {
-        if (newContractSupplierResponse.result == "Successful")
+        if (newContractResponse.contract != null)
         {
-            List<Utils.ContractSupplier> contractSuppliers = newContractSupplierResponse.contractSuppliers;
-            GameinSuppliersController.Instance.AddContractItemsToList(contractSuppliers);
-            Utils.ContractSupplier firstContract = contractSuppliers[0];
-            float cost = firstContract.boughtAmount * firstContract.pricePerUnit + firstContract.transportationCost;
-            MainHeaderManager.Instance.Money = MainHeaderManager.Instance.Money - cost;
+            List<Utils.Contract> contracts = new List<Utils.Contract>();
+            contracts.Add(newContractResponse.contract);
+            ContractsManager.Instance.AddContractItemsToList(contracts);
+            //Utils.Contract firstContract = contracts[0];
             makeADealWithDemanderPopupCanvas.SetActive(false);
         }
         else
@@ -60,94 +53,16 @@ public class MakeADealWithDemanderPopupController : MonoBehaviour
         }
     }
 
-    public void OnOpenMakeADealPopupClick(Utils.WeekDemand weekSupply)
+    public void OnOpenMakeADealPopupClick(Utils.WeekDemand weekDemand)
     {
-        _weekDemand = weekSupply;
+        _weekDemand = weekDemand;
         
         //TODO clear inputfields
         
-        Utils.Product product = GameDataManager.Instance.GetProductById(weekSupply.productId);
+        Utils.Product product = GameDataManager.Instance.GetProductById(weekDemand.productId);
         productNameLocalize.SetKey("product_" + product.name);
-        //pricePerUnit.text = weekSupply.price + "$";
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
-        CustomDate date = MainHeaderManager.Instance.gameDate.AddDays(GetTransportDuration());
-        arrivalDate.text = date.ToString();
         makeADealWithDemanderPopupCanvas.SetActive(true);
-    }
-
-    private int GetTransportDuration()
-    {
-        Utils.VehicleType vehicleType = GetTransportationMode();
-        Vector2 destinationLocation = GameDataManager.Instance.GetMyTeamLocaionOnMap();
-        Vector2 sourceLocation = GameDataManager.Instance.GetLocationByTypeAndId(Utils.TransportNodeType.GAMEIN_CUSTOMER, _weekDemand.gameinCustomerId);
-        int duration = TransportManager.Instance.CalculateTransportDuration(sourceLocation, destinationLocation, vehicleType);
-        return duration;
-    }
-    
-    public void OnAmountValueChange()
-    {
-        string amount = this.amount.text;
-        if (string.IsNullOrEmpty(amount))
-        {
-            return;
-        }
-
-        //int total = int.Parse(amount) * _weekDemand.price;
-        float transportationCost = GetTransportCost(int.Parse(amount));
-        //float final = total + transportationCost;
-        //totalPrice.text = total.ToString("0.00") + "$";
-        //finalPrice.text = final.ToString("0.00") + "$";
-    }
-
-    private float GetTransportCost(int amount)
-    {
-        Utils.VehicleType vehicleType = GetTransportationMode();
-        Vector2 destinationLocation = GameDataManager.Instance.GetMyTeamLocaionOnMap();
-        Vector2 sourceLocation = GameDataManager.Instance.GetLocationByTypeAndId(Utils.TransportNodeType.GAMEIN_CUSTOMER, _weekDemand.gameinCustomerId);
-        int distance = TransportManager.Instance.GetTransportDistance(sourceLocation, destinationLocation, vehicleType);
-        float cost = TransportManager.Instance.CalculateTransportCost(vehicleType, distance, _weekDemand.productId, amount, WantsInsurance());
-        return cost;
-    }
-
-    private bool WantsInsurance()
-    {
-        Toggle wants = wantsInsurance.ActiveToggles().FirstOrDefault();
-        if (wants.name == "Yes")
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private Utils.VehicleType GetTransportationMode()
-    {
-        Toggle mode = transportationMode.ActiveToggles().FirstOrDefault();
-        switch (mode.name)
-        {
-            case "AirPlane":
-                return Utils.VehicleType.AIRPLANE;
-            case "Train":
-                return Utils.VehicleType.TRAIN;
-            case "Truck":
-                return Utils.VehicleType.TRUCK;
-            case "Vanet":
-                return Utils.VehicleType.VANET;
-            default:
-                return Utils.VehicleType.AIRPLANE;
-        }
-    }
-
-    public void OnTransportationModeToggleChange()
-    {
-        OnAmountValueChange();
-        CustomDate date = MainHeaderManager.Instance.gameDate.AddDays(GetTransportDuration());
-        arrivalDate.text = date.ToString();
-    }
-
-    public void OnInsuranceToggleChange()
-    {
-        OnAmountValueChange();
     }
     
     private int GetRepetitionWeeks()
@@ -165,57 +80,58 @@ public class MakeADealWithDemanderPopupController : MonoBehaviour
         return weeksInt;
     }
 
-    private bool CanAffordMakingContract()
+    private bool IsPriceInRange()
     {
-        //TODO
-        float currentMoney = MainHeaderManager.Instance.Money;
-        int total = int.Parse(amount.text);
-        float transportationCost = GetTransportCost(int.Parse(amount.text));
-        float final = total + transportationCost;
-
-        return final <= currentMoney;
+        Utils.Product product = GameDataManager.Instance.GetProductById(_weekDemand.productId);
+        int price = int.Parse(this.price.text);
+        return price >= product.minPrice && price <= product.maxPrice;
     }
 
-    private bool StorageHasCapacity()
+    private bool HasContractWithDemanderThisWeek()
     {
-        int amount = int.Parse(this.amount.text);
-        Utils.Product product = GameDataManager.Instance.GetProductById(_weekDemand.productId);
-        int neededCapacity = amount * product.volumetricUnit;
-        int teamId = PlayerPrefs.GetInt("TeamId");
-        Utils.Factory factory = GameDataManager.Instance.GetFactoryById(GameDataManager.Instance.GetTeamById(teamId).factoryId);
-        Utils.Storage storage = StorageManager.Instance.GetStorageByBuildingIdAndType(factory.id, false);
-        int capacity = StorageManager.Instance.CalculateAvailableCapacity(storage, Utils.ProductType.RawMaterial, true);
-        return neededCapacity <= capacity;
+        //TODO how to get date of current contract
+        CustomDate thisWeekDate = new CustomDate(2020, 12, 3);
+        List<Utils.Contract> contracts = ContractsManager.Instance.myContracts;
+        bool result = false;
+        foreach (Utils.Contract contract in contracts)
+        {
+            if (contract.gameinCustomerId == _weekDemand.gameinCustomerId && contract.contractDate == thisWeekDate)
+            {
+                result = true;
+            }
+        }
+
+        return result;
     }
     
     public void OnDoneButtonClick()
     {
         Debug.LogWarning(1);
         string amountText = amount.text;
-        Utils.VehicleType vehicleType = GetTransportationMode();
+        string priceText = price.text;
         int weeks = GetRepetitionWeeks();
-        if (weeks < 0 || string.IsNullOrEmpty(amountText))
+        if (weeks < 0 || string.IsNullOrEmpty(amountText) || string.IsNullOrEmpty(priceText))
         {
             DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
             return;
         }
         Debug.LogWarning(2);
-        Debug.LogWarning(vehicleType);
-        if (CanAffordMakingContract() && StorageHasCapacity())
+        if (IsPriceInRange() && !HasContractWithDemanderThisWeek())
         {
             int amountInt = int.Parse(amount.text);
-            NewContractRequest newContractSupplier = new NewContractRequest(RequestTypeConstant.NEW_CONTRACT, _weekDemand.gameinCustomerId, _weekDemand.productId, amountInt,
-                int.Parse(pricePerUnit.text), weeks);
-            RequestManager.Instance.SendRequest(newContractSupplier);
+            int priceInt = int.Parse(priceText);
+            NewContractRequest newContract = new NewContractRequest(RequestTypeConstant.NEW_CONTRACT, _weekDemand.gameinCustomerId, _weekDemand.productId, amountInt,
+                priceInt, weeks);
+            RequestManager.Instance.SendRequest(newContract);
         }
-        if (!CanAffordMakingContract())
+        if (!IsPriceInRange())
         {
-            DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+            DialogManager.Instance.ShowErrorDialog("price_not_in_range_error");
         }
 
-        if (!StorageHasCapacity())
+        if (HasContractWithDemanderThisWeek())
         {
-            DialogManager.Instance.ShowErrorDialog("not_enough_capacity_error");
+            DialogManager.Instance.ShowErrorDialog("has_contract_this_week_error");
 
         }
     }

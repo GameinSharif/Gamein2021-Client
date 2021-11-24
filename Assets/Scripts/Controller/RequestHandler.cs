@@ -180,10 +180,12 @@ public class RequestHandler
                 EventManager.Instance.OnRemoveProductResponse(removeProductResponse);
                 break;
             case ResponseTypeConstant.NEW_CONTRACT:
-                //TODO
+                NewContractResponse newContractResponse = JsonConvert.DeserializeObject(responseJson, typeof(NewContractResponse), new StringEnumConverter()) as NewContractResponse;
+                EventManager.Instance.OnNewContractResponse(newContractResponse);
                 break;
             case ResponseTypeConstant.TERMINATE_CONTRACT:
-                //TODO
+                TerminateLongtermContractResponse terminateLongtermContractResponse = JsonConvert.DeserializeObject(responseJson, typeof(TerminateLongtermContractResponse), new StringEnumConverter()) as TerminateLongtermContractResponse;
+                EventManager.Instance.OnTerminateLongtermContractResponse(terminateLongtermContractResponse);
                 break;
             default:
                 Debug.LogWarning(responseJson);

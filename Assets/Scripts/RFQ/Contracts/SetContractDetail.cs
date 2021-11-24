@@ -23,6 +23,16 @@ public class SetContractDetail : MonoBehaviour
     
     public GameObject terminateButtonGameObject;
 
+    private void OnEnable()
+    {
+        EventManager.Instance.OnTerminateLongtermContractResponseEvent += OnTerminateLongtermContractResponseReceived;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnTerminateLongtermContractResponseEvent -= OnTerminateLongtermContractResponseReceived;
+    }
+    
     public void InitializeContract(Utils.Contract contractData, int index)
     {
         rowNumberTxt.text = (index + 1).ToString();
