@@ -44,7 +44,7 @@ public class FinishedProductCustomerItemController : MonoBehaviour
 
     public void OnMakeADealWithDemanderButtonClicked()
     {
-        //TODO
+        MakeADealWithDemanderPopupController.Instance.OnOpenMakeADealPopupClick(_weekDemand);
     }
 
 }

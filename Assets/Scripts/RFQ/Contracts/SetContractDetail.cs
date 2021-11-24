@@ -15,8 +15,8 @@ public class SetContractDetail : MonoBehaviour
     public RTLTextMeshPro pricePerUnitTxt;
     public RTLTextMeshPro boughtAmountTxt;
     public RTLTextMeshPro currentWeekTeamBrandTxt;
-    public RTLTextMeshPro sharePercentageTxt;
-    public RTLTextMeshPro incomePercentageTxt;
+    public RTLTextMeshPro demandShareTxt;
+    public RTLTextMeshPro valueShareTxt;
     public RTLTextMeshPro currentWeekPriceRangeTxt;
     public RTLTextMeshPro terminatePenaltyTxt;
     public RTLTextMeshPro lostSalePenaltyTxt;
@@ -30,26 +30,41 @@ public class SetContractDetail : MonoBehaviour
         productNameTxt.text = GameDataManager.Instance.Products[contractData.productId].name;
         contractDateTxt.text = contractData.contractDate.ToString();
         supplyAmountTxt.text = contractData.supplyAmount.ToString();
-        pricePerUnitTxt.text = contractData.pricePerUnit.ToString();
+        pricePerUnitTxt.text = contractData.pricePerUnit.ToString("0.00") + "$";
         boughtAmountTxt.text = contractData.boughtAmount.ToString();
-        //TODO how to get brand, share, income, price range
-        currentWeekTeamBrandTxt.text = "brand";
-        sharePercentageTxt.text = "share%";
-        incomePercentageTxt.text = "income%";
-        currentWeekPriceRangeTxt.text = "range";
+        currentWeekTeamBrandTxt.text = contractData.currentBrand.ToString("0.00");
+        demandShareTxt.text = contractData.demandShare.ToString("0.00");
+        valueShareTxt.text = contractData.valueShare.ToString("0.00");
+        currentWeekPriceRangeTxt.text = contractData.minPrice.ToString("0.00") + " - " + contractData.maxPrice.ToString("0.00");
         terminatePenaltyTxt.text = contractData.terminatePenalty.ToString();
         lostSalePenaltyTxt.text = contractData.lostSalePenalty.ToString();
 
         this.contractData = contractData;
     }
-
-    public void OnShowDetailsButtonClick()
+    
+    public void OnTerminateButtonClicked()
     {
-        //TODO
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                TerminateLongtermContractRequest terminateLongtermContract = new TerminateLongtermContractRequest(RequestTypeConstant.TERMINATE_CONTRACT, contractData.id);
+                RequestManager.Instance.SendRequest(terminateLongtermContract);
+            }
+        });
     }
 
-    public void OnTerminateContractButtonClick()
+    
+    public void OnTerminateLongtermContractResponseReceived(TerminateLongtermContractResponse terminateLongtermContractResponse)
     {
-        //TODO
+        if (terminateLongtermContractResponse.terminatedContract != null)
+        {
+            if (contractData.id == terminateLongtermContractResponse.terminatedContract.id)
+            {
+                DialogManager.Instance.ShowErrorDialog("contract_supplier_successfully_terminated");
+                MainHeaderManager.Instance.Money -= terminateLongtermContractResponse.terminatedContract.terminatePenalty;
+                terminateButtonGameObject.SetActive(false);
+            }
+        }
     }
 }

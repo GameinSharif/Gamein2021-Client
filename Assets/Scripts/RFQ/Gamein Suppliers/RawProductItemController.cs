@@ -12,7 +12,6 @@ public class RawProductItemController : MonoBehaviour
 
     
     private Utils.Product _rawProduct;
-    private List<Utils.WeekSupply> _supplies;
 
     public void SetInfo(int no, string productName)
     {

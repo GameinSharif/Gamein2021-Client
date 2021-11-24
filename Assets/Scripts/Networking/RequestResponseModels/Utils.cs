@@ -83,7 +83,11 @@ public class Utils
         public int supplyAmount;
         public float pricePerUnit;
         public int boughtAmount;
-        //TODO add parameters needed after calculating shares
+        public float currentBrand;
+        public float valueShare;
+        public float demandShare;
+        public float minPrice;
+        public float maxPrice;
         public int lostSalePenalty;
         public int terminatePenalty;
         public bool isTerminated;
@@ -106,6 +110,7 @@ public class Utils
         public int gameinCustomerId;
         public int productId;
         public int amount;
+        public int remainedAmount;
     }
     
     [Serializable]

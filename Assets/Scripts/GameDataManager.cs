@@ -223,7 +223,7 @@ public class GameDataManager : MonoBehaviour
         return CurrentWeekSupplies.Where(s => s.productId == rawProductId).ToList();
     }
 
-    public List<Utils.WeekDemand> GetCurrentWeekRawProductDemands(int rawProductId)
+    public List<Utils.WeekDemand> GetCurrentWeekFinishedProductDemands(int rawProductId)
     {
         return CurrentWeekDemands.Where(d => d.productId == rawProductId).ToList();
     }
