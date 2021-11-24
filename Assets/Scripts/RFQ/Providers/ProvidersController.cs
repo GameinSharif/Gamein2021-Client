@@ -13,6 +13,9 @@ public class ProvidersController : MonoBehaviour
     public GameObject MyTeamProvidersScrollViewParent;
     public GameObject OtherTeamsProvidersScrollViewParent;
 
+    public List<Utils.Provider> myTeamProviders; //only for storing
+    public List<Utils.Provider> otherTeamsProviders; //only for storing
+
     private List<ProviderItemController> _myTeamProviderItemControllers = new List<ProviderItemController>();
     private List<ProviderItemController> _otherTeamsProviderItemControllers = new List<ProviderItemController>();
     private List<GameObject> _spawnedGameObjects = new List<GameObject>();
@@ -36,8 +39,8 @@ public class ProvidersController : MonoBehaviour
 
     public void OnGetProvidersResponse(GetProvidersResponse getProvidersResponse)
     {
-        List<Utils.Provider> myTeamProviders = getProvidersResponse.myTeamProviders;
-        List<Utils.Provider> otherTeamsProviders = getProvidersResponse.otherTeamsProviders;
+        myTeamProviders = getProvidersResponse.myTeamProviders;
+        otherTeamsProviders = getProvidersResponse.otherTeamsProviders;
 
         myTeamProviders.Reverse();
         otherTeamsProviders.Reverse();

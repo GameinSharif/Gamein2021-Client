@@ -119,6 +119,9 @@ namespace ProductionLine
             }
 
             productionLineTableRows.Clear();
+            ProductionLinesDataManager.Instance.productionLineDtos =
+                new List<Utils.ProductionLineDto>(response.productionLines); //saving a copy in data manager object
+            
             foreach (var item in response.productionLines
                 .Where(c => c.status != ProductionLineStatus.SCRAPPED))
             {

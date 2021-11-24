@@ -29,6 +29,7 @@ public class MainMenuManager : MonoBehaviour
         RequestManager.Instance.SendRequest(getAllChatsRequest);
         
         var request = new GetStorageProductsRequest(RequestTypeConstant.GET_STORAGES);
+        var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
         RequestManager.Instance.SendRequest(request);
     }
 
