@@ -325,7 +325,7 @@ GameObject:
   - component: {fileID: 2702946606538594142}
   - component: {fileID: 4401875202768673426}
   m_Layer: 0
-  m_Name: show suppliers
+  m_Name: show retailers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -433,9 +433,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RawProductItemController, Assembly-CSharp
-        m_MethodName: OnShowSuppliesButtonClicked
+      - m_Target: {fileID: 2675288532329609220}
+        m_TargetAssemblyTypeName: FinishedProductItemController, Assembly-CSharp
+        m_MethodName: OnShowDemandsButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -655,6 +655,7 @@ GameObject:
   - component: {fileID: 4860367688378670087}
   - component: {fileID: 1063381510333770033}
   - component: {fileID: 1881207605874541123}
+  - component: {fileID: 2675288532329609220}
   m_Layer: 5
   m_Name: FinishedProductItemPrefab
   m_TagString: Untagged
@@ -766,6 +767,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &2675288532329609220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4860367688378670137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdb022cd19cdb0f419df73f9482647cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  no: {fileID: 4363434474450271698}
+  productNameLocalize: {fileID: 2579077662754097249}
+  showDemandsButtonGameObject: {fileID: 1264966159872089296}
 --- !u!1 &5092448032345143190
 GameObject:
   m_ObjectHideFlags: 0
