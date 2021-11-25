@@ -20,14 +20,14 @@ namespace ProductionLine
         public ToggleGroup _toggleGroup;
         public Button start_B;
 
-        private int _selectedProduct;
-        private int SelectedProduct
+        private int _selectedProductId;
+        private int SelectedProductId
         {
-            get => _selectedProduct;
+            get => _selectedProductId;
             set
             {
                 start_B.interactable = value != -1;
-                _selectedProduct = value;
+                _selectedProductId = value;
             }
         }
 
@@ -71,12 +71,12 @@ namespace ProductionLine
             productAmount_I.text = "0";
             total.text = "=" + int.Parse(productAmount_I.text) * _template.batchSize;
             
-            SelectedProduct = -1;
+            SelectedProductId = -1;
         }
         
         private void Select(bool toggleOn, int productId)
         {
-            SelectedProduct = toggleOn ? productId : -1;
+            SelectedProductId = toggleOn ? productId : -1;
         }
         
         private void AmountChange(string value)
@@ -90,14 +90,26 @@ namespace ProductionLine
 
         public void StartButton()
         {
+            if (SelectedProductId == -1)
+            {
+                DialogManager.Instance.ShowErrorDialog("no_product_selected_error");
+                return;
+            }
+
             int amount = int.Parse(productAmount_I.text);
+            if (amount <= 0)
+            {
+                DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
+                return;
+            }
+
             if (!HaveEnoughMoneyForProduct(amount))
             {
                 DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
                 return;
             }
 
-            if (!HaveEnoughMaterialForProduct(SelectedProduct, amount))
+            if (!HaveEnoughMaterialForProduct(SelectedProductId, amount))
             {
                 DialogManager.Instance.ShowErrorDialog("not_enough_material_error");
                 return;
@@ -108,7 +120,7 @@ namespace ProductionLine
                 if (agreed)
                 {
                     var request =
-                        new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, data.id, SelectedProduct,
+                        new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, data.id, SelectedProductId,
                             amount);
                     RequestManager.Instance.SendRequest(request);
                     CloseButton();
@@ -118,6 +130,11 @@ namespace ProductionLine
 
         private bool HaveEnoughMaterialForProduct(int productId, int amount)
         {
+            if (productId == 27) //CarbonDiaxide has no ingredients
+            {
+                return true;
+            }
+
             var ingredients = GameDataManager.Instance.GetProductById(productId).ingredientsPerUnit;
             if (ingredients is null) return true;
             

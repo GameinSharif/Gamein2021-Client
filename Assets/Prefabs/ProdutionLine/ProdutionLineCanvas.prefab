@@ -3868,7 +3868,6 @@ GameObject:
   - component: {fileID: 1251465707870159297}
   - component: {fileID: 1251465707870159302}
   - component: {fileID: 1251465707870159303}
-  - component: {fileID: 1853216378164920437}
   m_Layer: 5
   m_Name: ProdutionLineCanvas
   m_TagString: Untagged
@@ -3962,23 +3961,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1853216378164920437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1251465707870159300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb287049aa54f84b8a7b90c941b774b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  productionLineRowPrefab: {fileID: 2264302379968471493, guid: e264e2a179582334c82f045324a4676a, type: 3}
-  tableParent: {fileID: 1251465708172393966}
-  productionLineDetail: {fileID: 1251465706789545874}
-  constructButton: {fileID: 1251465707947013899}
-  constructPopup: {fileID: 44882784}
 --- !u!1 &1251465707907400642
 GameObject:
   m_ObjectHideFlags: 0
@@ -4422,17 +4404,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1853216378164920437}
-        m_TargetAssemblyTypeName: ProductionLine.ProductionLinesController, Assembly-CSharp
-        m_MethodName: PopupConstructProductionLine
-        m_Mode: 1
+      - m_Target: {fileID: 44882784}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!1 &1251465708172393967
 GameObject:

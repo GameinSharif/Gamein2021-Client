@@ -22,15 +22,14 @@ namespace ProductionLine
         private void Awake()
         {
             Instance = this;
+
             EventManager.Instance.OnGetProductionLinesResponseEvent += OnGetProductionLinesResponse;
             EventManager.Instance.OnConstructProductionLineResponseEvent += OnConstructProductionLineResponse;
             EventManager.Instance.OnScrapProductionLineResponseEvent += OnScrapProductionLineResponse;
             EventManager.Instance.OnStartProductionResponseEvent += OnStartProductionResponse;
-            EventManager.Instance.OnUpgradeProductionLineEfficiencyResponseEvent +=
-                OnUpgradeProductionLineEfficiencyResponse;
+            EventManager.Instance.OnUpgradeProductionLineEfficiencyResponseEvent += OnUpgradeProductionLineEfficiencyResponse;
             EventManager.Instance.OnUpgradeProductionLineQualityResponseEvent += OnUpgradeProductionLineQualityResponse;
-            EventManager.Instance.OnProductionLineConstructionCompletedResponseEvent +=
-                OnProductionLineConstructionCompletedResponse;
+            EventManager.Instance.OnProductionLineConstructionCompletedResponseEvent += OnProductionLineConstructionCompletedResponse;
             EventManager.Instance.OnProductCreationCompletedResponseEvent += OnProductCreationCompletedResponse;
 
             productionLineDetail.gameObject.SetActive(false);
@@ -109,6 +108,7 @@ namespace ProductionLine
         {
             if (response.productionLines is null)
             {
+                DialogManager.Instance.ShowErrorDialog();
                 Debug.LogError("error while getting production lines");
                 return;
             }
@@ -122,8 +122,7 @@ namespace ProductionLine
             ProductionLinesDataManager.Instance.productionLineDtos =
                 new List<Utils.ProductionLineDto>(response.productionLines); //saving a copy in data manager object
             
-            foreach (var item in response.productionLines
-                .Where(c => c.status != ProductionLineStatus.SCRAPPED))
+            foreach (var item in response.productionLines.Where(c => c.status != ProductionLineStatus.SCRAPPED))
             {
                 if (item.status == ProductionLineStatus.SCRAPPED) continue;
                 var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
