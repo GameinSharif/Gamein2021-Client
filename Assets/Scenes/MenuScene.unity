@@ -4416,6 +4416,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 559683431}
+  - component: {fileID: 559683432}
   - component: {fileID: 559683430}
   - component: {fileID: 559683429}
   - component: {fileID: 559683428}
@@ -4489,6 +4490,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &559683432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559683427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6517111b8cf02274d9d0c4fe206ec2a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ContractParentGameObject: {fileID: 540406575}
+  ContractPrefab: {fileID: 5024848028919615963, guid: 35a0f771e7e0f814a81700c51628c3d3, type: 3}
+  myContracts: []
 --- !u!1 &560978953
 GameObject:
   m_ObjectHideFlags: 0
@@ -7461,6 +7477,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 431380394}
+    - target: {fileID: 8710817870900047533, guid: 98efd0147c1be754eb4fb828e7fcef20, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98efd0147c1be754eb4fb828e7fcef20, type: 3}
 --- !u!114 &842913504 stripped
@@ -14762,12 +14782,12 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1710534270 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 7365516227578766254, guid: fd359c11b24deef42a64c81b6a1c337c, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8028389697774948103, guid: fd359c11b24deef42a64c81b6a1c337c, type: 3}
   m_PrefabInstance: {fileID: 1710534268}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1710534271 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 6423773580928625354, guid: fd359c11b24deef42a64c81b6a1c337c, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6423773582594812379, guid: fd359c11b24deef42a64c81b6a1c337c, type: 3}
   m_PrefabInstance: {fileID: 1710534268}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1710534272 stripped
@@ -15188,7 +15208,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1751902813}
-  - component: {fileID: 1751902812}
   - component: {fileID: 1751902817}
   m_Layer: 0
   m_Name: RFQManager
@@ -15197,21 +15216,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1751902812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751902811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6517111b8cf02274d9d0c4fe206ec2a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ContractParentGameObject: {fileID: 540406575}
-  ContractPrefab: {fileID: 5024848028919615963, guid: 35a0f771e7e0f814a81700c51628c3d3, type: 3}
-  myContracts: []
 --- !u!4 &1751902813
 Transform:
   m_ObjectHideFlags: 0
