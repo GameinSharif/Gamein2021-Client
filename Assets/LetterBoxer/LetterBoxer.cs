@@ -71,6 +71,11 @@ public class LetterBoxer : MonoBehaviour
         {             
             if (camera.depth == -100)
             {
+                if (camera.depth == -99)
+                {
+                    return;
+                }
+                
                 letterBoxerCamera.depth = -99;
                 //Debug.LogError("Found " + camera.name + " with a depth of -100. Will cause letter boxing issues. Please increase it's depth.");
             }

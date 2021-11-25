@@ -92,10 +92,10 @@ public class StorageTransportPopupController : MonoBehaviour
             return;
         }
         
-        var sourceType = _source.dc ? Utils.TransportNodeType.DC : Utils.TransportNodeType.FACTORY;
-        var destination = _destinationOptions[destinationDropDown.value];
-        var destinationType = destination.dc ? Utils.TransportNodeType.DC : Utils.TransportNodeType.FACTORY;
-        var vehicleType = _vehicleTypesOptions[vehicleTypeDropDown.value];
+        Utils.TransportNodeType sourceType = _source.dc ? Utils.TransportNodeType.DC : Utils.TransportNodeType.FACTORY;
+        Utils.Storage destination = _destinationOptions[destinationDropDown.value];
+        Utils.TransportNodeType destinationType = destination.dc ? Utils.TransportNodeType.DC : Utils.TransportNodeType.FACTORY;
+        Utils.VehicleType vehicleType = _vehicleTypesOptions[vehicleTypeDropDown.value];
 
         // dc type check
         
@@ -140,9 +140,9 @@ public class StorageTransportPopupController : MonoBehaviour
 
 
         var request = new StartTransportForPlayerStoragesRequest(
-            sourceId: _source.id,
+            sourceId: _source.buildingId,
             sourceType: sourceType,
-            destinationId: destination.id,
+            destinationId: destination.buildingId,
             destinationType: destinationType,
             productId: _product.id,
             amount: amount.Value,
@@ -154,7 +154,6 @@ public class StorageTransportPopupController : MonoBehaviour
 
     public void RefreshTotalCost()
     {
-
         var amount = ParseAmount();
         if (amount == null || amount < 1) return;
         
@@ -169,9 +168,7 @@ public class StorageTransportPopupController : MonoBehaviour
         
         int distance = TransportManager.Instance.GetTransportDistance(sourceLocation, destinationLocation, vehicleType);
 
-        _totalCostValue =
-            TransportManager.Instance.CalculateTransportCost(vehicleType, distance, _product.id, amount.Value,
-                insurance.isOn);
+        _totalCostValue = TransportManager.Instance.CalculateTransportCost(vehicleType, distance, _product.id, amount.Value, insurance.isOn);
         totalCost.text = _totalCostValue.ToString();
     }
 
