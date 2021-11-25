@@ -68,9 +68,9 @@ public class DcTabController : MonoBehaviour
 
     public void OnSendButtonClicked()
     {
-        //TODO send request to server
-        //We have the storage product index from _currentSelectedProduct
-        //and we have the amount from amountInputField
+        if (_currentSelectedProduct == null) return;
+        
+        StorageTransportPopupController.Instance.Initialize(_dc, _currentSelectedProduct);
     }
 
     public void OnRemoveButtonClicked()

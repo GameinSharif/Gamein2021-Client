@@ -35,7 +35,7 @@ public class WarehouseTabController : MonoBehaviour
     public void Initialize(Utils.Storage warehouse)
     {
         _warehouse = warehouse;
-        warehouseNameLoccalize.SetKey("Storage_Type_WAREHOUSE");
+        warehouseNameLoccalize.SetKey("Storage_Type_WAREHOUSE", _warehouse.buildingId.ToString());
         
         OnRawChanged(true);
         
@@ -74,9 +74,9 @@ public class WarehouseTabController : MonoBehaviour
     
     public void OnSendButtonClicked()
     {
-        //TODO send request to server
-        //We have the storage product index from _currentSelectedProduct
-        //and we have the amount from amountInputField
+        if (_currentSelectedProduct == null) return;
+        
+        StorageTransportPopupController.Instance.Initialize(_warehouse, _currentSelectedProduct);
     }
 
     public void OnRemoveButtonClicked()

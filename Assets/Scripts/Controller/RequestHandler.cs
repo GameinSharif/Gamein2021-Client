@@ -195,6 +195,11 @@ public class RequestHandler
             case ResponseTypeConstant.TERMINATE_CONTRACT:
                 //TODO
                 break;
+            case ResponseTypeConstant.START_TRANSPORT_FOR_STORAGES:
+                StartTransportForPlayerStoragesResponse startTransportForPlayerStoragesResponse =
+                    JsonUtility.FromJson<StartTransportForPlayerStoragesResponse>(responseJson);
+                EventManager.Instance.OnStartTransportForPlayerStoragesResponse(startTransportForPlayerStoragesResponse);
+                break;
             default:
                 Debug.LogWarning(responseJson);
                 break;
