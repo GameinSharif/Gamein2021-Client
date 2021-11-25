@@ -37,8 +37,7 @@ namespace ProductionLine
 
         public void ConstructProductionLine(int productionLineTemplateId)
         {
-            if (GameDataManager.Instance.GetProductionLineTemplateById(productionLineTemplateId).constructionCost >
-                MainHeaderManager.Instance.Money)
+            if (GameDataManager.Instance.GetProductionLineTemplateById(productionLineTemplateId).constructionCost > MainHeaderManager.Instance.Money)
             {
                 DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
                 return;
@@ -141,8 +140,8 @@ namespace ProductionLine
                 return;
             }
 
-            MainHeaderManager.Instance.Money -= GameDataManager.Instance
-                .GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).constructionCost;
+            MainHeaderManager.Instance.Money -= GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).constructionCost;
+            
             if (productionLineTableRows.Select(c => c.Data).Contains(response.productionLine)) return;
             var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
             current.SetData(response.productionLine, true);
@@ -158,8 +157,8 @@ namespace ProductionLine
                 return;
             }
 
-            MainHeaderManager.Instance.Money += GameDataManager.Instance
-                .GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).scrapPrice;
+            MainHeaderManager.Instance.Money += GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).scrapPrice;
+            
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             if (current is null) return;
             productionLineTableRows.Remove(current);
@@ -177,12 +176,11 @@ namespace ProductionLine
                 return;
             }
             
-            var template =
-                GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine
-                    .productionLineTemplateId);
+            var template = GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId);
             var production = response.productionLine.products.Last();
-            MainHeaderManager.Instance.Money -=
-                template.productionCostPerOneProduct * template.batchSize * production.amount + template.setupCost;
+           
+            MainHeaderManager.Instance.Money -= template.productionCostPerOneProduct * production.amount + template.setupCost;
+            
             var ingredients = GameDataManager.Instance.GetProductById(production.productId).ingredientsPerUnit;
             if (ingredients != null)
             {
