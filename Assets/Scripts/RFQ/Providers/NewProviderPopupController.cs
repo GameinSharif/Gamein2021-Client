@@ -41,7 +41,7 @@ public class NewProviderPopupController : MonoBehaviour
     private void OnNewProviderResponse(NewProviderResponse newProviderResponse)
     {
         _isSendingRequest = false;
-        if (newProviderResponse.result == "Success")
+        if (newProviderResponse.newProvider != null)
         {
             ProvidersController.Instance.AddMyProviderToList(newProviderResponse.newProvider);
 
@@ -81,11 +81,9 @@ public class NewProviderPopupController : MonoBehaviour
             if (product.productType == Utils.ProductType.SemiFinished)
             {
                 bool hasThisProductsProductionLine = ProductionLinesDataManager.Instance.HasProductionLineOfProduct(product);
-                bool isNotCurrentlyProviderOfThisProduct =
-                    !ProvidersController.Instance.myTeamProviders.Exists(p => p.productId == product.id);
+                bool isNotCurrentlyProviderOfThisProduct = !ProvidersController.Instance.myTeamProviders.Exists(p => p.productId == product.id && p.state == Utils.ProviderState.ACTIVE);
 
-                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine && isNotCurrentlyProviderOfThisProduct,
-                    index, "NewProvider");
+                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine && isNotCurrentlyProviderOfThisProduct, index, "NewProvider");
                 
                 index++;
             }
