@@ -85,7 +85,7 @@ public class GameinSuppliersController : MonoBehaviour
         createdItem.transform.SetSiblingIndex(index);
 
         ContractSupplierItemController controller = createdItem.GetComponent<ContractSupplierItemController>();
-        controller.SetInfo(index, contractSupplier);
+        controller.SetInfo(contractSupplier);
 
         createdItem.SetActive(true);
     }

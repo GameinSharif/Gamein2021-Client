@@ -7,7 +7,6 @@ public class SetContractDetail : MonoBehaviour
 {
     [HideInInspector] public Utils.Contract contractData;
 
-    public RTLTextMeshPro rowNumberTxt;
     public RTLTextMeshPro gameinCustomerNameTxt;
     public RTLTextMeshPro productNameTxt;
     public RTLTextMeshPro contractDateTxt;
@@ -33,9 +32,8 @@ public class SetContractDetail : MonoBehaviour
         EventManager.Instance.OnTerminateLongtermContractResponseEvent -= OnTerminateLongtermContractResponseReceived;
     }
     
-    public void InitializeContract(Utils.Contract contractData, int index)
+    public void InitializeContract(Utils.Contract contractData)
     {
-        rowNumberTxt.text = (index + 1).ToString();
         gameinCustomerNameTxt.text = GameDataManager.Instance.GetGameinCustomerById(contractData.gameinCustomerId).name;
         productNameTxt.text = GameDataManager.Instance.Products[contractData.productId].name;
         contractDateTxt.text = contractData.contractDate.ToString();

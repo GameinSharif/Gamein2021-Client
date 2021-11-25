@@ -5,7 +5,6 @@ using RTLTMPro;
 
 public class ContractSupplierItemController : MonoBehaviour
 {
-    public RTLTextMeshPro no;
     public RTLTextMeshPro supplierName;
     public Localize productNameLocalize;
     public RTLTextMeshPro contractDate;
@@ -39,9 +38,8 @@ public class ContractSupplierItemController : MonoBehaviour
         EventManager.Instance.OnTerminateLongtermContractSupplierResponseEvent -= OnTerminateLongtermContractSupplierResponseReceived;
     }
     
-    public void SetInfo(int no, string supplierName, string productNameKey, CustomDate contractDate, float currentWeekPrice, int boughtAmount, Utils.VehicleType transportType, float transportCost, bool hasInsurance, int terminatePenalty, int noMoneyPenalty)
+    public void SetInfo(string supplierName, string productNameKey, CustomDate contractDate, float currentWeekPrice, int boughtAmount, Utils.VehicleType transportType, float transportCost, bool hasInsurance, int terminatePenalty, int noMoneyPenalty)
     {
-        this.no.text = no.ToString();
         this.supplierName.text = supplierName;
         productNameLocalize.SetKey("product_" + productNameKey);
         this.contractDate.text = contractDate.ToString();
@@ -54,10 +52,9 @@ public class ContractSupplierItemController : MonoBehaviour
         this.noMoneyPenalty.text = noMoneyPenalty.ToString();
     }
 
-    public void SetInfo(int no, Utils.ContractSupplier contractSupplier)
+    public void SetInfo(Utils.ContractSupplier contractSupplier)
     {
         SetInfo(
-            no: no,
             supplierName: GameDataManager.Instance.GetSupplierName(contractSupplier.supplierId),
             productNameKey: GameDataManager.Instance.GetProductById(contractSupplier.materialId).name,
             contractDate: contractSupplier.contractDate,

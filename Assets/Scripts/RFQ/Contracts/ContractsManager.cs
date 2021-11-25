@@ -51,7 +51,7 @@ public class ContractsManager : MonoBehaviour
         GameObject contractGameObject = GetPoolledContractGameObject();
 
         SetContractDetail setContractDetail = contractGameObject.GetComponent<SetContractDetail>();
-        setContractDetail.InitializeContract(contract, index);
+        setContractDetail.InitializeContract(contract);
 
         contractGameObject.transform.SetSiblingIndex(index + 1);
         contractGameObject.SetActive(true);
