@@ -270,4 +270,9 @@ public class GameDataManager : MonoBehaviour
     {
         return DateTime.Now > GameConstants.AuctionRoundsStartTime[GameConstants.AuctionRoundsStartTime.Count - 1].ToDateTime().AddSeconds(GameConstants.AuctionRoundDurationSeconds);
     }
+
+    public Utils.ProductionLineTemplate GetProductionLineTemplateById(int templateId)
+    {
+        return GameDataManager.Instance.ProductionLineTemplates.FirstOrDefault(c => c.id == templateId);
+    }
 }

@@ -103,7 +103,8 @@ public class NegotiationItemController : MonoBehaviour
 
     public void OnChatButtonClick()
     {
-        // TODO
+        int otherTeamId = _negotiation.supplierId == PlayerPrefs.GetInt("TeamId") ? _negotiation.demanderId : _negotiation.supplierId;
+        ChatsListController.Instance.OpenChatFromNegotiation(otherTeamId);
     }
 
     public void OnChangePriceButtonClick()
@@ -112,7 +113,6 @@ public class NegotiationItemController : MonoBehaviour
         {
             return;
         }
-        _isSendingRequest = true;
 
         string price = PricePerUnitInputfield.text;
         if (string.IsNullOrEmpty(price))
@@ -121,6 +121,7 @@ public class NegotiationItemController : MonoBehaviour
             return;
         }
 
+        _isSendingRequest = true;
         EditNegotiationCostPerUnitRequest editNegotiationCostPerUnitRequest = new EditNegotiationCostPerUnitRequest(RequestTypeConstant.EDIT_NEGOTIATION_COST_PER_UNIT, _negotiation.id, float.Parse(price));
         RequestManager.Instance.SendRequest(editNegotiationCostPerUnitRequest);
     }

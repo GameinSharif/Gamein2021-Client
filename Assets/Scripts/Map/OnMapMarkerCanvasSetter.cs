@@ -10,7 +10,7 @@ public class OnMapMarkerCanvasSetter : MonoBehaviour
     private void Start()
     {
         canvas = GetComponent<Canvas>();
-        canvas.worldCamera = Camera.allCameras[1];
+        canvas.worldCamera = Camera.allCameras[2];
         canvas.sortingOrder = 1;
     }
 }

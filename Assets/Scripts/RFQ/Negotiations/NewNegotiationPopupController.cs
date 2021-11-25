@@ -14,6 +14,7 @@ public class NewNegotiationPopupController: MonoBehaviour
     public Localize ProductNameLocalize;
     public TMP_InputField AmountInputfield;
     public TMP_InputField PriceInputfield;
+    public Localize minMaxLocalize;
 
     private Utils.Provider _provider;
     private bool _isSendingRequest = false;
@@ -54,6 +55,8 @@ public class NewNegotiationPopupController: MonoBehaviour
 
         ProductImage.sprite = GameDataManager.Instance.ProductSprites[provider.productId - 1];
         ProductNameLocalize.SetKey("product_" + GameDataManager.Instance.Products[provider.productId - 1].name);
+        var product = GameDataManager.Instance.GetProductById(_provider.productId);
+        minMaxLocalize.SetKey("min_max_text", product.minPrice.ToString(), product.maxPrice.ToString());
         _provider = provider;
 
         NewNegotiationPopupCanvas.SetActive(true);
@@ -65,7 +68,6 @@ public class NewNegotiationPopupController: MonoBehaviour
         {
             return;
         }
-        _isSendingRequest = true;
 
         string amount = AmountInputfield.text;
         string price = PriceInputfield.text;
@@ -75,7 +77,18 @@ public class NewNegotiationPopupController: MonoBehaviour
             return;
         }
 
-        NewProviderNegotiationRequest newProviderNegotiationRequest = new NewProviderNegotiationRequest(RequestTypeConstant.NEW_PROVIDER_NEGOTIATION, _provider.id, int.Parse(amount), float.Parse(price));
+        var parsedAmount = int.Parse(amount);
+        var parsedPrice = float.Parse(price);
+        var product = GameDataManager.Instance.GetProductById(_provider.productId);
+
+        if (parsedPrice > product.maxPrice || parsedPrice < product.minPrice)
+        {
+            DialogManager.Instance.ShowErrorDialog("price_min_max_error");
+            return;
+        }
+
+        _isSendingRequest = true;
+        NewProviderNegotiationRequest newProviderNegotiationRequest = new NewProviderNegotiationRequest(RequestTypeConstant.NEW_PROVIDER_NEGOTIATION, _provider.id, parsedAmount, parsedPrice);
         RequestManager.Instance.SendRequest(newProviderNegotiationRequest);
     }
 }

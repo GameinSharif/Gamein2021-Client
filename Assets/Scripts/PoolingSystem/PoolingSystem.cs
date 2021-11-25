@@ -42,7 +42,7 @@ public class PoolingSystem<T>
     {
         foreach (Transform child in parent)
         {
-            if (!child.gameObject.activeInHierarchy)
+            if (!child.gameObject.activeSelf)
             {
                 return child.gameObject;
             }

@@ -27,6 +27,12 @@ public class MainMenuManager : MonoBehaviour
 
         GetAllChatsRequest getAllChatsRequest = new GetAllChatsRequest();
         RequestManager.Instance.SendRequest(getAllChatsRequest);
+
+        GetStorageProductsRequest getStorageProductsRequest = new GetStorageProductsRequest(RequestTypeConstant.GET_STORAGES);
+        RequestManager.Instance.SendRequest(getStorageProductsRequest);
+
+        var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
+        RequestManager.Instance.SendRequest(request);
     }
 
     private void Start()
@@ -68,8 +74,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnOpenStoragePageButtonClick()
     {
-        var request = new GetStorageProductsRequest(RequestTypeConstant.GET_STORAGES);
-        RequestManager.Instance.SendRequest(request);
+        
     }
 
     public void OnLoadMapSceneButtonClick()

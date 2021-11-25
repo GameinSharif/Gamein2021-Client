@@ -287,6 +287,20 @@ public class EventManager : MonoBehaviour
         OnUpgradeProductionLineQualityResponseEvent?.Invoke(response);
     }
     
+    public event Action<ProductCreationCompletedResponse> OnProductCreationCompletedResponseEvent;
+
+    public void OnProductCreationCompletedResponse(ProductCreationCompletedResponse response)
+    {
+        OnProductCreationCompletedResponseEvent?.Invoke(response);
+    }
+    
+    public event Action<ProductionLineConstructionCompletedResponse> OnProductionLineConstructionCompletedResponseEvent;
+
+    public void OnProductionLineConstructionCompletedResponse(ProductionLineConstructionCompletedResponse response)
+    {
+        OnProductionLineConstructionCompletedResponseEvent?.Invoke(response);
+    }
+    
     public event Action<GetAllActiveDcResponse> OnGetAllActiveDcResponseEvent;
 
     public void OnGetAllActiveDcResponse(GetAllActiveDcResponse response)
@@ -299,5 +313,11 @@ public class EventManager : MonoBehaviour
     public void OnRemoveProductResponse(RemoveProductResponse response)
     {
         OnRemoveProductResponseEvent?.Invoke(response);
+    }
+
+    public event Action<StartTransportForPlayerStoragesResponse> OnStartTransportForPlayerStoragesResponseEvent;
+    public void OnStartTransportForPlayerStoragesResponse(StartTransportForPlayerStoragesResponse response)
+    {
+        OnStartTransportForPlayerStoragesResponseEvent?.Invoke(response);
     }
 }

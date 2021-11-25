@@ -33,4 +33,10 @@ public class ProductDetailsSetter : MonoBehaviour
             });
         }
     }
+
+    public void SetRawData(Utils.Product product)
+    {
+        ProductImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
+        ProductNameLocalize.SetKey("product_" + product.name);
+    }
 }

@@ -163,6 +163,16 @@ public class RequestHandler
                     responseJson, typeof(UpgradeProductionLineEfficiencyResponse),
                     new StringEnumConverter()) as UpgradeProductionLineEfficiencyResponse);
                 break;
+            case ResponseTypeConstant.PRODUCTION_LINE_CONSTRUCTION_COMPLETED:
+                EventManager.Instance.OnProductionLineConstructionCompletedResponse(JsonConvert.DeserializeObject(
+                    responseJson, typeof(ProductionLineConstructionCompletedResponse),
+                    new StringEnumConverter()) as ProductionLineConstructionCompletedResponse);
+                break;
+            case ResponseTypeConstant.PRODUCT_CREATION_COMPLETED:
+                EventManager.Instance.OnProductCreationCompletedResponse(JsonConvert.DeserializeObject(
+                    responseJson, typeof(ProductCreationCompletedResponse),
+                    new StringEnumConverter()) as ProductCreationCompletedResponse);
+                break;
             case ResponseTypeConstant.SERVER_TIME:
                 ServerTimeResponse serverTimeResponse = JsonUtility.FromJson<ServerTimeResponse>(responseJson);
                 EventManager.Instance.OnServerTimeResponse(serverTimeResponse);
@@ -186,6 +196,11 @@ public class RequestHandler
             case ResponseTypeConstant.TERMINATE_CONTRACT:
                 TerminateLongtermContractResponse terminateLongtermContractResponse = JsonConvert.DeserializeObject(responseJson, typeof(TerminateLongtermContractResponse), new StringEnumConverter()) as TerminateLongtermContractResponse;
                 EventManager.Instance.OnTerminateLongtermContractResponse(terminateLongtermContractResponse);
+                break;
+            case ResponseTypeConstant.TRANSPORT_TO_STORAGE:
+                StartTransportForPlayerStoragesResponse startTransportForPlayerStoragesResponse =
+                    JsonUtility.FromJson<StartTransportForPlayerStoragesResponse>(responseJson);
+                EventManager.Instance.OnStartTransportForPlayerStoragesResponse(startTransportForPlayerStoragesResponse);
                 break;
             default:
                 Debug.LogWarning(responseJson);

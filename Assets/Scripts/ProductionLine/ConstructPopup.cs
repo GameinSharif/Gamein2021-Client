@@ -1,6 +1,4 @@
-﻿using System;
-using RTLTMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace ProductionLine
@@ -9,26 +7,47 @@ namespace ProductionLine
     {
         public GameObject choicePrefab;
         public Transform choicesParent;
-        private int currentSelected = -1;
+        public ToggleGroup _toggleGroup;
+        public Sprite defaultImageForChoice;
+        public Button construct_B;
+        
+        
+        private int _currentSelected;
+        private int CurrentSelected
+        {
+            get => _currentSelected;
+            set
+            {
+                construct_B.interactable = value != -1;
+                _currentSelected = value;
+            }
+        }
 
         private void Awake()
         {
             foreach (var template in GameDataManager.Instance.ProductionLineTemplates)
             {
                 var c = Instantiate(choicePrefab, choicesParent);
-                c.GetComponent<Button>().onClick.AddListener(() => { currentSelected = template.id; });
-                c.GetComponentInChildren<RTLTextMeshPro>().text = template.name;
+                c.GetComponent<ProductionLineTemplateChoice>().Setup(template.name, defaultImageForChoice, template.constructionCost);
+                c.GetComponent<Toggle>().group = _toggleGroup;
+                c.GetComponent<Toggle>().onValueChanged.AddListener(on => Select(on, template.id));
             }
         }
 
         private void OnEnable()
         {
-            currentSelected = -1;
+            _toggleGroup.SetAllTogglesOff();
+            CurrentSelected = -1;
+        }
+
+        private void Select(bool toggleOn, int templateId)
+        {
+            CurrentSelected = toggleOn ? templateId : -1;
         }
 
         public void ConstructButton()
         {
-            ProductionLinesController.Instance.ConstructProductionLine(currentSelected);
+            ProductionLinesController.Instance.ConstructProductionLine(CurrentSelected);
             CloseButton();
         }
 

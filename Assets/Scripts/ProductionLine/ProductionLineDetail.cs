@@ -17,6 +17,9 @@ namespace ProductionLine
 
         public GameObject startProductionPopup;
 
+        public GameObject inProcessPanel;
+        public Localize remainingTime_T;
+
         #endregion
 
         #region fields
@@ -34,14 +37,33 @@ namespace ProductionLine
         {
             Data = data;
 
-            qualityUpgradeButton.interactable = data.qualityLevel != 2;
+            qualityUpgradeButton.interactable = data.status == ProductionLineStatus.ACTIVE && data.qualityLevel != 2;
 
-            efficiencyUpgradeButton.interactable = data.efficiencyLevel != 2;
+            efficiencyUpgradeButton.interactable =
+                data.status == ProductionLineStatus.ACTIVE && data.efficiencyLevel != 2;
 
-            startProductionButton.interactable = data.status == ProductionLineStatus.ACTIVE;
+            //startProductionButton.interactable = data.status == ProductionLineStatus.ACTIVE;
             scrapButton.interactable = data.status == ProductionLineStatus.ACTIVE;
 
-            if (data.products != null && data.products.Count > 0) startProductionButton.interactable = false;
+            inProcessPanel.SetActive(false);
+            
+            if (data.status == ProductionLineStatus.IN_CONSTRUCTION)
+            {
+                var remainingTime = (data.activationDate.ToDateTime() -
+                                 MainHeaderManager.Instance.gameDate.ToDateTime()).Days;
+                remainingTime_T.SetKey("construction_remaining_time", remainingTime.ToString());
+                inProcessPanel.SetActive(true);
+                return;
+            }
+            
+            if (data.products is null) return;
+            if (data.products.Count == 0) return;
+            var remaining = (data.products.Last().endDate.ToDateTime() -
+                            MainHeaderManager.Instance.gameDate.ToDateTime()).Days;
+            if (remaining <= 0) return;
+
+            remainingTime_T.SetKey("production_remaining_time", remaining.ToString());
+            inProcessPanel.SetActive(true);
         }
 
 
@@ -53,31 +75,44 @@ namespace ProductionLine
 
         public void UpgradeProductionLineEfficiency()
         {
-            //TODO: check money
-            
+            if (GameDataManager.Instance.GetProductionLineTemplateById(Data.productionLineTemplateId)
+                    .efficiencyLevels[Data.efficiencyLevel + 1].upgradeCost >
+                MainHeaderManager.Instance.Money)
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
+
             DialogManager.Instance.ShowConfirmDialog(agreed =>
             {
                 if (agreed)
                 {
                     var request =
-                        new UpgradeProductionLineEfficiencyRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_EFFICIENCY,
+                        new UpgradeProductionLineEfficiencyRequest(
+                            RequestTypeConstant.UPGRADE_PRODUCTION_LINE_EFFICIENCY,
                             Data.id);
-                    RequestManager.Instance.SendRequest(request); 
+                    RequestManager.Instance.SendRequest(request);
                 }
             });
-            
         }
 
         public void UpgradeProductionLineQuality()
         {
-            //TODO: check money
-            
+            if (GameDataManager.Instance.GetProductionLineTemplateById(Data.productionLineTemplateId)
+                    .qualityLevels[Data.qualityLevel + 1].upgradeCost >
+                MainHeaderManager.Instance.Money)
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
+
             DialogManager.Instance.ShowConfirmDialog(agreed =>
             {
                 if (agreed)
                 {
                     var request =
-                        new UpgradeProductionLineQualityRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY, Data.id);
+                        new UpgradeProductionLineQualityRequest(RequestTypeConstant.UPGRADE_PRODUCTION_LINE_QUALITY,
+                            Data.id);
                     RequestManager.Instance.SendRequest(request);
                 }
             });
@@ -85,12 +120,12 @@ namespace ProductionLine
 
         public void ScrapProductionLine()
         {
-            DialogManager.Instance.ShowConfirmDialog(agreed => {
+            DialogManager.Instance.ShowConfirmDialog(agreed =>
+            {
                 if (agreed)
                 {
                     var request = new ScarpProductionLineRequest(RequestTypeConstant.SCRAP_PRODUCTION_LINE, Data.id);
                     RequestManager.Instance.SendRequest(request);
-                    //TODO: add money
                 }
             });
         }

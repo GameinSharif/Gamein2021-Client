@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.Mapbox.Unity.MeshGeneration.Modifiers.MeshModifiers;
 using RTLTMPro;
 using TMPro;
 using UnityEngine;
@@ -15,12 +14,27 @@ namespace ProductionLine
 
         public TMP_InputField productAmount_I;
 
-        private ToggleGroup _toggleGroup;
-        private int selectedProduct = -1;
+        public RTLTextMeshPro benchSize_T, total;
+        
+        
+        public ToggleGroup _toggleGroup;
+        public Button start_B;
+
+        private int _selectedProductId;
+        private int SelectedProductId
+        {
+            get => _selectedProductId;
+            set
+            {
+                start_B.interactable = value != -1;
+                _selectedProductId = value;
+            }
+        }
 
         private List<GameObject> choices = new List<GameObject>();
 
         private Utils.ProductionLineDto data;
+        private Utils.ProductionLineTemplate _template;
 
         private void Awake()
         {
@@ -28,14 +42,15 @@ namespace ProductionLine
             {
                 var c = Instantiate(choicePrefab, choicesParent);
                 choices.Add(c);
-                _toggleGroup.RegisterToggle(c.GetComponent<Toggle>());
+                c.GetComponent<Toggle>().group = _toggleGroup;
             }
+            productAmount_I.onValueChanged.AddListener(AmountChange);
         }
 
         public void Setup(Utils.ProductionLineDto data)
         {
             this.data = data;
-            _toggleGroup.SetAllTogglesOff();
+            _template = GameDataManager.Instance.GetProductionLineTemplateById(data.productionLineTemplateId);
             foreach (var item in choices)
             {
                 item.SetActive(false);
@@ -48,37 +63,112 @@ namespace ProductionLine
                 var product = products[i];
                 choices[i].SetActive(true);
                 choices[i].GetComponentInChildren<Localize>().SetKey("product_" + product.name);
-                choices[i].GetComponent<Toggle>().onValueChanged.AddListener(on => Select(product.id));
+                choices[i].GetComponent<Toggle>().onValueChanged.AddListener(on => Select(on, product.id));
             }
+            _toggleGroup.SetAllTogglesOff();
 
-            selectedProduct = -1;
+            benchSize_T.text = "\u00D7"+_template.batchSize;
+            productAmount_I.text = "0";
+            total.text = "=" + int.Parse(productAmount_I.text) * _template.batchSize;
+            
+            SelectedProductId = -1;
         }
-
-        private void Select(int productId)
+        
+        private void Select(bool toggleOn, int productId)
         {
-            selectedProduct = productId;
+            SelectedProductId = toggleOn ? productId : -1;
+        }
+        
+        private void AmountChange(string value)
+        {
+            if(string.IsNullOrEmpty(value))
+                productAmount_I.text = "0";
+
+            start_B.interactable = int.Parse(productAmount_I.text) > 0;
+            total.text = "=" + int.Parse(productAmount_I.text) * _template.batchSize;
         }
 
         public void StartButton()
         {
+            if (SelectedProductId == -1)
+            {
+                DialogManager.Instance.ShowErrorDialog("no_product_selected_error");
+                return;
+            }
+
             int amount = int.Parse(productAmount_I.text);
-            //TODO: check money and materials
-            
+            if (amount <= 0)
+            {
+                DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
+                return;
+            }
+
+            if (!HaveEnoughMoneyForProduct(amount))
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
+
+            if (!HaveEnoughMaterialForProduct(SelectedProductId, amount))
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_material_error");
+                return;
+            }
+
             DialogManager.Instance.ShowConfirmDialog(agreed =>
             {
                 if (agreed)
                 {
                     var request =
-                        new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, data.id, selectedProduct, amount);
+                        new StartProductionRequest(RequestTypeConstant.START_PRODUCTION, data.id, SelectedProductId,
+                            amount);
                     RequestManager.Instance.SendRequest(request);
                     CloseButton();
                 }
             });
         }
 
+        private bool HaveEnoughMaterialForProduct(int productId, int amount)
+        {
+            if (productId == 27) //CarbonDiaxide has no ingredients
+            {
+                return true;
+            }
+
+            var ingredients = GameDataManager.Instance.GetProductById(productId).ingredientsPerUnit;
+            if (ingredients is null) return true;
+            
+            foreach (var ingredient in ingredients)
+            {
+                if (ingredient.productId == 4) //always has Water
+                {
+                    continue;
+                }
+
+                if (ingredient.amount * amount * _template.batchSize >
+                    StorageManager.Instance.GetProductAmountByStorage(StorageManager.Instance.GetWarehouse(),
+                        ingredient.productId))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool HaveEnoughMoneyForProduct(int amount)
+        {
+            return CalculateProductionCost(amount) <= MainHeaderManager.Instance.Money;
+        }
+
         public void CloseButton()
         {
             gameObject.SetActive(false);
+        }
+
+        private int CalculateProductionCost(int amount)
+        {
+            return _template.productionCostPerOneProduct * _template.batchSize * amount + _template.setupCost;
         }
     }
 }

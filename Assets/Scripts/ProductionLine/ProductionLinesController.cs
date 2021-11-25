@@ -22,20 +22,27 @@ namespace ProductionLine
         private void Awake()
         {
             Instance = this;
+
             EventManager.Instance.OnGetProductionLinesResponseEvent += OnGetProductionLinesResponse;
             EventManager.Instance.OnConstructProductionLineResponseEvent += OnConstructProductionLineResponse;
             EventManager.Instance.OnScrapProductionLineResponseEvent += OnScrapProductionLineResponse;
             EventManager.Instance.OnStartProductionResponseEvent += OnStartProductionResponse;
-            EventManager.Instance.OnUpgradeProductionLineEfficiencyResponseEvent +=
-                OnUpgradeProductionLineEfficiencyResponse;
+            EventManager.Instance.OnUpgradeProductionLineEfficiencyResponseEvent += OnUpgradeProductionLineEfficiencyResponse;
             EventManager.Instance.OnUpgradeProductionLineQualityResponseEvent += OnUpgradeProductionLineQualityResponse;
+            EventManager.Instance.OnProductionLineConstructionCompletedResponseEvent += OnProductionLineConstructionCompletedResponse;
+            EventManager.Instance.OnProductCreationCompletedResponseEvent += OnProductCreationCompletedResponse;
+
             productionLineDetail.gameObject.SetActive(false);
         }
 
         public void ConstructProductionLine(int productionLineTemplateId)
         {
-            //TODO: check money
-            
+            if (GameDataManager.Instance.GetProductionLineTemplateById(productionLineTemplateId).constructionCost > MainHeaderManager.Instance.Money)
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
+
             DialogManager.Instance.ShowConfirmDialog(agreed =>
             {
                 if (agreed)
@@ -49,17 +56,26 @@ namespace ProductionLine
 
         public void ShowDetails(int id)
         {
-            var productionLine = productionLineTableRows.FirstOrDefault(e => e.Data.id == id);
-            if (productionLine is null)
+            currentDetailId = -1;
+            foreach (var row in productionLineTableRows)
             {
-                currentDetailId = -1;
-                productionLineDetail.gameObject.SetActive(false);
-                return;
+                if (row.Data.id == id)
+                {
+                    currentDetailId = id;
+                    row.Highlight(true);
+                    productionLineDetail.gameObject.SetActive(true);
+                    productionLineDetail.SetData(row.Data);
+                }
+                else
+                {
+                    row.Highlight(false);
+                }
             }
 
-            currentDetailId = id;
-            productionLineDetail.gameObject.SetActive(true);
-            productionLineDetail.SetData(productionLine.Data);
+            if (currentDetailId == -1)
+            {
+                productionLineDetail.gameObject.SetActive(false);
+            }
         }
 
         private void UpdateDetails(Utils.ProductionLineDto data)
@@ -79,7 +95,7 @@ namespace ProductionLine
 
             constructButton.SetAsLastSibling();
         }
-        
+
         public void PopupConstructProductionLine()
         {
             constructPopup.SetActive(true);
@@ -89,8 +105,23 @@ namespace ProductionLine
 
         private void OnGetProductionLinesResponse(GetProductionLinesResponse response)
         {
-            foreach (var item in response.productionLines
-                    .Where(c => c.status == ProductionLineStatus.ACTIVE))
+            if (response.productionLines is null)
+            {
+                DialogManager.Instance.ShowErrorDialog();
+                Debug.LogError("error while getting production lines");
+                return;
+            }
+
+            foreach (var item in productionLineTableRows)
+            {
+                Destroy(item.gameObject);
+            }
+
+            productionLineTableRows.Clear();
+            ProductionLinesDataManager.Instance.productionLineDtos =
+                new List<Utils.ProductionLineDto>(response.productionLines); //saving a copy in data manager object
+            
+            foreach (var item in response.productionLines.Where(c => c.status != ProductionLineStatus.SCRAPPED))
             {
                 if (item.status == ProductionLineStatus.SCRAPPED) continue;
                 var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
@@ -103,6 +134,14 @@ namespace ProductionLine
 
         private void OnConstructProductionLineResponse(ConstructProductionLineResponse response)
         {
+            if (response.productionLine is null)
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
+
+            MainHeaderManager.Instance.Money -= GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).constructionCost;
+            
             if (productionLineTableRows.Select(c => c.Data).Contains(response.productionLine)) return;
             var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
             current.SetData(response.productionLine, true);
@@ -112,6 +151,14 @@ namespace ProductionLine
 
         private void OnScrapProductionLineResponse(ScrapProductionLineResponse response)
         {
+            if (response.productionLine is null)
+            {
+                Debug.LogError("cant scrap production line");
+                return;
+            }
+
+            MainHeaderManager.Instance.Money += GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).scrapPrice;
+            
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             if (current is null) return;
             productionLineTableRows.Remove(current);
@@ -123,6 +170,28 @@ namespace ProductionLine
 
         private void OnStartProductionResponse(StartProductionResponse response)
         {
+            if (response.productionLine is null)
+            {
+                Debug.LogError("cant start production");
+                return;
+            }
+            
+            var template = GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId);
+            var production = response.productionLine.products.Last();
+           
+            MainHeaderManager.Instance.Money -= template.productionCostPerOneProduct * production.amount + template.setupCost;
+            
+            var ingredients = GameDataManager.Instance.GetProductById(production.productId).ingredientsPerUnit;
+            if (ingredients != null)
+            {
+                foreach (var ingredient in ingredients)
+                {
+                    StorageManager.Instance.ChangeStockInStorage(StorageManager.Instance.GetWarehouse().id,
+                        ingredient.productId, - ingredient.amount * production.amount);
+                }
+            }
+
+
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
@@ -130,6 +199,15 @@ namespace ProductionLine
 
         private void OnUpgradeProductionLineEfficiencyResponse(UpgradeProductionLineEfficiencyResponse response)
         {
+            if (response.productionLine is null)
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
+
+            MainHeaderManager.Instance.Money -= GameDataManager.Instance
+                .GetProductionLineTemplateById(response.productionLine.productionLineTemplateId)
+                .efficiencyLevels[response.productionLine.efficiencyLevel].upgradeCost;
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
@@ -137,9 +215,36 @@ namespace ProductionLine
 
         private void OnUpgradeProductionLineQualityResponse(UpgradeProductionLineQualityResponse response)
         {
+            if (response.productionLine is null)
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                return;
+            }
+
+            MainHeaderManager.Instance.Money -= GameDataManager.Instance
+                .GetProductionLineTemplateById(response.productionLine.productionLineTemplateId)
+                .qualityLevels[response.productionLine.qualityLevel].upgradeCost;
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
+        }
+
+        private void OnProductionLineConstructionCompletedResponse(ProductionLineConstructionCompletedResponse response)
+        {
+            var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
+            current?.SetData(response.productionLine);
+            UpdateDetails(response.productionLine);
+        }
+
+        private void OnProductCreationCompletedResponse(ProductCreationCompletedResponse response)
+        {
+            //TODO
+            //var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productLineId);
+            //current?.SetData(response.productionLine);
+            //UpdateDetails(response.productionLine);
+
+            StorageManager.Instance.ChangeStockInStorage(StorageManager.Instance.GetWarehouse().id,
+                response.product.productId, response.product.amount);
         }
 
         #endregion
