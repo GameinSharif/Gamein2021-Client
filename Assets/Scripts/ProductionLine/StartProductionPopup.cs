@@ -140,6 +140,11 @@ namespace ProductionLine
             
             foreach (var ingredient in ingredients)
             {
+                if (ingredient.productId == 4) //always has Water
+                {
+                    continue;
+                }
+
                 if (ingredient.amount * amount * _template.batchSize >
                     StorageManager.Instance.GetProductAmountByStorage(StorageManager.Instance.GetWarehouse(),
                         ingredient.productId))
