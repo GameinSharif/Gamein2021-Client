@@ -142,7 +142,7 @@ public class CountrySelectionController : MonoBehaviour
     {
         MapManager.SnapToLocaltionOnOpenMap = _countryCapitalsLocaltion[_countryIndex];
 
-        MainMenuManager.Instance.OnLoadMapSceneButtonClick();
+        MainMenuManager.Instance.OnLoadMapScene();
 
         countrySelectionCanvas.SetActive(false);
     }

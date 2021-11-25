@@ -43,8 +43,7 @@ public class RawProductSupplyItemController : MonoBehaviour
         float y = (float)GameDataManager.Instance.GetSupplierById(_weekSupply.supplierId).longitude;
         MapManager.SnapToLocaltionOnOpenMap = new Vector2(x, y);
 
-        MainMenuManager.Instance.IsInTradePage = false;
-        MainMenuManager.Instance.OnLoadMapSceneButtonClick();
+        MainMenuManager.Instance.OpenPage(0);
     }
 
     public void OnMakeADealWithSupplierButtonClicked()

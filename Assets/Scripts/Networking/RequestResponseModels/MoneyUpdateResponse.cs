@@ -1,4 +1,5 @@
 ﻿public class MoneyUpdateResponse : ResponseObject
 {
-    public int money;
+    public float money;
+    public float value;
 }

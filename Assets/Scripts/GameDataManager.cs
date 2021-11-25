@@ -66,20 +66,14 @@ public class GameDataManager : MonoBehaviour
     {
         CurrentWeekDemands = getCurrentWeekDemandsResponse.currentWeekDemands;
 
-        if (MainMenuManager.Instance.IsInTradePage)
-        {
-            GameinCustomersController.Instance.UpdateDemands();
-        }
+        GameinCustomersController.Instance.UpdateDemands();
     }
 
     public void OnGetCurrentWeekSuppliesResponse(GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse)
     {
         CurrentWeekSupplies = getCurrentWeekSuppliesResponse.currentWeekSupplies;
 
-        if (MainMenuManager.Instance.IsInTradePage)
-        {
-            GameinSuppliersController.Instance.UpdateSupplies();
-        }
+        GameinSuppliersController.Instance.UpdateSupplies();
     }
     
     public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)

@@ -563,13 +563,4 @@ public class MapManager : MonoBehaviour
     }
 
     #endregion
-
-    public void OnBackToMainMenuButtonClick()
-    {
-        IsInMap = false;
-
-        MainMenuManager.Instance.MainMenuCanvasGameObject.SetActive(true);
-        SceneManager.UnloadSceneAsync("MapScene");
-    }
-
 }

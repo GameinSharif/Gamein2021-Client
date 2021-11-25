@@ -38,8 +38,7 @@ public class FinishedProductCustomerItemController : MonoBehaviour
         float y = (float)GameDataManager.Instance.GetCustomerById(_weekDemand.gameinCustomerId).longitude;
         MapManager.SnapToLocaltionOnOpenMap = new Vector2(x, y);
 
-        MainMenuManager.Instance.IsInTradePage = false;
-        MainMenuManager.Instance.OnLoadMapSceneButtonClick();
+        MainMenuManager.Instance.OpenPage(0);
     }
 
     public void OnMakeADealWithDemanderButtonClicked()

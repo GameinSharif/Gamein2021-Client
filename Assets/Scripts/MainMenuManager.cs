@@ -10,10 +10,11 @@ public class MainMenuManager : MonoBehaviour
     public static MainMenuManager Instance;
     public static bool IsLoadingMap;
 
-    public GameObject MainMenuCanvasGameObject;
-    public GameObject TradeParentGameObject;
+    public List<GameObject> MainMenuTabCanvasGameobjects;
+    public List<Image> MainMenuTabButtonsImages;
 
-    [HideInInspector] public bool IsInTradePage = false;
+    public Sprite selectedTabSprite;
+    public Sprite unselectedTabSprite;
 
     private void Awake()
     {
@@ -41,12 +42,47 @@ public class MainMenuManager : MonoBehaviour
         {
             CountrySelectionController.Instance.Initialize();
         }
+
+        OpenPage(0);
     }
 
-    public void OnOpenTradePageButtonClick()
+    public void OpenPage(int index)
     {
-        IsInTradePage = true;
+        if (MainMenuTabCanvasGameobjects[index].activeInHierarchy)
+        {
+            return;
+        }
 
+        DisableAll();
+
+        switch (index)
+        {
+            case 0:
+                OnLoadMapScene();
+                break;
+            case 1:
+                OnOpenProductionLinesPage();
+                break;
+            case 2:
+                OnOpenStoragePage();
+                break;
+            case 3:
+                OnOpenMarketPage();
+                break;
+            case 4:
+                //TODO
+                break;
+            case 5:
+                //TODO
+                break;
+        }
+
+        MainMenuTabCanvasGameobjects[index].SetActive(true);
+        MainMenuTabButtonsImages[index].sprite = selectedTabSprite;
+    }
+
+    public void OnOpenMarketPage()
+    {
         GetOffersRequest getOffersRequest = new GetOffersRequest(RequestTypeConstant.GET_OFFERS);
         RequestManager.Instance.SendRequest(getOffersRequest);
 
@@ -66,18 +102,19 @@ public class MainMenuManager : MonoBehaviour
         GameinCustomersController.Instance.UpdateDemands();
     }
 
-    public void OnOpenProductionLinesPageButtonClick()
+    public void OnOpenProductionLinesPage()
     {
         var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
         RequestManager.Instance.SendRequest(request);
     }
 
-    public void OnOpenStoragePageButtonClick()
+    public void OnOpenStoragePage()
     {
-        
+        GetStorageProductsRequest getStorageProductsRequest = new GetStorageProductsRequest(RequestTypeConstant.GET_STORAGES);
+        RequestManager.Instance.SendRequest(getStorageProductsRequest);
     }
 
-    public void OnLoadMapSceneButtonClick()
+    public void OnLoadMapScene()
     {
         if (IsLoadingMap)
         {
@@ -85,25 +122,24 @@ public class MainMenuManager : MonoBehaviour
         }
 
         IsLoadingMap = true;
-
-        GameObject[] gameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
-        foreach (GameObject gameObject in gameObjects)
-        {
-            if (gameObject.GetComponent<Canvas>() != null)
-            {
-                gameObject.SetActive(false);
-            }
-        }
-
-        TradeParentGameObject.SetActive(false);
-
         SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
     }
 
-    public void OnBackToMainMenuFromTrade()
+    private void DisableAll()
     {
-        IsInTradePage = false;
-    }
+        if (SceneManager.sceneCount > 1)
+        {
+            SceneManager.UnloadSceneAsync("MapScene");
+        }
 
-    //TODO for other pages
+        foreach (GameObject gameObject in MainMenuTabCanvasGameobjects)
+        {
+            gameObject.SetActive(false);
+        }
+
+        foreach (Image image in MainMenuTabButtonsImages)
+        {
+            image.sprite = unselectedTabSprite;
+        }
+    }
 }

@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class MainHeaderManager : MonoBehaviour
 {
-
     public static MainHeaderManager Instance;
 
-    public CustomDate gameDate = new CustomDate(0,0,0);
+    [HideInInspector] public CustomDate gameDate = new CustomDate(0,0,0);
 
-    public GameObject header;
+    public RTLTextMeshPro valueRTLTMP;
     public RTLTextMeshPro moneyRTLTMP;
     public RTLTextMeshPro gameDateText;
 
@@ -22,8 +21,8 @@ public class MainHeaderManager : MonoBehaviour
 
     private void Start()
     {
-        DontDestroyOnLoad(header);
         moneyRTLTMP.text = PlayerPrefs.GetFloat("Money").ToString();
+        valueRTLTMP.text = PlayerPrefs.GetFloat("Value").ToString();
         SetDate();
     }
 
@@ -36,6 +35,7 @@ public class MainHeaderManager : MonoBehaviour
     private void OnMoneyUpdateReceived(MoneyUpdateResponse moneyUpdateResponse)
     {
         Money = moneyUpdateResponse.money;
+        Value = moneyUpdateResponse.value;
     }
 
     public float Money
@@ -43,10 +43,22 @@ public class MainHeaderManager : MonoBehaviour
         set
         {
             PlayerPrefs.SetFloat("Money", value);
-            moneyRTLTMP.text = value + "$";
+            moneyRTLTMP.text = value.ToString();
         }
 
         get => PlayerPrefs.GetFloat("Money", 0f);
+    }
+
+    //TODO update value too
+    public float Value
+    {
+        set
+        {
+            PlayerPrefs.SetFloat("Value", value);
+            valueRTLTMP.text = value.ToString();
+        }
+
+        get => PlayerPrefs.GetFloat("Value", 0f);
     }
 
     private void SetDate()
