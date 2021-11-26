@@ -34,7 +34,7 @@ public class StorageManager : MonoBehaviour
     {
         Storages = getStorageProductsResponse.storages;
 
-        StorageTabSelector.Instance.Initialize();
+        StorageDashboardController.Instance.Initialize();
     }
 
     private void OnRemoveProductResponseReceived(RemoveProductResponse removeProductResponse)
@@ -100,7 +100,7 @@ public class StorageManager : MonoBehaviour
             }
         }
         
-        StorageTabSelector.Instance.ApplyStockChangeToUI(storage, product);
+        StorageDashboardController.Instance.ApplyStockChangeToUI(storage, product);
     }
 
     public Utils.Storage GetWarehouse()

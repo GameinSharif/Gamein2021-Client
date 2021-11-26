@@ -18,9 +18,6 @@ public class DcTabController : MonoBehaviour
 
     public Localize dcNameLocalize;
     
-    public GameObject actionPopup;
-    public TMP_InputField amountInputField;
-
     private Utils.Product _currentSelectedProduct;
     private bool _isSendingRequest = false;
 
@@ -44,14 +41,6 @@ public class DcTabController : MonoBehaviour
         }
         
         RebuildListLayout();
-        
-        OnClosePopupButtonClicked();
-    }
-
-    public void OnDcProductClicked(Utils.Product product)
-    {
-        _currentSelectedProduct = product;
-        actionPopup.SetActive(true);
     }
 
     private void InitializeDcProduct(GameObject theGameObject, int index, Tuple<Utils.Product, int> productTuple)
@@ -60,52 +49,21 @@ public class DcTabController : MonoBehaviour
         int comingAmount = TransportManager.Instance.CalculateInWayProductsAmount(_dc, product.id);
 
         var controller = theGameObject.GetComponent<StorageProductController>();
-        controller.SetInfo(product, Utils.StorageType.DC);
-        controller.SetData(availableAmount, comingAmount);
+        controller.SetData(product, Utils.StorageType.DC, availableAmount, comingAmount);
         
         _itemControllers.Add(controller);
     }
 
-    public void OnSendButtonClicked()
+    public void OnProductTransportClicked(Utils.Product product)
     {
-        if (_currentSelectedProduct == null) return;
-        
-        StorageTransportPopupController.Instance.Initialize(_dc, _currentSelectedProduct);
+        StorageTransportPopupController.Instance.Initialize(_dc, product);
     }
 
-    public void OnRemoveButtonClicked()
+    public void OnProductRemoveClicked(Utils.Product product)
     {
-        string amountText = amountInputField.text;
-        if (string.IsNullOrWhiteSpace(amountText))
-        {
-            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
-            return;
-        }
-
-        int amount = int.Parse(amountText);
-        if (amount > StorageManager.Instance.GetProductAmountByStorage(_dc, _currentSelectedProduct.id))
-        {
-            DialogManager.Instance.ShowErrorDialog("dialog_popup_not_enough_product");
-            return;
-        }
-
-        if (amount <= 0)
-        {
-            DialogManager.Instance.ShowErrorDialog();
-            return;
-        }
-
-        RemoveProductRequest removeProductRequest = new RemoveProductRequest(RequestTypeConstant.REMOVE_PRODUCT, true, _dc.buildingId, _currentSelectedProduct.id, amount);
-        RequestManager.Instance.SendRequest(removeProductRequest);
+        RemoveProductController.Instance.Initialize(_dc, product);
     }
 
-    public void OnClosePopupButtonClicked()
-    {
-        actionPopup.SetActive(false);
-        amountInputField.text = "";
-        _currentSelectedProduct = null;
-    }
-    
     public void ChangeProductInList(Utils.StorageProduct storageProduct)
     {
         foreach (var controller in _itemControllers)
