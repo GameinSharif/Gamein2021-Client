@@ -48,7 +48,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void OpenPage(int index)
     {
-        if (MainMenuTabCanvasGameobjects[index].activeInHierarchy)
+        if (MainMenuTabButtonsImages[index].sprite == selectedTabSprite)
         {
             return;
         }
