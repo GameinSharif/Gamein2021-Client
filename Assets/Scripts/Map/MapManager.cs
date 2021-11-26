@@ -119,23 +119,26 @@ public class MapManager : MonoBehaviour
 
         for (int i = 0; i < GameDataManager.Instance.DCs.Count; i++)
         {
-            Utils.DC dcDto = GameDataManager.Instance.DCs[i];
+            Utils.DC dc = GameDataManager.Instance.DCs[i];
+            string dcName = dc.name;
 
             MapUtils.MapAgentMarker.AgentType agentType;
-            if (dcDto.ownerId == null)
+            if (dc.ownerId == null)
             {
                 agentType = MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter;
             }
-            else if (dcDto.ownerId == PlayerPrefs.GetInt("TeamId"))
+            else if (dc.ownerId == PlayerPrefs.GetInt("TeamId"))
             {
                 agentType = MapUtils.MapAgentMarker.AgentType.MyDistributionCenter;
+                dcName = PlayerPrefs.GetString("TeamName");
             }
             else
             {
                 agentType = MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter;
+                dcName = GameDataManager.Instance.GetTeamById(dc.ownerId.Value).teamName;
             }
 
-            SetMapAgentMarker(agentType, new Vector2d(dcDto.latitude, dcDto.longitude), dcDto.id, dcDto.name);
+            SetMapAgentMarker(agentType, new Vector2d(dc.latitude, dc.longitude), dc.id, dcName);
         }
         
         for (int i=0; i < GameDataManager.Instance.GameinSuppliers.Count; i++)
