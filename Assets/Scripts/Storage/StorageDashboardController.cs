@@ -27,9 +27,6 @@ public class StorageDashboardController : MonoBehaviour
     // re-creates dc list items
     public void Initialize()
     {
-        dcTabView.SetActive(false);
-        warehouseTabView.SetActive(false);
-        
         _pool.RemoveAll();
         foreach (var storage in StorageManager.Instance.Storages)
         {
@@ -42,6 +39,7 @@ public class StorageDashboardController : MonoBehaviour
                 _warehouse = storage;
             }
         }
+        RebuildListLayout();
     }
 
     private void DcListItemInitializer(GameObject theGameObject, int index, Utils.Storage storage)
@@ -68,6 +66,7 @@ public class StorageDashboardController : MonoBehaviour
             dcTabView.SetActive(false);
             warehouseTabView.SetActive(true);
             WarehouseTabController.Instance.Initialize(_warehouse);
+            _currentSelectedStorageId = _warehouse.id;
         }
         else
         {
@@ -88,13 +87,18 @@ public class StorageDashboardController : MonoBehaviour
             return;
         }
 
-        if (updatedStorage.dc && dcTabView.activeInHierarchy)
+        if (updatedStorage.dc && dcTabView.activeSelf)
         {
             DcTabController.Instance.ChangeProductInList(updatedProduct);
         } 
-        else if (!updatedStorage.dc && warehouseTabView.activeInHierarchy)
+        else if (!updatedStorage.dc && warehouseTabView.activeSelf)
         {
             WarehouseTabController.Instance.ChangeProductInList(updatedProduct);
         }
+    }
+    
+    private void RebuildListLayout()
+    {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(dcListScrollPanel as RectTransform);
     }
 }

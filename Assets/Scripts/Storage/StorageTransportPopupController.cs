@@ -10,13 +10,12 @@ public class StorageTransportPopupController : MonoBehaviour
 
     public GameObject popup;
 
+    public Localize title;
     public TMP_Dropdown destinationDropDown;
     public TMP_Dropdown vehicleTypeDropDown;
-    public Localize sourceNameLocalize;
     public TMP_InputField amountInputField;
     public Toggle insurance;
     public TMP_InputField totalCost;
-    public ProductDetailsSetter productDetailsSetter;
 
     private Utils.Storage _source;
     private Utils.Product _product;
@@ -36,16 +35,16 @@ public class StorageTransportPopupController : MonoBehaviour
     {
         _source = source;
         _product = product;
-
-        StorageManager.SetStorageLocalize(sourceNameLocalize, _source);
-        productDetailsSetter.SetRawData(_product);
+        
+        //TODO find a way for title to be of format "Transfer {_product.name}"
+        title.SetKey("product_" + _product.name);
 
         if (_firstTimeInitializing)
         {
             InitializeVehicleDropdown();
+            _firstTimeInitializing = false;
         }
-        _firstTimeInitializing = false;
-        
+
         InitializeDestinationDropdown();
 
         popup.SetActive(true);
@@ -62,7 +61,7 @@ public class StorageTransportPopupController : MonoBehaviour
             _vehicleTypesOptions.Add(vehicleType);
         }
         
-        vehicleTypeDropDown.value = 0;
+        vehicleTypeDropDown.value = -1;
     }
 
     private void InitializeDestinationDropdown()
@@ -78,7 +77,7 @@ public class StorageTransportPopupController : MonoBehaviour
             _destinationOptions.Add(storage);
         }
 
-        destinationDropDown.value = 0;
+        destinationDropDown.value = -1;
     }
 
     public void OnSendButtonClicked()
@@ -89,6 +88,18 @@ public class StorageTransportPopupController : MonoBehaviour
         if (amount == null || amount < 1)
         {
             DialogManager.Instance.ShowErrorDialog("invalid_amount_error");
+            return;
+        }
+
+        if (destinationDropDown.value < 0)
+        {
+            DialogManager.Instance.ShowErrorDialog("destination_not_selected_error");
+            return;
+        }
+
+        if (vehicleTypeDropDown.value < 0)
+        {
+            DialogManager.Instance.ShowErrorDialog("vehicle_not_selected_error");
             return;
         }
         
