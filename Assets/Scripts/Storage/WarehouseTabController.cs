@@ -23,7 +23,7 @@ public class WarehouseTabController : MonoBehaviour
     {
         Instance = this;
         _pool = new PoolingSystem<Tuple<Utils.Product, int>>(scrollPanel, storageProductPrefab, InitializeWarehouseProduct, 10);
-        _itemControllers = new List<StorageProductController>(25);
+        _itemControllers = new List<StorageProductController>(10);
     }
 
     public void Initialize(Utils.Storage warehouse)

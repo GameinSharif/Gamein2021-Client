@@ -16,22 +16,18 @@ public class DcTabController : MonoBehaviour
     public Transform scrollPanel;
     public GameObject storageProductPrefab;
 
-    public Localize dcNameLocalize;
-    
-    private Utils.Product _currentSelectedProduct;
     private bool _isSendingRequest = false;
 
     private void Awake()
     {
         Instance = this;
-        _pool = new PoolingSystem<Tuple<Utils.Product, int>>(scrollPanel, storageProductPrefab, InitializeDcProduct, 25);
-        _itemControllers = new List<StorageProductController>(25);
+        _pool = new PoolingSystem<Tuple<Utils.Product, int>>(scrollPanel, storageProductPrefab, InitializeDcProduct, 10);
+        _itemControllers = new List<StorageProductController>(10);
     }
 
     public void Initialize(Utils.Storage dc)
     {
         _dc = dc;
-        dcNameLocalize.SetKey("Storage_Type_DC", _dc.buildingId.ToString());
         
         _itemControllers.Clear();
         _pool.RemoveAll();
