@@ -77,7 +77,10 @@ public class MainMenuManager : MonoBehaviour
                 break;
         }
 
-        MainMenuTabCanvasGameobjects[index].SetActive(true);
+        if (index != 0) //because Map has no canvas
+        {
+            MainMenuTabCanvasGameobjects[index - 1].SetActive(true); 
+        }
         MainMenuTabButtonsImages[index].sprite = selectedTabSprite;
     }
 
