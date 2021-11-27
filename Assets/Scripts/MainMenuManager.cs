@@ -138,6 +138,7 @@ public class MainMenuManager : MonoBehaviour
         if (SceneManager.sceneCount > 1)
         {
             SceneManager.UnloadSceneAsync("MapScene");
+            MapManager.IsInMap = false;
         }
 
         foreach (GameObject gameObject in MainMenuTabCanvasGameobjects)
