@@ -74,8 +74,8 @@ public class DcTabController : MonoBehaviour
                 else
                 {
                     controller.available.text = storageProduct.amount.ToString();
-                    int coming = int.Parse(controller.coming.OriginalText);
-                    controller.total.text = (coming + storageProduct.amount).ToString();
+                    //int coming = int.Parse(controller.coming.OriginalText);
+                    //controller.total.text = (coming + storageProduct.amount).ToString();
                 }
                 return;
             }

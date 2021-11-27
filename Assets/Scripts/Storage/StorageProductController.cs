@@ -23,8 +23,8 @@ public class StorageProductController : MonoBehaviour
         
         nameLocalize.SetKey("product_" + _product.name);
         available.text = availableAmount.ToString();
-        coming.text = comingAmount.ToString();
-        total.text = (availableAmount + comingAmount).ToString();
+        //coming.text = comingAmount.ToString();
+        //total.text = (availableAmount + comingAmount).ToString();
         
         //TODO set product image
     }

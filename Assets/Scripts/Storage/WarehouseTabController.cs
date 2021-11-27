@@ -29,9 +29,19 @@ public class WarehouseTabController : MonoBehaviour
     public void Initialize(Utils.Storage warehouse)
     {
         _warehouse = warehouse;
-        
-        OnRawChanged(true);
-        
+
+        switch (_currentSelectedType)
+        {
+            case Utils.ProductType.RawMaterial:
+                OnRawChanged(true);
+                break;
+            case Utils.ProductType.SemiFinished:
+                OnSemiChanged(true);
+                break;
+            case Utils.ProductType.Finished:
+                OnFinishedChanged(true);
+                break;
+        }
     }
 
     private void ResetList(List<Tuple<Utils.Product, int>> list)
@@ -128,8 +138,8 @@ public class WarehouseTabController : MonoBehaviour
                 else
                 {
                     controller.available.text = storageProduct.amount.ToString();
-                    int coming = int.Parse(controller.coming.OriginalText);
-                    controller.total.text = (coming + storageProduct.amount).ToString();
+                    //int coming = int.Parse(controller.coming.OriginalText);
+                    //controller.total.text = (coming + storageProduct.amount).ToString();
                 }
                 return;
             }
