@@ -10486,6 +10486,7 @@ GameObject:
   - component: {fileID: 1479015358}
   - component: {fileID: 1479015362}
   - component: {fileID: 1479015361}
+  - component: {fileID: 1479015363}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -10505,6 +10506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a9dc97afd7bdb24c90ece7780e3b77c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HeaderFooterGameObject: {fileID: 6091946378138331119}
   MainMenuTabCanvasGameobjects:
   - {fileID: 256898761}
   - {fileID: 197876065}
@@ -10606,6 +10608,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5b549bad7cd2f4a43be72d58b8e1c937, type: 3}
   - {fileID: 21300000, guid: 5b549bad7cd2f4a43be72d58b8e1c937, type: 3}
   - {fileID: 21300000, guid: 5b549bad7cd2f4a43be72d58b8e1c937, type: 3}
+  AuctionCurrentRound: -1
 --- !u!4 &1479015360
 Transform:
   m_ObjectHideFlags: 0
@@ -10665,6 +10668,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97b1b60106835104dbf39ae1268beaa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1479015363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479015357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 842eac54811b4d6d9944265cf8c19547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1507410610
@@ -19028,6 +19043,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6091946378138331119 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6091946376885967728, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+  m_PrefabInstance: {fileID: 6091946378138331109}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6423773582588801987 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5096365368703331509, guid: 9d4a4c94336f3fd47b3b5f11664eb0cb, type: 3}

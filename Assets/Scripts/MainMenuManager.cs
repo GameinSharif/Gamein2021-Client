@@ -10,6 +10,8 @@ public class MainMenuManager : MonoBehaviour
     public static MainMenuManager Instance;
     public static bool IsLoadingMap;
 
+    public GameObject HeaderFooterGameObject;
+
     public List<GameObject> MainMenuTabCanvasGameobjects;
     public List<Image> MainMenuTabButtonsImages;
 
@@ -40,10 +42,13 @@ public class MainMenuManager : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("FactoryId") == 0)
         {
+            HeaderFooterGameObject.SetActive(false);
             CountrySelectionController.Instance.Initialize();
         }
-
-        OpenPage(0);
+        else
+        {
+            OpenPage(0);
+        }
     }
 
     public void OpenPage(int index)

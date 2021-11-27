@@ -28,7 +28,7 @@ public class GameDataManager : MonoBehaviour
 
     public List<Sprite> ProductSprites;
 
-    private int _auctionCurrentRound = 0;
+    [HideInInspector] public int AuctionCurrentRound = -1;
 
     private void Awake()
     {
@@ -83,16 +83,21 @@ public class GameDataManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "MapScene")
             MapManager.Instance.UpdateAllAuctions();
 
-        _auctionCurrentRound = 0;
-        foreach(CustomDateTime customDateTime in GameConstants.AuctionRoundsStartTime)
+        SetAuctionCurrentRound();
+
+        //TODO update auction remained time
+    }
+
+    public void SetAuctionCurrentRound()
+    {
+        AuctionCurrentRound = -1;
+        foreach (CustomDateTime customDateTime in GameConstants.AuctionRoundsStartTime)
         {
             if (DateTime.Now >= customDateTime.ToDateTime())
             {
-                _auctionCurrentRound++;
+                AuctionCurrentRound++;
             }
         }
-
-        //TODO update auction remained time
     }
 
     public void OnAuctionFinishedResponse(AuctionFinishedResponse auctionFinishedResponse)
@@ -105,10 +110,12 @@ public class GameDataManager : MonoBehaviour
             if (team.id == teamId)
             {
                 PlayerPrefs.SetInt("FactoryId", team.factoryId);
+                DialogManager.Instance.ShowErrorDialog("auction_win", team.factoryId.ToString());
             }
         }
 
-        SceneManager.UnloadSceneAsync("MapScene");
+        MapManager.Instance.InitializeGameDataOnMap();
+        MainMenuManager.Instance.HeaderFooterGameObject.SetActive(true);
     }
     
     public Utils.Auction GetAuctionByFactoryId(int id)
