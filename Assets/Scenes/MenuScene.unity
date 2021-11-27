@@ -6140,7 +6140,7 @@ MonoBehaviour:
   AveragePriceInputfield: {fileID: 5558596633653049161}
   MinPriceOnRecordInputfield: {fileID: 5558596633653049160}
   MaxPriceOnRecordInputfield: {fileID: 5558596633653049159}
-  minMaxLocalize: {fileID: 0}
+  minMaxLocalize: {fileID: 5558596633653049163}
 --- !u!114 &840658813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7081,7 +7081,7 @@ MonoBehaviour:
   offerItemPrefab: {fileID: 1753029309529033913, guid: d332fb33bdab82f4da06dbe3952f37bc, type: 3}
   MyTeamOffersScrollViewParent: {fileID: 8368589904446455406}
   OtherTeamsOffersScrollViewParent: {fileID: 8368589903091678502}
-  AcceptedOffersScrollViewParent: {fileID: 0}
+  AcceptedOffersScrollViewParent: {fileID: 3244527026814146486}
 --- !u!114 &931590415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7123,7 +7123,7 @@ MonoBehaviour:
   PricePerUnitInputfield: {fileID: 7526055069067096036}
   TotalPriceInputfield: {fileID: 679907292550001881}
   OfferDeadline: {fileID: 717292537}
-  minMaxLocalize: {fileID: 0}
+  minMaxLocalize: {fileID: 7915166685838368767}
 --- !u!4 &931590416
 Transform:
   m_ObjectHideFlags: 0
@@ -14085,7 +14085,7 @@ MonoBehaviour:
   ProductNameLocalize: {fileID: 7490732568214982280}
   AmountInputfield: {fileID: 7490732568214982279}
   PriceInputfield: {fileID: 7490732568214982278}
-  minMaxLocalize: {fileID: 0}
+  minMaxLocalize: {fileID: 7490732568214982283}
 --- !u!1 &1882473625
 GameObject:
   m_ObjectHideFlags: 0
@@ -17895,6 +17895,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 204171dd8d4f01f449fb149d7311989e, type: 3}
+--- !u!1 &3244527026814146486 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5989627505715167518, guid: 204171dd8d4f01f449fb149d7311989e, type: 3}
+  m_PrefabInstance: {fileID: 3244527026814146485}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5558596633653049158
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18462,6 +18467,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5558596633653049163 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1079353774416336641, guid: b60d9aa78d01a834f96549b2af0c1f94, type: 3}
+  m_PrefabInstance: {fileID: 5558596633653049158}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5558596633653049168 stripped
@@ -19299,6 +19315,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7534290702925140923, guid: 89d322273e6680048b93d38053dddbee, type: 3}
   m_PrefabInstance: {fileID: 7490732568214982277}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7490732568214982283 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5287060599472904663, guid: 89d322273e6680048b93d38053dddbee, type: 3}
+  m_PrefabInstance: {fileID: 7490732568214982277}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7526055069067096036 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 408060788086108186, guid: 09536128357206a458e7a73be78f3c33, type: 3}
@@ -19835,6 +19862,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09536128357206a458e7a73be78f3c33, type: 3}
+--- !u!114 &7915166685838368767 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5518615908161205537, guid: 09536128357206a458e7a73be78f3c33, type: 3}
+  m_PrefabInstance: {fileID: 7915166685838368766}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8368589903091678502 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6423773581282011795, guid: 204171dd8d4f01f449fb149d7311989e, type: 3}

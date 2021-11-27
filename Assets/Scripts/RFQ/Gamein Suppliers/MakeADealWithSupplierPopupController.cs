@@ -86,14 +86,17 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         productNameLocalize.SetKey("product_" + product.name);
         pricePerUnit.text = weekSupply.price + "$";
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
-        CustomDate date = MainHeaderManager.Instance.gameDate.AddDays(GetTransportDuration());
-        arrivalDate.text = date.ToString();
-        makeADealWithSupplierPopupCanvas.SetActive(true);
+
         if (_firstTimeInitializing)
         {
             InitializeVehicleDropdown();
         }
         _firstTimeInitializing = false;
+
+        CustomDate date = MainHeaderManager.Instance.gameDate.AddDays(GetTransportDuration());
+        arrivalDate.text = date.ToString();
+
+        makeADealWithSupplierPopupCanvas.SetActive(true);
     }
 
     private int GetTransportDuration()
