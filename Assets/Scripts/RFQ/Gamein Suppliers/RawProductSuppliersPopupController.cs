@@ -36,7 +36,9 @@ public class RawProductSuppliersPopupController : MonoBehaviour
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
         SetSupplies();
         rawProductSuppliersPopupCanvas.SetActive(true);
+        Canvas.ForceUpdateCanvases();
     }
+    
       
     private void SetSupplies()
     {
