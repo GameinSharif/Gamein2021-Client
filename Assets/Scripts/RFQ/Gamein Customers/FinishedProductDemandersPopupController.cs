@@ -36,6 +36,7 @@ public class FinishedProductDemandersPopupController : MonoBehaviour
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
         SetDemands();
         finishedProductDemandersPopupCanvas.SetActive(true);
+        Canvas.ForceUpdateCanvases();
     }
       
     private void SetDemands()

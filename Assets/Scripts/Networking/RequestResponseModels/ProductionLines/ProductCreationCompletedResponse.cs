@@ -4,5 +4,5 @@
 public class ProductCreationCompletedResponse : ResponseObject
 {
     public Utils.ProductionLineProductDto product;
-    public int productLineId;
+    public Utils.ProductionLineDto productLine;
 }

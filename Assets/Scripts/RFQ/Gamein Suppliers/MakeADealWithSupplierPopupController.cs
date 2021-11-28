@@ -21,11 +21,13 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     public TMP_InputField totalPrice;
     public TMP_InputField finalPrice;
     public TMP_InputField arrivalDate;
-    public ToggleGroup transportationMode;
+    public TMP_Dropdown vehicleTypeDropDown;
     public TMP_InputField numberOfRepetition;
     public TMP_InputField penalty; //TODO calculate?
-    public ToggleGroup wantsInsurance;
+    public Toggle insurance;
 
+    private bool _firstTimeInitializing = true;
+    private List<Utils.VehicleType> _vehicleTypesOptions = new List<Utils.VehicleType>();
     private Utils.WeekSupply _weekSupply;
 
     private void Awake()
@@ -59,6 +61,20 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
             DialogManager.Instance.ShowErrorDialog();
         }
     }
+    
+    private void InitializeVehicleDropdown()
+    {
+        vehicleTypeDropDown.options.Clear();
+        _vehicleTypesOptions.Clear();
+        foreach (Utils.VehicleType vehicleType in Enum.GetValues(typeof(Utils.VehicleType)))
+        {
+            var optionData = new TMP_Dropdown.OptionData(vehicleType.ToString());
+            vehicleTypeDropDown.options.Add(optionData);
+            _vehicleTypesOptions.Add(vehicleType);
+        }
+        
+        vehicleTypeDropDown.value = 0;
+    }
 
     public void OnOpenMakeADealPopupClick(Utils.WeekSupply weekSupply)
     {
@@ -70,8 +86,16 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         productNameLocalize.SetKey("product_" + product.name);
         pricePerUnit.text = weekSupply.price + "$";
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
+
+        if (_firstTimeInitializing)
+        {
+            InitializeVehicleDropdown();
+        }
+        _firstTimeInitializing = false;
+
         CustomDate date = MainHeaderManager.Instance.gameDate.AddDays(GetTransportDuration());
         arrivalDate.text = date.ToString();
+
         makeADealWithSupplierPopupCanvas.SetActive(true);
     }
 
@@ -111,31 +135,15 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
 
     private bool WantsInsurance()
     {
-        Toggle wants = wantsInsurance.ActiveToggles().FirstOrDefault();
-        if (wants.name == "Yes")
-        {
-            return true;
-        }
-
-        return false;
+        bool wants = insurance.isOn;
+        
+        return wants;
     }
 
     private Utils.VehicleType GetTransportationMode()
     {
-        Toggle mode = transportationMode.ActiveToggles().FirstOrDefault();
-        switch (mode.name)
-        {
-            case "AirPlane":
-                return Utils.VehicleType.AIRPLANE;
-            case "Train":
-                return Utils.VehicleType.TRAIN;
-            case "Truck":
-                return Utils.VehicleType.TRUCK;
-            case "Vanet":
-                return Utils.VehicleType.VANET;
-            default:
-                return Utils.VehicleType.AIRPLANE;
-        }
+        Utils.VehicleType vehicleType = _vehicleTypesOptions[vehicleTypeDropDown.value];
+        return vehicleType;
     }
 
     public void OnTransportationModeToggleChange()
