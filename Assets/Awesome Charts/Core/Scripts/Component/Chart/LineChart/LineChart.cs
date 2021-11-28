@@ -14,8 +14,8 @@ namespace AwesomeCharts {
         private LineChartAxisConfig axisConfig;
         [SerializeField]
         private LineChartConfig config;
-        [SerializeField]
-        private LineData data;
+
+        public LineData data;
 
         private ChartValuePopup currentValuePopup = null;
         private LineEntry currentValuePopupEntry = null;

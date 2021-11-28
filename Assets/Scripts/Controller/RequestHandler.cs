@@ -202,6 +202,23 @@ public class RequestHandler
                     JsonUtility.FromJson<StartTransportForPlayerStoragesResponse>(responseJson);
                 EventManager.Instance.OnStartTransportForPlayerStoragesResponse(startTransportForPlayerStoragesResponse);
                 break;
+            case ResponseTypeConstant.ADD_PRODUCT:
+                //TODO remove this from server and here too
+                break;
+            case ResponseTypeConstant.UPDATE_GAME_STATUS:
+                //TODO
+                break;
+            case ResponseTypeConstant.ACCESS_DENIED:
+                //TODO
+                break;
+            case ResponseTypeConstant.GET_ALL_WEEKLY_REPORTS:
+                GetAllWeeklyReportsResponse getAllWeeklyReportsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetAllWeeklyReportsResponse), new StringEnumConverter()) as GetAllWeeklyReportsResponse;
+                EventManager.Instance.OnGetAllWeeklyReportsResponse(getAllWeeklyReportsResponse);
+                break;
+            case ResponseTypeConstant.UPDATE_WEEKLY_REPORT:
+                UpdateWeeklyReportResponse updateWeeklyReportResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateWeeklyReportResponse), new StringEnumConverter()) as UpdateWeeklyReportResponse;
+                EventManager.Instance.OnUpdateWeeklyReportResponse(updateWeeklyReportResponse);
+                break;
             default:
                 Debug.LogWarning(responseJson);
                 break;

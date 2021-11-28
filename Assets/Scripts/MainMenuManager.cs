@@ -36,6 +36,9 @@ public class MainMenuManager : MonoBehaviour
 
         var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
         RequestManager.Instance.SendRequest(request);
+
+        GetAllWeeklyReportsRequest getAllWeeklyReportsRequest = new GetAllWeeklyReportsRequest(RequestTypeConstant.GET_ALL_WEEKLY_REPORTS);
+        RequestManager.Instance.SendRequest(getAllWeeklyReportsRequest);
     }
 
     private void Start()
@@ -78,7 +81,7 @@ public class MainMenuManager : MonoBehaviour
                 //TODO
                 break;
             case 5:
-                //TODO
+                OnOpenReportsPage();
                 break;
         }
 
@@ -120,6 +123,11 @@ public class MainMenuManager : MonoBehaviour
     {
         GetStorageProductsRequest getStorageProductsRequest = new GetStorageProductsRequest(RequestTypeConstant.GET_STORAGES);
         RequestManager.Instance.SendRequest(getStorageProductsRequest);
+    }
+
+    public void OnOpenReportsPage()
+    {
+        WeeklyReportManager.Instance.DrawCharts();
     }
 
     public void OnLoadMapScene()
