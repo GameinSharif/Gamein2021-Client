@@ -13,7 +13,7 @@ namespace ProductionLine
         public Transform tableParent;
 
         public ProductionLineDetail productionLineDetail;
-        public Transform constructButton;
+        //public Transform constructButton;
         public GameObject constructPopup;
 
         private int currentDetailId = -1;
@@ -93,7 +93,7 @@ namespace ProductionLine
                 productionLineTableRows[i].SetRowNumber(i + 1);
             }
 
-            constructButton.SetAsLastSibling();
+            //constructButton.SetAsLastSibling();
         }
 
         public void PopupConstructProductionLine()
@@ -238,10 +238,9 @@ namespace ProductionLine
 
         private void OnProductCreationCompletedResponse(ProductCreationCompletedResponse response)
         {
-            //TODO
-            //var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productLineId);
-            //current?.SetData(response.productionLine);
-            //UpdateDetails(response.productionLine);
+            var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productLine.id);
+            current?.SetData(response.productLine);
+            UpdateDetails(response.productLine);
 
             StorageManager.Instance.ChangeStockInStorage(StorageManager.Instance.GetWarehouse().id,
                 response.product.productId, response.product.amount);
