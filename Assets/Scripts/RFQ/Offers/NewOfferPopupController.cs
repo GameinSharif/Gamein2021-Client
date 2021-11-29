@@ -43,7 +43,7 @@ public class NewOfferPopupController : MonoBehaviour
         _isSendingRequest = false;
         if (newOfferResponse.offer != null)
         {
-            OffersController.Instance.AddMyOfferToList(newOfferResponse.offer);
+            // OffersController.Instance.AddMyOfferToList(newOfferResponse.offer);
 
             NewOfferPopupCanvas.SetActive(false);
         }
@@ -155,7 +155,6 @@ public class NewOfferPopupController : MonoBehaviour
             productId = _selectedProductId,
             volume = parsedVolume,
             costPerUnit = parsedCostPerUnit,
-            offerDeadline = new CustomDate(selectedDate.Year, selectedDate.Month, selectedDate.Day),
         });
         RequestManager.Instance.SendRequest(newOfferRequest);
     }

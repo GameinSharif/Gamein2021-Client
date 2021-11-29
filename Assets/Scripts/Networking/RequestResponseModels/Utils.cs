@@ -49,7 +49,7 @@ public class Utils
         public int volume;
         public OfferStatus offerStatus;
         public float costPerUnit;
-        public CustomDate offerDeadline;
+        public CustomDate acceptDate;
     }
 
     public enum NegotiationState
