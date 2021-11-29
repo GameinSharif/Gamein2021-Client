@@ -12,15 +12,13 @@ public class NewOfferPopupController : MonoBehaviour
     public GameObject NewOfferPopupCanvas;
 
     public List<ProductDetailsSetter> ProductDetailsSetters;
-    public List<GameObject> IsSelectedGameObjects;
 
     public TMP_InputField VolumeInputfield;
     public TMP_InputField PricePerUnitInputfield;
     public TMP_InputField TotalPriceInputfield;
-    public DatePicker OfferDeadline;
     public Localize minMaxLocalize;
 
-    private int _selectedProductId = 0;
+    private Utils.Product _selectedProduct = null;
     private bool _isSendingRequest = false;
 
     private void Awake()
@@ -43,7 +41,7 @@ public class NewOfferPopupController : MonoBehaviour
         _isSendingRequest = false;
         if (newOfferResponse.offer != null)
         {
-            // OffersController.Instance.AddMyOfferToList(newOfferResponse.offer);
+            OffersController.Instance.AddMyOfferToList(newOfferResponse.offer);
 
             NewOfferPopupCanvas.SetActive(false);
         }
@@ -86,14 +84,11 @@ public class NewOfferPopupController : MonoBehaviour
         }
     }
 
-    public void OnProductClick(int productId, int index)
+    public void OnProductClick(Utils.Product productId)
     {
-        DisableAllSelections();
-        IsSelectedGameObjects[index].SetActive(true);
-        _selectedProductId = productId;
+        _selectedProduct = productId;
 
-        var product = GameDataManager.Instance.GetProductById(productId);
-        minMaxLocalize.SetKey("min_max_text", product.minPrice.ToString(), product.maxPrice.ToString());
+        minMaxLocalize.SetKey("min_max_text", _selectedProduct.minPrice.ToString(), _selectedProduct.maxPrice.ToString());
     }
 
     public void OnVolumeOrPriceValueChange()
@@ -108,14 +103,6 @@ public class NewOfferPopupController : MonoBehaviour
         TotalPriceInputfield.text = (int.Parse(volume) * float.Parse(price)).ToString("0.00");
     }
 
-    public void DisableAllSelections()
-    {
-        foreach (GameObject gameObject in IsSelectedGameObjects)
-        {
-            gameObject.SetActive(false);
-        }
-    }
-
     public void OnDoneButtonClick()
     {
         if (_isSendingRequest)
@@ -125,17 +112,15 @@ public class NewOfferPopupController : MonoBehaviour
 
         string volume = VolumeInputfield.text;
         string price = PricePerUnitInputfield.text;
-        string date = OfferDeadline.currentSelectedDate.text;
-        DateTime selectedDate = OfferDeadline.Value;
-        if (string.IsNullOrEmpty(volume) || string.IsNullOrEmpty(price) || _selectedProductId == 0 || string.IsNullOrEmpty(date))
+        if (string.IsNullOrEmpty(volume) || string.IsNullOrEmpty(price) || _selectedProduct == null)
         {
-            DialogManager.Instance.ShowErrorDialog(_selectedProductId == 0 ? "no_product_selected_error" : "empty_input_field_error");
+            DialogManager.Instance.ShowErrorDialog(_selectedProduct == null ? "no_product_selected_error" : "empty_input_field_error");
             return;
         }
 
         var parsedVolume = int.Parse(volume);
         var parsedCostPerUnit = float.Parse(price);
-        var product = GameDataManager.Instance.GetProductById(_selectedProductId);
+        var product = _selectedProduct;
         
         if (parsedCostPerUnit > product.maxPrice || parsedCostPerUnit < product.minPrice)
         {
@@ -152,7 +137,7 @@ public class NewOfferPopupController : MonoBehaviour
         _isSendingRequest = true;
         NewOfferRequest newOfferRequest = new NewOfferRequest(RequestTypeConstant.NEW_OFFER, new Utils.Offer()
         {
-            productId = _selectedProductId,
+            productId = product.id,
             volume = parsedVolume,
             costPerUnit = parsedCostPerUnit,
         });

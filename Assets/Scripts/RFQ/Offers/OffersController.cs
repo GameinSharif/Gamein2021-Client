@@ -181,4 +181,9 @@ public class OffersController : MonoBehaviour
         acceptedOffersScrollView.SetActive(value);
         otherOffersScrollView.SetActive(!value);
     }
+
+    public void AddMyOfferToList(Utils.Offer offer)
+    {
+        _myOffersPool.Add(offer);
+    }
 }
