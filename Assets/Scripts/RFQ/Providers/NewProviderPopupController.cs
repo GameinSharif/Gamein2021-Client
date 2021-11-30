@@ -60,9 +60,9 @@ public class NewProviderPopupController : MonoBehaviour
         
         ClearInputFields();
 
-        // SetProducts();
-        //
-        // InitializeDropdownOptions();
+        SetProducts();
+        
+        InitializeDropdownOptions();
 
         NewProviderPopupCanvas.SetActive(true);
     }
@@ -86,7 +86,7 @@ public class NewProviderPopupController : MonoBehaviour
     {
         CapacityInputfield.text = "";
         PriceInputfield.text = "";
-        AveragePriceInputfield.text = (123.123123).ToString("0.00");
+        AveragePriceInputfield.text = "";
         MinPriceOnRecordInputfield.text = "";
         MaxPriceOnRecordInputfield.text = "";
     }
