@@ -15,6 +15,8 @@ public class WeeklyReportManager: MonoBehaviour
 
     [HideInInspector] public List<Utils.WeeklyReport> WeeklyReports;
 
+    private int _index = 0;
+
     private void Awake()
     {
         Instance = this;
@@ -42,9 +44,40 @@ public class WeeklyReportManager: MonoBehaviour
         WeeklyReports.Add(updateWeeklyReportResponse.weeklyReport);
     }
 
-    public void DrawCharts()
+    public void OnOpenReportsPage()
     {
-        DrawRankingChart();
+        DrawChart(_index);
+    }
+
+    public void DrawChart(int index)
+    {
+        DisableAll();
+
+        switch(index)
+        {
+            case 0:
+                RankingLineChart.gameObject.SetActive(true);
+                DrawRankingChart();
+                break;
+            case 1:
+                BrandLineChart.gameObject.SetActive(true);
+                DrawRankingChart();
+                break;
+            case 2:
+                FinanceLineChart.gameObject.SetActive(true);
+                DrawRankingChart();
+                break;
+            case 3:
+                CostsLineChart.gameObject.SetActive(true);
+                DrawRankingChart();
+                break;
+            case 4:
+                InventoryLineChart.gameObject.SetActive(true);
+                DrawRankingChart();
+                break;
+        }
+
+        _index = index;
     }
 
     private void DrawRankingChart()
@@ -57,5 +90,14 @@ public class WeeklyReportManager: MonoBehaviour
         }
 
         RankingLineChart.data.DataSets[0].Entries = lineEntries;
+    }
+
+    private void DisableAll()
+    {
+        RankingLineChart.gameObject.SetActive(false);
+        BrandLineChart.gameObject.SetActive(false);
+        FinanceLineChart.gameObject.SetActive(false);
+        CostsLineChart.gameObject.SetActive(false);
+        InventoryLineChart.gameObject.SetActive(false);
     }
 }

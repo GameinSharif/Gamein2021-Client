@@ -127,7 +127,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnOpenReportsPage()
     {
-        WeeklyReportManager.Instance.DrawCharts();
+        WeeklyReportManager.Instance.OnOpenReportsPage();
     }
 
     public void OnLoadMapScene()
