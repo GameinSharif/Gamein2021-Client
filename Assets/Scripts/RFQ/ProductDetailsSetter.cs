@@ -36,7 +36,7 @@ public class ProductDetailsSetter : MonoBehaviour
                 NewOfferPopupController.Instance.OnProductClick(_product);
                 break;
             case "NewProvider":
-                // NewProviderPopupController.Instance.OnProductClick(product.id, index);
+                NewProviderPopupController.Instance.OnProductClick(_product);
                 break;
         }
         Debug.Log("Helllllll");

@@ -30,7 +30,7 @@ public class OtherOfferItemController : MonoBehaviour
         costPerUnit.text = _offer.costPerUnit.ToString();
         total.text = (_offer.volume * _offer.costPerUnit).ToString();
         team.text = _otherTeam.teamName;
-        distance.text = CalculateDistance().ToString();
+        distance.text = CalculateDistance() + " km";
 
         acceptButton.SetActive(!isAccepted);
     }

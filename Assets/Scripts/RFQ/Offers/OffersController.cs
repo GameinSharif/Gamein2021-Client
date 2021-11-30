@@ -73,11 +73,15 @@ public class OffersController : MonoBehaviour
         
         for (int i = 0; i < myTeamOffers.Count; i++)
         {
+            if (myTeamOffers[i].offerStatus == Utils.OfferStatus.TERMINATED ||
+                myTeamOffers[i].offerStatus == Utils.OfferStatus.PASSED_DEADLINE) continue;
             _myOffersPool.Add(myTeamOffers[i]);
         }
 
         for (int i = 0; i < otherTeamsOffers.Count; i++)
         {
+            if (otherTeamsOffers[i].offerStatus == Utils.OfferStatus.TERMINATED ||
+                otherTeamsOffers[i].offerStatus == Utils.OfferStatus.PASSED_DEADLINE) continue;
             _otherOffersPool.Add(otherTeamsOffers[i]);
         }
 
@@ -161,8 +165,6 @@ public class OffersController : MonoBehaviour
         var controller = theGameObject.GetComponent<OtherOfferItemController>();
         controller.Initialize(offer, true);
         _acceptedOfferItemControllers.Add(controller);
-        
-        RebuildListLayout(acceptedOffersScrollPanel);
     }
 
     private void InitializeMyOfferItem(GameObject theGameObject, int index, Utils.Offer offer)
@@ -170,8 +172,6 @@ public class OffersController : MonoBehaviour
         var controller = theGameObject.GetComponent<MyOfferItemController>();
         controller.Initialize(offer);
         _myTeamOfferItemControllers.Add(controller);
-        
-        RebuildListLayout(myOffersScrollPanel);
     }
 
     public void AcceptedOffersToggleOnValueChanged(bool value)
@@ -185,5 +185,6 @@ public class OffersController : MonoBehaviour
     public void AddMyOfferToList(Utils.Offer offer)
     {
         _myOffersPool.Add(offer);
+        RebuildListLayout(myOffersScrollPanel);
     }
 }

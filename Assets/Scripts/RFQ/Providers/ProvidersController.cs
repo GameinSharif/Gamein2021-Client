@@ -1,119 +1,156 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RTLTMPro;
 using TMPro;
+using UnityEngine.UI;
 
 public class ProvidersController : MonoBehaviour
 {
     public static ProvidersController Instance;
 
-    public GameObject providerItemPrefab;
+    public GameObject myProviderItemPrefab;
+    public GameObject otherProviderItemPrefab;
 
-    public GameObject MyTeamProvidersScrollViewParent;
-    public GameObject OtherTeamsProvidersScrollViewParent;
+    public RectTransform myProvidersScrollPanel;
+    public RectTransform otherProvidersScrollPanel;
 
-    public List<Utils.Provider> myTeamProviders; //only for storing
-    public List<Utils.Provider> otherTeamsProviders; //only for storing
+    private List<MyProviderItemController> _myTeamProviderItemControllers = new List<MyProviderItemController>();
+    private List<OtherProviderItemController> _otherTeamsProviderItemControllers = new List<OtherProviderItemController>();
 
-    private List<ProviderItemController> _myTeamProviderItemControllers = new List<ProviderItemController>();
-    private List<ProviderItemController> _otherTeamsProviderItemControllers = new List<ProviderItemController>();
-    private List<GameObject> _spawnedGameObjects = new List<GameObject>();
+    private PoolingSystem<Utils.Provider> _myProvidersPool;
+    private PoolingSystem<Utils.Provider> _otherProvidersPool;
 
     private void Awake()
     {
         Instance = this;
 
-        DeactiveAllChildrenInScrollPanel();
+        _myProvidersPool = new PoolingSystem<Utils.Provider>(myProvidersScrollPanel, myProviderItemPrefab, InitializeMyProviderItem, 10);
+        _otherProvidersPool = new PoolingSystem<Utils.Provider>(otherProvidersScrollPanel, otherProviderItemPrefab, InitializeOtherProviderItem, 10);
     }
 
     private void OnEnable()
     {
         EventManager.Instance.OnGetProvidersResponseEvent += OnGetProvidersResponse;
+        EventManager.Instance.OnRemoveProviderResponseEvent += OnRemoveProviderResponse;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnGetProvidersResponseEvent -= OnGetProvidersResponse;
+        EventManager.Instance.OnRemoveProviderResponseEvent -= OnRemoveProviderResponse;
     }
 
     public void OnGetProvidersResponse(GetProvidersResponse getProvidersResponse)
     {
-        myTeamProviders = getProvidersResponse.myTeamProviders;
-        otherTeamsProviders = getProvidersResponse.otherTeamsProviders;
+        var myTeamProviders = getProvidersResponse.myTeamProviders;
+        var otherTeamsProviders = getProvidersResponse.otherTeamsProviders;
 
         myTeamProviders.Reverse();
         otherTeamsProviders.Reverse();
 
         _myTeamProviderItemControllers.Clear();
         _otherTeamsProviderItemControllers.Clear();
-        DeactiveAllChildrenInScrollPanel();
+        
+        _myProvidersPool.RemoveAll();
+        _otherProvidersPool.RemoveAll();
 
         for (int i=0;i < myTeamProviders.Count; i++)
         {
-            AddMyProviderToList(myTeamProviders[i], i + 1);
+            if (myTeamProviders[i].state == Utils.ProviderState.TERMINATED) continue;
+            
+            _myProvidersPool.Add(myTeamProviders[i]);
         }
         for (int i = 0; i < otherTeamsProviders.Count; i++)
         {
-            AddOtherProviderToList(otherTeamsProviders[i], i + 1);
+            if (otherTeamsProviders[i].state == Utils.ProviderState.TERMINATED) continue;
+            
+            _otherProvidersPool.Add(otherTeamsProviders[i]);
         }
+        
+        RebuildListLayout(myProvidersScrollPanel);
+        RebuildListLayout(otherProvidersScrollPanel);
     }
 
-    public void AddMyProviderToList(Utils.Provider provider)
+    private void OnRemoveProviderResponse(RemoveProviderResponse response)
     {
-        AddMyProviderToList(provider, _myTeamProviderItemControllers.Count);
-    }
-
-    private void AddMyProviderToList(Utils.Provider provider, int index)
-    {
-        GameObject createdItem = GetItem(MyTeamProvidersScrollViewParent);
-        createdItem.transform.SetSiblingIndex(index);
-
-        ProviderItemController controller = createdItem.GetComponent<ProviderItemController>();
-        controller.SetInfo(index, provider);
-
-        _myTeamProviderItemControllers.Add(controller);
-        createdItem.SetActive(true);
-    }
-
-    private void AddOtherProviderToList(Utils.Provider provider, int index)
-    {
-        GameObject createdItem = GetItem(OtherTeamsProvidersScrollViewParent);
-        createdItem.transform.SetSiblingIndex(index);
-
-        ProviderItemController controller = createdItem.GetComponent<ProviderItemController>();
-        controller.SetInfo(index, provider);
-
-        _otherTeamsProviderItemControllers.Add(controller);
-        createdItem.SetActive(true);
-    }
-
-    private GameObject GetItem(GameObject parent)
-    {
-        foreach (GameObject gameObject in _spawnedGameObjects)
+        for (int i = 0; i < _myTeamProviderItemControllers.Count; i++)
         {
-            if (!gameObject.activeSelf)
-            {
-                return gameObject;
-            }
-        }
+            var controller = _myTeamProviderItemControllers[i];
 
-        GameObject newItem = Instantiate(providerItemPrefab, parent.transform);
-        _spawnedGameObjects.Add(newItem);
-        return newItem;
+            if (controller.Provider.id != response.removedProviderId) continue;
+            
+            _myProvidersPool.Remove(controller.gameObject);
+            _myTeamProviderItemControllers.Remove(controller);
+            RebuildListLayout(myProvidersScrollPanel);
+            return;
+        }
     }
-
-    private void DeactiveAllChildrenInScrollPanel()
+    
+    private void RebuildListLayout(RectTransform rectTransform)
     {
-        foreach (GameObject gameObject in _spawnedGameObjects)
-        {
-            gameObject.SetActive(false);
-        }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
     }
 
     public void OnRefreshButtonClick()
     {
         GetProvidersRequest getProvidersRequest = new GetProvidersRequest(RequestTypeConstant.GET_PROVIDERS);
         RequestManager.Instance.SendRequest(getProvidersRequest);
+    }
+
+    private void InitializeMyProviderItem(GameObject theGameObject, int index, Utils.Provider provider)
+    {
+        var controller = theGameObject.GetComponent<MyProviderItemController>();
+        controller.Initialize(provider);
+        _myTeamProviderItemControllers.Add(controller);
+    }
+    
+    private void InitializeOtherProviderItem(GameObject theGameObject, int index, Utils.Provider provider)
+    {
+        var controller = theGameObject.GetComponent<OtherProviderItemController>();
+        controller.Initialize(provider);
+        _otherTeamsProviderItemControllers.Add(controller);
+    }
+
+    public void AddMyProviderToList(Utils.Provider provider)
+    {
+        _myProvidersPool.Add(provider);
+        RebuildListLayout(myProvidersScrollPanel);
+    }
+
+    public bool IsProviderOfProduct(int productId)
+    {
+        return _myTeamProviderItemControllers.Exists(c => c.Provider.productId == productId);
+    }
+    
+    public Tuple<float, float, float> CalculateMeanMaxMinByProductId(int productId)
+    {
+        float mean = 0, min = float.MaxValue, max = float.MinValue;
+        int i = 0;
+
+        foreach (var controller in _otherTeamsProviderItemControllers)
+        {
+            var provider = controller.Provider;
+            
+            if (provider.productId != productId) continue;
+            if (provider.state == Utils.ProviderState.TERMINATED) continue;
+        
+            mean = (mean * i + provider.price) / (i + 1);
+            if (provider.price > max)
+            {
+                max = provider.price;
+            } else if (provider.price < min)
+            {
+                min = provider.price;
+            }
+        
+            i++;
+        }
+
+        max = max == float.MinValue ? 0 : max;
+        min = min == float.MaxValue ? 0 : min;
+
+        return new Tuple<float, float, float>(mean, max, min);
     }
 }
