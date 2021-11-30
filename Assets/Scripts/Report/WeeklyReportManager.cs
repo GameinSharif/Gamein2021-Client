@@ -61,19 +61,19 @@ public class WeeklyReportManager: MonoBehaviour
                 break;
             case 1:
                 BrandLineChart.gameObject.SetActive(true);
-                DrawRankingChart();
+                DrawBrandChart();
                 break;
             case 2:
                 FinanceLineChart.gameObject.SetActive(true);
-                DrawRankingChart();
+                DrawFinanceChart();
                 break;
             case 3:
                 CostsLineChart.gameObject.SetActive(true);
-                DrawRankingChart();
+                DrawCostsChart();
                 break;
             case 4:
                 InventoryLineChart.gameObject.SetActive(true);
-                DrawRankingChart();
+                DrawInventoryChart();
                 break;
         }
 
@@ -90,6 +90,92 @@ public class WeeklyReportManager: MonoBehaviour
         }
 
         RankingLineChart.data.DataSets[0].Entries = lineEntries;
+    }
+
+    private void DrawBrandChart()
+    {
+        List<LineEntry> lineEntries = new List<LineEntry>();
+        foreach (Utils.WeeklyReport weeklyReport in WeeklyReports)
+        {
+            LineEntry lineEntry = new LineEntry(weeklyReport.weekNumber, weeklyReport.brand);
+            lineEntries.Add(lineEntry);
+        }
+
+        BrandLineChart.data.DataSets[0].Entries = lineEntries;
+    }
+
+    private void DrawFinanceChart()
+    {
+        List<LineEntry> totalCapitalLineEntries = new List<LineEntry>();
+        List<LineEntry> inFlowLineEntries = new List<LineEntry>();
+        List<LineEntry> outFlowLineEntries = new List<LineEntry>();
+
+        for(int i=0;i < WeeklyReports.Count; i++)
+        {
+            Utils.WeeklyReport weeklyReport = WeeklyReports[i];
+
+            totalCapitalLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.totalCapital));
+
+            if (i == 0)
+            {
+                inFlowLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.inFlow));
+                outFlowLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.outFlow));
+            }
+            else
+            {
+                inFlowLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.inFlow - WeeklyReports[i-1].inFlow));
+                outFlowLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.outFlow - WeeklyReports[i-1].outFlow));
+            }
+        }
+
+        FinanceLineChart.data.DataSets[0].Entries = totalCapitalLineEntries;
+        FinanceLineChart.data.DataSets[1].Entries = inFlowLineEntries;
+        FinanceLineChart.data.DataSets[2].Entries = outFlowLineEntries;
+    }
+
+    private void DrawCostsChart()
+    {
+        List<LineEntry> transportCostsLineEntries = new List<LineEntry>();
+        List<LineEntry> productionCostsLineEntries = new List<LineEntry>();
+
+        for (int i = 0; i < WeeklyReports.Count; i++)
+        {
+            Utils.WeeklyReport weeklyReport = WeeklyReports[i];
+
+            if (i == 0)
+            {
+                transportCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.transportationCosts));
+                productionCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.productionCosts));
+            }
+            else
+            {
+                transportCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.transportationCosts - WeeklyReports[i - 1].transportationCosts));
+                productionCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.productionCosts - WeeklyReports[i - 1].productionCosts));
+            }
+        }
+
+        CostsLineChart.data.DataSets[0].Entries = transportCostsLineEntries;
+        CostsLineChart.data.DataSets[1].Entries = productionCostsLineEntries;
+    }
+
+    private void DrawInventoryChart()
+    {
+        List<LineEntry> rawMaterialsLineEntries = new List<LineEntry>();
+        List<LineEntry> semiFinishedLineEntries = new List<LineEntry>();
+        List<LineEntry> finishedEntries = new List<LineEntry>();
+
+        for (int i = 0; i < WeeklyReports.Count; i++)
+        {
+            Utils.WeeklyReport weeklyReport = WeeklyReports[i];
+
+            rawMaterialsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.rawMaterialPercentage));
+            semiFinishedLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.intermediateMaterialPercentage));
+            finishedEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.finalProductPercentage));
+        }
+
+        InventoryLineChart.data.DataSets[0].Entries = rawMaterialsLineEntries;
+        InventoryLineChart.data.DataSets[1].Entries = semiFinishedLineEntries;
+        InventoryLineChart.data.DataSets[2].Entries = finishedEntries;
     }
 
     private void DisableAll()
