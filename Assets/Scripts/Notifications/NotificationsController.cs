@@ -1,0 +1,129 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class NotificationsController : MonoBehaviour
+{
+    public static NotificationsController Instance;
+    public const int MAX_NOTIFICATIONS = 5;
+
+    public GameObject newMessageSign;
+    public GameObject notificationsParentGameObject;
+
+    public ScrollRect notificationsScrollViewScrollRect;
+    public Transform notificationsScrollPanel;
+
+    public GameObject notificationsScrollViewParent;
+
+    public GameObject notificationItemPrefab;
+    private List<GameObject> _spawnedNotificationGameObjects = new List<GameObject>();
+    private List<string> _activeNotificationsTextLocalize = new List<string>();
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    public void OnTestButtonClick()
+    {
+        AddNewNotification("auction_min_raise");
+    }
+
+    public void AddNewNotification(string textLocalize)
+    {
+        if (_activeNotificationsTextLocalize.Count == MAX_NOTIFICATIONS)
+        {
+            CloseNotificationItem(0);
+        }
+        _activeNotificationsTextLocalize.Add(textLocalize);
+        if (notificationsParentGameObject.activeSelf)
+        {
+            int index = _activeNotificationsTextLocalize.Count - 1;
+            AddNotificationItemToList(index, _activeNotificationsTextLocalize[index]);
+            RebuildLayout();
+        }
+    }
+
+    private void ShowNotifications()
+    {
+        DeactiveAllChildrenInScrollPanel();
+        for (int i = 0; i < _activeNotificationsTextLocalize.Count; i++)
+        {
+            AddNotificationItemToList(i, _activeNotificationsTextLocalize[i]);
+        }
+    }
+
+    private void AddNotificationItemToList(int index, string textLocalize)
+    {
+        GameObject createdItem = GetItem(notificationsScrollViewParent);
+        createdItem.transform.SetSiblingIndex(index + 1);
+
+        NotificationItemController controller = createdItem.GetComponent<NotificationItemController>();
+        controller.SetInfo(textLocalize, index);
+
+        createdItem.SetActive(true);
+    }
+    
+    private GameObject GetItem(GameObject parent)
+    {
+        foreach (GameObject gameObject in _spawnedNotificationGameObjects)
+        {
+            if (!gameObject.activeSelf)
+            {
+                return gameObject;
+            }
+        }
+
+        GameObject newItem = Instantiate(notificationItemPrefab, parent.transform);
+        _spawnedNotificationGameObjects.Add(newItem);
+
+        return newItem;
+    }
+
+    private void DeactiveAllChildrenInScrollPanel()
+    {
+        foreach (GameObject gameObject in _spawnedNotificationGameObjects)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void CloseNotificationItem(int index)
+    {
+        for (int i = 0; i < _activeNotificationsTextLocalize.Count; i++)
+        {
+            if (index == i)
+            {
+                _activeNotificationsTextLocalize.RemoveAt(i);
+                _spawnedNotificationGameObjects[i].SetActive(false);
+            }
+            else if (index < i)
+            {
+                _spawnedNotificationGameObjects[i].GetComponent<NotificationItemController>().ChangeIndex(i - 1);
+            }
+        }
+    }
+    
+    private void RebuildLayout()
+    {
+        Canvas.ForceUpdateCanvases();
+        notificationsScrollViewScrollRect.verticalNormalizedPosition = 0.0f;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(notificationsScrollPanel as RectTransform);
+    }
+    
+    public void OnNotificationsButtonClick()
+    {
+        newMessageSign.SetActive(false);
+        if (!notificationsParentGameObject.activeSelf)
+        {
+            ShowNotifications();
+        }
+        notificationsParentGameObject.SetActive(!notificationsParentGameObject.activeSelf);
+    }
+
+    public void OnCloseNotificationsButtonClick()
+    {
+        notificationsParentGameObject.SetActive(false);
+    }
+}

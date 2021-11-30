@@ -363,7 +363,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 31
+  m_RootOrder: 32
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &62992785
 GameObject:
@@ -675,7 +675,56 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 30
+  m_RootOrder: 31
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &177832377
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 177832379}
+  - component: {fileID: 177832378}
+  m_Layer: 0
+  m_Name: NotificationsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &177832378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177832377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 888c495101748214b90ce16cead9aefb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newMessageSign: {fileID: 1303916314}
+  notificationsParentGameObject: {fileID: 856759774}
+  notificationsScrollViewScrollRect: {fileID: 428129485}
+  notificationsScrollPanel: {fileID: 2013105863}
+  notificationsScrollViewParent: {fileID: 428129481}
+  notificationItemPrefab: {fileID: 1265294262119897353, guid: 848f54afcdde9de4b9883bfe88635546, type: 3}
+--- !u!4 &177832379
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177832377}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &240338858
 GameObject:
@@ -1750,6 +1799,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 425635897}
   m_CullTransparentMesh: 1
+--- !u!1 &428129481 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2580622887636705833, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+  m_PrefabInstance: {fileID: 1067820545}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &428129485 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2580622887636705842, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+  m_PrefabInstance: {fileID: 1067820545}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428129481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &431380392
 GameObject:
   m_ObjectHideFlags: 0
@@ -3329,7 +3394,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &559683432
 MonoBehaviour:
@@ -4125,7 +4190,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 26
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &842913503
 PrefabInstance:
@@ -4331,6 +4396,11 @@ MonoBehaviour:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8710817870900047529, guid: 98efd0147c1be754eb4fb828e7fcef20, type: 3}
   m_PrefabInstance: {fileID: 842913503}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &856759774 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2580622886307493121, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+  m_PrefabInstance: {fileID: 1067820545}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &897736487 stripped
 MonoBehaviour:
@@ -4708,7 +4778,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 25
+  m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &949420933
 PrefabInstance:
@@ -6123,6 +6193,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -184.453
       objectReference: {fileID: 0}
+    - target: {fileID: 3948003930093893496, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948003930093893496, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948003930093893496, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 177832378}
+    - target: {fileID: 3948003930093893496, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948003930093893496, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnCloseNotificationsButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948003930093893496, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NotificationsController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948003930093893496, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6397234871549754196, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -7425,6 +7523,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1257418588}
   m_CullTransparentMesh: 1
+--- !u!1 &1303916314 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6091946378429440883, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+  m_PrefabInstance: {fileID: 6091946378138331109}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1326982606
 GameObject:
   m_ObjectHideFlags: 0
@@ -8890,7 +8993,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 29
+  m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1645059103
 GameObject:
@@ -9991,7 +10094,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 28
+  m_RootOrder: 29
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1840388342 stripped
 MonoBehaviour:
@@ -10049,7 +10152,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 27
+  m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1878286321
 MonoBehaviour:
@@ -10069,6 +10172,11 @@ MonoBehaviour:
   AmountInputfield: {fileID: 7490732568214982279}
   PriceInputfield: {fileID: 7490732568214982278}
   minMaxLocalize: {fileID: 7490732568214982283}
+--- !u!224 &2013105863 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2580622887253269430, guid: b4520a34b40e61e4795a6e8fa8a78050, type: 3}
+  m_PrefabInstance: {fileID: 1067820545}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2038626047
 GameObject:
   m_ObjectHideFlags: 0
@@ -14030,6 +14138,34 @@ PrefabInstance:
     - target: {fileID: 5499417663116519702, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6091946376836371721, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6091946376836371721, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6091946376836371721, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 177832378}
+    - target: {fileID: 6091946376836371721, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6091946376836371721, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnNotificationsButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 6091946376836371721, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NotificationsController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6091946376836371721, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6091946376885967728, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
       propertyPath: m_Name
