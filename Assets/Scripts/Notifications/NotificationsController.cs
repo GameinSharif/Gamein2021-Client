@@ -11,11 +11,8 @@ public class NotificationsController : MonoBehaviour
     public GameObject newMessageSign;
     public GameObject notificationsParentGameObject;
 
-    public ScrollRect notificationsScrollViewScrollRect;
-    public Transform notificationsScrollPanel;
-
-    public GameObject notificationsScrollViewParent;
-
+    public GameObject notificationsScrollPanel;
+    
     public GameObject notificationItemPrefab;
     private List<GameObject> _spawnedNotificationGameObjects = new List<GameObject>();
     private List<string> _activeNotificationsTextLocalize = new List<string>();
@@ -41,7 +38,11 @@ public class NotificationsController : MonoBehaviour
         {
             int index = _activeNotificationsTextLocalize.Count - 1;
             AddNotificationItemToList(index, _activeNotificationsTextLocalize[index]);
-            RebuildLayout();
+            Canvas.ForceUpdateCanvases();
+        }
+        else
+        {
+            newMessageSign.SetActive(true);
         }
     }
 
@@ -56,7 +57,7 @@ public class NotificationsController : MonoBehaviour
 
     private void AddNotificationItemToList(int index, string textLocalize)
     {
-        GameObject createdItem = GetItem(notificationsScrollViewParent);
+        GameObject createdItem = GetItem(notificationsScrollPanel);
         createdItem.transform.SetSiblingIndex(index + 1);
 
         NotificationItemController controller = createdItem.GetComponent<NotificationItemController>();
@@ -105,15 +106,9 @@ public class NotificationsController : MonoBehaviour
         }
     }
     
-    private void RebuildLayout()
-    {
-        Canvas.ForceUpdateCanvases();
-        notificationsScrollViewScrollRect.verticalNormalizedPosition = 0.0f;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(notificationsScrollPanel as RectTransform);
-    }
-    
     public void OnNotificationsButtonClick()
     {
+        Debug.Log(notificationsParentGameObject.activeSelf);
         newMessageSign.SetActive(false);
         if (!notificationsParentGameObject.activeSelf)
         {

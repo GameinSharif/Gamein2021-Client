@@ -20,6 +20,7 @@ public class NotificationItemController : MonoBehaviour
 
     public void OnCloseNotificationItemButtonClick()
     {
+        Debug.Log("closing");
         NotificationsController.Instance.CloseNotificationItem(_itemsGameObjectIndex);
     }
 }
