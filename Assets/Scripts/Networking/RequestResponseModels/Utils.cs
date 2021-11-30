@@ -30,6 +30,7 @@ public class Utils
         public int capacity;
         public float price;
         public ProviderState state;
+        public int storageId;
     }
 
     public enum OfferStatus
@@ -70,6 +71,7 @@ public class Utils
         public float costPerUnitDemander;
         public float costPerUnitSupplier;
         public NegotiationState state;
+        public int sourceStorageId;
     }
     
     [Serializable]

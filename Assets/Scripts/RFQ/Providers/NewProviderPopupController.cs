@@ -144,9 +144,12 @@ public class NewProviderPopupController : MonoBehaviour
             DialogManager.Instance.ShowErrorDialog("price_min_max_error");
             return;
         }
+        
+        //TODO
+        int storageId = 0;
 
         _isSendingRequest = true;
-        NewProviderRequest newProviderRequest = new NewProviderRequest(RequestTypeConstant.NEW_PROVIDER, _selectedProductId, parsedCapacity, parsedPrice);
+        NewProviderRequest newProviderRequest = new NewProviderRequest(RequestTypeConstant.NEW_PROVIDER, _selectedProductId, parsedCapacity, parsedPrice, storageId);
         RequestManager.Instance.SendRequest(newProviderRequest);
     }
 

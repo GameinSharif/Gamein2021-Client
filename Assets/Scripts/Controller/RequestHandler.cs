@@ -202,6 +202,15 @@ public class RequestHandler
                     JsonUtility.FromJson<StartTransportForPlayerStoragesResponse>(responseJson);
                 EventManager.Instance.OnStartTransportForPlayerStoragesResponse(startTransportForPlayerStoragesResponse);
                 break;
+            case ResponseTypeConstant.REJECT_NEGOTIATION:
+                RejectNegotiationResponse rejectNegotiationResponse =
+                    JsonUtility.FromJson<RejectNegotiationResponse>(responseJson);
+                EventManager.Instance.OnRejectNegotiationResponse(rejectNegotiationResponse);
+                break;
+            case ResponseTypeConstant.EDIT_PROVIDER:
+                EditProviderResponse editProviderResponse = JsonUtility.FromJson<EditProviderResponse>(responseJson);
+                EventManager.Instance.OnEditProviderResponse(editProviderResponse);
+                break;
             default:
                 Debug.LogWarning(responseJson);
                 break;

@@ -320,4 +320,16 @@ public class EventManager : MonoBehaviour
     {
         OnStartTransportForPlayerStoragesResponseEvent?.Invoke(response);
     }
+
+    public event Action<RejectNegotiationResponse> OnRejectNegotiationResponseEvent;
+    public void OnRejectNegotiationResponse(RejectNegotiationResponse response)
+    {
+        OnRejectNegotiationResponseEvent?.Invoke(response);
+    }
+
+    public event Action<EditProviderResponse> OnEditProviderResponseEvent;
+    public void OnEditProviderResponse(EditProviderResponse response)
+    {
+        OnEditProviderResponseEvent?.Invoke(response);
+    }
 }
