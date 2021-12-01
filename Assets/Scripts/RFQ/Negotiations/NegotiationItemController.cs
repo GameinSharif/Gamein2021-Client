@@ -1,104 +1,137 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using RTLTMPro;
 using TMPro;
+using UnityEngine.UI;
 
 public class NegotiationItemController : MonoBehaviour
 {
-    public RTLTextMeshPro no;
-    public GameObject demanderGameObject;
-    public RTLTextMeshPro demanderTeamName;
-    public GameObject supplierGameObject;
-    public RTLTextMeshPro supplierTeamName;
+    public RTLTextMeshPro supplierOrDemander;
     public Localize productNameLocalize;
     public RTLTextMeshPro amount;
     public RTLTextMeshPro demanderCostPerUnit;
     public RTLTextMeshPro supplierCostPerUnit;
     public Localize negotiationStatusLocalize;
-    public GameObject openActionsButtonGameObject;
+    public Localize storageOrDistanceLocalize;
 
-    public TMP_InputField PricePerUnitInputfield;
+    public Image mainImage;
+    public Sprite closedSprite;
+    public Sprite openedSprite;
+    public LayoutElement layoutElement;
 
-    public GameObject actionsGameObjects;
+    public TMP_InputField pricePerUnitInputField;
+
+    public GameObject onOpenObjects;
+    public Toggle showActionToggle;
+
+    public Utils.Negotiation Negotiation => _negotiation;
 
     private Utils.Negotiation _negotiation;
+    private bool _isSupply;
+    private Utils.Team _supplierOrDemanderTeam;
+    private Utils.Product _product;
+    private Tuple<int, bool> _storageDetails;
+
     private bool _isSendingRequest = false;
 
-    public void OnEditNegotiationCostPerUnitResponseReceived(Utils.Negotiation negotiation)
+    public void Initialize(Utils.Negotiation negotiation, bool isSupply)
     {
-        _isSendingRequest = false;
-        if (negotiation.id == _negotiation.id)
-        {
-            SetInfo(int.Parse(no.OriginalText), negotiation);
+        _isSupply = isSupply;
+        _negotiation = negotiation;
+        _product = GameDataManager.Instance.GetProductById(_negotiation.productId);
+        _storageDetails = StorageManager.Instance.GetStorageDetailsById(_negotiation.sourceStorageId);
 
-            if (_negotiation.state == Utils.NegotiationState.DEAL)
+        if (_isSupply)
+        {
+            _supplierOrDemanderTeam = GameDataManager.Instance.GetTeamById(_negotiation.demanderId);
+
+            if (_storageDetails.Item2)
             {
-                actionsGameObjects.SetActive(false);
-                openActionsButtonGameObject.SetActive(false);
+                storageOrDistanceLocalize.SetKey("negotiation_item_dc", _storageDetails.Item1.ToString());
+            }
+            else
+            {
+                storageOrDistanceLocalize.SetKey("negotiation_item_warehouse");
             }
         }
-    }
-
-    private void SetInfo(int no, string demanderTeamName, string supplierTeamName, string productNameKey, int amount, float demanderCostPerUnit, float supplierCostPerUnit, Utils.NegotiationState negotiationState)
-    {
-        this.no.text = no.ToString();
-        this.demanderTeamName.text = demanderTeamName;
-        this.supplierTeamName.text = supplierTeamName;
-        productNameLocalize.SetKey("product_" + productNameKey);
-        this.amount.text = amount.ToString();
-        this.demanderCostPerUnit.text = demanderCostPerUnit.ToString("0.00");
-        this.supplierCostPerUnit.text = supplierCostPerUnit.ToString("0.00");
-        negotiationStatusLocalize.SetKey(negotiationState.ToString());
-
-        if (negotiationState != Utils.NegotiationState.IN_PROGRESS)
+        else
         {
-            actionsGameObjects.SetActive(false);
-            openActionsButtonGameObject.SetActive(false);
+            _supplierOrDemanderTeam = GameDataManager.Instance.GetTeamById(_negotiation.supplierId);
+
+            storageOrDistanceLocalize.SetKey("distance", CalculateDistance().ToString());
         }
+
+        supplierOrDemander.text = _supplierOrDemanderTeam.teamName;
+        
+        productNameLocalize.SetKey("product_" + _product.name);
+        amount.text = amount.ToString();
+        demanderCostPerUnit.text = _negotiation.costPerUnitDemander.ToString("0.00");
+        supplierCostPerUnit.text = _negotiation.costPerUnitSupplier.ToString("0.00");
+        negotiationStatusLocalize.SetKey(_negotiation.state.ToString());
     }
 
-    public void SetSupplyNegotiationInfo(int no, Utils.Negotiation negotiation)
+    public void UpdateEditedNegotiation(Utils.Negotiation editedNegotiation)
     {
-        supplierGameObject.SetActive(false);
+        _negotiation = editedNegotiation;
+        
+        demanderCostPerUnit.text = _negotiation.costPerUnitDemander.ToString("0.00");
+        supplierCostPerUnit.text = _negotiation.costPerUnitSupplier.ToString("0.00");
+        negotiationStatusLocalize.SetKey(_negotiation.state.ToString());
 
-        SetInfo(no, negotiation);
-    }
-
-    public void SetDemandNegotiationInfo(int no, Utils.Negotiation negotiation)
-    {
-        demanderGameObject.SetActive(false);
-
-        SetInfo(no, negotiation);
-    }
-
-    private void SetInfo(int no, Utils.Negotiation negotiation)
-    {
-        SetInfo(
-            no: no,
-            demanderTeamName: GameDataManager.Instance.GetTeamName(negotiation.demanderId),
-            supplierTeamName: GameDataManager.Instance.GetTeamName(negotiation.supplierId),
-            productNameKey: GameDataManager.Instance.GetProductById(negotiation.productId).name,
-            amount: negotiation.amount,
-            demanderCostPerUnit: negotiation.costPerUnitDemander,
-            supplierCostPerUnit: negotiation.costPerUnitSupplier,
-            negotiationState: negotiation.state
-        );
-
-        _negotiation = negotiation;
-    }
-
-    public void ToggleActions()
-    {
-        if (openActionsButtonGameObject.activeSelf)
+        if (_negotiation.state == Utils.NegotiationState.DEAL)
         {
-            actionsGameObjects.SetActive(!actionsGameObjects.activeSelf);
+            showActionToggle.isOn = false;
+            showActionToggle.gameObject.SetActive(false);
+        }
+
+        _isSendingRequest = false;
+    }
+
+    private int CalculateDistance()
+    {
+        var source =
+            GameDataManager.Instance.GetLocationByTypeAndId(
+                _storageDetails.Item2 ? Utils.TransportNodeType.DC : Utils.TransportNodeType.FACTORY,
+                _storageDetails.Item1);
+        var destination = GameDataManager.Instance.GetMyTeamLocaionOnMap();
+        return TransportManager.Instance.GetTransportDistance(source, destination, Utils.VehicleType.TRUCK);
+    }
+
+    public void ShowActionToggleOnValueChanged(bool value)
+    {
+        onOpenObjects.SetActive(value);
+        if (value)
+        {
+            mainImage.sprite = openedSprite;
+            layoutElement.minHeight = openedSprite.rect.height;
+        }
+        else
+        {
+            mainImage.sprite = closedSprite;
+            layoutElement.minHeight = closedSprite.rect.height;
+        }
+
+        if (_isSupply)
+        {
+            NegotiationsController.Instance.RebuildSupplyNegotiationsLayout();
+        }
+        else
+        {
+            NegotiationsController.Instance.RebuildDemandNegotiationsLayout();
         }
     }
 
     public void OnRejectButtonClick()
     {
-        // TODO
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                _isSendingRequest = true;
+                var rejectRequest = new RejectNegotiationRequest(_negotiation.id);
+                RequestManager.Instance.SendRequest(rejectRequest);
+            }
+        });
     }
 
     public void OnChatButtonClick()
@@ -114,15 +147,21 @@ public class NegotiationItemController : MonoBehaviour
             return;
         }
 
-        string price = PricePerUnitInputfield.text;
+        string price = pricePerUnitInputField.text;
         if (string.IsNullOrEmpty(price))
         {
             DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
             return;
         }
-
-        _isSendingRequest = true;
-        EditNegotiationCostPerUnitRequest editNegotiationCostPerUnitRequest = new EditNegotiationCostPerUnitRequest(RequestTypeConstant.EDIT_NEGOTIATION_COST_PER_UNIT, _negotiation.id, float.Parse(price));
-        RequestManager.Instance.SendRequest(editNegotiationCostPerUnitRequest);
+        
+        DialogManager.Instance.ShowConfirmDialog(agreed =>
+        {
+            if (agreed)
+            {
+                _isSendingRequest = true;
+                EditNegotiationCostPerUnitRequest editNegotiationCostPerUnitRequest = new EditNegotiationCostPerUnitRequest(RequestTypeConstant.EDIT_NEGOTIATION_COST_PER_UNIT, _negotiation.id, float.Parse(price));
+                RequestManager.Instance.SendRequest(editNegotiationCostPerUnitRequest);
+            }
+        });
     }
 }
