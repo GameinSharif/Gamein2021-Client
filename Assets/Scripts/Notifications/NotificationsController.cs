@@ -16,28 +16,30 @@ public class NotificationsController : MonoBehaviour
     public GameObject notificationItemPrefab;
     private List<GameObject> _spawnedNotificationGameObjects = new List<GameObject>();
     private List<string> _activeNotificationsTextLocalize = new List<string>();
+    private List<string> _activeNotificationsTextLocalizeParams = new List<string>();
 
     void Awake()
     {
         Instance = this;
     }
 
-    public void OnTestButtonClick()
-    {
-        AddNewNotification("auction_min_raise");
-    }
+    // public void OnTestButtonClick()
+    // {
+    //     AddNewNotification("auction_min_raise");
+    // }
 
-    public void AddNewNotification(string textLocalize)
+    public void AddNewNotification(string textLocalize, string param)
     {
         if (_activeNotificationsTextLocalize.Count == MAX_NOTIFICATIONS)
         {
             CloseNotificationItem(0);
         }
         _activeNotificationsTextLocalize.Add(textLocalize);
+        _activeNotificationsTextLocalizeParams.Add(param);
         if (notificationsParentGameObject.activeSelf)
         {
             int index = _activeNotificationsTextLocalize.Count - 1;
-            AddNotificationItemToList(index, _activeNotificationsTextLocalize[index]);
+            AddNotificationItemToList(index, _activeNotificationsTextLocalize[index], _activeNotificationsTextLocalizeParams[index]);
             Canvas.ForceUpdateCanvases();
         }
         else
@@ -51,17 +53,17 @@ public class NotificationsController : MonoBehaviour
         DeactiveAllChildrenInScrollPanel();
         for (int i = 0; i < _activeNotificationsTextLocalize.Count; i++)
         {
-            AddNotificationItemToList(i, _activeNotificationsTextLocalize[i]);
+            AddNotificationItemToList(i, _activeNotificationsTextLocalize[i], _activeNotificationsTextLocalizeParams[i]);
         }
     }
 
-    private void AddNotificationItemToList(int index, string textLocalize)
+    private void AddNotificationItemToList(int index, string textLocalize, string param)
     {
         GameObject createdItem = GetItem(notificationsScrollPanel);
         createdItem.transform.SetSiblingIndex(index + 1);
 
         NotificationItemController controller = createdItem.GetComponent<NotificationItemController>();
-        controller.SetInfo(textLocalize, index);
+        controller.SetInfo(textLocalize, index, param);
 
         createdItem.SetActive(true);
     }
@@ -97,6 +99,7 @@ public class NotificationsController : MonoBehaviour
             if (index == i)
             {
                 _activeNotificationsTextLocalize.RemoveAt(i);
+                _activeNotificationsTextLocalizeParams.RemoveAt(i);
                 _spawnedNotificationGameObjects[i].SetActive(false);
             }
             else if (index < i)
