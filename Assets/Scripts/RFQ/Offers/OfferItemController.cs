@@ -156,6 +156,8 @@ public class OfferItemController : MonoBehaviour
             {
                 MainHeaderManager.Instance.Money += (int)(acceptOfferResponse.acceptedOffer.volume * acceptOfferResponse.acceptedOffer.costPerUnit);
             }
+            NotificationsController.Instance.AddNewNotification("notification_offer_accepted",
+                GameDataManager.Instance.GetProductById(acceptOfferResponse.acceptedOffer.productId).name);
         }
     }
 }
