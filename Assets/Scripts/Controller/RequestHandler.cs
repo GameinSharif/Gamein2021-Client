@@ -198,18 +198,17 @@ public class RequestHandler
                 EventManager.Instance.OnTerminateLongtermContractResponse(terminateLongtermContractResponse);
                 break;
             case ResponseTypeConstant.TRANSPORT_TO_STORAGE:
-                StartTransportForPlayerStoragesResponse startTransportForPlayerStoragesResponse =
-                    JsonUtility.FromJson<StartTransportForPlayerStoragesResponse>(responseJson);
+                StartTransportForPlayerStoragesResponse startTransportForPlayerStoragesResponse = JsonUtility.FromJson<StartTransportForPlayerStoragesResponse>(responseJson);
                 EventManager.Instance.OnStartTransportForPlayerStoragesResponse(startTransportForPlayerStoragesResponse);
                 break;
             case ResponseTypeConstant.REJECT_NEGOTIATION:
-                RejectNegotiationResponse rejectNegotiationResponse =
-                    JsonUtility.FromJson<RejectNegotiationResponse>(responseJson);
+                RejectNegotiationResponse rejectNegotiationResponse = JsonUtility.FromJson<RejectNegotiationResponse>(responseJson);
                 EventManager.Instance.OnRejectNegotiationResponse(rejectNegotiationResponse);
                 break;
             case ResponseTypeConstant.EDIT_PROVIDER:
                 EditProviderResponse editProviderResponse = JsonUtility.FromJson<EditProviderResponse>(responseJson);
                 EventManager.Instance.OnEditProviderResponse(editProviderResponse);
+                break;
             case ResponseTypeConstant.ADD_PRODUCT:
                 //TODO remove this from server and here too
                 break;

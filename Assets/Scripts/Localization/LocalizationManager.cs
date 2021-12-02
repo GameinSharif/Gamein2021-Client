@@ -263,12 +263,12 @@ public class LocalizationManager : MonoBehaviour
             Instance = GameObject.FindObjectOfType<LocalizationManager>();
         }
 
-        //RTLTextMeshPro[] rtl = Resources.FindObjectsOfTypeAll<RTLTextMeshPro>();
-        //foreach (RTLTextMeshPro rTLTextMeshPro in rtl)
-        //{
-        //    rTLTextMeshPro.font = Instance.EnglishFontAsset;
-        //    rTLTextMeshPro.fontSharedMaterial = Instance.EnglishMaterialPresets[0];
-        //}
+        RTLTextMeshPro[] rtl = Resources.FindObjectsOfTypeAll<RTLTextMeshPro>();
+        foreach (RTLTextMeshPro rTLTextMeshPro in rtl)
+        {
+            rTLTextMeshPro.font = Instance.EnglishFontAsset;
+            rTLTextMeshPro.fontSharedMaterial = Instance.EnglishMaterialPresets[0];
+        }
     }
 
     void OnValidate()

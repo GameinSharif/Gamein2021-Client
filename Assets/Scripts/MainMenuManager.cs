@@ -132,7 +132,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnLoadMapScene()
     {
-        if (IsLoadingMap)
+        if (IsLoadingMap || MapManager.IsInMap)
         {
             return;
         }

@@ -321,6 +321,8 @@ public class EventManager : MonoBehaviour
     public void OnEditProviderResponse(EditProviderResponse response)
     {
         OnEditProviderResponseEvent?.Invoke(response);
+    }
+
     public event Action<GetAllWeeklyReportsResponse> OnGetAllWeeklyReportsResponseEvent;
     public void OnGetAllWeeklyReportsResponse(GetAllWeeklyReportsResponse response)
     {
