@@ -33,6 +33,8 @@ public class DCManager : MonoBehaviour
         {
             MapManager.Instance.UpdateDcMarker(response.dc, false);
         }
+        NotificationsController.Instance.AddNewNotification("notification_DC_bought", 
+            response.dc.name);
     }
 
     private void OnSellDCResponse(SellDCResponse response)
@@ -44,6 +46,8 @@ public class DCManager : MonoBehaviour
         {
             MapManager.Instance.UpdateDcMarker(response.dc, true);
         }
+        NotificationsController.Instance.AddNewNotification("notification_DC_sold", 
+            response.dc.name);
     }
 
     private void UpdateGameData(Utils.DC dc)

@@ -165,6 +165,9 @@ namespace ProductionLine
             Destroy(current.gameObject);
             UpdateRowNumbers();
 
+            NotificationsController.Instance.AddNewNotification("notification_production_line_scrapped",
+                GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).name);
+
             ShowDetails(-1);
         }
 
@@ -211,6 +214,8 @@ namespace ProductionLine
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
+            NotificationsController.Instance.AddNewNotification("notification_upgrade_production_line_efficiency",
+                GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).name);
         }
 
         private void OnUpgradeProductionLineQualityResponse(UpgradeProductionLineQualityResponse response)
@@ -227,6 +232,8 @@ namespace ProductionLine
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
+            NotificationsController.Instance.AddNewNotification("notification_upgrade_production_line_quality",
+                GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).name);
         }
 
         private void OnProductionLineConstructionCompletedResponse(ProductionLineConstructionCompletedResponse response)
@@ -234,6 +241,8 @@ namespace ProductionLine
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
+            NotificationsController.Instance.AddNewNotification("notification_production_line_creation_done",
+                GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).name);
         }
 
         private void OnProductCreationCompletedResponse(ProductCreationCompletedResponse response)
@@ -244,6 +253,8 @@ namespace ProductionLine
 
             StorageManager.Instance.ChangeStockInStorage(StorageManager.Instance.GetWarehouse().id,
                 response.product.productId, response.product.amount);
+            NotificationsController.Instance.AddNewNotification("notification_product_creation_done",
+                GameDataManager.Instance.GetProductById(response.product.productId).name);
         }
 
         #endregion
