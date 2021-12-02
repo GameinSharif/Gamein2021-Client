@@ -7,7 +7,6 @@ public class OtherProviderItemController : MonoBehaviour
     public Localize product;
     public RTLTextMeshPro capacity;
     public RTLTextMeshPro price;
-    public RTLTextMeshPro total;
     public RTLTextMeshPro team;
     public Localize distance;
 
@@ -21,14 +20,14 @@ public class OtherProviderItemController : MonoBehaviour
     public void Initialize(Utils.Provider provider)
     {
         _provider = provider;
-        _product = GameDataManager.Instance.GetProductById(_product.id);
+        _product = GameDataManager.Instance.GetProductById(_provider.productId);
         _otherTeam = GameDataManager.Instance.GetTeamById(_provider.teamId);
         _storageDetail = StorageManager.Instance.GetStorageDetailsById(_provider.storageId);
         
         product.SetKey("product_" + _product.name);
         capacity.text = _provider.capacity.ToString();
         price.text = _provider.price.ToString("0.00");
-        total.text = (_provider.capacity * provider.price).ToString("0.00");
+
         team.text = _otherTeam.teamName;
         distance.SetKey("distance", CalculateDistance().ToString());
     }

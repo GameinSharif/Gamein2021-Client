@@ -79,7 +79,7 @@ public class NewOfferPopupController : MonoBehaviour
             {
                 bool hasThisProductCategoryProductionLine = ProductionLinesDataManager.Instance.CanUseProduct(product);
 
-                ProductDetailsSetters[index].SetData(product, hasThisProductCategoryProductionLine, index, "NewOffer");
+                ProductDetailsSetters[index].SetData(product, hasThisProductCategoryProductionLine, "NewOffer");
                 index++;
             }
         }

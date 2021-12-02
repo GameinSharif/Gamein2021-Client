@@ -102,7 +102,7 @@ public class NewProviderPopupController : MonoBehaviour
                 bool hasThisProductsProductionLine = ProductionLinesDataManager.Instance.HasProductionLineOfProduct(product);
                 bool isNotCurrentlyProviderOfThisProduct = !ProvidersController.Instance.IsProviderOfProduct(product.id);
 
-                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine && isNotCurrentlyProviderOfThisProduct, index, "NewProvider");
+                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine && isNotCurrentlyProviderOfThisProduct, "NewProvider");
                 
                 index++;
             }

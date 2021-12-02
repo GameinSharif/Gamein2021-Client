@@ -7,7 +7,6 @@ public class MyProviderItemController : MonoBehaviour
     public Localize product;
     public RTLTextMeshPro capacity;
     public RTLTextMeshPro price;
-    public RTLTextMeshPro total;
     public Localize storageLocalize;
 
     public Utils.Provider Provider => _provider;
@@ -21,13 +20,12 @@ public class MyProviderItemController : MonoBehaviour
     public void Initialize(Utils.Provider provider)
     {
         _provider = provider;
-        _product = GameDataManager.Instance.GetProductById(_provider.id);
+        _product = GameDataManager.Instance.GetProductById(_provider.productId);
         _storageDetail = StorageManager.Instance.GetStorageDetailsById(provider.storageId);
         
         product.SetKey("product_" + _product.name);
         capacity.text = _provider.capacity.ToString();
         price.text = _provider.price.ToString("0.00");
-        total.text = (_provider.capacity * provider.price).ToString("0.00");
 
         if (_storageDetail.Item2)
         {
@@ -45,7 +43,6 @@ public class MyProviderItemController : MonoBehaviour
         
         capacity.text = _provider.capacity.ToString();
         price.text = _provider.price.ToString("0.00");
-        total.text = (_provider.capacity * provider.price).ToString("0.00");
     }
 
     public void OnRemoveClicked()

@@ -12,7 +12,7 @@ public class ProductDetailsSetter : MonoBehaviour
     private Utils.Product _product;
     private string _popupType;
 
-    public void SetData(Utils.Product product, bool isAvailable, int index, string popupType)
+    public void SetData(Utils.Product product, bool isAvailable, string popupType)
     {
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
         productNameLocalize.SetKey("product_" + product.name);
