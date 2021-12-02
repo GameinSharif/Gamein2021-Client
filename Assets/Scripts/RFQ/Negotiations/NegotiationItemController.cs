@@ -17,7 +17,6 @@ public class NegotiationItemController : MonoBehaviour
     public Image mainImage;
     public Sprite closedSprite;
     public Sprite openedSprite;
-    public LayoutElement layoutElement;
 
     public TMP_InputField pricePerUnitInputField;
 
@@ -103,12 +102,10 @@ public class NegotiationItemController : MonoBehaviour
         if (value)
         {
             mainImage.sprite = openedSprite;
-            layoutElement.minHeight = openedSprite.rect.height;
         }
         else
         {
             mainImage.sprite = closedSprite;
-            layoutElement.minHeight = closedSprite.rect.height;
         }
 
         if (_isSupply)

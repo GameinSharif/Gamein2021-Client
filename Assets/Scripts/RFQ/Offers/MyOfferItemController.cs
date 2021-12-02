@@ -25,7 +25,7 @@ public class MyOfferItemController : MonoBehaviour
         volume.text = _offer.volume.ToString();
         costPerUnit.text = _offer.costPerUnit.ToString();
         total.text = (_offer.volume * _offer.costPerUnit).ToString();
-        acceptDate.text = offer.offerStatus == Utils.OfferStatus.ACCEPTED ? offer.acceptDate.ToString() : "";
+        acceptDate.text = offer.offerStatus == Utils.OfferStatus.ACCEPTED ? offer.acceptDate.ToString() : "----/--/--";
     }
 
     public void SetAsAccepted(Utils.Offer offer)

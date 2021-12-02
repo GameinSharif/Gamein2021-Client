@@ -111,6 +111,8 @@ public class MainMenuManager : MonoBehaviour
 
         GameinSuppliersController.Instance.UpdateSupplies();
         GameinCustomersController.Instance.UpdateDemands();
+
+        RFQTabsManager.Instance.OnOpenMarketPage();
     }
 
     public void OnOpenProductionLinesPage()

@@ -85,9 +85,9 @@ public class NewOfferPopupController : MonoBehaviour
         }
     }
 
-    public void OnProductClick(Utils.Product productId)
+    public void OnProductClick(Utils.Product product)
     {
-        _selectedProduct = productId;
+        _selectedProduct = product;
 
         minMaxLocalize.SetKey("min_max_text", _selectedProduct.minPrice.ToString(), _selectedProduct.maxPrice.ToString());
     }
