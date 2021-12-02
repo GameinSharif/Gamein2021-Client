@@ -50,6 +50,7 @@ public class NewProviderPopupController : MonoBehaviour
         }
         else
         {
+            NewProviderPopupCanvas.SetActive(false);
             DialogManager.Instance.ShowErrorDialog();
         }
     }

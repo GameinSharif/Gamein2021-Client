@@ -8,7 +8,7 @@ public class OtherOfferItemController : MonoBehaviour
     public RTLTextMeshPro costPerUnit;
     public RTLTextMeshPro total;
     public RTLTextMeshPro team;
-    public RTLTextMeshPro distance;
+    public Localize distance;
     public GameObject acceptButton;
 
     public Utils.Offer Offer => _offer;
@@ -27,10 +27,10 @@ public class OtherOfferItemController : MonoBehaviour
         
         product.SetKey("product_" + _product.name);
         volume.text = _offer.volume.ToString();
-        costPerUnit.text = _offer.costPerUnit.ToString();
-        total.text = (_offer.volume * _offer.costPerUnit).ToString();
+        costPerUnit.text = _offer.costPerUnit.ToString("0.00");
+        total.text = (_offer.volume * _offer.costPerUnit).ToString("0.00");
         team.text = _otherTeam.teamName;
-        distance.text = CalculateDistance() + " km";
+        distance.SetKey("distance", CalculateDistance().ToString());
 
         acceptButton.SetActive(!isAccepted);
     }

@@ -9,7 +9,7 @@ public class OtherProviderItemController : MonoBehaviour
     public RTLTextMeshPro price;
     public RTLTextMeshPro total;
     public RTLTextMeshPro team;
-    public RTLTextMeshPro distance;
+    public Localize distance;
 
     public Utils.Provider Provider => _provider;
     
@@ -27,10 +27,10 @@ public class OtherProviderItemController : MonoBehaviour
         
         product.SetKey("product_" + _product.name);
         capacity.text = _provider.capacity.ToString();
-        price.text = _provider.price.ToString();
-        total.text = (_provider.capacity * provider.price).ToString();
+        price.text = _provider.price.ToString("0.00");
+        total.text = (_provider.capacity * provider.price).ToString("0.00");
         team.text = _otherTeam.teamName;
-        distance.text = CalculateDistance() + " km";
+        distance.SetKey("distance", CalculateDistance().ToString());
     }
 
     public void OnNegotiationButtonClicked()

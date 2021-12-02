@@ -26,7 +26,7 @@ public class ProvidersController : MonoBehaviour
     {
         Instance = this;
 
-        _myProvidersPool = new PoolingSystem<Utils.Provider>(myProvidersScrollPanel, myProviderItemPrefab, InitializeMyProviderItem, 10);
+        _myProvidersPool = new PoolingSystem<Utils.Provider>(myProvidersScrollPanel, myProviderItemPrefab, InitializeMyProviderItem, 10, false);
         _otherProvidersPool = new PoolingSystem<Utils.Provider>(otherProvidersScrollPanel, otherProviderItemPrefab, InitializeOtherProviderItem, 10);
     }
 
@@ -34,12 +34,14 @@ public class ProvidersController : MonoBehaviour
     {
         EventManager.Instance.OnGetProvidersResponseEvent += OnGetProvidersResponse;
         EventManager.Instance.OnRemoveProviderResponseEvent += OnRemoveProviderResponse;
+        EventManager.Instance.OnEditProviderResponseEvent += OnEditProviderResponse;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnGetProvidersResponseEvent -= OnGetProvidersResponse;
         EventManager.Instance.OnRemoveProviderResponseEvent -= OnRemoveProviderResponse;
+        EventManager.Instance.OnEditProviderResponseEvent -= OnEditProviderResponse;
     }
 
     public void OnGetProvidersResponse(GetProvidersResponse getProvidersResponse)
@@ -86,6 +88,25 @@ public class ProvidersController : MonoBehaviour
             RebuildListLayout(myProvidersScrollPanel);
             return;
         }
+    }
+
+    public void OnEditProviderResponse(EditProviderResponse editProviderResponse)
+    {
+        if (editProviderResponse.editedProvider != null)
+        {
+            foreach (var controller in _myTeamProviderItemControllers)
+            {
+                if (controller.Provider.id != editProviderResponse.editedProvider.id) continue;
+                
+                controller.UpdateEditedProvider(editProviderResponse.editedProvider);
+            }
+        }
+        else
+        {
+            DialogManager.Instance.ShowErrorDialog();
+        }
+        
+        EditProviderPopupController.Instance.ClosePopup();
     }
     
     private void RebuildListLayout(RectTransform rectTransform)

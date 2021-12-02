@@ -26,8 +26,8 @@ public class MyProviderItemController : MonoBehaviour
         
         product.SetKey("product_" + _product.name);
         capacity.text = _provider.capacity.ToString();
-        price.text = _provider.price.ToString();
-        total.text = (_provider.capacity * provider.price).ToString();
+        price.text = _provider.price.ToString("0.00");
+        total.text = (_provider.capacity * provider.price).ToString("0.00");
 
         if (_storageDetail.Item2)
         {
@@ -37,6 +37,15 @@ public class MyProviderItemController : MonoBehaviour
         {
             storageLocalize.SetKey("provider_item_warehouse");
         }
+    }
+
+    public void UpdateEditedProvider(Utils.Provider provider)
+    {
+        _provider = provider;
+        
+        capacity.text = _provider.capacity.ToString();
+        price.text = _provider.price.ToString("0.00");
+        total.text = (_provider.capacity * provider.price).ToString("0.00");
     }
 
     public void OnRemoveClicked()
@@ -55,5 +64,10 @@ public class MyProviderItemController : MonoBehaviour
                 RequestManager.Instance.SendRequest(request);
             }
         });
+    }
+
+    public void OnEditClicked()
+    {
+        EditProviderPopupController.Instance.OpenEditProviderPopup(_provider, _product);
     }
 }

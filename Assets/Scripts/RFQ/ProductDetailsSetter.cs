@@ -26,6 +26,9 @@ public class ProductDetailsSetter : MonoBehaviour
     {
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
         productNameLocalize.SetKey("product_" + product.name);
+
+        button.transition = Selectable.Transition.None;
+        button.interactable = false;
     }
 
     public void OnClicked()
@@ -39,6 +42,5 @@ public class ProductDetailsSetter : MonoBehaviour
                 NewProviderPopupController.Instance.OnProductClick(_product);
                 break;
         }
-        Debug.Log("Helllllll");
     }
 }

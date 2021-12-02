@@ -153,13 +153,22 @@ public class NegotiationItemController : MonoBehaviour
             DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
             return;
         }
+
+        var parsedPrice = float.Parse(price);
+        
+        if (parsedPrice > _product.maxPrice || parsedPrice < _product.minPrice)
+        {
+            DialogManager.Instance.ShowErrorDialog("price_min_max_error");
+            return;
+        }
+        
         
         DialogManager.Instance.ShowConfirmDialog(agreed =>
         {
             if (agreed)
             {
                 _isSendingRequest = true;
-                EditNegotiationCostPerUnitRequest editNegotiationCostPerUnitRequest = new EditNegotiationCostPerUnitRequest(RequestTypeConstant.EDIT_NEGOTIATION_COST_PER_UNIT, _negotiation.id, float.Parse(price));
+                EditNegotiationCostPerUnitRequest editNegotiationCostPerUnitRequest = new EditNegotiationCostPerUnitRequest(RequestTypeConstant.EDIT_NEGOTIATION_COST_PER_UNIT, _negotiation.id, parsedPrice);
                 RequestManager.Instance.SendRequest(editNegotiationCostPerUnitRequest);
             }
         });
