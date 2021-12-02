@@ -6,14 +6,12 @@ using UnityEngine.UI;
 public class RFQTabsManager : MonoBehaviour
 {
     public List<GameObject> TabsCanvasGameObjects;
-    public List<Image> TabsImages;
 
     public void OnSelectTabButton(int index)
     {
         DisableAllTabs();
 
         TabsCanvasGameObjects[index].SetActive(true);
-        TabsImages[index].enabled = true;
     }
 
     private void DisableAllTabs()
@@ -21,11 +19,6 @@ public class RFQTabsManager : MonoBehaviour
         foreach (GameObject gameObject in TabsCanvasGameObjects)
         {
             gameObject.SetActive(false);
-        }
-
-        foreach (Image image in TabsImages)
-        {
-            image.enabled = false;
         }
     }
 }

@@ -10,13 +10,13 @@ public class NewNegotiationPopupController: MonoBehaviour
 
     public GameObject NewNegotiationPopupCanvas;
 
-    public Image ProductImage;
-    public Localize ProductNameLocalize;
     public TMP_InputField AmountInputfield;
     public TMP_InputField PriceInputfield;
+    public ProductDetailsSetter productDetailsSetter;
     public Localize minMaxLocalize;
 
     private Utils.Provider _provider;
+    private Utils.Product _product;
     private bool _isSendingRequest = false;
 
     private void Awake()
@@ -45,19 +45,24 @@ public class NewNegotiationPopupController: MonoBehaviour
         }
         else
         {
+            NewNegotiationPopupCanvas.SetActive(false);
             DialogManager.Instance.ShowErrorDialog();
         }
     }
 
     public void OpenNewNegotiationPopup(Utils.Provider provider)
     {
+        _provider = provider;
         _isSendingRequest = false;
 
-        ProductImage.sprite = GameDataManager.Instance.ProductSprites[provider.productId - 1];
-        ProductNameLocalize.SetKey("product_" + GameDataManager.Instance.Products[provider.productId - 1].name);
-        var product = GameDataManager.Instance.GetProductById(_provider.productId);
-        minMaxLocalize.SetKey("min_max_text", product.minPrice.ToString(), product.maxPrice.ToString());
-        _provider = provider;
+        _product = GameDataManager.Instance.GetProductById(_provider.productId);
+
+        AmountInputfield.text = "";
+        PriceInputfield.text = "";
+        
+        productDetailsSetter.SetRawData(_product);
+
+        minMaxLocalize.SetKey("min_max_text", _product.minPrice.ToString(), _product.maxPrice.ToString());
 
         NewNegotiationPopupCanvas.SetActive(true);
     }
@@ -79,11 +84,16 @@ public class NewNegotiationPopupController: MonoBehaviour
 
         var parsedAmount = int.Parse(amount);
         var parsedPrice = float.Parse(price);
-        var product = GameDataManager.Instance.GetProductById(_provider.productId);
-
-        if (parsedPrice > product.maxPrice || parsedPrice < product.minPrice)
+        
+        if (parsedPrice > _product.maxPrice || parsedPrice < _product.minPrice)
         {
             DialogManager.Instance.ShowErrorDialog("price_min_max_error");
+            return;
+        }
+
+        if (parsedAmount < 1)
+        {
+            DialogManager.Instance.ShowErrorDialog("invalid_amount_error");
             return;
         }
 

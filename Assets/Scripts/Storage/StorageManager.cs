@@ -173,4 +173,13 @@ public class StorageManager : MonoBehaviour
 
         return occupiedAmount;
     }
+
+    public Tuple<int, bool> GetStorageDetailsById(int id)
+    {
+        int buildingId = id > GameDataManager.Instance.Factories.Count
+            ? id - GameDataManager.Instance.Factories.Count
+            : id;
+        bool dc = id > GameDataManager.Instance.Factories.Count;
+        return new Tuple<int, bool>(buildingId, dc);
+    }
 }
