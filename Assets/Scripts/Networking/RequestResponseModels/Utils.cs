@@ -5,6 +5,14 @@ using ProductionLine;
 
 public class Utils
 {
+    public enum GameStatus
+    {
+        RUNNING,
+        PAUSED,
+        STOPPED
+    }
+
+
     [Serializable]
     public class Team
     {

@@ -206,7 +206,8 @@ public class RequestHandler
                 //TODO remove this from server and here too
                 break;
             case ResponseTypeConstant.UPDATE_GAME_STATUS:
-                //TODO
+                UpdateGameStatusResponse updateGameStatusResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateGameStatusResponse), new StringEnumConverter()) as UpdateGameStatusResponse;
+                EventManager.Instance.OnUpdateGameStatusResponse(updateGameStatusResponse);
                 break;
             case ResponseTypeConstant.ACCESS_DENIED:
                 //TODO

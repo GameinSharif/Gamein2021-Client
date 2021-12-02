@@ -322,4 +322,10 @@ public class EventManager : MonoBehaviour
     {
         OnUpdateWeeklyReportResponseEvent?.Invoke(response);
     }
+
+    public event Action<UpdateGameStatusResponse> OnUpdateGameStatusResponseEvent;
+    public void OnUpdateGameStatusResponse(UpdateGameStatusResponse response)
+    {
+        OnUpdateGameStatusResponseEvent?.Invoke(response);
+    }
 }
