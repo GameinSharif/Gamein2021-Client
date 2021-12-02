@@ -8,6 +8,7 @@ public class MyOfferItemController : MonoBehaviour
     public RTLTextMeshPro costPerUnit;
     public RTLTextMeshPro total;
     public RTLTextMeshPro acceptDate;
+    public GameObject terminateButtonGameObject;
     
     public Utils.Offer Offer => _offer;
 
@@ -26,6 +27,7 @@ public class MyOfferItemController : MonoBehaviour
         costPerUnit.text = _offer.costPerUnit.ToString();
         total.text = (_offer.volume * _offer.costPerUnit).ToString();
         acceptDate.text = offer.offerStatus == Utils.OfferStatus.ACCEPTED ? offer.acceptDate.ToString() : "----/--/--";
+        terminateButtonGameObject.SetActive(offer.offerStatus == Utils.OfferStatus.ACCEPTED ? false : true);
     }
 
     public void SetAsAccepted(Utils.Offer offer)
