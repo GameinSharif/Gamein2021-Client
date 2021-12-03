@@ -50,7 +50,7 @@ public class TransportItemController : MonoBehaviour
                     : MapUtils.MapAgentMarker.AgentType.MyDistributionCenter);
             case Utils.TransportNodeType.FACTORY:
                 return TransportsController.Instance.GetSpriteByAgentType(_isGoing
-                    ? GetFactoryAgentType(_transport.destinationId)
+                    ? MapUtils.MapAgentMarker.AgentType.OtherFactory
                     : MapUtils.MapAgentMarker.AgentType.MyFactory);  
         }
 
@@ -72,21 +72,9 @@ public class TransportItemController : MonoBehaviour
             case Utils.TransportNodeType.FACTORY:
                 return TransportsController.Instance.GetSpriteByAgentType(_isGoing
                     ? MapUtils.MapAgentMarker.AgentType.MyFactory
-                    : GetFactoryAgentType(_transport.sourceId));
+                    : MapUtils.MapAgentMarker.AgentType.OtherFactory);
         }
 
         return null;
-    }
-
-    // chooses between other factory or different country factory
-    private MapUtils.MapAgentMarker.AgentType GetFactoryAgentType(int id)
-    {
-        Utils.Factory factory = GameDataManager.Instance.GetFactoryById(id);
-        int teamId = PlayerPrefs.GetInt("TeamId");
-        Utils.Team myTeam = GameDataManager.Instance.GetTeamById(teamId);
-
-        return myTeam.country == factory.country
-            ? MapUtils.MapAgentMarker.AgentType.OtherFactory
-            : MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory;
     }
 }
