@@ -7,17 +7,16 @@ using System.Linq;
 using RTLTMPro;
 using UnityEngine.UI;
 
-public class RawProductSuppliersPopupController : MonoBehaviour
+public class SuppliersController : MonoBehaviour
 {
-    public static RawProductSuppliersPopupController Instance;
+    public static SuppliersController Instance;
 
-    public GameObject rawProductSuppliersPopupCanvas;
-    public GameObject rawProductSuppliersScrollViewParent;
+    public GameObject SuppliersParentGameObject;
+    public GameObject ContractsParentGameObject;
+
+    public GameObject SuppliersScrollPanel;
 
     public GameObject supplyItemPrefab;
-
-    public Image productImage;
-    public Localize productNameLocalize;
 
     private Utils.Product _product;
     private List<Utils.WeekSupply> _supplies;
@@ -30,16 +29,15 @@ public class RawProductSuppliersPopupController : MonoBehaviour
 
     public void OnShowSuppliersClick(Utils.Product product)
     {
-        this._product = product;
+        _product = product;
         
-        productNameLocalize.SetKey("product_" + product.name);
-        productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
         SetSupplies();
-        rawProductSuppliersPopupCanvas.SetActive(true);
-        Canvas.ForceUpdateCanvases();
+
+        ContractsParentGameObject.SetActive(false);
+        SuppliersParentGameObject.SetActive(true);
+        //Canvas.ForceUpdateCanvases();
     }
-    
-      
+        
     private void SetSupplies()
     {
         _supplies = GameDataManager.Instance.GetCurrentWeekRawProductSupplies(_product.id);
@@ -60,11 +58,11 @@ public class RawProductSuppliersPopupController : MonoBehaviour
     
     private void AddSupplierItemToList(Utils.WeekSupply supply, int index)
     {
-        GameObject createdItem = GetItem(rawProductSuppliersScrollViewParent);
+        GameObject createdItem = GetItem(SuppliersScrollPanel);
         createdItem.transform.SetSiblingIndex(index);
 
         RawProductSupplyItemController controller = createdItem.GetComponent<RawProductSupplyItemController>();
-        controller.SetInfo(index, supply);
+        controller.SetInfo(supply);
 
         createdItem.SetActive(true);
     }
@@ -79,12 +77,9 @@ public class RawProductSuppliersPopupController : MonoBehaviour
             }
         }
 
-        GameObject newItem;
-        newItem = Instantiate(supplyItemPrefab, parent.transform);
+        GameObject newItem = Instantiate(supplyItemPrefab, parent.transform);
         _spawnedSupplyItemGameObjects.Add(newItem);
+
         return newItem;
     }
-
-
-
 }

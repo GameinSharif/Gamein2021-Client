@@ -144,16 +144,6 @@ public class Utils
         public int price;
         public int sales;
     }
-    
-    [Serializable]
-    public class ContractSupplierDetail
-    {
-        public int id;
-        public CustomDate contractDate;
-        public int boughtAmount;
-        public float pricePerUnit;
-        public TransportNodeType transportNodeType;
-    }
 
     [Serializable]
     public class ContractSupplier

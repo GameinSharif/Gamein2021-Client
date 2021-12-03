@@ -179,6 +179,14 @@ public class TransportManager : MonoBehaviour
         return (int)Mathf.Ceil((float) distance * GameDataManager.Instance.GameConstants.distanceConstant * GameDataManager.Instance.GetVehicleByType(vehicleType).coefficient);
     }
 
+    public int GetTransportDistance(Vector2 sourceLocation, Vector2 destinationLocation)
+    {
+        double distance = (sourceLocation.x - destinationLocation.x) * (sourceLocation.x - destinationLocation.x);
+        distance += (sourceLocation.y - destinationLocation.y) * (sourceLocation.y - destinationLocation.y);
+        distance = Mathf.Sqrt((float)distance);
+        return (int)Mathf.Ceil((float)distance * GameDataManager.Instance.GameConstants.distanceConstant);
+    }
+
     public float CalculateTransportCost(Utils.VehicleType vehicleType, int distance, int productId, int productAmount, bool hasInsurance)
     {
         float insuranceFactor = (hasInsurance ? (1 + GameDataManager.Instance.GameConstants.insuranceCostFactor) : 1);

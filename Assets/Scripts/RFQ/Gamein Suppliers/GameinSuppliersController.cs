@@ -10,9 +10,6 @@ public class GameinSuppliersController : MonoBehaviour
 {
     public static GameinSuppliersController Instance;
 
-    [HideInInspector] List<Utils.ContractSupplier> MyContractSuppliers = new List<Utils.ContractSupplier>();
-    [HideInInspector] List<Utils.Product> RawProducts;
-
     public GameObject rawProductItemPrefab;
     public GameObject contractSupplierItemPrefab;
 
@@ -41,21 +38,20 @@ public class GameinSuppliersController : MonoBehaviour
 
     public void UpdateSupplies()
     {
-        RawProducts = GameDataManager.Instance.GetRawProducts();
+        List<Utils.Product> rawProducts = GameDataManager.Instance.GetRawProducts();
         DeactiveAllChildrenInScrollPanel(false);
-        for (int i = 0; i < RawProducts.Count; i++)
+        for (int i = 0; i < rawProducts.Count; i++)
         {
-            AddRawProductItemToList(RawProducts[i], i + 1);
+            AddRawProductItemToList(rawProducts[i], i + 1);
         }
     }
     
     public void OnGetContractSuppliersResponse(GetContractSuppliersResponse getContractSuppliersResponse)
     {
-        MyContractSuppliers = getContractSuppliersResponse.contractsSupplier;
         DeactiveAllChildrenInScrollPanel(true);
-        for (int i = 0; i < MyContractSuppliers.Count; i++)
+        for (int i = 0; i < getContractSuppliersResponse.contractsSupplier.Count; i++)
         {
-            AddContractItemToList(MyContractSuppliers[i], i + 1);
+            AddContractItemToList(getContractSuppliersResponse.contractsSupplier[i]);
         }
     }
     
@@ -65,7 +61,7 @@ public class GameinSuppliersController : MonoBehaviour
         createdItem.transform.SetSiblingIndex(index);
 
         RawProductItemController controller = createdItem.GetComponent<RawProductItemController>();
-        controller.SetInfo(index, product);
+        controller.SetInfo(product);
 
         createdItem.SetActive(true);
     }
@@ -74,15 +70,14 @@ public class GameinSuppliersController : MonoBehaviour
     {
         foreach (Utils.ContractSupplier contractSupplier in contractSuppliers)
         {
-            MyContractSuppliers.Add(contractSupplier);
-            AddContractItemToList(contractSupplier, MyContractSuppliers.Count);   
+            AddContractItemToList(contractSupplier);   
         }
     }
     
-    private void AddContractItemToList(Utils.ContractSupplier contractSupplier, int index)
+    private void AddContractItemToList(Utils.ContractSupplier contractSupplier)
     {
         GameObject createdItem = GetItem(contractSuppliersScrollViewParent, true);
-        createdItem.transform.SetSiblingIndex(index);
+        createdItem.transform.SetSiblingIndex(0);
 
         ContractSupplierItemController controller = createdItem.GetComponent<ContractSupplierItemController>();
         controller.SetInfo(contractSupplier);
