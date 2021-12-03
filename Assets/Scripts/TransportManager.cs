@@ -168,7 +168,7 @@ public class TransportManager : MonoBehaviour
     public int CalculateTransportDuration(Vector2 sourceLocation, Vector2 destinationLocation, Utils.VehicleType vehicleType)
     {
         int transportDistance = GetTransportDistance(sourceLocation, destinationLocation, vehicleType);
-        return (int)Mathf.Ceil((float)transportDistance / GameDataManager.Instance.GetVehicleByType(vehicleType).speed);
+        return (int)Mathf.Ceil(1f * transportDistance / GameDataManager.Instance.GetVehicleByType(vehicleType).speed);
     }
 
     public int GetTransportDistance(Vector2 sourceLocation, Vector2 destinationLocation, Utils.VehicleType vehicleType)
@@ -185,7 +185,7 @@ public class TransportManager : MonoBehaviour
         Utils.Vehicle transportVehicle = GameDataManager.Instance.GetVehicleByType(vehicleType);
         float vehicleCost = transportVehicle.costPerKilometer * distance * insuranceFactor;
         int productVolume = GameDataManager.Instance.GetProductById(productId).volumetricUnit * productAmount;
-        int vehicleCount = (int)Mathf.Ceil((float)productVolume / transportVehicle.capacity);
+        int vehicleCount = (int)Mathf.Ceil(1f * productVolume / transportVehicle.capacity);
         return vehicleCost * vehicleCount;
     }
 
@@ -194,7 +194,7 @@ public class TransportManager : MonoBehaviour
         Utils.Vehicle transportVehicle = GameDataManager.Instance.GetVehicleByType(vehicleType);
         float vehicleCost = transportVehicle.costPerKilometer * distance;
         int productVolume = GameDataManager.Instance.GetProductById(productId).volumetricUnit * productAmount;
-        int vehicleCount = (int)Mathf.Ceil((float)productVolume / transportVehicle.capacity);
+        int vehicleCount = (int)Mathf.Ceil(1f * productVolume / transportVehicle.capacity);
         return vehicleCost * vehicleCount;
     }
 
