@@ -77,7 +77,6 @@ public class GameinSuppliersController : MonoBehaviour
     private void AddContractItemToList(Utils.ContractSupplier contractSupplier)
     {
         GameObject createdItem = GetItem(contractSuppliersScrollViewParent, true);
-        createdItem.transform.SetSiblingIndex(0);
 
         ContractSupplierItemController controller = createdItem.GetComponent<ContractSupplierItemController>();
         controller.SetInfo(contractSupplier);

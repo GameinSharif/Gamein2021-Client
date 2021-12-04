@@ -43,15 +43,14 @@ public class TransportManager : MonoBehaviour
                 {
                     transport.transportState = Utils.TransportState.IN_WAY;
                 }
+                //TODO notification
                 break;
             case Utils.TransportState.SUCCESSFUL:
                 Transports.Remove(transport);
-                //TODO notification or something
                 SendNotificationForSuccessfulTransport(transport);
                 break;
             case Utils.TransportState.CRUSHED:
                 Transports.Remove(transport);
-                //TODO notification or something
                 SendNotificationForCrashedTransport(transport);
                 break;
             case Utils.TransportState.PENDING:

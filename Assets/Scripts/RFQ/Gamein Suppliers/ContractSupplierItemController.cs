@@ -12,6 +12,9 @@ public class ContractSupplierItemController : MonoBehaviour
     public RTLTextMeshPro amount;
     public Localize transportType;
     public RTLTextMeshPro totalCost;
+
+    public GameObject terminateButtonGameObject;
+    public GameObject noTerminateTextGameObject;
     
     private Utils.ContractSupplier _contractSupplier;
 
@@ -34,6 +37,12 @@ public class ContractSupplierItemController : MonoBehaviour
         amount.text = boughtAmount.ToString();
         this.transportType.SetKey(transportType.ToString());
         this.totalCost.text = totalCost.ToString();
+
+        if (contractDate.ToDateTime() <= MainHeaderManager.Instance.gameDate.ToDateTime())
+        {
+            terminateButtonGameObject.SetActive(false);
+            noTerminateTextGameObject.SetActive(true);
+        }
     }
 
     public void SetInfo(Utils.ContractSupplier contractSupplier)

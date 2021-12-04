@@ -211,7 +211,7 @@ public class GameDataManager : MonoBehaviour
 
     public List<Utils.Product> GetRawProducts()
     {
-        return Products.Where(p => p.productType == Utils.ProductType.RawMaterial).ToList();
+        return Products.Where(p => (p.productType == Utils.ProductType.RawMaterial && p.id != 4) || p.id == 27).ToList();
     }
 
     public List<Utils.Product> GetFinishedProducts()

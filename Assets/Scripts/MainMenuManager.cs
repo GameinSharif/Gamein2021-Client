@@ -145,11 +145,11 @@ public class MainMenuManager : MonoBehaviour
 
     private void DisableAll()
     {
-        if (SceneManager.sceneCount > 1)
-        {
-            SceneManager.UnloadSceneAsync("MapScene");
-            MapManager.IsInMap = false;
-        }
+        //if (SceneManager.sceneCount > 1)
+        //{
+        //    SceneManager.UnloadSceneAsync("MapScene");
+        //    MapManager.IsInMap = false;
+        //}
 
         foreach (GameObject gameObject in MainMenuTabCanvasGameobjects)
         {

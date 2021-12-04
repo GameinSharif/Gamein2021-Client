@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
-using System.Linq;
-using System.Net.NetworkInformation;
 using RTLTMPro;
 using UnityEngine.UI;
 
@@ -16,15 +14,16 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
 
     public Image productImage;
     public Localize productNameLocalize;
+    public RTLTextMeshPro supplierName;
+
     public TMP_InputField amount;
-    public RTLTextMeshPro pricePerUnit;
-    public TMP_InputField totalPrice;
-    public TMP_InputField finalPrice;
-    public TMP_InputField arrivalDate;
     public TMP_Dropdown vehicleTypeDropDown;
-    public TMP_InputField numberOfRepetition;
-    public TMP_InputField penalty; //TODO calculate?
+    public TMP_InputField numberOfWeeks;
     public Toggle insurance;
+    public TMP_InputField totalPrice;
+    public TMP_InputField arrivalDate;
+
+    //TODO penalty?
 
     private bool _firstTimeInitializing = true;
     private List<Utils.VehicleType> _vehicleTypesOptions = new List<Utils.VehicleType>();
@@ -84,7 +83,6 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         
         Utils.Product product = GameDataManager.Instance.GetProductById(weekSupply.productId);
         productNameLocalize.SetKey("product_" + product.name);
-        pricePerUnit.text = weekSupply.price + "$";
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
 
         if (_firstTimeInitializing)
@@ -93,8 +91,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         }
         _firstTimeInitializing = false;
 
-        CustomDate date = MainHeaderManager.Instance.gameDate.AddDays(GetTransportDuration());
-        arrivalDate.text = date.ToString();
+        SetArrivalDate();
 
         makeADealWithSupplierPopupCanvas.SetActive(true);
     }
@@ -116,11 +113,11 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
             return;
         }
 
-        int total = int.Parse(amount) * _weekSupply.price;
         float transportationCost = GetTransportCost(int.Parse(amount));
-        float final = total + transportationCost;
-        totalPrice.text = total.ToString("0.00") + "$";
-        finalPrice.text = final.ToString("0.00") + "$";
+
+        Debug.Log(transportationCost);
+        float final = int.Parse(amount) * _weekSupply.price + transportationCost;
+        totalPrice.text = final.ToString("0.00");
     }
 
     private float GetTransportCost(int amount)
@@ -129,19 +126,12 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         Vector2 destinationLocation = GameDataManager.Instance.GetMyTeamLocaionOnMap();
         Vector2 sourceLocation = GameDataManager.Instance.GetLocationByTypeAndId(Utils.TransportNodeType.SUPPLIER, _weekSupply.supplierId);
         int distance = TransportManager.Instance.GetTransportDistance(sourceLocation, destinationLocation, vehicleType);
-        float cost = TransportManager.Instance.CalculateTransportCost(vehicleType, distance, _weekSupply.productId, amount, WantsInsurance());
-        return cost;
-    }
-
-    private bool WantsInsurance()
-    {
-        bool wants = insurance.isOn;
-        
-        return wants;
+        return TransportManager.Instance.CalculateTransportCost(vehicleType, distance, _weekSupply.productId, amount, insurance.isOn);
     }
 
     private Utils.VehicleType GetTransportationMode()
     {
+        Debug.Log(vehicleTypeDropDown.value);
         Utils.VehicleType vehicleType = _vehicleTypesOptions[vehicleTypeDropDown.value];
         return vehicleType;
     }
@@ -149,8 +139,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     public void OnTransportationModeToggleChange()
     {
         OnAmountValueChange();
-        CustomDate date = MainHeaderManager.Instance.gameDate.AddDays(GetTransportDuration());
-        arrivalDate.text = date.ToString();
+        SetArrivalDate();
     }
 
     public void OnInsuranceToggleChange()
@@ -158,14 +147,14 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         OnAmountValueChange();
     }
     
-    private int GetRepetitionWeeks()
+    private int GetNumberOfWeeks()
     {
-        string weeks = numberOfRepetition.text;
+        string weeks = numberOfWeeks.text;
         if (string.IsNullOrEmpty(weeks))
         {
             return 0;
         }
-        int weeksInt = int.Parse(numberOfRepetition.text);
+        int weeksInt = int.Parse(numberOfWeeks.text);
         if (weeksInt < 0)
         {
             return -1;
@@ -197,32 +186,43 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     
     public void OnDoneButtonClick()
     {
-        Debug.LogWarning(1);
         string amountText = amount.text;
-        Utils.VehicleType vehicleType = GetTransportationMode();
-        int weeks = GetRepetitionWeeks();
-        if (weeks < 0 || string.IsNullOrEmpty(amountText))
+        int weeks = GetNumberOfWeeks();
+        if (weeks < 1 || string.IsNullOrEmpty(amountText) || int.Parse(amountText) < 1)
         {
             DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
             return;
         }
-        Debug.LogWarning(2);
-        Debug.LogWarning(vehicleType);
-        if (CanAffordMakingContract() && StorageHasCapacity())
+
+        Utils.VehicleType vehicleType = GetTransportationMode();
+        if (vehicleTypeDropDown.value < 0)
         {
-            int amountInt = int.Parse(amount.text);
-            NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_WITH_SUPPLIER, _weekSupply, weeks, amountInt, GameDataManager.Instance.GetVehicleByType(vehicleType).id, WantsInsurance());
-            RequestManager.Instance.SendRequest(newContractSupplier);
+            DialogManager.Instance.ShowErrorDialog("vehicle_not_selected_error");
+            return;
         }
+
         if (!CanAffordMakingContract())
         {
             DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+            return;
         }
 
         if (!StorageHasCapacity())
         {
             DialogManager.Instance.ShowErrorDialog("not_enough_capacity_error");
-
+            return;
         }
+
+        int amountInt = int.Parse(amount.text);
+        NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_WITH_SUPPLIER, _weekSupply, weeks, amountInt, GameDataManager.Instance.GetVehicleByType(vehicleType).id, insurance.isOn);
+        RequestManager.Instance.SendRequest(newContractSupplier);
+    }
+
+    private void SetArrivalDate()
+    {
+        DateTime dateTime = MainHeaderManager.Instance.gameDate.ToDateTime().AddDays(GetTransportDuration());
+        arrivalDate.text = dateTime.Year + "/" +
+            dateTime.Month.ToString().PadLeft(2, '0') + "/" +
+            dateTime.Day.ToString().PadLeft(2, '0'); ;
     }
 }
