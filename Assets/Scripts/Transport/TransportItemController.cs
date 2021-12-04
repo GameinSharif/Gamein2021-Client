@@ -45,13 +45,13 @@ public class TransportItemController : MonoBehaviour
             case Utils.TransportNodeType.GAMEIN_CUSTOMER:
                 return TransportsController.Instance.GetSpriteByAgentType(MapUtils.MapAgentMarker.AgentType.GameinCustomer);
             case Utils.TransportNodeType.DC:
-                return TransportsController.Instance.GetSpriteByAgentType(_isGoing
-                    ? MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter
-                    : MapUtils.MapAgentMarker.AgentType.MyDistributionCenter);
+                return TransportsController.Instance.GetSpriteByAgentType(HasStorage(_transport.destinationId, true)
+                    ? MapUtils.MapAgentMarker.AgentType.MyDistributionCenter
+                    : MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter);
             case Utils.TransportNodeType.FACTORY:
-                return TransportsController.Instance.GetSpriteByAgentType(_isGoing
-                    ? MapUtils.MapAgentMarker.AgentType.OtherFactory
-                    : MapUtils.MapAgentMarker.AgentType.MyFactory);  
+                return TransportsController.Instance.GetSpriteByAgentType(HasStorage(_transport.destinationId, false)
+                    ? MapUtils.MapAgentMarker.AgentType.MyFactory
+                    : MapUtils.MapAgentMarker.AgentType.OtherFactory);  
         }
 
         return null;
@@ -66,15 +66,20 @@ public class TransportItemController : MonoBehaviour
             case Utils.TransportNodeType.GAMEIN_CUSTOMER:
                 return TransportsController.Instance.GetSpriteByAgentType(MapUtils.MapAgentMarker.AgentType.GameinCustomer);
             case Utils.TransportNodeType.DC:
-                return TransportsController.Instance.GetSpriteByAgentType(_isGoing
+                return TransportsController.Instance.GetSpriteByAgentType(HasStorage(_transport.sourceId, true)
                     ? MapUtils.MapAgentMarker.AgentType.MyDistributionCenter
                     : MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter);
             case Utils.TransportNodeType.FACTORY:
-                return TransportsController.Instance.GetSpriteByAgentType(_isGoing
+                return TransportsController.Instance.GetSpriteByAgentType(HasStorage(_transport.sourceId, false)
                     ? MapUtils.MapAgentMarker.AgentType.MyFactory
                     : MapUtils.MapAgentMarker.AgentType.OtherFactory);
         }
 
         return null;
+    }
+
+    private bool HasStorage(int id, bool dc)
+    {
+        return StorageManager.Instance.GetStorageByBuildingIdAndType(id, dc) != null;
     }
 }

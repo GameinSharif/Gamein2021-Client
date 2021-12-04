@@ -75,10 +75,10 @@ public class TransportsController : MonoBehaviour
         _comingControllers.Clear();
         _goingControllers.Clear();
 
-        for (int i = 0; i < TransportManager.Instance.Transports.Count; i++)
+        var transportListCopy = RemoveDuplicates(TransportManager.Instance.Transports);
+        
+        foreach (var transport in transportListCopy)
         {
-            var transport = TransportManager.Instance.Transports[i];
-            
             if (transport.transportState == Utils.TransportState.PENDING) continue;
 
             var isGoing = IsGoing(transport);
@@ -98,6 +98,31 @@ public class TransportsController : MonoBehaviour
         RebuildListLayout(goingScrollPanel);
         RebuildListLayout(doneScrollPanel);
         RebuildListLayout(crashScrollPanel);
+    }
+
+    private List<Utils.Transport> RemoveDuplicates(List<Utils.Transport> mainList)
+    {
+        var newList = new List<Utils.Transport>(mainList.Count);
+
+        for (int i = 0; i < mainList.Count; i++)
+        {
+            bool isUnique = true;
+            for (int j = 0; j < newList.Count; j++)
+            {
+                if (mainList[i].id == newList[j].id)
+                {
+                    isUnique = false;
+                    break;
+                }
+            }
+
+            if (isUnique)
+            {
+                newList.Add(mainList[i]);
+            }
+        }
+        
+        return newList;
     }
 
     private bool IsGoing(Utils.Transport transport)
