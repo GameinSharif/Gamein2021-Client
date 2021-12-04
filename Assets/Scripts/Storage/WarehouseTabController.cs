@@ -108,7 +108,7 @@ public class WarehouseTabController : MonoBehaviour
         foreach (var storageProduct in _warehouse.products)
         {
             var product = GameDataManager.Instance.GetProductById(storageProduct.productId);
-            if (product.productType == type)
+            if (product.productType == type && storageProduct.amount != 0)
             {
                 list.Add(new Tuple<Utils.Product, int>(product, storageProduct.amount));
             }

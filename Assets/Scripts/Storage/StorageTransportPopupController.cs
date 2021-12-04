@@ -47,7 +47,18 @@ public class StorageTransportPopupController : MonoBehaviour
 
         InitializeDestinationDropdown();
 
+        ClearInputFields();
+        
         popup.SetActive(true);
+    }
+
+    private void ClearInputFields()
+    {
+        destinationDropDown.value = -1;
+        vehicleTypeDropDown.value = -1;
+        amountInputField.text = "";
+        insurance.SetIsOnWithoutNotify(false);
+        totalCost.text = "";
     }
 
     private void InitializeVehicleDropdown()
@@ -72,7 +83,7 @@ public class StorageTransportPopupController : MonoBehaviour
         {
             if (storage.id == _source.id) continue;
             
-            var optionData = new TMP_Dropdown.OptionData(storage.dc ? "DC " : "Warehouse " + storage.buildingId);
+            var optionData = new TMP_Dropdown.OptionData(storage.dc ? ("DC " + storage.buildingId) : "Warehouse");
             destinationDropDown.options.Add(optionData);
             _destinationOptions.Add(storage);
         }
@@ -166,7 +177,11 @@ public class StorageTransportPopupController : MonoBehaviour
     public void RefreshTotalCost()
     {
         var amount = ParseAmount();
-        if (amount == null || amount < 1) return;
+        if (amount == null || amount < 1 || destinationDropDown.value < 0 || vehicleTypeDropDown.value < 0)
+        {
+            totalCost.text = "";
+            return;
+        }
         
         var destination = _destinationOptions[destinationDropDown.value];
         var destinationType = destination.dc ? Utils.TransportNodeType.DC : Utils.TransportNodeType.FACTORY;
@@ -180,7 +195,7 @@ public class StorageTransportPopupController : MonoBehaviour
         int distance = TransportManager.Instance.GetTransportDistance(sourceLocation, destinationLocation, vehicleType);
 
         _totalCostValue = TransportManager.Instance.CalculateTransportCost(vehicleType, distance, _product.id, amount.Value, insurance.isOn);
-        totalCost.text = _totalCostValue.ToString();
+        totalCost.text = _totalCostValue.ToString("0.00");
     }
 
     private int? ParseAmount()
@@ -199,5 +214,12 @@ public class StorageTransportPopupController : MonoBehaviour
     private void OnStartTransportForPlayerStoragesResponse(StartTransportForPlayerStoragesResponse response)
     {
         Debug.Log("start transport response: " + response.response);
+
+        popup.SetActive(false);
+
+        if (response.transportDto == null)
+        {
+            DialogManager.Instance.ShowErrorDialog();
+        }
     }
 }
