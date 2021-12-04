@@ -7,17 +7,17 @@ using UnityEngine.UI;
 
 namespace ProductionLine
 {
-    public class StartProductionPopup : MonoBehaviour
+    public class StartProductionPanel : MonoBehaviour
     {
-        public GameObject choicePrefab;
-        public Transform choicesParent;
+        //public GameObject choicePrefab;
+        //public Transform choicesParent;
 
         public TMP_InputField productAmount_I;
 
-        public RTLTextMeshPro benchSize_T, total;
+        public RTLTextMeshPro total;
         
         
-        public ToggleGroup _toggleGroup;
+        //public ToggleGroup _toggleGroup;
         public Button start_B;
 
         private int _selectedProductId;
@@ -31,7 +31,9 @@ namespace ProductionLine
             }
         }
 
-        private List<GameObject> choices = new List<GameObject>();
+        public TMP_Dropdown productDropdown;
+
+        //private List<GameObject> choices = new List<GameObject>();
 
         private Utils.ProductionLineDto data;
         private Utils.ProductionLineTemplate _template;
@@ -40,10 +42,12 @@ namespace ProductionLine
         {
             for (int i = 0; i < 6; i++)
             {
-                var c = Instantiate(choicePrefab, choicesParent);
-                choices.Add(c);
-                c.GetComponent<Toggle>().group = _toggleGroup;
+                //var c = Instantiate(choicePrefab, choicesParent);
+                //choices.Add(c);
+                //c.GetComponent<Toggle>().group = _toggleGroup;
             }
+            start_B.onClick.AddListener(StartButton);
+            productDropdown.onValueChanged.AddListener(ChooseProduct);
             productAmount_I.onValueChanged.AddListener(AmountChange);
         }
 
@@ -51,29 +55,36 @@ namespace ProductionLine
         {
             this.data = data;
             _template = GameDataManager.Instance.GetProductionLineTemplateById(data.productionLineTemplateId);
-            foreach (var item in choices)
+            /*foreach (var item in choices)
             {
                 item.SetActive(false);
-            }
+            }*/
 
             var products = GameDataManager.Instance.Products
                 .Where(c => c.productionLineTemplateId == data.productionLineTemplateId).ToList();
+            
+            productDropdown.ClearOptions();
+            productDropdown.AddOptions(products.Select(c => c.name).ToList());
             for (var i = 0; i < products.Count; i++)
             {
                 var product = products[i];
-                choices[i].SetActive(true);
-                choices[i].GetComponentInChildren<Localize>().SetKey("product_" + product.name);
-                choices[i].GetComponent<Toggle>().onValueChanged.AddListener(on => Select(on, product.id));
+                //productDropdown.AddOptions(new List<string>(product.name));
+                //choices[i].SetActive(true);
+                //choices[i].GetComponentInChildren<Localize>().SetKey("product_" + product.name);
+                //choices[i].GetComponent<Toggle>().onValueChanged.AddListener(on => Select(on, product.id));
             }
-            _toggleGroup.SetAllTogglesOff();
-
-            benchSize_T.text = "\u00D7"+_template.batchSize;
+            //_toggleGroup.SetAllTogglesOff();
+            
             productAmount_I.text = "0";
-            total.text = "=" + int.Parse(productAmount_I.text) * _template.batchSize;
+            total.text = productAmount_I.text +  " \u00D7 "+_template.batchSize + " = " + int.Parse(productAmount_I.text) * _template.batchSize;
             
             SelectedProductId = -1;
         }
-        
+
+        private void ChooseProduct(int optionIndex)
+        {
+            print(optionIndex);
+        }
         private void Select(bool toggleOn, int productId)
         {
             SelectedProductId = toggleOn ? productId : -1;
@@ -85,7 +96,8 @@ namespace ProductionLine
                 productAmount_I.text = "0";
 
             start_B.interactable = int.Parse(productAmount_I.text) > 0;
-            total.text = "=" + int.Parse(productAmount_I.text) * _template.batchSize;
+            total.text = productAmount_I.text +  " \u00D7 "+_template.batchSize + " = " + int.Parse(productAmount_I.text) * _template.batchSize;
+
         }
 
         public void StartButton()

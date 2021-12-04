@@ -31,8 +31,9 @@ namespace ProductionLine
             EventManager.Instance.OnUpgradeProductionLineQualityResponseEvent += OnUpgradeProductionLineQualityResponse;
             EventManager.Instance.OnProductionLineConstructionCompletedResponseEvent += OnProductionLineConstructionCompletedResponse;
             EventManager.Instance.OnProductCreationCompletedResponseEvent += OnProductCreationCompletedResponse;
-
+            
             productionLineDetail.gameObject.SetActive(false);
+
         }
 
         public void ConstructProductionLine(int productionLineTemplateId)
@@ -86,7 +87,7 @@ namespace ProductionLine
             }
         }
 
-        private void UpdateRowNumbers()
+        /*private void UpdateRowNumbers()
         {
             for (int i = 0; i < productionLineTableRows.Count; i++)
             {
@@ -94,7 +95,7 @@ namespace ProductionLine
             }
 
             //constructButton.SetAsLastSibling();
-        }
+        }*/
 
         public void PopupConstructProductionLine()
         {
@@ -128,8 +129,8 @@ namespace ProductionLine
                 current.SetData(item);
                 productionLineTableRows.Add(current);
             }
-
-            UpdateRowNumbers();
+            
+            productionLineDetail.gameObject.SetActive(false);
         }
 
         private void OnConstructProductionLineResponse(ConstructProductionLineResponse response)
@@ -146,7 +147,6 @@ namespace ProductionLine
             var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
             current.SetData(response.productionLine, true);
             productionLineTableRows.Add(current);
-            UpdateRowNumbers();
         }
 
         private void OnScrapProductionLineResponse(ScrapProductionLineResponse response)
@@ -163,7 +163,6 @@ namespace ProductionLine
             if (current is null) return;
             productionLineTableRows.Remove(current);
             Destroy(current.gameObject);
-            UpdateRowNumbers();
 
             ShowDetails(-1);
         }
