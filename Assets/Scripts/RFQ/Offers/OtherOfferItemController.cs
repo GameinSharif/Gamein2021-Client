@@ -49,6 +49,15 @@ public class OtherOfferItemController : MonoBehaviour
         {
             return;
         }
+
+        var availableAmount =
+            StorageManager.Instance.GetProductAmountByStorage(StorageManager.Instance.GetWarehouse(), _product.id);
+
+        if (availableAmount < _offer.volume)
+        {
+            DialogManager.Instance.ShowErrorDialog("not_enough_available_amount_error");
+            return;
+        }
         
         DialogManager.Instance.ShowConfirmDialog(agreed =>
         {
