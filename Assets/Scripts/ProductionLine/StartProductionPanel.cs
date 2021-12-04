@@ -26,7 +26,7 @@ namespace ProductionLine
             get => _selectedProductId;
             set
             {
-                start_B.interactable = value != -1;
+                start_B.interactable = int.Parse(productAmount_I.text) > 0 && value != -1;
                 _selectedProductId = value;
             }
         }
@@ -37,6 +37,8 @@ namespace ProductionLine
 
         private Utils.ProductionLineDto data;
         private Utils.ProductionLineTemplate _template;
+
+        private List<Utils.Product> currentLineProducts;
 
         private void Awake()
         {
@@ -64,38 +66,39 @@ namespace ProductionLine
                 .Where(c => c.productionLineTemplateId == data.productionLineTemplateId).ToList();
             
             productDropdown.ClearOptions();
+            currentLineProducts = products;
             productDropdown.AddOptions(products.Select(c => c.name).ToList());
-            for (var i = 0; i < products.Count; i++)
-            {
-                var product = products[i];
+            //for (var i = 0; i < products.Count; i++)
+            //{
+                //var product = products[i];
                 //productDropdown.AddOptions(new List<string>(product.name));
                 //choices[i].SetActive(true);
                 //choices[i].GetComponentInChildren<Localize>().SetKey("product_" + product.name);
                 //choices[i].GetComponent<Toggle>().onValueChanged.AddListener(on => Select(on, product.id));
-            }
+            //}
             //_toggleGroup.SetAllTogglesOff();
             
             productAmount_I.text = "0";
             total.text = productAmount_I.text +  " \u00D7 "+_template.batchSize + " = " + int.Parse(productAmount_I.text) * _template.batchSize;
-            
             SelectedProductId = -1;
         }
 
         private void ChooseProduct(int optionIndex)
         {
-            print(optionIndex);
+            SelectedProductId = currentLineProducts[optionIndex].id;
+            //print(SelectedProductId);
         }
-        private void Select(bool toggleOn, int productId)
+        /*private void Select(bool toggleOn, int productId)
         {
             SelectedProductId = toggleOn ? productId : -1;
-        }
+        }*/
         
         private void AmountChange(string value)
         {
             if(string.IsNullOrEmpty(value))
                 productAmount_I.text = "0";
 
-            start_B.interactable = int.Parse(productAmount_I.text) > 0;
+            start_B.interactable = int.Parse(productAmount_I.text) > 0 && SelectedProductId != -1;
             total.text = productAmount_I.text +  " \u00D7 "+_template.batchSize + " = " + int.Parse(productAmount_I.text) * _template.batchSize;
 
         }
