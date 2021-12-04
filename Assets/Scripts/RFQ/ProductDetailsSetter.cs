@@ -31,6 +31,11 @@ public class ProductDetailsSetter : MonoBehaviour
         button.interactable = false;
     }
 
+    public void SetImageOnly(int productId)
+    {
+        productImage.sprite = GameDataManager.Instance.ProductSprites[productId - 1];
+    }
+
     public void OnClicked()
     {
         switch (_popupType)

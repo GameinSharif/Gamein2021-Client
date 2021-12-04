@@ -78,7 +78,7 @@ public class MainMenuManager : MonoBehaviour
                 OnOpenMarketPage();
                 break;
             case 4:
-                //TODO
+                OnOpenTransportPage();
                 break;
             case 5:
                 OnOpenReportsPage();
@@ -130,6 +130,12 @@ public class MainMenuManager : MonoBehaviour
     public void OnOpenReportsPage()
     {
         WeeklyReportManager.Instance.OnOpenReportsPage();
+    }
+
+    public void OnOpenTransportPage()
+    {
+        GetTeamTransportsRequest getTeamTransportsRequest = new GetTeamTransportsRequest(RequestTypeConstant.GET_TEAM_TRANSPORTS);
+        RequestManager.Instance.SendRequest(getTeamTransportsRequest);
     }
 
     public void OnLoadMapScene()

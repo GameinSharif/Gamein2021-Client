@@ -27,6 +27,7 @@ public class TransportManager : MonoBehaviour
     private void OnGetTransportsResponseReceived(GetTeamTransportsResponse getTeamTransportsResponse)
     {
         Transports = getTeamTransportsResponse.myTeamTransports;
+        TransportsController.Instance.Initialize();
     }
 
     private void OnTransportStateChangedResponseReceived(TransportStateChangedResponse transportStateChangedResponse)
@@ -38,19 +39,23 @@ public class TransportManager : MonoBehaviour
                 if (transport == null)
                 {
                     Transports.Add(transportStateChangedResponse.transport);
+                    TransportsController.Instance.AddInWay(transportStateChangedResponse.transport);
                 }
                 else
                 {
                     transport.transportState = Utils.TransportState.IN_WAY;
+                    TransportsController.Instance.AddInWay(transport);
                 }
                 break;
             case Utils.TransportState.SUCCESSFUL:
                 Transports.Remove(transport);
+                TransportsController.Instance.AddDone(transport);
                 //TODO notification or something
                 SendNotificationForSuccessfulTransport(transport);
                 break;
             case Utils.TransportState.CRUSHED:
                 Transports.Remove(transport);
+                TransportsController.Instance.AddCrashed(transport);
                 //TODO notification or something
                 SendNotificationForCrashedTransport(transport);
                 break;
