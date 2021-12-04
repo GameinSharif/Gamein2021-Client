@@ -1,14 +1,21 @@
-﻿
-using TMPro;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using RTLTMPro;
 
 public class BidForAuctionManager : MonoBehaviour
 {
-    public GameObject bidResultPopUp;
-    public GameObject successfulResult;
-    public GameObject unsuccessfulResult;
-    
+    public static BidForAuctionManager Instance;
+
+    public RTLTextMeshPro CurrentRoundText;
+    public RTLTextMeshPro RemainedTimeText;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void OnEnable()
     {
         EventManager.Instance.OnBidForAuctionResponseEvent += OnBidForAuctionResponseReceive;
@@ -23,26 +30,35 @@ public class BidForAuctionManager : MonoBehaviour
     {
         if (bidForAuctionResponse.result == "success")
         {
-            //int teamId = PlayerPrefs.GetInt("TeamId");
-            //if (bidForAuctionResponse.auction.highestBidTeamId == teamId)
-            //{
-            //    if (MapManager.IsInMap)
-            //    {
-            //        successfulResult.SetActive(true);
-            //        unsuccessfulResult.SetActive(false);
-            //        bidResultPopUp.SetActive(true);
-            //    }
-            //}
             GameDataManager.Instance.UpdateAuctionElement(bidForAuctionResponse.auction);
         }
         else
         {
             if (MapManager.IsInMap)
             {
-                successfulResult.SetActive(false);
-                unsuccessfulResult.SetActive(true);
-                bidResultPopUp.SetActive(true);
+                DialogManager.Instance.ShowErrorDialog();
             }
+        }
+    }
+
+    public IEnumerator AuctionTimer()
+    {
+        while (GameDataManager.Instance.AuctionCurrentRound < GameDataManager.Instance.GameConstants.AuctionRoundsStartTime.Count)
+        {
+            int remainedTimeInSeconds = (int) GameDataManager.Instance.GameConstants.AuctionRoundsStartTime[GameDataManager.Instance.AuctionCurrentRound].ToDateTime().AddSeconds(GameDataManager.Instance.GameConstants.AuctionRoundDurationSeconds).Subtract(DateTime.Now).TotalSeconds;
+            
+            CurrentRoundText.text = (GameDataManager.Instance.AuctionCurrentRound + 1) + "/" + GameDataManager.Instance.GameConstants.AuctionRoundsStartTime.Count;
+            
+            while (remainedTimeInSeconds > 0)
+            {
+                RemainedTimeText.text = remainedTimeInSeconds.ToString();
+
+                yield return new WaitForSeconds(1);
+
+                remainedTimeInSeconds--;
+            }
+
+            yield return null;
         }
     }
     

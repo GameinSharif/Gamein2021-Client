@@ -11,7 +11,6 @@ public class NewProviderPopupController : MonoBehaviour
     public GameObject NewProviderPopupCanvas;
 
     public List<ProductDetailsSetter> ProductDetailsSetters;
-    public List<GameObject> IsSelectedGameObjects;
 
     public TMP_InputField CapacityInputfield;
     public TMP_InputField PriceInputfield;
@@ -19,8 +18,10 @@ public class NewProviderPopupController : MonoBehaviour
     public TMP_InputField MinPriceOnRecordInputfield;
     public TMP_InputField MaxPriceOnRecordInputfield;
     public Localize minMaxLocalize;
+    public TMP_Dropdown storageDropdown;
 
-    private int _selectedProductId = 0;
+    private List<Utils.Storage> _storageOptions = new List<Utils.Storage>();
+    private Utils.Product _selectedProduct = null;
     private bool _isSendingRequest = false;
 
     private void Awake()
@@ -49,6 +50,7 @@ public class NewProviderPopupController : MonoBehaviour
         }
         else
         {
+            NewProviderPopupCanvas.SetActive(false);
             DialogManager.Instance.ShowErrorDialog();
         }
     }
@@ -60,8 +62,25 @@ public class NewProviderPopupController : MonoBehaviour
         ClearInputFields();
 
         SetProducts();
+        
+        InitializeDropdownOptions();
 
         NewProviderPopupCanvas.SetActive(true);
+    }
+
+    private void InitializeDropdownOptions()
+    {
+        _storageOptions.Clear();
+        storageDropdown.ClearOptions();
+        
+        foreach (var storage in StorageManager.Instance.Storages)
+        {
+            var optionData = new TMP_Dropdown.OptionData(storage.dc ? ("DC " + storage.buildingId): "Warehouse");
+            storageDropdown.options.Add(optionData);
+            _storageOptions.Add(storage);
+        }
+
+        storageDropdown.value = -1;
     }
 
     private void ClearInputFields()
@@ -81,37 +100,26 @@ public class NewProviderPopupController : MonoBehaviour
             if (product.productType == Utils.ProductType.SemiFinished)
             {
                 bool hasThisProductsProductionLine = ProductionLinesDataManager.Instance.HasProductionLineOfProduct(product);
-                bool isNotCurrentlyProviderOfThisProduct = !ProvidersController.Instance.myTeamProviders.Exists(p => p.productId == product.id && p.state == Utils.ProviderState.ACTIVE);
+                bool isNotCurrentlyProviderOfThisProduct = !ProvidersController.Instance.IsProviderOfProduct(product.id);
 
-                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine && isNotCurrentlyProviderOfThisProduct, index, "NewProvider");
+                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine && isNotCurrentlyProviderOfThisProduct, "NewProvider");
                 
                 index++;
             }
         }
     }
 
-    public void OnProductClick(int productId, int index)
+    public void OnProductClick(Utils.Product product)
     {
-        DisableAllSelections();
-        IsSelectedGameObjects[index].SetActive(true);
-        _selectedProductId = productId;
+        _selectedProduct = product;
 
-        var (mean, max, min) = CalculateMeanMaxMinByProductId(productId);
+        var (mean, max, min) = ProvidersController.Instance.CalculateMeanMaxMinByProductId(product.id);
 
-        AveragePriceInputfield.text = mean.ToString();
-        MaxPriceOnRecordInputfield.text = max.ToString();
-        MinPriceOnRecordInputfield.text = min.ToString();
+        AveragePriceInputfield.text = mean.ToString("0.00");
+        MaxPriceOnRecordInputfield.text = max.ToString("0.00");
+        MinPriceOnRecordInputfield.text = min.ToString("0.00");
 
-        var product = GameDataManager.Instance.GetProductById(productId);
         minMaxLocalize.SetKey("min_max_text", product.minPrice.ToString(), product.maxPrice.ToString());
-    }
-
-    public void DisableAllSelections()
-    {
-        foreach (GameObject gameObject in IsSelectedGameObjects)
-        {
-            gameObject.SetActive(false);
-        }
     }
 
     public void OnDoneButtonClick()
@@ -129,52 +137,51 @@ public class NewProviderPopupController : MonoBehaviour
             return;
         }
 
-        if (_selectedProductId == 0)
+        if (_selectedProduct == null)
         {
             DialogManager.Instance.ShowErrorDialog("no_product_selected_error");
             return;
         }
 
-        var parsedPrice = float.Parse(price);
+        if (storageDropdown.value < 0)
+        {
+            DialogManager.Instance.ShowErrorDialog("no_storage_selected_error");
+            return;
+        }
+        
         var parsedCapacity = int.Parse(capacity);
-        var product = GameDataManager.Instance.GetProductById(_selectedProductId);
+        if (parsedCapacity < 1)
+        {
+            DialogManager.Instance.ShowErrorDialog("invalid_capacity_error");
+            return; 
+        }
+        
+        var storage = _storageOptions[storageDropdown.value];
+
+        if (storage.dc)
+        {
+            var dc = GameDataManager.Instance.GetDcById(storage.buildingId);
+            bool typeMatches = dc.type == Utils.DCType.SemiFinished &&
+                               _selectedProduct.productType == Utils.ProductType.SemiFinished;
+            
+            if (!typeMatches)
+            {
+                DialogManager.Instance.ShowErrorDialog("dc_and_product_type_mismatch_error");
+                return; 
+            }
+        }
+        
+        var parsedPrice = float.Parse(price);
+        var product = _selectedProduct;
 
         if (parsedPrice > product.maxPrice || parsedPrice < product.minPrice)
         {
             DialogManager.Instance.ShowErrorDialog("price_min_max_error");
             return;
         }
-
+        
         _isSendingRequest = true;
-        NewProviderRequest newProviderRequest = new NewProviderRequest(RequestTypeConstant.NEW_PROVIDER, _selectedProductId, parsedCapacity, parsedPrice);
+        NewProviderRequest newProviderRequest = new NewProviderRequest(RequestTypeConstant.NEW_PROVIDER, _selectedProduct.id, parsedCapacity, parsedPrice, storage.id);
         RequestManager.Instance.SendRequest(newProviderRequest);
-    }
-
-    private Tuple<float, float, float> CalculateMeanMaxMinByProductId(int productId)
-    {
-        float mean = 0, min = float.MaxValue, max = float.MinValue;
-        int i = 0;
-
-        foreach (var provider in ProvidersController.Instance.otherTeamsProviders)
-        {
-            if (provider.productId != productId) continue;
-            if (provider.state == Utils.ProviderState.TERMINATED) continue;
-
-            mean = (mean * i + provider.price) / (i + 1);
-            if (provider.price > max)
-            {
-                max = provider.price;
-            } else if (provider.price < min)
-            {
-                min = provider.price;
-            }
-
-            i++;
-        }
-
-        max = max == float.MinValue ? 0 : max;
-        min = min == float.MaxValue ? 0 : min;
-
-        return new Tuple<float, float, float>(mean, max, min);
     }
 }

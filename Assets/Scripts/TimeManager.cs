@@ -18,6 +18,15 @@ public class TimeManager : MonoBehaviour
     {
         _serverTime = serverTimeResponse.serverTime;
         _diff = DateTime.Now.Subtract(_serverTime.ToDateTime());
+
+        for(int i=0; i < GameDataManager.Instance.GameConstants.AuctionRoundsStartTime.Count; i++)
+        {
+            GameDataManager.Instance.GameConstants.AuctionRoundsStartTime[i] = new CustomDateTime(GameDataManager.Instance.GameConstants.AuctionRoundsStartTime[i].ToDateTime().Add(_diff));
+        }
+
+        Debug.Log(_diff);
+
+        GameDataManager.Instance.SetAuctionCurrentRound();
     }
 
     public CustomDateTime CurrentServerTime => new CustomDateTime(DateTime.Now.Subtract(_diff));

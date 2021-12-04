@@ -4,43 +4,56 @@ using System.Collections.Generic;
 using UnityEngine;
 using RTLTMPro;
 using TMPro;
+using UnityEngine.UI;
 
 public class NegotiationsController : MonoBehaviour
 {
     public static NegotiationsController Instance;
 
-    public GameObject NegotiationItemPrefab;
-
-    public GameObject SupplyNegotiationsScrollViewParent;
-    public GameObject DemandNegotiationsScrollViewParent;
+    public GameObject negotiationItemPrefab;
 
     private List<NegotiationItemController> _supplyNegotiationItemControllers = new List<NegotiationItemController>();
     private List<NegotiationItemController> _demandNegotiationItemControllers = new List<NegotiationItemController>();
-    private List<GameObject> _spawnedGameObjects = new List<GameObject>();
+    
+    public RectTransform supplyNegotiationsScrollPanel;
+    public RectTransform demandNegotiationsScrollPanel;
+
+    private PoolingSystem<Utils.Negotiation> _supplyNegotiationsPool;
+    private PoolingSystem<Utils.Negotiation> _demandNegotiationsPool;
 
     void Awake()
     {
         Instance = this;
+
+        _supplyNegotiationsPool = new PoolingSystem<Utils.Negotiation>(supplyNegotiationsScrollPanel, negotiationItemPrefab,
+            InitializeSupplyNegotiation, 10);
+        _demandNegotiationsPool = new PoolingSystem<Utils.Negotiation>(demandNegotiationsScrollPanel, negotiationItemPrefab,
+            InitializeDemandNegotiation, 10);
     }
 
     private void OnEnable()
     {
         EventManager.Instance.OnGetNegotiationsResponseEvent += OnGetNegotiationsResponseReceived;
         EventManager.Instance.OnEditNegotiationCostPerUnitResponseEvent += OnEditNegotiationCostPerUnitResponseReceived;
+        EventManager.Instance.OnRejectNegotiationResponseEvent += OnRejectNegotiationResponse;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnGetNegotiationsResponseEvent -= OnGetNegotiationsResponseReceived;
         EventManager.Instance.OnEditNegotiationCostPerUnitResponseEvent -= OnEditNegotiationCostPerUnitResponseReceived;
+        EventManager.Instance.OnRejectNegotiationResponseEvent -= OnRejectNegotiationResponse;
     }
 
     public void OnGetNegotiationsResponseReceived(GetNegotiationsResponse getNegotiationsResponse)
     {
         _supplyNegotiationItemControllers.Clear();
         _demandNegotiationItemControllers.Clear();
-        DeactiveAllChildrenInScrollPanel();
-
+        
+        _supplyNegotiationsPool.RemoveAll();
+        _demandNegotiationsPool.RemoveAll();
+        
+        
         List<Utils.Negotiation> supplyNegotiations = new List<Utils.Negotiation>();
         List<Utils.Negotiation> demandNegotiations = new List<Utils.Negotiation>();
 
@@ -62,25 +75,34 @@ public class NegotiationsController : MonoBehaviour
 
         for (int i=0;i < supplyNegotiations.Count; i++)
         {
-            AddSupplyNegotiationToList(supplyNegotiations[i], i + 1);
+            _supplyNegotiationsPool.Add(supplyNegotiations[i]);
         }
         for (int i = 0; i < demandNegotiations.Count; i++)
         {
-            AddDemandNegotiationToList(demandNegotiations[i], i + 1);
+            _demandNegotiationsPool.Add(demandNegotiations[i]);
         }
+        
+        RebuildSupplyNegotiationsLayout();
+        RebuildDemandNegotiationsLayout();
     }
 
     private void OnEditNegotiationCostPerUnitResponseReceived(EditNegotiationCostPerUnitResponse editNegotiationCostPerUnitResponse)
     {
         if (editNegotiationCostPerUnitResponse.negotiation != null)
         {
-            foreach (NegotiationItemController negotiationItemController in _supplyNegotiationItemControllers)
+            foreach (NegotiationItemController controller in _supplyNegotiationItemControllers)
             {
-                negotiationItemController.OnEditNegotiationCostPerUnitResponseReceived(editNegotiationCostPerUnitResponse.negotiation);
+                if (controller.Negotiation.id != editNegotiationCostPerUnitResponse.negotiation.id) continue;
+                
+                controller.UpdateEditedNegotiation(editNegotiationCostPerUnitResponse.negotiation);
+                return;
             }
-            foreach (NegotiationItemController negotiationItemController in _demandNegotiationItemControllers)
+            foreach (NegotiationItemController controller in _demandNegotiationItemControllers)
             {
-                negotiationItemController.OnEditNegotiationCostPerUnitResponseReceived(editNegotiationCostPerUnitResponse.negotiation);
+                if (controller.Negotiation.id != editNegotiationCostPerUnitResponse.negotiation.id) continue;
+                
+                controller.UpdateEditedNegotiation(editNegotiationCostPerUnitResponse.negotiation);
+                return;
             }
         }
         else
@@ -89,63 +111,75 @@ public class NegotiationsController : MonoBehaviour
         }
     }
 
+    private void OnRejectNegotiationResponse(RejectNegotiationResponse response)
+    {
+        if (response.negotiation == null || response.negotiation.state != Utils.NegotiationState.CLOSED) return;
+        
+        int teamId = PlayerPrefs.GetInt("TeamId");
+        
+        if (response.negotiation.supplierId == teamId)
+        {
+            for (int i = 0; i < _supplyNegotiationItemControllers.Count; i++)
+            {
+                var controller = _supplyNegotiationItemControllers[i];
+                if (controller.Negotiation.id != response.negotiation.id) continue;
+                
+                _supplyNegotiationsPool.Remove(controller.gameObject);
+                _supplyNegotiationItemControllers.Remove(controller);
+                RebuildSupplyNegotiationsLayout();
+            }
+        }
+        else if (response.negotiation.demanderId == teamId)
+        {
+            for (int i = 0; i < _demandNegotiationItemControllers.Count; i++)
+            {
+                var controller = _demandNegotiationItemControllers[i];
+                if (controller.Negotiation.id != response.negotiation.id) continue;
+                
+                _demandNegotiationsPool.Remove(controller.gameObject);
+                _demandNegotiationItemControllers.Remove(controller);
+                RebuildDemandNegotiationsLayout();
+            }
+        }
+    }
+
+    private void InitializeSupplyNegotiation(GameObject theGameObject, int index, Utils.Negotiation negotiation)
+    {
+        var controller = theGameObject.GetComponent<NegotiationItemController>();
+        controller.Initialize(negotiation, true);
+        
+        _supplyNegotiationItemControllers.Add(controller);
+    }
+    private void InitializeDemandNegotiation(GameObject theGameObject, int index, Utils.Negotiation negotiation)
+    {
+        var controller = theGameObject.GetComponent<NegotiationItemController>();
+        controller.Initialize(negotiation, false);
+        
+        _demandNegotiationItemControllers.Add(controller);
+    }
+
+    public void RebuildSupplyNegotiationsLayout()
+    {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(supplyNegotiationsScrollPanel);
+    }
+    
+    public void RebuildDemandNegotiationsLayout()
+    {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(demandNegotiationsScrollPanel);
+    }
+
     public void AddNegotiationToList(Utils.Negotiation negotiation)
     {
         int teamId = PlayerPrefs.GetInt("TeamId");
         if (negotiation.supplierId == teamId)
         {
-            AddSupplyNegotiationToList(negotiation, _supplyNegotiationItemControllers.Count);
+            _supplyNegotiationsPool.Add(negotiation);
+            RebuildSupplyNegotiationsLayout();
         }
         else if (negotiation.demanderId == teamId)
         {
-            AddDemandNegotiationToList(negotiation, _demandNegotiationItemControllers.Count);
-        }
-    }
-
-    private void AddSupplyNegotiationToList(Utils.Negotiation negotiation, int index)
-    {
-        GameObject createdItem = GetItem(SupplyNegotiationsScrollViewParent);
-        createdItem.transform.SetSiblingIndex(index);
-
-        NegotiationItemController controller = createdItem.GetComponent<NegotiationItemController>();
-        controller.SetSupplyNegotiationInfo(index, negotiation);
-
-        _supplyNegotiationItemControllers.Add(controller);
-        createdItem.SetActive(true);
-    }
-
-    private void AddDemandNegotiationToList(Utils.Negotiation negotiation, int index)
-    {
-        GameObject createdItem = GetItem(DemandNegotiationsScrollViewParent);
-        createdItem.transform.SetSiblingIndex(index);
-
-        NegotiationItemController controller = createdItem.GetComponent<NegotiationItemController>();
-        controller.SetDemandNegotiationInfo(index, negotiation);
-
-        _demandNegotiationItemControllers.Add(controller);
-        createdItem.SetActive(true);
-    }
-
-    private GameObject GetItem(GameObject parent)
-    {
-        foreach (GameObject gameObject in _spawnedGameObjects)
-        {
-            if (!gameObject.activeSelf)
-            {
-                return gameObject;
-            }
-        }
-
-        GameObject newItem = Instantiate(NegotiationItemPrefab, parent.transform);
-        _spawnedGameObjects.Add(newItem);
-        return newItem;
-    }
-
-    private void DeactiveAllChildrenInScrollPanel()
-    {
-        foreach (GameObject gameObject in _spawnedGameObjects)
-        {
-            gameObject.SetActive(false);
+            _demandNegotiationsPool.Add( negotiation);
+            RebuildDemandNegotiationsLayout();
         }
     }
 }

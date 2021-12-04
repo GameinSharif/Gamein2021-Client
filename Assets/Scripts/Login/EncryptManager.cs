@@ -14,6 +14,9 @@ public class EncryptManager
 
         Rsa = new RSACryptoServiceProvider();
         Rsa.ImportParameters(rsaParameters);
+
+        GetGameStatusRequest getGameStatusRequest = new GetGameStatusRequest(RequestTypeConstant.GET_GAME_STATUS);
+        RequestManager.Instance.SendRequest(getGameStatusRequest);
     }
 
     public static string Encrypt(string message)

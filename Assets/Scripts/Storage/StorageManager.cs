@@ -34,7 +34,7 @@ public class StorageManager : MonoBehaviour
     {
         Storages = getStorageProductsResponse.storages;
 
-        StorageTabSelector.Instance.Initialize();
+        StorageDashboardController.Instance.Initialize();
     }
 
     private void OnRemoveProductResponseReceived(RemoveProductResponse removeProductResponse)
@@ -100,7 +100,7 @@ public class StorageManager : MonoBehaviour
             }
         }
         
-        StorageTabSelector.Instance.ApplyStockChangeToUI(storage, product);
+        StorageDashboardController.Instance.ApplyStockChangeToUI(storage, product);
     }
 
     public Utils.Storage GetWarehouse()
@@ -174,9 +174,12 @@ public class StorageManager : MonoBehaviour
         return occupiedAmount;
     }
 
-    public static void SetStorageLocalize(Localize localize, Utils.Storage storage)
+    public Tuple<int, bool> GetStorageDetailsById(int id)
     {
-        var key = storage.dc ? "Storage_Type_DC" : "Storage_Type_WAREHOUSE";
-        localize.SetKey(key, storage.buildingId.ToString());
+        int buildingId = id > GameDataManager.Instance.Factories.Count
+            ? id - GameDataManager.Instance.Factories.Count
+            : id;
+        bool dc = id > GameDataManager.Instance.Factories.Count;
+        return new Tuple<int, bool>(buildingId, dc);
     }
 }

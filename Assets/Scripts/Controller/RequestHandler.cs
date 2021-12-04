@@ -198,9 +198,34 @@ public class RequestHandler
                 EventManager.Instance.OnTerminateLongtermContractResponse(terminateLongtermContractResponse);
                 break;
             case ResponseTypeConstant.TRANSPORT_TO_STORAGE:
-                StartTransportForPlayerStoragesResponse startTransportForPlayerStoragesResponse =
-                    JsonUtility.FromJson<StartTransportForPlayerStoragesResponse>(responseJson);
+                StartTransportForPlayerStoragesResponse startTransportForPlayerStoragesResponse = JsonUtility.FromJson<StartTransportForPlayerStoragesResponse>(responseJson);
                 EventManager.Instance.OnStartTransportForPlayerStoragesResponse(startTransportForPlayerStoragesResponse);
+                break;
+            case ResponseTypeConstant.REJECT_NEGOTIATION:
+                RejectNegotiationResponse rejectNegotiationResponse = JsonUtility.FromJson<RejectNegotiationResponse>(responseJson);
+                EventManager.Instance.OnRejectNegotiationResponse(rejectNegotiationResponse);
+                break;
+            case ResponseTypeConstant.EDIT_PROVIDER:
+                EditProviderResponse editProviderResponse = JsonUtility.FromJson<EditProviderResponse>(responseJson);
+                EventManager.Instance.OnEditProviderResponse(editProviderResponse);
+                break;
+            case ResponseTypeConstant.ADD_PRODUCT:
+                //TODO remove this from server and here too
+                break;
+            case ResponseTypeConstant.UPDATE_GAME_STATUS:
+                UpdateGameStatusResponse updateGameStatusResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateGameStatusResponse), new StringEnumConverter()) as UpdateGameStatusResponse;
+                EventManager.Instance.OnUpdateGameStatusResponse(updateGameStatusResponse);
+                break;
+            case ResponseTypeConstant.ACCESS_DENIED:
+                //TODO
+                break;
+            case ResponseTypeConstant.GET_ALL_WEEKLY_REPORTS:
+                GetAllWeeklyReportsResponse getAllWeeklyReportsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetAllWeeklyReportsResponse), new StringEnumConverter()) as GetAllWeeklyReportsResponse;
+                EventManager.Instance.OnGetAllWeeklyReportsResponse(getAllWeeklyReportsResponse);
+                break;
+            case ResponseTypeConstant.UPDATE_WEEKLY_REPORT:
+                UpdateWeeklyReportResponse updateWeeklyReportResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateWeeklyReportResponse), new StringEnumConverter()) as UpdateWeeklyReportResponse;
+                EventManager.Instance.OnUpdateWeeklyReportResponse(updateWeeklyReportResponse);
                 break;
             default:
                 Debug.LogWarning(responseJson);

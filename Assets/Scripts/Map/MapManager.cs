@@ -74,6 +74,11 @@ public class MapManager : MonoBehaviour
             SnapToMyTeamLocation();
         }
 
+        if (!GameDataManager.Instance.IsAuctionOver())
+        {
+            StartCoroutine(BidForAuctionManager.Instance.AuctionTimer());
+        }
+
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
 
@@ -87,7 +92,7 @@ public class MapManager : MonoBehaviour
         SnapToLocation(GameDataManager.Instance.GetMyTeamLocaionOnMap());
     }
 
-    private void InitializeGameDataOnMap()
+    public void InitializeGameDataOnMap()
     {
         InitializeMapMarkers();
         InitializeLines();

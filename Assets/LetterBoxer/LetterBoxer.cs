@@ -53,18 +53,7 @@ public class LetterBoxer : MonoBehaviour
 
     private void AddLetterBoxingCamera()
     {
-        // create a camera to render bcakground used for matte bars
-        letterBoxerCamera = new GameObject().AddComponent<Camera>();
-        letterBoxerCamera.backgroundColor = matteColor;
-        letterBoxerCamera.cullingMask = 0;
-        letterBoxerCamera.depth = -100;
-        letterBoxerCamera.farClipPlane = 1;
-        letterBoxerCamera.useOcclusionCulling = false;
-        letterBoxerCamera.allowHDR = false;
-        letterBoxerCamera.allowMSAA = false;
-        letterBoxerCamera.clearFlags = CameraClearFlags.Color;
-        letterBoxerCamera.name = "Letter Boxer Camera";
-
+        int depth = -100;
         // check that we don't have a camera already at -100 (lowest depth) which will cause issues
         Camera[] allCameras = FindObjectsOfType<Camera>();
         foreach (Camera camera in allCameras)
@@ -76,10 +65,22 @@ public class LetterBoxer : MonoBehaviour
                     return;
                 }
                 
-                letterBoxerCamera.depth = -99;
+                depth = -99;
                 //Debug.LogError("Found " + camera.name + " with a depth of -100. Will cause letter boxing issues. Please increase it's depth.");
             }
-        }    
+        }
+
+        // create a camera to render bcakground used for matte bars
+        letterBoxerCamera = new GameObject().AddComponent<Camera>();
+        letterBoxerCamera.backgroundColor = matteColor;
+        letterBoxerCamera.cullingMask = 0;
+        letterBoxerCamera.depth = depth;
+        letterBoxerCamera.farClipPlane = 1;
+        letterBoxerCamera.useOcclusionCulling = false;
+        letterBoxerCamera.allowHDR = false;
+        letterBoxerCamera.allowMSAA = false;
+        letterBoxerCamera.clearFlags = CameraClearFlags.Color;
+        letterBoxerCamera.name = "Letter Boxer Camera";
     }
 
     // based on logic here from http://gamedesigntheory.blogspot.com/2010/09/controlling-aspect-ratio-in-unity.html

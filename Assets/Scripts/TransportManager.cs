@@ -47,10 +47,12 @@ public class TransportManager : MonoBehaviour
             case Utils.TransportState.SUCCESSFUL:
                 Transports.Remove(transport);
                 //TODO notification or something
+                SendNotificationForSuccessfulTransport(transport);
                 break;
             case Utils.TransportState.CRUSHED:
                 Transports.Remove(transport);
                 //TODO notification or something
+                SendNotificationForCrashedTransport(transport);
                 break;
             case Utils.TransportState.PENDING:
                 Transports.Add(transportStateChangedResponse.transport);
@@ -63,6 +65,50 @@ public class TransportManager : MonoBehaviour
         {
             MapManager.Instance.UpdateLine(transportStateChangedResponse.transport);
         }
+    }
+
+    private void SendNotificationForSuccessfulTransport(Utils.Transport transport)
+    {
+        string localizeKey = "";
+        string name = "";
+        switch (transport.destinationType)
+        {
+            case Utils.TransportNodeType.DC:
+                name = GameDataManager.Instance.GetDcById(transport.destinationId).name;
+                localizeKey = "notification_transport_successful_DC";
+                break;
+            case Utils.TransportNodeType.FACTORY:
+                name = GameDataManager.Instance.GetFactoryById(transport.destinationId).name;
+                localizeKey = "notification_transport_successful_factory";
+                break;
+            case Utils.TransportNodeType.GAMEIN_CUSTOMER:
+                name = GameDataManager.Instance.GetGameinCustomerById(transport.destinationId).name;
+                localizeKey = "notification_transport_successful_gamein";
+                break;
+        }
+        NotificationsController.Instance.AddNewNotification(localizeKey, name);
+    }
+    
+    private void SendNotificationForCrashedTransport(Utils.Transport transport)
+    {
+        string localizeKey = "";
+        string name = "";
+        switch (transport.destinationType)
+        {
+            case Utils.TransportNodeType.DC:
+                name = GameDataManager.Instance.GetDcById(transport.destinationId).name;
+                localizeKey = "notification_transport_crashed_DC";
+                break;
+            case Utils.TransportNodeType.FACTORY:
+                name = GameDataManager.Instance.GetFactoryById(transport.destinationId).name;
+                localizeKey = "notification_transport_crashed_factory";
+                break;
+            case Utils.TransportNodeType.GAMEIN_CUSTOMER:
+                name = GameDataManager.Instance.GetGameinCustomerById(transport.destinationId).name;
+                localizeKey = "notification_transport_crashed_gamein";
+                break;
+        }
+        NotificationsController.Instance.AddNewNotification(localizeKey, name);
     }
 
     private Utils.Transport GetTransportById(int id)

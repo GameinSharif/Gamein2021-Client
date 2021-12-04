@@ -10,6 +10,8 @@ public class MainMenuManager : MonoBehaviour
     public static MainMenuManager Instance;
     public static bool IsLoadingMap;
 
+    public GameObject HeaderFooterGameObject;
+
     public List<GameObject> MainMenuTabCanvasGameobjects;
     public List<Image> MainMenuTabButtonsImages;
 
@@ -34,16 +36,22 @@ public class MainMenuManager : MonoBehaviour
 
         var request = new GetProductionLinesRequest(RequestTypeConstant.GET_PRODUCTION_LINES);
         RequestManager.Instance.SendRequest(request);
+
+        GetAllWeeklyReportsRequest getAllWeeklyReportsRequest = new GetAllWeeklyReportsRequest(RequestTypeConstant.GET_ALL_WEEKLY_REPORTS);
+        RequestManager.Instance.SendRequest(getAllWeeklyReportsRequest);
     }
 
     private void Start()
     {
         if (PlayerPrefs.GetInt("FactoryId") == 0)
         {
+            HeaderFooterGameObject.SetActive(false);
             CountrySelectionController.Instance.Initialize();
         }
-
-        OpenPage(0);
+        else
+        {
+            OpenPage(0);
+        }
     }
 
     public void OpenPage(int index)
@@ -73,7 +81,7 @@ public class MainMenuManager : MonoBehaviour
                 //TODO
                 break;
             case 5:
-                //TODO
+                OnOpenReportsPage();
                 break;
         }
 
@@ -103,6 +111,8 @@ public class MainMenuManager : MonoBehaviour
 
         GameinSuppliersController.Instance.UpdateSupplies();
         GameinCustomersController.Instance.UpdateDemands();
+
+        RFQTabsManager.Instance.OnOpenMarketPage();
     }
 
     public void OnOpenProductionLinesPage()
@@ -117,9 +127,14 @@ public class MainMenuManager : MonoBehaviour
         RequestManager.Instance.SendRequest(getStorageProductsRequest);
     }
 
+    public void OnOpenReportsPage()
+    {
+        WeeklyReportManager.Instance.OnOpenReportsPage();
+    }
+
     public void OnLoadMapScene()
     {
-        if (IsLoadingMap)
+        if (IsLoadingMap || MapManager.IsInMap)
         {
             return;
         }
@@ -133,6 +148,7 @@ public class MainMenuManager : MonoBehaviour
         if (SceneManager.sceneCount > 1)
         {
             SceneManager.UnloadSceneAsync("MapScene");
+            MapManager.IsInMap = false;
         }
 
         foreach (GameObject gameObject in MainMenuTabCanvasGameobjects)

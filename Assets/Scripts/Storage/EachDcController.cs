@@ -38,7 +38,7 @@ public class EachDcController : MonoBehaviour
 
     public void OnDcMarkerClicked()
     {      
-        if (!_isClickable)
+        if (!_isClickable || !GameDataManager.Instance.IsAuctionOver())
         {
             return;
         }

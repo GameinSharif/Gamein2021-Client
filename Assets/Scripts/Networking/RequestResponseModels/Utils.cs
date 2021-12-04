@@ -5,6 +5,14 @@ using ProductionLine;
 
 public class Utils
 {
+    public enum GameStatus
+    {
+        RUNNING,
+        PAUSED,
+        STOPPED
+    }
+
+
     [Serializable]
     public class Team
     {
@@ -30,6 +38,7 @@ public class Utils
         public int capacity;
         public float price;
         public ProviderState state;
+        public int storageId;
     }
 
     public enum OfferStatus
@@ -49,7 +58,7 @@ public class Utils
         public int volume;
         public OfferStatus offerStatus;
         public float costPerUnit;
-        public CustomDate offerDeadline;
+        public CustomDate acceptDate;
     }
 
     public enum NegotiationState
@@ -70,6 +79,7 @@ public class Utils
         public float costPerUnitDemander;
         public float costPerUnitSupplier;
         public NegotiationState state;
+        public int sourceStorageId;
     }
     
     [Serializable]
@@ -261,6 +271,7 @@ public class Utils
         Over
     }
 
+    [Serializable]
     public class Auction
     {
         public int id;
@@ -271,6 +282,7 @@ public class Utils
         public AuctionBidStatus auctionBidStatus;
     }
 
+    [Serializable]
     public class GameConstants
     {
         public int AuctionStartValue;
@@ -344,6 +356,7 @@ public class Utils
         AIRPLANE, TRUCK, TRAIN, VANET
     }
 
+    [Serializable]
     public class Vehicle
     {
         public int id;
@@ -364,6 +377,7 @@ public class Utils
         SUCCESSFUL, IN_WAY, CRUSHED, PENDING
     }
 
+    [Serializable]
     public class Transport
     {
         public int id;
@@ -378,5 +392,22 @@ public class Utils
         public TransportState transportState;
         public int contentProductId;
         public int contentProductAmount;
+    }
+
+    [Serializable]
+    public class WeeklyReport
+    {
+        public int weekNumber;
+        public int teamId;
+        public int ranking;
+        public float brand;
+        public float rawMaterialPercentage;
+        public float intermediateMaterialPercentage;
+        public float finalProductPercentage;
+        public float totalCapital;
+        public float inFlow;
+        public float outFlow;
+        public float transportationCosts;
+        public float productionCosts;
     }
 }

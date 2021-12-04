@@ -246,70 +246,60 @@ public class EventManager : MonoBehaviour
     }
 
     public event Action<GetProductionLinesResponse> OnGetProductionLinesResponseEvent;
-
     public void OnGetProductionLinesResponse(GetProductionLinesResponse response)
     {
         OnGetProductionLinesResponseEvent?.Invoke(response);
     }
 
     public event Action<ConstructProductionLineResponse> OnConstructProductionLineResponseEvent;
-
     public void OnConstructProductionLineResponse(ConstructProductionLineResponse response)
     {
         OnConstructProductionLineResponseEvent?.Invoke(response);
     }
 
     public event Action<ScrapProductionLineResponse> OnScrapProductionLineResponseEvent;
-
     public void OnScrapProductionLineResponse(ScrapProductionLineResponse response)
     {
         OnScrapProductionLineResponseEvent?.Invoke(response);
     }
 
     public event Action<StartProductionResponse> OnStartProductionResponseEvent;
-
     public void OnStartProductionResponse(StartProductionResponse response)
     {
         OnStartProductionResponseEvent?.Invoke(response);
     }
 
     public event Action<UpgradeProductionLineEfficiencyResponse> OnUpgradeProductionLineEfficiencyResponseEvent;
-
     public void OnUpgradeProductionLineEfficiencyResponse(UpgradeProductionLineEfficiencyResponse response)
     {
         OnUpgradeProductionLineEfficiencyResponseEvent?.Invoke(response);
     }
 
     public event Action<UpgradeProductionLineQualityResponse> OnUpgradeProductionLineQualityResponseEvent;
-
     public void OnUpgradeProductionLineQualityResponse(UpgradeProductionLineQualityResponse response)
     {
         OnUpgradeProductionLineQualityResponseEvent?.Invoke(response);
     }
     
     public event Action<ProductCreationCompletedResponse> OnProductCreationCompletedResponseEvent;
-
     public void OnProductCreationCompletedResponse(ProductCreationCompletedResponse response)
     {
         OnProductCreationCompletedResponseEvent?.Invoke(response);
     }
     
     public event Action<ProductionLineConstructionCompletedResponse> OnProductionLineConstructionCompletedResponseEvent;
-
     public void OnProductionLineConstructionCompletedResponse(ProductionLineConstructionCompletedResponse response)
     {
         OnProductionLineConstructionCompletedResponseEvent?.Invoke(response);
     }
     
     public event Action<GetAllActiveDcResponse> OnGetAllActiveDcResponseEvent;
-
     public void OnGetAllActiveDcResponse(GetAllActiveDcResponse response)
     {
         OnGetAllActiveDcResponseEvent?.Invoke(response);
     }
 
     public event Action<RemoveProductResponse> OnRemoveProductResponseEvent;
-
     public void OnRemoveProductResponse(RemoveProductResponse response)
     {
         OnRemoveProductResponseEvent?.Invoke(response);
@@ -319,5 +309,35 @@ public class EventManager : MonoBehaviour
     public void OnStartTransportForPlayerStoragesResponse(StartTransportForPlayerStoragesResponse response)
     {
         OnStartTransportForPlayerStoragesResponseEvent?.Invoke(response);
+    }
+
+    public event Action<RejectNegotiationResponse> OnRejectNegotiationResponseEvent;
+    public void OnRejectNegotiationResponse(RejectNegotiationResponse response)
+    {
+        OnRejectNegotiationResponseEvent?.Invoke(response);
+    }
+
+    public event Action<EditProviderResponse> OnEditProviderResponseEvent;
+    public void OnEditProviderResponse(EditProviderResponse response)
+    {
+        OnEditProviderResponseEvent?.Invoke(response);
+    }
+
+    public event Action<GetAllWeeklyReportsResponse> OnGetAllWeeklyReportsResponseEvent;
+    public void OnGetAllWeeklyReportsResponse(GetAllWeeklyReportsResponse response)
+    {
+        OnGetAllWeeklyReportsResponseEvent?.Invoke(response);
+    }
+
+    public event Action<UpdateWeeklyReportResponse> OnUpdateWeeklyReportResponseEvent;
+    public void OnUpdateWeeklyReportResponse(UpdateWeeklyReportResponse response)
+    {
+        OnUpdateWeeklyReportResponseEvent?.Invoke(response);
+    }
+
+    public event Action<UpdateGameStatusResponse> OnUpdateGameStatusResponseEvent;
+    public void OnUpdateGameStatusResponse(UpdateGameStatusResponse response)
+    {
+        OnUpdateGameStatusResponseEvent?.Invoke(response);
     }
 }
