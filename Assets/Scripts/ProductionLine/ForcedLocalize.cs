@@ -1,7 +1,7 @@
 using RTLTMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(RTLTextMeshPro))]
+[RequireComponent(typeof(RTLTextMeshPro), typeof(Localize))]
 public class ForcedLocalize : MonoBehaviour
 {
     private RTLTextMeshPro text;
@@ -14,10 +14,9 @@ public class ForcedLocalize : MonoBehaviour
         text.onChange += SetLocalize;
     }
 
-    private void SetLocalize()
+    private void SetLocalize(string newValue)
     {
-        if(!text.text.StartsWith("product_")) return;
-        text.onChange -= SetLocalize;
-        localize.SetKey(text.text);
+        if(!newValue.StartsWith("product_")) return;
+        localize.SetKey(newValue);
     }
 }

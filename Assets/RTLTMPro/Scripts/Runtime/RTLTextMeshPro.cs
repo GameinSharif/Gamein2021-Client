@@ -21,7 +21,7 @@ namespace RTLTMPro
                     return;
 
                 originalText = value;
-
+                onChange.Invoke(originalText);
                 UpdateText();
             }
         }
@@ -95,7 +95,7 @@ namespace RTLTMPro
 
         protected readonly FastStringBuilder finalText = new FastStringBuilder(RTLSupport.DefaultBufferSize);
         
-        public Action onChange = delegate {  };
+        public Action<string> onChange = delegate {  };
 
         protected void Update()
         {
@@ -107,7 +107,6 @@ namespace RTLTMPro
 
         public virtual void UpdateText()
         {
-            onChange.Invoke();
             if (originalText == null)
                 originalText = "";
 
