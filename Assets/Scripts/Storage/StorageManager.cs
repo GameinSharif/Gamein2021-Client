@@ -11,7 +11,6 @@ public class StorageManager : MonoBehaviour
         get;
         private set;
     }
-    
 
     private void Awake()
     {

@@ -35,7 +35,6 @@ public class SuppliersController : MonoBehaviour
 
         ContractsParentGameObject.SetActive(false);
         SuppliersParentGameObject.SetActive(true);
-        //Canvas.ForceUpdateCanvases();
     }
         
     private void SetSupplies()

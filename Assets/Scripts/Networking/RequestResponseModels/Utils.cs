@@ -100,7 +100,6 @@ public class Utils
         public float maxPrice;
         public int lostSalePenalty;
         public int terminatePenalty;
-        public bool isTerminated;
     }
 
     [Serializable]

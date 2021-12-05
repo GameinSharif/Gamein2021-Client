@@ -3,6 +3,6 @@
 [Serializable]
 public class TerminateLongtermContractSupplierResponse : ResponseObject
 {
-    public String result;
+    public string result;
     public Utils.ContractSupplier contractSupplier;
 }

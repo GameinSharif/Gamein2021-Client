@@ -8,19 +8,25 @@ using System.Net.NetworkInformation;
 using RTLTMPro;
 using UnityEngine.UI;
 
-public class MakeADealWithDemanderPopupController : MonoBehaviour
+public class NewContractController : MonoBehaviour
 {
-    public static MakeADealWithDemanderPopupController Instance;
+    public static NewContractController Instance;
 
-    public GameObject makeADealWithDemanderPopupCanvas;
+    public GameObject NewContractPopupCanvasGameObject;
 
     public Image productImage;
     public Localize productNameLocalize;
+    public RTLTextMeshPro customerName;
     public TMP_InputField amount;
     public TMP_InputField numberOfRepetition;
     public TMP_InputField price;
+    public TMP_Dropdown sourceStorageDropDown;
 
+    public Localize demandAmount;
+
+    private bool _firstTimeInitializing = true;
     private Utils.WeekDemand _weekDemand;
+    private List<Utils.Storage> _storages = new List<Utils.Storage>();
 
     private void Awake()
     {
@@ -41,11 +47,8 @@ public class MakeADealWithDemanderPopupController : MonoBehaviour
     {
         if (newContractResponse.contract != null)
         {
-            List<Utils.Contract> contracts = new List<Utils.Contract>();
-            contracts.Add(newContractResponse.contract);
-            ContractsManager.Instance.AddContractItemsToList(contracts);
-            //Utils.Contract firstContract = contracts[0];
-            makeADealWithDemanderPopupCanvas.SetActive(false);
+            ContractsManager.Instance.AddContractItemToList(newContractResponse.contract);
+            NewContractPopupCanvasGameObject.SetActive(false);
         }
         else
         {
@@ -62,9 +65,34 @@ public class MakeADealWithDemanderPopupController : MonoBehaviour
         Utils.Product product = GameDataManager.Instance.GetProductById(weekDemand.productId);
         productNameLocalize.SetKey("product_" + product.name);
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
-        makeADealWithDemanderPopupCanvas.SetActive(true);
+        demandAmount.SetKey("new_contract_demand", _weekDemand.amount.ToString());
+        customerName.text = GameDataManager.Instance.GetGameinCustomerById(_weekDemand.gameinCustomerId).name;
+
+        if (_firstTimeInitializing)
+        {
+            InitializeStorageDropdown();
+        }
+        _firstTimeInitializing = false;
+
+        NewContractPopupCanvasGameObject.SetActive(true);
     }
-    
+
+    private void InitializeStorageDropdown()
+    {
+        sourceStorageDropDown.options.Clear();
+        _storages.Clear();
+
+        foreach (Utils.Storage storage in StorageManager.Instance.Storages)
+        {
+            var optionData = new TMP_Dropdown.OptionData(storage.dc ? "DC " + storage.buildingId : "Warehouse");
+
+            sourceStorageDropDown.options.Add(optionData);
+            _storages.Add(storage);
+        }
+
+        sourceStorageDropDown.value = CustomersController.Instance.StorageIndex;
+    }
+
     private int GetRepetitionWeeks()
     {
         string weeks = numberOfRepetition.text;
@@ -89,50 +117,53 @@ public class MakeADealWithDemanderPopupController : MonoBehaviour
 
     private bool HasContractWithDemanderThisWeek()
     {
-        //TODO how to get date of current contract
-        CustomDate thisWeekDate = new CustomDate(2020, 12, 3);
-        List<Utils.Contract> contracts = ContractsManager.Instance.myContracts;
-        bool result = false;
-        foreach (Utils.Contract contract in contracts)
+        DateTime currentDate = MainHeaderManager.Instance.gameDate.ToDateTime();
+
+        int num_days = DayOfWeek.Friday - currentDate.DayOfWeek;
+        if (num_days < 0) num_days += 7;
+
+        DateTime friday = currentDate.AddDays(num_days);
+
+        foreach (Utils.Contract contract in ContractsManager.Instance.myContracts)
         {
-            if (contract.gameinCustomerId == _weekDemand.gameinCustomerId && contract.contractDate == thisWeekDate)
+            if (contract.gameinCustomerId == _weekDemand.gameinCustomerId && contract.contractDate.ToDateTime() == friday)
             {
-                result = true;
+                return true;
             }
         }
 
-        return result;
+        return false;
     }
     
     public void OnDoneButtonClick()
     {
-        Debug.LogWarning(1);
         string amountText = amount.text;
         string priceText = price.text;
         int weeks = GetRepetitionWeeks();
+
         if (weeks < 0 || string.IsNullOrEmpty(amountText) || string.IsNullOrEmpty(priceText))
         {
             DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
             return;
         }
-        Debug.LogWarning(2);
-        if (IsPriceInRange() && !HasContractWithDemanderThisWeek())
-        {
-            int amountInt = int.Parse(amount.text);
-            int priceInt = int.Parse(priceText);
-            NewContractRequest newContract = new NewContractRequest(RequestTypeConstant.NEW_CONTRACT, _weekDemand.gameinCustomerId, _weekDemand.productId, amountInt,
-                priceInt, weeks);
-            RequestManager.Instance.SendRequest(newContract);
-        }
+
         if (!IsPriceInRange())
         {
             DialogManager.Instance.ShowErrorDialog("price_not_in_range_error");
+            return;
         }
 
         if (HasContractWithDemanderThisWeek())
         {
             DialogManager.Instance.ShowErrorDialog("has_contract_this_week_error");
+            return;
 
         }
+
+        int amountInt = int.Parse(amount.text);
+        int priceInt = int.Parse(priceText);
+
+        NewContractRequest newContract = new NewContractRequest(RequestTypeConstant.NEW_CONTRACT, _weekDemand.gameinCustomerId, _storages[sourceStorageDropDown.value].id, _weekDemand.productId, amountInt, priceInt, weeks);
+        RequestManager.Instance.SendRequest(newContract);
     }
 }

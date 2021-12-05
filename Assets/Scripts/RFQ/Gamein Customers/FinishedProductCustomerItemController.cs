@@ -5,31 +5,33 @@ using RTLTMPro;
 
 public class FinishedProductCustomerItemController : MonoBehaviour
 {
-    public RTLTextMeshPro no;
     public RTLTextMeshPro customerName;
     public RTLTextMeshPro amount;
+    public RTLTextMeshPro distance;
 
     public GameObject showOnMapButton;
     public GameObject makeADealWithCustomerButton;
 
     private Utils.WeekDemand _weekDemand;
+    private Utils.Storage _storage;
 
-    public void SetInfo(int no, string DemanderName, string amount)
+    public void SetInfo(Utils.WeekDemand weekDemand, Utils.Storage storage)
     {
-        this.no.text = no.ToString();
-        this.customerName.text = DemanderName;
-        this.amount.text = amount;
+        _weekDemand = weekDemand;
+        _storage = storage;
+
+        customerName.text = GameDataManager.Instance.GetCustomerById(weekDemand.gameinCustomerId).name;
+        amount.text = weekDemand.amount.ToString();
+
+        CalculateDistance();
     }
 
-    public void SetInfo(int no, Utils.WeekDemand weekDemand)
+    private void CalculateDistance()
     {
-        SetInfo(
-            no: no,
-            DemanderName: GameDataManager.Instance.GetCustomerById(weekDemand.gameinCustomerId).name,
-            amount: weekDemand.amount.ToString()
-        );
-        
-        _weekDemand = weekDemand;
+        Vector2 sourceLocation = GameDataManager.Instance.GetLocationByTypeAndId(_storage.dc ? Utils.TransportNodeType.DC : Utils.TransportNodeType.FACTORY, _storage.buildingId);
+        Vector2 destinationLocation = GameDataManager.Instance.GetLocationByTypeAndId(Utils.TransportNodeType.GAMEIN_CUSTOMER, _weekDemand.gameinCustomerId);
+
+        distance.text = TransportManager.Instance.GetTransportDistance(sourceLocation, destinationLocation) + "KM";
     }
 
     public void OnShowOnMapButtonClicked()
@@ -43,7 +45,14 @@ public class FinishedProductCustomerItemController : MonoBehaviour
 
     public void OnMakeADealWithDemanderButtonClicked()
     {
-        MakeADealWithDemanderPopupController.Instance.OnOpenMakeADealPopupClick(_weekDemand);
+        NewContractController.Instance.OnOpenMakeADealPopupClick(_weekDemand);
+    }
+
+    public void OnChangeSourceStorage(Utils.Storage storage)
+    {
+        _storage = storage;
+
+        CalculateDistance();
     }
 
 }

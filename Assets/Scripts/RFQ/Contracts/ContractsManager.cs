@@ -40,30 +40,20 @@ public class ContractsManager : MonoBehaviour
 
         for (int i=0; i < getContractsResponse.contracts.Count; i++)
         {
-            AddContractItemToList(getContractsResponse.contracts[i], i);
+            AddContractItemToList(getContractsResponse.contracts[i]);
         }
 
         Canvas.ForceUpdateCanvases();
     }
 
-    private void AddContractItemToList(Utils.Contract contract, int index)
+    public void AddContractItemToList(Utils.Contract contract)
     {
         GameObject contractGameObject = GetPoolledContractGameObject();
 
         SetContractDetail setContractDetail = contractGameObject.GetComponent<SetContractDetail>();
         setContractDetail.InitializeContract(contract);
 
-        contractGameObject.transform.SetSiblingIndex(index + 1);
         contractGameObject.SetActive(true);
-    }
-
-    public void AddContractItemsToList(List<Utils.Contract> contracts)
-    {
-        foreach (Utils.Contract contract in contracts)
-        {
-            myContracts.Add(contract);
-            AddContractItemToList(contract, myContracts.Count-1);   
-        }
     }
     
     private GameObject GetPoolledContractGameObject()
@@ -80,6 +70,4 @@ public class ContractsManager : MonoBehaviour
         _spawnedObjects.Add(instance);
         return instance;
     }
-
-    //TODO new contract gamein customer
 }

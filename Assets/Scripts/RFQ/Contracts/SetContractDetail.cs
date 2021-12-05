@@ -8,17 +8,12 @@ public class SetContractDetail : MonoBehaviour
     [HideInInspector] public Utils.Contract contractData;
 
     public RTLTextMeshPro gameinCustomerNameTxt;
-    public RTLTextMeshPro productNameTxt;
+    public Localize productNameLocalize;
     public RTLTextMeshPro contractDateTxt;
     public RTLTextMeshPro supplyAmountTxt;
     public RTLTextMeshPro pricePerUnitTxt;
     public RTLTextMeshPro boughtAmountTxt;
-    public RTLTextMeshPro currentWeekTeamBrandTxt;
     public RTLTextMeshPro demandShareTxt;
-    public RTLTextMeshPro valueShareTxt;
-    public RTLTextMeshPro currentWeekPriceRangeTxt;
-    public RTLTextMeshPro terminatePenaltyTxt;
-    public RTLTextMeshPro lostSalePenaltyTxt;
     
     public GameObject terminateButtonGameObject;
 
@@ -35,17 +30,12 @@ public class SetContractDetail : MonoBehaviour
     public void InitializeContract(Utils.Contract contractData)
     {
         gameinCustomerNameTxt.text = GameDataManager.Instance.GetGameinCustomerById(contractData.gameinCustomerId).name;
-        productNameTxt.text = GameDataManager.Instance.Products[contractData.productId].name;
+        productNameLocalize.SetKey("product_" + GameDataManager.Instance.Products[contractData.productId].name);
         contractDateTxt.text = contractData.contractDate.ToString();
         supplyAmountTxt.text = contractData.supplyAmount.ToString();
-        pricePerUnitTxt.text = contractData.pricePerUnit.ToString("0.00") + "$";
+        pricePerUnitTxt.text = contractData.pricePerUnit.ToString("0.00");
         boughtAmountTxt.text = contractData.boughtAmount.ToString();
-        currentWeekTeamBrandTxt.text = contractData.currentBrand.ToString("0.00");
-        demandShareTxt.text = contractData.demandShare.ToString("0.00");
-        valueShareTxt.text = contractData.valueShare.ToString("0.00");
-        currentWeekPriceRangeTxt.text = contractData.minPrice.ToString("0.00") + " - " + contractData.maxPrice.ToString("0.00");
-        terminatePenaltyTxt.text = contractData.terminatePenalty.ToString();
-        lostSalePenaltyTxt.text = contractData.lostSalePenalty.ToString();
+        demandShareTxt.text = contractData.demandShare.ToString("0.00") + "%";
 
         this.contractData = contractData;
     }
@@ -61,7 +51,6 @@ public class SetContractDetail : MonoBehaviour
             }
         });
     }
-
     
     public void OnTerminateLongtermContractResponseReceived(TerminateLongtermContractResponse terminateLongtermContractResponse)
     {
@@ -71,8 +60,13 @@ public class SetContractDetail : MonoBehaviour
             {
                 DialogManager.Instance.ShowErrorDialog("contract_supplier_successfully_terminated");
                 MainHeaderManager.Instance.Money -= terminateLongtermContractResponse.terminatedContract.terminatePenalty;
-                terminateButtonGameObject.SetActive(false);
+                gameObject.SetActive(false);
             }
         }
+    }
+
+    public void OnShowMoreDetailsButtonClick()
+    {
+        ContractMoreDetailsController.Instance.ShowMoreDetailsButtonClick(contractData);
     }
 }

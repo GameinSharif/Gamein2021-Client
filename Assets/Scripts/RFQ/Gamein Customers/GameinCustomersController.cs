@@ -36,7 +36,7 @@ public class GameinCustomersController : MonoBehaviour
         createdItem.transform.SetSiblingIndex(index);
 
         FinishedProductItemController controller = createdItem.GetComponent<FinishedProductItemController>();
-        controller.SetInfo(index, product);
+        controller.SetInfo(product);
 
         createdItem.SetActive(true);
     }
