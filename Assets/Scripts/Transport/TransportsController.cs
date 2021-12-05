@@ -28,7 +28,21 @@ public class TransportsController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
 
+    public Sprite GetSpriteByAgentType(MapUtils.MapAgentMarker.AgentType agentType)
+    {
+        return markerSprites[(int) agentType];
+    }
+
+    public Sprite GetVehicleSprite(Utils.VehicleType transportVehicleType)
+    {
+        return vehicleSprites[(int) transportVehicleType];
+    }
+
+    //resets everything
+    public void Initialize()
+    {
         _comingPool = new PoolingSystem<Tuple<Utils.Transport, bool, bool>>(
             comingScrollPanel,
             transportItemPrefab,
@@ -52,26 +66,7 @@ public class TransportsController : MonoBehaviour
             transportItemPrefab,
             InitializeTransportItem
         );
-    }
 
-    public Sprite GetSpriteByAgentType(MapUtils.MapAgentMarker.AgentType agentType)
-    {
-        return markerSprites[(int) agentType];
-    }
-
-    public Sprite GetVehicleSprite(Utils.VehicleType transportVehicleType)
-    {
-        return vehicleSprites[(int) transportVehicleType];
-    }
-
-    //resets everything
-    public void Initialize()
-    {
-        _comingPool.RemoveAll();
-        _goingPool.RemoveAll();
-        _crashPool.RemoveAll();
-        _donePool.RemoveAll();
-        
         _comingControllers.Clear();
         _goingControllers.Clear();
 
