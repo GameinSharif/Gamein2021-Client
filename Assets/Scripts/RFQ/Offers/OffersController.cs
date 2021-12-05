@@ -111,6 +111,12 @@ public class OffersController : MonoBehaviour
 
     private void OnAcceptOfferResponse(AcceptOfferResponse response)
     {
+        if (response.acceptedOffer == null)
+        {
+            DialogManager.Instance.ShowErrorDialog();
+            return;
+        }
+        
         if (response.acceptedOffer.teamId != PlayerPrefs.GetInt("TeamId"))
         {
             for (int i = 0; i < _otherTeamsOfferItemControllers.Count; i++)

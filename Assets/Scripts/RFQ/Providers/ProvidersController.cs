@@ -77,6 +77,12 @@ public class ProvidersController : MonoBehaviour
 
     private void OnRemoveProviderResponse(RemoveProviderResponse response)
     {
+        if (!response.result.ToLower().Contains("provider removed"))
+        {
+            DialogManager.Instance.ShowErrorDialog();
+            return;
+        }
+        
         for (int i = 0; i < _myTeamProviderItemControllers.Count; i++)
         {
             var controller = _myTeamProviderItemControllers[i];
@@ -140,9 +146,17 @@ public class ProvidersController : MonoBehaviour
         RebuildListLayout(myProvidersScrollPanel);
     }
 
-    public bool IsProviderOfProduct(int productId)
+    public bool IsActiveProviderOfProductAtStorage(int productId, int storageId)
     {
-        return _myTeamProviderItemControllers.Exists(c => c.Provider.productId == productId);
+        foreach (var controller in _myTeamProviderItemControllers)
+        {
+            if (controller.Provider.productId == productId && controller.Provider.storageId == storageId)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     
     public Tuple<float, float, float> CalculateMeanMaxMinByProductId(int productId)

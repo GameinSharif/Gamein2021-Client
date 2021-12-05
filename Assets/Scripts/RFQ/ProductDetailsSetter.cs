@@ -17,9 +17,20 @@ public class ProductDetailsSetter : MonoBehaviour
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
         productNameLocalize.SetKey("product_" + product.name);
         button.interactable = isAvailable;
+        TurnOffToggle();
 
         _product = product;
         _popupType = popupType;
+    }
+
+    private void TurnOffToggle()
+    {
+        var toggle = GetComponentInChildren<Toggle>();
+
+        if (toggle != null)
+        {
+            toggle.isOn = false;
+        }
     }
 
     public void SetRawData(Utils.Product product)
@@ -29,6 +40,11 @@ public class ProductDetailsSetter : MonoBehaviour
 
         button.transition = Selectable.Transition.None;
         button.interactable = false;
+    }
+
+    public void SetImageOnly(int productId)
+    {
+        productImage.sprite = GameDataManager.Instance.ProductSprites[productId - 1];
     }
 
     public void OnClicked()

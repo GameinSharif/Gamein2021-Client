@@ -10,6 +10,7 @@ public class StorageProductController : MonoBehaviour
     public RTLTextMeshPro coming;
     public RTLTextMeshPro total;
     public Image productImage;
+    public GameObject transportButton;
 
     private Utils.Product _product;
     private Utils.StorageType _storageType;
@@ -25,6 +26,8 @@ public class StorageProductController : MonoBehaviour
         available.text = availableAmount.ToString();
         //coming.text = comingAmount.ToString();
         //total.text = (availableAmount + comingAmount).ToString();
+        
+        transportButton.SetActive(product.productType != Utils.ProductType.RawMaterial);
         
         //TODO set product image
     }
