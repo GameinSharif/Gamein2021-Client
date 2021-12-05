@@ -60,8 +60,8 @@ namespace ProductionLine
             {
                 var remainingTime = (data.activationDate.ToDateTime() -
                                      MainHeaderManager.Instance.gameDate.ToDateTime()).Days;
-                status_L.SetKey("");
-                status_T.text = remainingTime + " D";
+                status_L.SetKey("time_DAY", remainingTime.ToString());
+                //status_T.text = remainingTime + " D";
                 showDetailButton.interactable = false;
             }
             else

@@ -8,9 +8,7 @@ namespace ProductionLine
     public class ProductionLineDetail : MonoBehaviour
     {
         #region UI
-
-        public Button startProductionButton;
-
+        
         public Button qualityUpgradeButton;
         public Button efficiencyUpgradeButton;
         private Localize qualityUpgradeLocalize;
@@ -79,9 +77,6 @@ namespace ProductionLine
                 }
             }
 
-            //startProductionButton.interactable = data.status == ProductionLineStatus.ACTIVE;
-            //scrapButton.interactable = data.status == ProductionLineStatus.ACTIVE;
-
             for (int i = 0; i < qualityStars.Count; i++)
             {
                 qualityStars[i].SetActive(i <= Data.qualityLevel);
@@ -94,7 +89,7 @@ namespace ProductionLine
 
             inProcessPanel.SetActive(false);
 
-            if (data.status == ProductionLineStatus.IN_CONSTRUCTION)
+            /*if (data.status == ProductionLineStatus.IN_CONSTRUCTION)
             {
                 var remainingTime = (data.activationDate.ToDateTime() -
                                      MainHeaderManager.Instance.gameDate.ToDateTime()).Days;
@@ -110,7 +105,7 @@ namespace ProductionLine
             if (remaining <= 0) return;
 
             remainingTime_T.SetKey("production_remaining_time", remaining.ToString());
-            inProcessPanel.SetActive(true);
+            inProcessPanel.SetActive(true);*/
         }
 
 
