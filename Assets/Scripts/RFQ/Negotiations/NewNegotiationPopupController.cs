@@ -40,7 +40,8 @@ public class NewNegotiationPopupController: MonoBehaviour
         if (newProviderNegotiationResponse.negotiation != null)
         {
             NegotiationsController.Instance.AddNegotiationToList(newProviderNegotiationResponse.negotiation);
-
+            NotificationsController.Instance.AddNewNotification("notification_new_negotiation",
+                GameDataManager.Instance.GetProductName(newProviderNegotiationResponse.negotiation.productId));
             NewNegotiationPopupCanvas.SetActive(false);
         }
         else

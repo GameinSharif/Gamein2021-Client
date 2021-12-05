@@ -45,7 +45,8 @@ public class NewProviderPopupController : MonoBehaviour
         if (newProviderResponse.newProvider != null)
         {
             ProvidersController.Instance.AddMyProviderToList(newProviderResponse.newProvider);
-
+            NotificationsController.Instance.AddNewNotification("notification_new_provider",
+            GameDataManager.Instance.GetProductName(newProviderResponse.newProvider.productId));
             NewProviderPopupCanvas.SetActive(false);
         }
         else
