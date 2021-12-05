@@ -40,6 +40,10 @@ public class RequestHandler
                 GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse = JsonUtility.FromJson<GetCurrentWeekSuppliesResponse>(responseJson);
                 EventManager.Instance.OnGetCurrentWeekSuppliesResponse(getCurrentWeekSuppliesResponse);
                 break;
+            case ResponseTypeConstant.GET_NEWS:
+                SendNewsResponse sendNewsResponse = JsonUtility.FromJson<SendNewsResponse>(responseJson);
+                EventManager.Instance.OnSendNewsResponse(sendNewsResponse);
+                break;
             case ResponseTypeConstant.GET_CONTRACTS_WITH_SUPPLIER:
                 GetContractSuppliersResponse getContractSuppliersResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetContractSuppliersResponse), new StringEnumConverter()) as GetContractSuppliersResponse;
                 EventManager.Instance.OnGetContractSuppliersResponse(getContractSuppliersResponse);
