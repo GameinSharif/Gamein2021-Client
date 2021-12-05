@@ -45,13 +45,16 @@ public class StorageManager : MonoBehaviour
             return;
         }
 
-        if (removeProductResponse.storage.dc)
+        var oldStorage = GetStorageByBuildingIdAndType(removeProductResponse.storage.buildingId, removeProductResponse.storage.dc);
+        oldStorage.products = removeProductResponse.storage.products;
+
+        if (oldStorage.dc)
         {
-            DcTabController.Instance.Initialize(removeProductResponse.storage);
+            DcTabController.Instance.Initialize(oldStorage);
         }
         else
         {
-            WarehouseTabController.Instance.Initialize(removeProductResponse.storage);
+            WarehouseTabController.Instance.Initialize(oldStorage);
         }
     }
 

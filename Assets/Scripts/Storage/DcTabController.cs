@@ -33,6 +33,8 @@ public class DcTabController : MonoBehaviour
         _pool.RemoveAll();
         foreach (Utils.StorageProduct storageProduct in _dc.products)
         {
+            if (storageProduct.amount == 0) continue;
+            
             _pool.Add(new Tuple<Utils.Product, int>(GameDataManager.Instance.GetProductById(storageProduct.productId), storageProduct.amount));
         }
         
