@@ -100,7 +100,6 @@ public class Utils
         public float maxPrice;
         public int lostSalePenalty;
         public int terminatePenalty;
-        public bool isTerminated;
     }
 
     [Serializable]
@@ -143,16 +142,6 @@ public class Utils
         public int productId;
         public int price;
         public int sales;
-    }
-    
-    [Serializable]
-    public class ContractSupplierDetail
-    {
-        public int id;
-        public CustomDate contractDate;
-        public int boughtAmount;
-        public float pricePerUnit;
-        public TransportNodeType transportNodeType;
     }
 
     [Serializable]

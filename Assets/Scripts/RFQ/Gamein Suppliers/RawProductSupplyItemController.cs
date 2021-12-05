@@ -5,30 +5,25 @@ using RTLTMPro;
 
 public class RawProductSupplyItemController : MonoBehaviour
 {
-    public RTLTextMeshPro no;
     public RTLTextMeshPro supplierName;
     public RTLTextMeshPro costPerUnit;
+    public RTLTextMeshPro distance;
 
     public GameObject showOnMapButton;
     public GameObject makeADealWithSupplierButton;
 
     private Utils.WeekSupply _weekSupply;
 
-    public void SetInfo(int no, string supplierName, string costPerUnit)
+    public void SetInfo(Utils.WeekSupply weekSupply)
     {
-        this.no.text = no.ToString();
-        this.supplierName.text = supplierName;
-        this.costPerUnit.text = costPerUnit;
-    }
+        supplierName.text = GameDataManager.Instance.GetSupplierById(weekSupply.supplierId).name;
+        costPerUnit.text = weekSupply.price.ToString("0.00");
 
-    public void SetInfo(int no, Utils.WeekSupply weekSupply)
-    {
-        SetInfo(
-            no: no,
-            supplierName: GameDataManager.Instance.GetSupplierById(weekSupply.supplierId).name,
-            costPerUnit: weekSupply.price.ToString("0.00")
-        );
-        
+        Vector2 sourceLocation = GameDataManager.Instance.GetLocationByTypeAndId(Utils.TransportNodeType.SUPPLIER, weekSupply.supplierId);
+        Vector2 destinationLocation = GameDataManager.Instance.GetLocationByTypeAndId(Utils.TransportNodeType.FACTORY, PlayerPrefs.GetInt("FactoryId"));
+
+        distance.text = TransportManager.Instance.GetTransportDistance(sourceLocation, destinationLocation) + "KM";
+
         _weekSupply = weekSupply;
     }
 

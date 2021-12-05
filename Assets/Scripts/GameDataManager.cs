@@ -211,7 +211,7 @@ public class GameDataManager : MonoBehaviour
 
     public List<Utils.Product> GetRawProducts()
     {
-        return Products.Where(p => p.productType == Utils.ProductType.RawMaterial).ToList();
+        return Products.Where(p => (p.productType == Utils.ProductType.RawMaterial && p.id != 4) || p.id == 27).ToList();
     }
 
     public List<Utils.Product> GetFinishedProducts()
@@ -224,9 +224,9 @@ public class GameDataManager : MonoBehaviour
         return CurrentWeekSupplies.Where(s => s.productId == rawProductId).ToList();
     }
 
-    public List<Utils.WeekDemand> GetCurrentWeekFinishedProductDemands(int rawProductId)
+    public List<Utils.WeekDemand> GetCurrentWeekFinishedProductDemands(int productId)
     {
-        return CurrentWeekDemands.Where(d => d.productId == rawProductId).ToList();
+        return CurrentWeekDemands.Where(d => d.productId == productId).ToList();
     }
 
     public Vector2 GetMyTeamLocaionOnMap()
