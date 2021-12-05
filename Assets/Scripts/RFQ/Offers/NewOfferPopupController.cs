@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using ProductionLine;
+using RTLTMPro;
 
 public class NewOfferPopupController : MonoBehaviour
 {
@@ -59,6 +60,8 @@ public class NewOfferPopupController : MonoBehaviour
         ClearInputFields();
 
         SetProducts();
+        
+        minMaxLocalize.GetComponent<RTLTextMeshPro>().text = "";
 
         NewOfferPopupCanvas.SetActive(true);
     }
@@ -83,6 +86,8 @@ public class NewOfferPopupController : MonoBehaviour
                 index++;
             }
         }
+
+        _selectedProduct = null;
     }
 
     public void OnProductClick(Utils.Product product)

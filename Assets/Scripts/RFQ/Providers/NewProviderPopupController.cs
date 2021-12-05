@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ProductionLine;
+using RTLTMPro;
 using UnityEngine;
 using TMPro;
 
@@ -65,6 +66,8 @@ public class NewProviderPopupController : MonoBehaviour
         
         InitializeDropdownOptions();
 
+        minMaxLocalize.GetComponent<RTLTextMeshPro>().text = "";
+
         NewProviderPopupCanvas.SetActive(true);
     }
 
@@ -100,13 +103,13 @@ public class NewProviderPopupController : MonoBehaviour
             if (product.productType == Utils.ProductType.SemiFinished)
             {
                 bool hasThisProductsProductionLine = ProductionLinesDataManager.Instance.HasProductionLineOfProduct(product);
-                bool isNotCurrentlyProviderOfThisProduct = !ProvidersController.Instance.IsProviderOfProduct(product.id);
 
-                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine && isNotCurrentlyProviderOfThisProduct, "NewProvider");
+                ProductDetailsSetters[index].SetData(product, hasThisProductsProductionLine, "NewProvider");
                 
                 index++;
             }
         }
+        _selectedProduct = null;
     }
 
     public void OnProductClick(Utils.Product product)
@@ -129,14 +132,6 @@ public class NewProviderPopupController : MonoBehaviour
             return;
         }
 
-        string capacity = CapacityInputfield.text;
-        string price = PriceInputfield.text;
-        if (string.IsNullOrEmpty(capacity) || string.IsNullOrEmpty(price))
-        {
-            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
-            return;
-        }
-
         if (_selectedProduct == null)
         {
             DialogManager.Instance.ShowErrorDialog("no_product_selected_error");
@@ -148,15 +143,29 @@ public class NewProviderPopupController : MonoBehaviour
             DialogManager.Instance.ShowErrorDialog("no_storage_selected_error");
             return;
         }
-        
+
+        var storage = _storageOptions[storageDropdown.value];
+
+        if (ProvidersController.Instance.IsActiveProviderOfProductAtStorage(_selectedProduct.id, storage.id))
+        {
+            DialogManager.Instance.ShowErrorDialog("already_provider_error");
+            return;
+        }
+
+        string capacity = CapacityInputfield.text;
+        string price = PriceInputfield.text;
+        if (string.IsNullOrEmpty(capacity) || string.IsNullOrEmpty(price))
+        {
+            DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
+            return;
+        }
+
         var parsedCapacity = int.Parse(capacity);
         if (parsedCapacity < 1)
         {
             DialogManager.Instance.ShowErrorDialog("invalid_capacity_error");
             return; 
         }
-        
-        var storage = _storageOptions[storageDropdown.value];
 
         if (storage.dc)
         {
