@@ -40,8 +40,7 @@ public class TransportsController : MonoBehaviour
         return vehicleSprites[(int) transportVehicleType];
     }
 
-    //resets everything
-    public void Initialize()
+    private void Start()
     {
         _comingPool = new PoolingSystem<Tuple<Utils.Transport, bool, bool>>(
             comingScrollPanel,
@@ -66,6 +65,15 @@ public class TransportsController : MonoBehaviour
             transportItemPrefab,
             InitializeTransportItem
         );
+    }
+
+    //resets everything
+    public void Initialize()
+    {
+        _comingPool.RemoveAll();
+        _goingPool.RemoveAll();
+        _donePool.RemoveAll();
+        _crashPool.RemoveAll();
 
         _comingControllers.Clear();
         _goingControllers.Clear();
