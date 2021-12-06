@@ -22,7 +22,13 @@ namespace ProductionLine
         private void Awake()
         {
             Instance = this;
+            
+            productionLineDetail.gameObject.SetActive(false);
 
+        }
+
+        private void OnEnable()
+        {
             EventManager.Instance.OnGetProductionLinesResponseEvent += OnGetProductionLinesResponse;
             EventManager.Instance.OnConstructProductionLineResponseEvent += OnConstructProductionLineResponse;
             EventManager.Instance.OnScrapProductionLineResponseEvent += OnScrapProductionLineResponse;
@@ -31,9 +37,18 @@ namespace ProductionLine
             EventManager.Instance.OnUpgradeProductionLineQualityResponseEvent += OnUpgradeProductionLineQualityResponse;
             EventManager.Instance.OnProductionLineConstructionCompletedResponseEvent += OnProductionLineConstructionCompletedResponse;
             EventManager.Instance.OnProductCreationCompletedResponseEvent += OnProductCreationCompletedResponse;
-            
-            productionLineDetail.gameObject.SetActive(false);
+        }
 
+        private void OnDisable()
+        {
+            EventManager.Instance.OnGetProductionLinesResponseEvent -= OnGetProductionLinesResponse;
+            EventManager.Instance.OnConstructProductionLineResponseEvent -= OnConstructProductionLineResponse;
+            EventManager.Instance.OnScrapProductionLineResponseEvent -= OnScrapProductionLineResponse;
+            EventManager.Instance.OnStartProductionResponseEvent -= OnStartProductionResponse;
+            EventManager.Instance.OnUpgradeProductionLineEfficiencyResponseEvent -= OnUpgradeProductionLineEfficiencyResponse;
+            EventManager.Instance.OnUpgradeProductionLineQualityResponseEvent -= OnUpgradeProductionLineQualityResponse;
+            EventManager.Instance.OnProductionLineConstructionCompletedResponseEvent -= OnProductionLineConstructionCompletedResponse;
+            EventManager.Instance.OnProductCreationCompletedResponseEvent -= OnProductCreationCompletedResponse;
         }
 
         public void ConstructProductionLine(int productionLineTemplateId)
