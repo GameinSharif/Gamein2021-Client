@@ -27,7 +27,11 @@ public class TransportManager : MonoBehaviour
     private void OnGetTransportsResponseReceived(GetTeamTransportsResponse getTeamTransportsResponse)
     {
         Transports = getTeamTransportsResponse.myTeamTransports;
-        TransportsController.Instance.Initialize();
+        
+        if (StorageManager.Instance.Storages != null)
+        {
+            TransportsController.Instance.Initialize();
+        }
     }
 
     private void OnTransportStateChangedResponseReceived(TransportStateChangedResponse transportStateChangedResponse)
