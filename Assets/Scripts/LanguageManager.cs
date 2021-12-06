@@ -37,6 +37,8 @@ public class LanguageManager : MonoBehaviour
 
             SetGraphics(isFarsi);
 
+            MapManager.IsInMap = false;
+            MainMenuManager.IsLoadingMap = false;
             SceneManager.LoadScene("MenuScene");
         });
     }
