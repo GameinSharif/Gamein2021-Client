@@ -104,6 +104,8 @@ public class NegotiationsController : MonoBehaviour
                 controller.UpdateEditedNegotiation(editNegotiationCostPerUnitResponse.negotiation);
                 return;
             }
+            NotificationsController.Instance.AddNewNotification("notification_edit_negotiation",
+                GameDataManager.Instance.GetProductName(editNegotiationCostPerUnitResponse.negotiation.productId));
         }
         else
         {

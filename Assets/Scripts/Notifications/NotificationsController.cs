@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class NotificationsController : MonoBehaviour
 {
     public static NotificationsController Instance;
-    public const int MAX_NOTIFICATIONS = 5;
+    public const int MAX_NOTIFICATIONS = 20;
 
     public GameObject newMessageSign;
     public GameObject notificationsParentGameObject;

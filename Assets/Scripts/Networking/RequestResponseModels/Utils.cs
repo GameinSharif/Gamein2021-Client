@@ -399,4 +399,31 @@ public class Utils
         public float transportationCosts;
         public float productionCosts;
     }
+
+    public enum NewsType
+    {
+        COMMON, SERIOUS
+    }
+    
+    [Serializable]
+    public class News
+    {
+        public int id;
+        public int week;
+        public NewsType newsType;
+        
+        public string mainTitleEng;
+        public string mainTextEng;
+        public string subTextsEng1;
+        public string subTextsEng2;
+        public string subTextsEng3;
+
+        public string mainTitleFa;
+        public string mainTextFa;
+        public string subTextsFa1;
+        public string subTextsFa2;
+        public string subTextsFa3;
+
+        public int imageIndex;
+    }
 }
