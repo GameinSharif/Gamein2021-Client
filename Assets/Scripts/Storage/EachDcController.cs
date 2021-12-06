@@ -1,4 +1,5 @@
 ﻿using RTLTMPro;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EachDcController : MonoBehaviour
@@ -64,6 +65,13 @@ public class EachDcController : MonoBehaviour
         {
             if (agreed)
             {
+                List<Utils.Transport> transports = TransportManager.Instance.GetTransportsByDestinationTypeAndId(Utils.TransportNodeType.DC, _dc.id);
+                if (transports == null || transports.Count != 0)
+                {
+                    DialogManager.Instance.ShowErrorDialog("dialog_popup_in_way_transport");
+                    return;
+                }
+
                 _isSendingRequest = true;
                 RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, _dc.id)); 
             }
@@ -81,6 +89,12 @@ public class EachDcController : MonoBehaviour
         {
             if (agreed)
             {
+                if (MainHeaderManager.Instance.Money < _dc.buyingPrice)
+                {
+                    DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                    return;
+                }
+
                 _isSendingRequest = true;
                 RequestManager.Instance.SendRequest(new BuyDCRequest(RequestTypeConstant.BUY_DC, _dc.id));
             }
