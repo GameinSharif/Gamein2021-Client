@@ -173,12 +173,12 @@ public class NegotiationsController : MonoBehaviour
         int teamId = PlayerPrefs.GetInt("TeamId");
         if (negotiation.supplierId == teamId)
         {
-            _supplyNegotiationsPool.Add(negotiation);
+            _supplyNegotiationsPool.Add(0, negotiation);
             RebuildSupplyNegotiationsLayout();
         }
         else if (negotiation.demanderId == teamId)
         {
-            _demandNegotiationsPool.Add( negotiation);
+            _demandNegotiationsPool.Add(0, negotiation);
             RebuildDemandNegotiationsLayout();
         }
     }

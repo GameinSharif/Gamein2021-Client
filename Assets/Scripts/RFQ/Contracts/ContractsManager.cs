@@ -9,14 +9,13 @@ public class ContractsManager : MonoBehaviour
     public GameObject ContractParentGameObject;
     public GameObject ContractPrefab;
 
-    private List<GameObject> _spawnedObjects;
-    [HideInInspector] public List<Utils.Contract> myContracts;
+    private List<GameObject> _spawnedObjects = new List<GameObject>();
+
+    [HideInInspector] public List<Utils.Contract> myContracts = new List<Utils.Contract>();
 
     private void Awake()
     {
         Instance = this;
-        _spawnedObjects = new List<GameObject>();
-        myContracts = new List<Utils.Contract>();
     }
 
     private void OnEnable()
@@ -32,8 +31,7 @@ public class ContractsManager : MonoBehaviour
     public void OnGetContractsResponse(GetContractsResponse getContractsResponse)
     {
         myContracts = getContractsResponse.contracts;
-        myContracts.Reverse();
-        
+
         foreach (GameObject gameObject in _spawnedObjects)
         {
             gameObject.SetActive(false);
@@ -50,7 +48,6 @@ public class ContractsManager : MonoBehaviour
     public void AddContractItemToList(Utils.Contract contract)
     {
         GameObject contractGameObject = GetPoolledContractGameObject();
-        contractGameObject.transform.SetAsFirstSibling();
 
         SetContractDetail setContractDetail = contractGameObject.GetComponent<SetContractDetail>();
         setContractDetail.InitializeContract(contract);

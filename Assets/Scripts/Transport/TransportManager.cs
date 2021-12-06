@@ -27,6 +27,7 @@ public class TransportManager : MonoBehaviour
     private void OnGetTransportsResponseReceived(GetTeamTransportsResponse getTeamTransportsResponse)
     {
         Transports = getTeamTransportsResponse.myTeamTransports;
+        Transports.Reverse();
         
         if (StorageManager.Instance.Storages != null)
         {

@@ -51,7 +51,6 @@ public class GameinSuppliersController : MonoBehaviour
     public void OnGetContractSuppliersResponse(GetContractSuppliersResponse getContractSuppliersResponse)
     {
         myContracts = getContractSuppliersResponse.contractsSupplier;
-        myContracts.Reverse();
 
         DeactiveAllChildrenInScrollPanel(true);
         for (int i = 0; i < myContracts.Count; i++)
@@ -73,7 +72,6 @@ public class GameinSuppliersController : MonoBehaviour
 
     public void AddContractItemsToList(List<Utils.ContractSupplier> contractSuppliers)
     {
-        contractSuppliers.Reverse();
         foreach (Utils.ContractSupplier contractSupplier in contractSuppliers)
         {
             AddContractItemToList(contractSupplier);   
@@ -83,7 +81,6 @@ public class GameinSuppliersController : MonoBehaviour
     private void AddContractItemToList(Utils.ContractSupplier contractSupplier)
     {
         GameObject createdItem = GetItem(contractSuppliersScrollViewParent, true);
-        createdItem.transform.SetAsFirstSibling();
 
         ContractSupplierItemController controller = createdItem.GetComponent<ContractSupplierItemController>();
         controller.SetInfo(contractSupplier);

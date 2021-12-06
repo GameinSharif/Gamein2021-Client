@@ -163,7 +163,7 @@ public class TransportsController : MonoBehaviour
     {
         var isGoing = IsGoing(transport);
         var pool = isGoing ? _goingPool : _comingPool;
-        pool.Add(new Tuple<Utils.Transport, bool, bool>(transport, isGoing, true));
+        pool.Add(0, new Tuple<Utils.Transport, bool, bool>(transport, isGoing, true));
         RebuildListLayout(isGoing ? goingScrollPanel : comingScrollPanel);
     }
 
@@ -173,7 +173,7 @@ public class TransportsController : MonoBehaviour
 
         RemoveInWay(transport, isGoing);
         
-        _crashPool.Add(new Tuple<Utils.Transport, bool, bool>(transport, isGoing, false));
+        _crashPool.Add(0, new Tuple<Utils.Transport, bool, bool>(transport, isGoing, false));
         RebuildListLayout(crashScrollPanel);
     }
 
@@ -183,7 +183,7 @@ public class TransportsController : MonoBehaviour
 
         RemoveInWay(transport, isGoing);
         
-        _donePool.Add(new Tuple<Utils.Transport, bool, bool>(transport, isGoing, false));
+        _donePool.Add(0, new Tuple<Utils.Transport, bool, bool>(transport, isGoing, false));
         RebuildListLayout(doneScrollPanel);
     }
 

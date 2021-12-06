@@ -56,7 +56,6 @@ public class PoolingSystem<T>
         index = index > ActiveCount ? ActiveCount : index;
         
         var gameObject = GetAvailableGameObject();
-        gameObject.transform.SetAsFirstSibling();
         
         initializerAction.Invoke(gameObject, index, data);
 
