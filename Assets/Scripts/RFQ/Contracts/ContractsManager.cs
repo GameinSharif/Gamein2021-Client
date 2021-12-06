@@ -32,6 +32,7 @@ public class ContractsManager : MonoBehaviour
     public void OnGetContractsResponse(GetContractsResponse getContractsResponse)
     {
         myContracts = getContractsResponse.contracts;
+        myContracts.Reverse();
         
         foreach (GameObject gameObject in _spawnedObjects)
         {
@@ -49,6 +50,7 @@ public class ContractsManager : MonoBehaviour
     public void AddContractItemToList(Utils.Contract contract)
     {
         GameObject contractGameObject = GetPoolledContractGameObject();
+        contractGameObject.transform.SetAsFirstSibling();
 
         SetContractDetail setContractDetail = contractGameObject.GetComponent<SetContractDetail>();
         setContractDetail.InitializeContract(contract);

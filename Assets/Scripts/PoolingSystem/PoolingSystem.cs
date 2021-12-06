@@ -37,7 +37,6 @@ public class PoolingSystem<T>
         }
     }
     
-
     private GameObject GetAvailableGameObject()
     {
         foreach (Transform child in parent)
@@ -57,6 +56,7 @@ public class PoolingSystem<T>
         index = index > ActiveCount ? ActiveCount : index;
         
         var gameObject = GetAvailableGameObject();
+        gameObject.transform.SetAsFirstSibling();
         
         initializerAction.Invoke(gameObject, index, data);
 

@@ -94,7 +94,7 @@ public class CustomersController : MonoBehaviour
     
     public void ChangeStorage(int change)
     {
-        SetStorageIndex((StorageIndex + change) % StorageManager.Instance.Storages.Count);
+        SetStorageIndex((StorageIndex + change + StorageManager.Instance.Storages.Count) % StorageManager.Instance.Storages.Count);
 
         foreach (FinishedProductCustomerItemController controller in _finishedProductCustomerItemControllers)
         {

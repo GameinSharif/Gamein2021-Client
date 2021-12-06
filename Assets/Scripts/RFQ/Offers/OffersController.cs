@@ -190,7 +190,7 @@ public class OffersController : MonoBehaviour
 
     public void AddMyOfferToList(Utils.Offer offer)
     {
-        _myOffersPool.Add(offer);
+        _myOffersPool.Add(0, offer);
         RebuildListLayout(myOffersScrollPanel);
     }
 }
