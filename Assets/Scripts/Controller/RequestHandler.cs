@@ -231,6 +231,16 @@ public class RequestHandler
                 UpdateWeeklyReportResponse updateWeeklyReportResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateWeeklyReportResponse), new StringEnumConverter()) as UpdateWeeklyReportResponse;
                 EventManager.Instance.OnUpdateWeeklyReportResponse(updateWeeklyReportResponse);
                 break;
+            case ResponseTypeConstant.CORONA_INFO:
+                EventManager.Instance.OnCoronaInfoResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(CoronaInfoResponse),
+                    new StringEnumConverter()) as CoronaInfoResponse);
+                break;
+            case ResponseTypeConstant.DONATE:
+                EventManager.Instance.OnDonateResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(DonateResponse),
+                    new StringEnumConverter()) as DonateResponse);
+                break;
             default:
                 Debug.LogWarning(responseJson);
                 break;

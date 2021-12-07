@@ -426,4 +426,14 @@ public class Utils
 
         public int imageIndex;
     }
+    
+    [Serializable]
+    public class CoronaInfoDto
+    {
+        private int id;
+        private Country country;
+        private float amountToBeCollect = 10000F;
+        private float currentCollectedAmount = 0F;
+        bool isCoronaOver = true;
+    }
 }

@@ -346,4 +346,16 @@ public class EventManager : MonoBehaviour
     {
         OnUpdateGameStatusResponseEvent?.Invoke(response);
     }
+    
+    public event Action<CoronaInfoResponse> OnCoronaInfoResponseEvent;
+    public void OnCoronaInfoResponse(CoronaInfoResponse response)
+    {
+        OnCoronaInfoResponseEvent?.Invoke(response);
+    }
+    
+    public event Action<DonateResponse> OnDonateResponseEvent;
+    public void OnDonateResponse(DonateResponse response)
+    {
+        OnDonateResponseEvent?.Invoke(response);
+    }
 }
