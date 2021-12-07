@@ -10,8 +10,12 @@ public class BreakingNewsController : MonoBehaviour
     public RTLTextMeshPro mainTitle;
     public RTLTextMeshPro mainText;
     public RTLTextMeshPro newsDate;
+    public GameObject forWeekly;
+    public GameObject navigateButtons;
+    public RTLTextMeshPro newsNo;
+    public Localize headerLocalize;
 
-    public void SetInfo(Utils.News newspaper)
+    public void SetInfo(Utils.News newspaper, bool isSingle)
     {
         if (LocalizationManager.GetCurrentLanguage() == LocalizationManager.LocalizedLanguage.English)
         {
@@ -25,5 +29,19 @@ public class BreakingNewsController : MonoBehaviour
         }
         newsImage.sprite = GameDataManager.Instance.NewsSprites[newspaper.imageIndex];
         newsDate.SetText(MainHeaderManager.Instance.gameDate.ToString());
+        headerLocalize.SetKey("breaking_news_title");
+        if (isSingle)
+        {
+            navigateButtons.SetActive(false);
+            forWeekly.SetActive(false);
+            newsNo.gameObject.SetActive(false);
+        }
+        else
+        {
+            newsNo.gameObject.SetActive(true);
+            navigateButtons.SetActive(true);
+            forWeekly.SetActive(false);
+            newsNo.text = newspaper.week.ToString();
+        }
     }
 }
