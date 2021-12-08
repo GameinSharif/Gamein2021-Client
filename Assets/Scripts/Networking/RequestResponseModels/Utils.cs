@@ -7,9 +7,11 @@ public class Utils
 {
     public enum GameStatus
     {
+        NOT_STARTED,
+        AUCTION,
         RUNNING,
         PAUSED,
-        STOPPED
+        FINISHED
     }
 
 

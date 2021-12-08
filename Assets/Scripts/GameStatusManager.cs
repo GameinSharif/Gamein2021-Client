@@ -48,11 +48,13 @@ public class GameStatusManager : MonoBehaviour
                 background.SetActive(false);
                 break;
             case Utils.GameStatus.PAUSED:
+            case Utils.GameStatus.AUCTION:
                 GameStatusPopupCanvas.SetActive(true);
                 CloseButtonGameObject.SetActive(true);
                 background.SetActive(false);
                 break;
-            case Utils.GameStatus.STOPPED:
+            case Utils.GameStatus.NOT_STARTED:
+            case Utils.GameStatus.FINISHED:
                 GameStatusPopupCanvas.SetActive(true);
                 CloseButtonGameObject.SetActive(false);
                 background.SetActive(true);
