@@ -16,7 +16,7 @@ public class EncryptManager
         Rsa = new RSACryptoServiceProvider();
         Rsa.ImportParameters(rsaParameters);
 
-        if (!PlayerPrefs.HasKey("Language"))
+        if (PlayerPrefs.HasKey("Language"))
         {
             LoginManager.Instance.GetGameStatus();
         }
