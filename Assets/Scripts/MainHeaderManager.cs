@@ -77,7 +77,7 @@ public class MainHeaderManager : MonoBehaviour
         set
         {
             PlayerPrefs.SetFloat("Brand", value);
-            moneyRTLTMP.text = value.ToString("0.00");
+            brandRTLTMP.text = value.ToString("0.00");
         }
 
         get => PlayerPrefs.GetFloat("Brand", 0f);
