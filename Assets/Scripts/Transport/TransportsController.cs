@@ -79,22 +79,47 @@ public class TransportsController : MonoBehaviour
         _goingControllers.Clear();
 
         var transportListCopy = RemoveDuplicates(TransportManager.Instance.Transports);
-        
+        var comingTransports = new List<Utils.Transport>();
+        var goingTransports = new List<Utils.Transport>();
+
         foreach (var transport in transportListCopy)
         {
             if (transport.transportState == Utils.TransportState.PENDING) continue;
 
             var isGoing = IsGoing(transport);
             var isInWay = transport.transportState == Utils.TransportState.IN_WAY;
-
-            PoolingSystem<Tuple<Utils.Transport, bool, bool>> pool = transport.transportState switch
+            
+            switch (transport.transportState)
             {
-                Utils.TransportState.IN_WAY => isGoing ? _goingPool : _comingPool,
-                Utils.TransportState.CRUSHED => _crashPool,
-                Utils.TransportState.SUCCESSFUL => _donePool,
-            };
-
-            pool.Add(new Tuple<Utils.Transport, bool, bool>(transport, isGoing, isInWay));
+                case Utils.TransportState.IN_WAY:
+                    if (isGoing)
+                    {
+                        goingTransports.Add(transport);
+                    }
+                    else
+                    {
+                        comingTransports.Add(transport);
+                    }
+                    break;
+                case Utils.TransportState.CRUSHED:
+                    _crashPool.Add(new Tuple<Utils.Transport, bool, bool>(transport, isGoing, isInWay));
+                    break;
+                case Utils.TransportState.SUCCESSFUL:
+                    _donePool.Add(new Tuple<Utils.Transport, bool, bool>(transport, isGoing, isInWay));
+                    break;
+            }
+        }
+        
+        comingTransports.Sort(CompareComings);
+        foreach (var comingTransport in comingTransports)
+        {
+            _comingPool.Add(new Tuple<Utils.Transport, bool, bool>(comingTransport, false, true));
+        }
+        
+        goingTransports.Sort(CompareGoings);
+        foreach (var goingTransport in goingTransports)
+        {
+            _goingPool.Add(new Tuple<Utils.Transport, bool, bool>(goingTransport, true, true));
         }
         
         RebuildListLayout(comingScrollPanel);
@@ -150,11 +175,11 @@ public class TransportsController : MonoBehaviour
         {
             if (isGoing)
             {
-                _goingControllers.Add(controller);
+                _goingControllers.Insert(index, controller);
             }
             else
             {
-                _comingControllers.Add(controller);
+                _comingControllers.Insert(index, controller);
             }
         }
     }
@@ -163,8 +188,51 @@ public class TransportsController : MonoBehaviour
     {
         var isGoing = IsGoing(transport);
         var pool = isGoing ? _goingPool : _comingPool;
-        pool.Add(0, new Tuple<Utils.Transport, bool, bool>(transport, isGoing, true));
+
+        var index = isGoing
+            ? BinarySearch(_goingControllers, CompareGoings, transport)
+            : BinarySearch(_comingControllers, CompareComings, transport);
+
+        index = index < 0 ? ~index : index;
+        
+        pool.Add(index, new Tuple<Utils.Transport, bool, bool>(transport, isGoing, true));
         RebuildListLayout(isGoing ? goingScrollPanel : comingScrollPanel);
+    }
+
+    private int BinarySearch(List<TransportItemController> controllers, Comparison<Utils.Transport> comparison, Utils.Transport value)
+    {
+        int low = 0, high = controllers.Count;
+
+        while (high > low)
+        {
+            int mid = (high + low) / 2;
+            
+            var lowVal = controllers[low].Transport;
+            var midVal = controllers[mid].Transport;
+
+            var vl = comparison(value,lowVal);
+            var vm = comparison(value,midVal);
+
+            if (vm == 0)
+            {
+                return mid;
+            }
+            
+            if (vl >= 0 && vm < 0)
+            {
+                high = mid;
+            }
+            else if (vl < 0)
+            {
+                break;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+
+        return ~low;
     }
 
     public void AddCrashed(Utils.Transport transport)
@@ -173,7 +241,7 @@ public class TransportsController : MonoBehaviour
 
         RemoveInWay(transport, isGoing);
         
-        _crashPool.Add(0, new Tuple<Utils.Transport, bool, bool>(transport, isGoing, false));
+        _crashPool.Add(new Tuple<Utils.Transport, bool, bool>(transport, isGoing, false));
         RebuildListLayout(crashScrollPanel);
     }
 
@@ -183,7 +251,7 @@ public class TransportsController : MonoBehaviour
 
         RemoveInWay(transport, isGoing);
         
-        _donePool.Add(0, new Tuple<Utils.Transport, bool, bool>(transport, isGoing, false));
+        _donePool.Add(new Tuple<Utils.Transport, bool, bool>(transport, isGoing, false));
         RebuildListLayout(doneScrollPanel);
     }
 
@@ -222,5 +290,27 @@ public class TransportsController : MonoBehaviour
     private void RebuildListLayout(RectTransform rectTransform)
     {
         LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
+    }
+
+    private int CompareComings(Utils.Transport x, Utils.Transport y)
+    {
+        var dateDiff = x.endDate.CompareTo(y.endDate);
+        if (dateDiff != 0)
+        {
+            return dateDiff;
+        }
+
+        return x.id - y.id;
+    }
+    
+    private int CompareGoings(Utils.Transport x, Utils.Transport y)
+    {
+        var dateDiff = x.startDate.CompareTo(y.startDate);
+        if (dateDiff != 0)
+        {
+            return dateDiff;
+        }
+
+        return x.id - y.id;
     }
 }
