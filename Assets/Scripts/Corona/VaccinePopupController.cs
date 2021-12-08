@@ -21,10 +21,20 @@ public class VaccinePopupController : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    private void OnEnable()
     {
         EventManager.Instance.OnDonateResponseEvent += OnGetDonateResponse;
         EventManager.Instance.OnCoronaInfoResponseEvent += OnGetCoronaInfoResponse;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnDonateResponseEvent -= OnGetDonateResponse;
+        EventManager.Instance.OnCoronaInfoResponseEvent -= OnGetCoronaInfoResponse;
+    }
+
+    private void Start()
+    {
         donateButton.onClick.AddListener(Donate);
         coronaButton.gameObject.SetActive(false);
     }
