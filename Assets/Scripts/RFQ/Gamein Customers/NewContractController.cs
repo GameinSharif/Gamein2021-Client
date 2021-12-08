@@ -23,10 +23,12 @@ public class NewContractController : MonoBehaviour
     public TMP_Dropdown sourceStorageDropDown;
 
     public Localize demandAmount;
+    public Localize minMaxPriceLocalize;
 
-    private bool _firstTimeInitializing = true;
     private Utils.WeekDemand _weekDemand;
     private List<Utils.Storage> _storages = new List<Utils.Storage>();
+
+    private bool _isSendingRequest = false;
 
     private void Awake()
     {
@@ -54,27 +56,33 @@ public class NewContractController : MonoBehaviour
         {
             DialogManager.Instance.ShowErrorDialog();
         }
+
+        _isSendingRequest = false;
     }
 
     public void OnOpenMakeADealPopupClick(Utils.WeekDemand weekDemand)
     {
         _weekDemand = weekDemand;
         
-        //TODO clear inputfields
+        ClearInputFields();
         
         Utils.Product product = GameDataManager.Instance.GetProductById(weekDemand.productId);
         productNameLocalize.SetKey("product_" + product.name);
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
         demandAmount.SetKey("new_contract_demand", _weekDemand.amount.ToString());
+        minMaxPriceLocalize.SetKey("min_max_text", product.minPrice.ToString(), product.maxPrice.ToString());
         customerName.text = GameDataManager.Instance.GetGameinCustomerById(_weekDemand.gameinCustomerId).name;
 
-        if (_firstTimeInitializing)
-        {
-            InitializeStorageDropdown();
-        }
-        _firstTimeInitializing = false;
+        InitializeStorageDropdown();
 
         NewContractPopupCanvasGameObject.SetActive(true);
+    }
+
+    private void ClearInputFields()
+    {
+        amount.text = "";
+        numberOfRepetition.text = "";
+        price.text = "";
     }
 
     private void InitializeStorageDropdown()
@@ -93,26 +101,10 @@ public class NewContractController : MonoBehaviour
         sourceStorageDropDown.value = CustomersController.Instance.StorageIndex;
     }
 
-    private int GetRepetitionWeeks()
-    {
-        string weeks = numberOfRepetition.text;
-        if (string.IsNullOrEmpty(weeks))
-        {
-            return 0;
-        }
-        int weeksInt = int.Parse(numberOfRepetition.text);
-        if (weeksInt < 0)
-        {
-            return -1;
-        }
-        return weeksInt;
-    }
-
-    private bool IsPriceInRange()
+    private bool IsPriceInRange(float priceFloat)
     {
         Utils.Product product = GameDataManager.Instance.GetProductById(_weekDemand.productId);
-        int price = int.Parse(this.price.text);
-        return price >= product.minPrice && price <= product.maxPrice;
+        return priceFloat >= product.minPrice && priceFloat <= product.maxPrice;
     }
 
     private bool HasContractWithDemanderThisWeek()
@@ -137,19 +129,46 @@ public class NewContractController : MonoBehaviour
     
     public void OnDoneButtonClick()
     {
+        if (_isSendingRequest)
+        {
+            return;
+        }
+        
         string amountText = amount.text;
         string priceText = price.text;
-        int weeks = GetRepetitionWeeks();
+        string weeksText = numberOfRepetition.text;
 
-        if (weeks < 0 || string.IsNullOrEmpty(amountText) || string.IsNullOrEmpty(priceText))
+        if (string.IsNullOrEmpty(weeksText) || string.IsNullOrEmpty(amountText) || string.IsNullOrEmpty(priceText))
         {
             DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
             return;
         }
+        
+        int amountInt = int.Parse(amountText);
+        int weeksInt = int.Parse(weeksText);
+        float priceFloat = float.Parse(priceText);
 
-        if (!IsPriceInRange())
+        if (amountInt < 1)
+        {
+            DialogManager.Instance.ShowErrorDialog("invalid_amount_error");
+            return;
+        }
+
+        if (weeksInt < 1)
+        {
+            DialogManager.Instance.ShowErrorDialog("invalid_weeks_error");
+            return;
+        }
+
+        if (!IsPriceInRange(priceFloat))
         {
             DialogManager.Instance.ShowErrorDialog("price_not_in_range_error");
+            return;
+        }
+
+        if (sourceStorageDropDown.value < 0)
+        {
+            DialogManager.Instance.ShowErrorDialog("no_storage_selected_error");
             return;
         }
 
@@ -160,10 +179,8 @@ public class NewContractController : MonoBehaviour
 
         }
 
-        int amountInt = int.Parse(amount.text);
-        int priceInt = int.Parse(priceText);
-
-        NewContractRequest newContract = new NewContractRequest(RequestTypeConstant.NEW_CONTRACT, _weekDemand.gameinCustomerId, _storages[sourceStorageDropDown.value].id, _weekDemand.productId, amountInt, priceInt, weeks);
+        NewContractRequest newContract = new NewContractRequest(RequestTypeConstant.NEW_CONTRACT, _weekDemand.gameinCustomerId, _storages[sourceStorageDropDown.value].id, _weekDemand.productId, amountInt, priceFloat, weeksInt);
         RequestManager.Instance.SendRequest(newContract);
+        _isSendingRequest = true;
     }
 }

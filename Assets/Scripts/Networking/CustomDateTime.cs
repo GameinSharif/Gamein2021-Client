@@ -25,7 +25,7 @@ public class CustomDateTime
 }
 
 [Serializable]
-public class CustomDate
+public class CustomDate : IComparable<CustomDate>
 {
     public int year;
     public int month;
@@ -47,6 +47,26 @@ public class CustomDate
     public string ToString()
     {
         return year.ToString("0000") + "/" + month.ToString("00") + "/" + day.ToString("00");
+    }
+
+    public int CompareTo(CustomDate obj)
+    {
+        if (obj == null) return 1;
+
+        var yearDiff = year - obj.year;
+        if (yearDiff != 0)
+        {
+            return yearDiff;
+        }
+
+        var monthDiff = month - obj.month;
+        if (monthDiff != 0)
+        {
+            return monthDiff;
+        }
+
+        var dayDiff = day - obj.day;
+        return dayDiff;
     }
 
     private bool isLeap(int y)
