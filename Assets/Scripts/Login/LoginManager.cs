@@ -55,6 +55,14 @@ public class LoginManager : MonoBehaviour
 
         LoginCanvas.SetActive(true);
         SelectLanguagePopup.SetActive(false);
+
+        GetGameStatus();
+    }
+
+    public void GetGameStatus()
+    {
+        GetGameStatusRequest getGameStatusRequest = new GetGameStatusRequest(RequestTypeConstant.GET_GAME_STATUS);
+        RequestManager.Instance.SendRequest(getGameStatusRequest);
     }
 
     public void OnLoginButtonClick()
