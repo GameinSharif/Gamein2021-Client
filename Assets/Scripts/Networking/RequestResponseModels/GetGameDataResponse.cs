@@ -6,6 +6,7 @@ public class GetGameDataResponse : ResponseObject
 {
     public List<Utils.Team> teams;
     public List<Utils.GameinCustomer> gameinCustomers;
+    public List<Utils.CoronaInfoDto> coronaInfos;
     public List<Utils.Product> products;
     public List<Utils.DC> dcDtos;
     public List<Utils.Factory> factories;

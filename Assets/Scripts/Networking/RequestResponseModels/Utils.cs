@@ -430,10 +430,10 @@ public class Utils
     [Serializable]
     public class CoronaInfoDto
     {
-        private int id;
-        private Country country;
-        private float amountToBeCollect = 10000F;
-        private float currentCollectedAmount = 0F;
-        bool isCoronaOver = true;
+        public int id;
+        public Country country;
+        public float amountToBeCollect = 10000F;
+        public float currentCollectedAmount = 0F;
+        public bool isCoronaOver = true;
     }
 }

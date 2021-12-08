@@ -11,6 +11,7 @@ public class GameDataManager : MonoBehaviour
 
     [HideInInspector] public List<Utils.Team> Teams;
     [HideInInspector] public List<Utils.GameinCustomer> GameinCustomers;
+    [HideInInspector] public List<Utils.CoronaInfoDto> CoronaInfos;
     [HideInInspector] public List<Utils.Supplier> GameinSuppliers;
     [HideInInspector] public List<Utils.Product> Products;
     [HideInInspector] public List<Utils.Vehicle> Vehicles;
@@ -49,6 +50,7 @@ public class GameDataManager : MonoBehaviour
         Teams = getGameDataResponse.teams;
         GameinCustomers = getGameDataResponse.gameinCustomers;
         GameinSuppliers = getGameDataResponse.suppliers;
+        CoronaInfos = getGameDataResponse.coronaInfos;
         Products = getGameDataResponse.products;
         Vehicles = getGameDataResponse.vehicles;
         ProductionLineTemplates = getGameDataResponse.productionLineTemplates;
