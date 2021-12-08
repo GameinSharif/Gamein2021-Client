@@ -62,6 +62,7 @@ public class GameDataManager : MonoBehaviour
         GameConstants = getGameDataResponse.gameConstants;
         News = getGameDataResponse.news;
         CheckLastNewspaperSeen();
+        VaccinePopupController.Instance.CheckCorona();
     }
 
     public void OnGetAllActiveDCsResponse(GetAllActiveDcResponse getAllActiveDcResponse)

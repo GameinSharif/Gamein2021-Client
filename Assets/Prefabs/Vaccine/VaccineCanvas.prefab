@@ -1406,6 +1406,7 @@ GameObject:
   - component: {fileID: 3311370343497371351}
   - component: {fileID: 8329398975116848471}
   - component: {fileID: 3450490191552131985}
+  - component: {fileID: 7716043734564366030}
   m_Layer: 5
   m_Name: countryName
   m_TagString: Untagged
@@ -1534,6 +1535,42 @@ MonoBehaviour:
   originalText: New Text
   fixTags: 1
   forceFix: 0
+--- !u!114 &7716043734564366030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847367645592408257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: 
 --- !u!1 &2137710091743689873
 GameObject:
   m_ObjectHideFlags: 0
@@ -1545,6 +1582,7 @@ GameObject:
   - component: {fileID: 9155669682301754609}
   - component: {fileID: 9145329323589272872}
   - component: {fileID: 5927767457824270581}
+  - component: {fileID: 7511277156375711761}
   m_Layer: 5
   m_Name: countryName
   m_TagString: Untagged
@@ -1673,6 +1711,42 @@ MonoBehaviour:
   originalText: New Text
   fixTags: 1
   forceFix: 0
+--- !u!114 &7511277156375711761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137710091743689873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: 
 --- !u!1 &2482398041241453501
 GameObject:
   m_ObjectHideFlags: 0
@@ -2190,6 +2264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04fdf26f3a8f12645bb49ca6d0e3c3ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coronaButton: {fileID: 0}
   donateAmount: {fileID: 8104873813457626236}
   donateButton: {fileID: 2391924682856568456}
   otherCountriesStatus:
@@ -3133,8 +3208,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Amount
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 159ecab0e50ff8e4da74c11a52a653b5, type: 2}
+  m_sharedMaterial: {fileID: -5449547863004890230, guid: 159ecab0e50ff8e4da74c11a52a653b5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3158,7 +3233,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.55
+  m_fontSize: 15.3
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3272,8 +3347,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 159ecab0e50ff8e4da74c11a52a653b5, type: 2}
+  m_sharedMaterial: {fileID: -5449547863004890230, guid: 159ecab0e50ff8e4da74c11a52a653b5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3355,6 +3430,7 @@ GameObject:
   - component: {fileID: 6406694621816441598}
   - component: {fileID: 1525048971630314915}
   - component: {fileID: 4204085747038930360}
+  - component: {fileID: 8388092316425216802}
   m_Layer: 5
   m_Name: countryName
   m_TagString: Untagged
@@ -3483,6 +3559,42 @@ MonoBehaviour:
   originalText: New Text
   fixTags: 1
   forceFix: 0
+--- !u!114 &8388092316425216802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5888217358994159094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: 
 --- !u!1 &6258544605152535530
 GameObject:
   m_ObjectHideFlags: 0
@@ -3852,6 +3964,7 @@ GameObject:
   - component: {fileID: 6072646426661022245}
   - component: {fileID: 7213066947258924185}
   - component: {fileID: 7648337614835906602}
+  - component: {fileID: 7318437310219759246}
   m_Layer: 5
   m_Name: countryName
   m_TagString: Untagged
@@ -3980,6 +4093,42 @@ MonoBehaviour:
   originalText: New Text
   fixTags: 1
   forceFix: 0
+--- !u!114 &7318437310219759246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7000520734063760763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: 
 --- !u!1 &7059036121649362371
 GameObject:
   m_ObjectHideFlags: 0
@@ -4540,6 +4689,7 @@ GameObject:
   - component: {fileID: 4532771042033538617}
   - component: {fileID: 1602446235649148396}
   - component: {fileID: 8429100745578367232}
+  - component: {fileID: 5545090754159630438}
   m_Layer: 5
   m_Name: countryName
   m_TagString: Untagged
@@ -4668,6 +4818,42 @@ MonoBehaviour:
   originalText: New Text
   fixTags: 1
   forceFix: 0
+--- !u!114 &5545090754159630438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8801593999472090291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: 
 --- !u!1 &8908993551860467731
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class VaccinePopupController : MonoBehaviour
 {
+    public static VaccinePopupController Instance;
+
+    
     public Button coronaButton;
     
     public TMP_InputField donateAmount;
@@ -13,12 +16,24 @@ public class VaccinePopupController : MonoBehaviour
     public List<Slider> otherCountriesStatus;
     public Slider myCountryStatus;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         EventManager.Instance.OnDonateResponseEvent += OnGetDonateResponse;
         EventManager.Instance.OnCoronaInfoResponseEvent += OnGetCoronaInfoResponse;
         donateButton.onClick.AddListener(Donate);
         coronaButton.gameObject.SetActive(!(GameDataManager.Instance.CoronaInfos is null));
+        print(GameDataManager.Instance.CoronaInfos);
+    }
+    
+    public void CheckCorona()
+    {
+        coronaButton.gameObject.SetActive(!(GameDataManager.Instance.CoronaInfos is null));
+        print(GameDataManager.Instance.CoronaInfos);
     }
 
     private void Donate()
@@ -26,6 +41,7 @@ public class VaccinePopupController : MonoBehaviour
         if (string.IsNullOrEmpty(donateAmount.text)) return;
 
         var amount = float.Parse(donateAmount.text);
+        if(amount == 0) return;
         if (amount > MainHeaderManager.Instance.Money)
         {
             DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
@@ -49,7 +65,9 @@ public class VaccinePopupController : MonoBehaviour
 
     private void OnGetCoronaInfoResponse(CoronaInfoResponse response)
     {
+        print("HHHHHHHHHHHHHHHHHHHHHHHHHH");
         SetData(response.infos);
+        coronaButton.gameObject.SetActive(true);
     }
 
 
@@ -69,7 +87,7 @@ public class VaccinePopupController : MonoBehaviour
                 otherCountriesStatus[i].maxValue = info.amountToBeCollect;
                 otherCountriesStatus[i].value = info.currentCollectedAmount;
                 otherCountriesStatus[i].GetComponentInChildren<Localize>()
-                    .SetKey("auction_" + info.country.ToString().ToLower());
+                    .SetKey("country_" + info.country);
                 i++;
             }
         }
