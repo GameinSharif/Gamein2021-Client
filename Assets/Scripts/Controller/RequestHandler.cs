@@ -213,9 +213,6 @@ public class RequestHandler
                 EditProviderResponse editProviderResponse = JsonUtility.FromJson<EditProviderResponse>(responseJson);
                 EventManager.Instance.OnEditProviderResponse(editProviderResponse);
                 break;
-            case ResponseTypeConstant.ADD_PRODUCT:
-                //TODO remove this from server and here too
-                break;
             case ResponseTypeConstant.UPDATE_GAME_STATUS:
                 UpdateGameStatusResponse updateGameStatusResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateGameStatusResponse), new StringEnumConverter()) as UpdateGameStatusResponse;
                 EventManager.Instance.OnUpdateGameStatusResponse(updateGameStatusResponse);

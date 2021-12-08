@@ -14,7 +14,7 @@ public class LeaderboardController : MonoBehaviour
     public RTLTextMeshPro yourNo;
     public RTLTextMeshPro yourValue;
 
-    private List<GameObject> _spawnedRankGameObjects = new List<GameObject>();
+    public List<GameObject> _spawnedRankGameObjects;
     
     public Localize totalTeams;
     
@@ -34,16 +34,18 @@ public class LeaderboardController : MonoBehaviour
         DeactiveAllChildrenInScrollPanel();
         for (int i = 0; i < rankings.Count; i++)
         {
-            AddFinishedProductItemToList(rankings[i], i + 1);
+            AddRankItemToList(rankings[i], i + 1);
         }
+
         yourTeamLocalize.SetKey("leaderboard_your_team");
         yourNo.text = getLeaderboardResponse.yourRanking.ToString();
-        yourValue.text = MainHeaderManager.Instance.Value.ToString("0.00");
-        totalTeams.SetKey("leaderboard_total_teams", getLeaderboardResponse.totalTeams.ToString());
+        yourValue.text = getLeaderboardResponse.yourWealth.ToString("0.00");
+        totalTeams.SetKey("leaderboard_total_teams", GameDataManager.Instance.Teams.Count.ToString());
+
         leaderboardCanvas.SetActive(true);
     }
     
-    private void AddFinishedProductItemToList(Utils.Ranking ranking, int index)
+    private void AddRankItemToList(Utils.Ranking ranking, int index)
     {
         GameObject createdItem = GetItem(leaderboardScrollViewParent);
         createdItem.transform.SetSiblingIndex(index);
@@ -78,7 +80,6 @@ public class LeaderboardController : MonoBehaviour
         }
     }    
     
-    
     public void OnLeaderboardButtonClicked()
     {
         if (leaderboardCanvas.activeSelf)
@@ -86,6 +87,7 @@ public class LeaderboardController : MonoBehaviour
             leaderboardCanvas.SetActive(false);
             return;
         }
+
         GetLeaderboardRequest getLeaderboardRequest = new GetLeaderboardRequest(RequestTypeConstant.GET_LEADERBOARD);
         RequestManager.Instance.SendRequest(getLeaderboardRequest);
     }

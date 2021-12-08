@@ -35,7 +35,7 @@ public enum ResponseTypeConstant
     GET_CONTRACTS_WITH_SUPPLIER = 32,
     AUCTION_FINISHED = 33,
     GET_ALL_ACTIVE_DC = 34,
-    ADD_PRODUCT = 35,
+    GET_LEADERBOARD = 35,
     REMOVE_PRODUCT = 36,
     GET_STORAGES = 37,
     NEW_CONTRACT = 38,
@@ -52,6 +52,5 @@ public enum ResponseTypeConstant
     UPDATE_WEEKLY_REPORT = 49,
     REJECT_NEGOTIATION = 50,
     EDIT_PROVIDER = 51,
-    GET_NEWS =52,
-    GET_LEADERBOARD = 53,
+    GET_NEWS = 52
 }

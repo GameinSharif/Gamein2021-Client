@@ -8,5 +8,5 @@ public class GetLeaderboardResponse : ResponseObject
 {
     public List<Utils.Ranking> rankings;
     public int yourRanking;
-    public int totalTeams;
+    public float yourWealth;
 }
