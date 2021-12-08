@@ -26,14 +26,16 @@ public class VaccinePopupController : MonoBehaviour
         EventManager.Instance.OnDonateResponseEvent += OnGetDonateResponse;
         EventManager.Instance.OnCoronaInfoResponseEvent += OnGetCoronaInfoResponse;
         donateButton.onClick.AddListener(Donate);
-        coronaButton.gameObject.SetActive(!(GameDataManager.Instance.CoronaInfos is null));
-        print(GameDataManager.Instance.CoronaInfos);
+        coronaButton.gameObject.SetActive(false);
     }
     
     public void CheckCorona()
     {
-        coronaButton.gameObject.SetActive(!(GameDataManager.Instance.CoronaInfos is null));
-        print(GameDataManager.Instance.CoronaInfos);
+        if (!(GameDataManager.Instance.CoronaInfos is null))
+        {
+            SetData(GameDataManager.Instance.CoronaInfos);
+            coronaButton.gameObject.SetActive(true);
+        }
     }
 
     private void Donate()
@@ -65,7 +67,6 @@ public class VaccinePopupController : MonoBehaviour
 
     private void OnGetCoronaInfoResponse(CoronaInfoResponse response)
     {
-        print("HHHHHHHHHHHHHHHHHHHHHHHHHH");
         SetData(response.infos);
         coronaButton.gameObject.SetActive(true);
     }

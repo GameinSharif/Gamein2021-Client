@@ -231,15 +231,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'fjiejfirjjhuh
-
-    vorjirji
-
-    jmorjgijrg
-
-    jorjogrjg
-
-    jorjgorjgorjgojrgojr'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 159ecab0e50ff8e4da74c11a52a653b5, type: 2}
   m_sharedMaterial: {fileID: -5449547863004890230, guid: 159ecab0e50ff8e4da74c11a52a653b5, type: 2}
@@ -266,7 +258,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.45
+  m_fontSize: 25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -310,15 +302,7 @@ MonoBehaviour:
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
   preserveNumbers: 0
   farsi: 1
-  originalText: 'fjiejfirjjhuh
-
-    vorjirji
-
-    jmorjgijrg
-
-    jorjogrjg
-
-    jorjgorjgorjgojrgojr'
+  originalText: 
   fixTags: 1
   forceFix: 0
 --- !u!1 &363386493011279533
@@ -353,7 +337,7 @@ RectTransform:
   - {fileID: 7136260617115658366}
   - {fileID: 6609737181083807053}
   m_Father: {fileID: 675198647092476346}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -422,6 +406,7 @@ GameObject:
   - component: {fileID: 2124262615505279165}
   - component: {fileID: 507607354069079190}
   - component: {fileID: 3654029249377455781}
+  - component: {fileID: 4407006067905754617}
   m_Layer: 5
   m_Name: counties status header
   m_TagString: Untagged
@@ -550,6 +535,42 @@ MonoBehaviour:
   originalText: New Text
   fixTags: 1
   forceFix: 0
+--- !u!114 &4407006067905754617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752212159915920190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: corona_other_countries_header
 --- !u!1 &753069115175542531
 GameObject:
   m_ObjectHideFlags: 0
@@ -1043,9 +1064,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 3773670534045742810}
   - {fileID: 4953925216553732160}
   - {fileID: 2334925413319898405}
-  - {fileID: 3773670534045742810}
   m_Father: {fileID: 2314893979782322432}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1117,6 +1138,7 @@ GameObject:
   - component: {fileID: 737823018518643257}
   - component: {fileID: 8236307461012240878}
   - component: {fileID: 1901922954272955750}
+  - component: {fileID: 1679604037601889558}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -1245,6 +1267,42 @@ MonoBehaviour:
   originalText: DONATE
   fixTags: 1
   forceFix: 0
+--- !u!114 &1679604037601889558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690290042879459103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: corona_donate_button
 --- !u!1 &1798966386635805730
 GameObject:
   m_ObjectHideFlags: 0
@@ -2436,6 +2494,7 @@ GameObject:
   - component: {fileID: 9081050205961297055}
   - component: {fileID: 3488415213629627146}
   - component: {fileID: 5279497047359278148}
+  - component: {fileID: 3312787328683417280}
   m_Layer: 5
   m_Name: corona header
   m_TagString: Untagged
@@ -2564,6 +2623,42 @@ MonoBehaviour:
   originalText: CORONA VIRUS
   fixTags: 1
   forceFix: 0
+--- !u!114 &3312787328683417280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4085086801510445072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: corona_virus
 --- !u!1 &4260358947197882770
 GameObject:
   m_ObjectHideFlags: 0
@@ -2840,7 +2935,7 @@ RectTransform:
   m_Children:
   - {fileID: 6631358538928290956}
   m_Father: {fileID: 675198647092476346}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3286,6 +3381,7 @@ GameObject:
   - component: {fileID: 4185317224316665764}
   - component: {fileID: 1119183102322278601}
   - component: {fileID: 527565523963928477}
+  - component: {fileID: 3796602135778804681}
   m_Layer: 5
   m_Name: Placeholder
   m_TagString: Untagged
@@ -3414,6 +3510,42 @@ MonoBehaviour:
   originalText: Amount
   fixTags: 1
   forceFix: 0
+--- !u!114 &3796602135778804681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5192527880919573385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: corona_amount_placeholder
 --- !u!1 &5603230032618742078
 GameObject:
   m_ObjectHideFlags: 0
@@ -3959,6 +4091,7 @@ GameObject:
   - component: {fileID: 5564956683772755238}
   - component: {fileID: 902420340178337865}
   - component: {fileID: 4493528478938410616}
+  - component: {fileID: 3588828918547088722}
   m_Layer: 5
   m_Name: vaccine name
   m_TagString: Untagged
@@ -4087,6 +4220,42 @@ MonoBehaviour:
   originalText: 'vaccine name: '
   fixTags: 1
   forceFix: 0
+--- !u!114 &3588828918547088722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6829863010981907920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe7c7b9bf6459b499f64ed3e4bc6785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0
+  AudioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  Sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  Fonts:
+  - {fileID: 0}
+  - {fileID: 0}
+  FontAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  StartCorner: 0
+  ReverseArrangement: 1
+  ChangeChildAlignment: 0
+  Positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  Outline: 0
+  FixedFontAsset: 0
+  IsContainsAtSign: 0
+  LocalizedString:
+    key: corona_vaccine_name
 --- !u!1 &7000520734063760763
 GameObject:
   m_ObjectHideFlags: 0
@@ -4295,7 +4464,7 @@ RectTransform:
   m_Children:
   - {fileID: 737823018518643257}
   m_Father: {fileID: 675198647092476346}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
