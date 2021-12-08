@@ -86,6 +86,8 @@ public class LoginManager : MonoBehaviour
             PlayerPrefs.SetString("Country", loginResponse.team.country.ToString());
             PlayerPrefs.SetFloat("Money", loginResponse.team.credit);
 
+            RequestObject.myToken = loginResponse.token;
+
             SceneManager.LoadScene("MenuScene");
         }
         else
