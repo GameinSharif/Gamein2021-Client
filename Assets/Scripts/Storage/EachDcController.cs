@@ -5,10 +5,10 @@ using UnityEngine;
 public class EachDcController : MonoBehaviour
 {
     public GameObject sellPopup;
-    public RTLTextMeshPro sellPrice;
+    public Localize sellPriceLocalize;
     [Space(10)]
     public GameObject buyPopup;
-    public RTLTextMeshPro buyPrice;
+    public Localize buyPriceLocalize;
 
     private bool _isClickable = false;
     private MapUtils.MapAgentMarker.AgentType _agentType;
@@ -26,8 +26,8 @@ public class EachDcController : MonoBehaviour
             _agentType == MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter)
         {
             _isClickable = true;
-            sellPrice.text = _dc.sellingPrice.ToString();
-            buyPrice.text = _dc.buyingPrice.ToString();
+            sellPriceLocalize.SetKey("dc_price", _dc.sellingPrice.ToString());
+            buyPriceLocalize.SetKey("dc_price", _dc.buyingPrice.ToString());
         }
         else
         {

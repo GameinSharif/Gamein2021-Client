@@ -36,6 +36,11 @@ public class MainHeaderManager : MonoBehaviour
     {
         Money = moneyUpdateResponse.money;
         Value = moneyUpdateResponse.value;
+
+        if (MapManager.IsInMap)
+        {
+            MapManager.Instance.CashForAuction.text = Money.ToString("0.00");
+        }
     }
 
     public float Money

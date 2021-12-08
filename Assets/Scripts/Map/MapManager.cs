@@ -7,6 +7,7 @@ using Mapbox.Utils;
 using Mapbox.Examples;
 using System;
 using System.Linq;
+using RTLTMPro;
 
 public class MapManager : MonoBehaviour
 {
@@ -44,6 +45,10 @@ public class MapManager : MonoBehaviour
     public List<MapUtils.MapLine> MapLines;
     [Space]
     public GameObject SnapToMyTeamLocationButtonGameObject;
+    [Space]
+    public GameObject OtherCountryFactoriesLegend;
+    [Space]
+    public RTLTextMeshPro CashForAuction;
 
     private List<GameObject> _linesSpawnedObjects = new List<GameObject>();
 
@@ -154,6 +159,7 @@ public class MapManager : MonoBehaviour
 
         if (GameDataManager.Instance.IsAuctionOver())
         {
+            OtherCountryFactoriesLegend.SetActive(true);
             SnapToMyTeamLocationButtonGameObject.SetActive(true);
 
             int teamId = PlayerPrefs.GetInt("TeamId");
@@ -177,6 +183,7 @@ public class MapManager : MonoBehaviour
         }
         else
         {
+            OtherCountryFactoriesLegend.SetActive(false);
             SnapToMyTeamLocationButtonGameObject.SetActive(false);
 
             Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
@@ -255,6 +262,29 @@ public class MapManager : MonoBehaviour
         _currnetZoomAmountIndex = index;
         _abstractMap.UpdateMap(_possibleZoomAmounts[_currnetZoomAmountIndex]);
         PlayerPrefs.SetInt("MapZoomIndex", index);
+
+        if (index == 0)
+        {
+            foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+            {
+                switch (onMapMarker.MapAgentMarker.MapAgentType)
+                {
+                    case MapUtils.MapAgentMarker.AgentType.OtherFactory:
+                    case MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory:
+                    case MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter:
+                    case MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter:
+                        onMapMarker.SpawnedObject.SetActive(false);
+                        break;
+                }
+            }
+        }
+        else
+        {
+            foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+            {
+                onMapMarker.SpawnedObject.SetActive(true);
+            }
+        }
     }
 
     public void ZoomIn()
