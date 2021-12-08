@@ -93,6 +93,8 @@ public class LoginManager : MonoBehaviour
             PlayerPrefs.SetInt("FactoryId", loginResponse.team.factoryId); //Is 0 if player has no factory
             PlayerPrefs.SetString("Country", loginResponse.team.country.ToString());
             PlayerPrefs.SetFloat("Money", loginResponse.team.credit);
+            PlayerPrefs.SetFloat("Value", loginResponse.team.wealth);
+            PlayerPrefs.SetFloat("Brand", loginResponse.team.brand);
 
             RequestObject.myToken = loginResponse.token;
 

@@ -23,6 +23,8 @@ public class Utils
         public Country country;
         public int factoryId;
         public float credit;
+        public float wealth;
+        public float brand;
     }
 
     public enum ProviderState
