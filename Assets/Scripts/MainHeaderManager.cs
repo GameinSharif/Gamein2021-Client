@@ -7,10 +7,14 @@ public class MainHeaderManager : MonoBehaviour
     public static MainHeaderManager Instance;
 
     [HideInInspector] public CustomDate gameDate = new CustomDate(0,0,0);
+    [HideInInspector] public int weekNumber = 0;
 
     public RTLTextMeshPro valueRTLTMP;
     public RTLTextMeshPro moneyRTLTMP;
+
     public RTLTextMeshPro gameDateText;
+    public Localize dayLocalize;
+    public RTLTextMeshPro weekNumberText;
 
     public RTLTextMeshPro brandRTLTMP;
 
@@ -32,6 +36,8 @@ public class MainHeaderManager : MonoBehaviour
     private void OnGameTimeReceived(GameTimeResponse gameTimeResponse)
     {
         gameDate = gameTimeResponse.gameDate;
+        weekNumber = gameTimeResponse.week;
+
         SetDate();
     }
 
@@ -88,5 +94,9 @@ public class MainHeaderManager : MonoBehaviour
         gameDateText.text = gameDate.year + "/" +
                             gameDate.month.ToString().PadLeft(2, '0') + "/" + 
                             gameDate.day.ToString().PadLeft(2, '0');
+
+        dayLocalize.SetKey(gameDate.ToDateTime().DayOfWeek.ToString());
+
+        weekNumberText.text = weekNumber + "/100";
     }
 }
