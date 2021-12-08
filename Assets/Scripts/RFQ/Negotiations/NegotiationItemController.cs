@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using RTLTMPro;
 using TMPro;
@@ -63,7 +64,7 @@ public class NegotiationItemController : MonoBehaviour
         supplierOrDemander.text = _supplierOrDemanderTeam.teamName;
         
         productNameLocalize.SetKey("product_" + _product.name);
-        amount.text = amount.ToString();
+        amount.text = _negotiation.amount.ToString();
         demanderCostPerUnit.text = _negotiation.costPerUnitDemander.ToString("0.00");
         supplierCostPerUnit.text = _negotiation.costPerUnitSupplier.ToString("0.00");
         negotiationStatusLocalize.SetKey(_negotiation.state.ToString());
@@ -167,7 +168,14 @@ public class NegotiationItemController : MonoBehaviour
                 _isSendingRequest = true;
                 EditNegotiationCostPerUnitRequest editNegotiationCostPerUnitRequest = new EditNegotiationCostPerUnitRequest(RequestTypeConstant.EDIT_NEGOTIATION_COST_PER_UNIT, _negotiation.id, parsedPrice);
                 RequestManager.Instance.SendRequest(editNegotiationCostPerUnitRequest);
+                StartCoroutine(RequestTimeOut());
             }
         });
+    }
+
+    private IEnumerator RequestTimeOut()
+    {
+        yield return new WaitForSeconds(5f);
+        _isSendingRequest = false;
     }
 }
