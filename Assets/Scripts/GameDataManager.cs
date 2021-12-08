@@ -35,6 +35,10 @@ public class GameDataManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
         EventManager.Instance.OnGetGameDataResponseEvent += OnGetGameDataResponse;
         EventManager.Instance.OnGetCurrentWeekDemandsResponseEvent += OnGetCurrentWeekDemandsResponse;
         EventManager.Instance.OnGetCurrentWeekSuppliesResponseEvent += OnGetCurrentWeekSuppliesResponse;
@@ -42,6 +46,16 @@ public class GameDataManager : MonoBehaviour
         EventManager.Instance.OnGetAllAuctionsResponseEvent += OnGetAllAuctionsResponse;
         EventManager.Instance.OnAuctionFinishedResponseEvent += OnAuctionFinishedResponse;
         EventManager.Instance.OnGetAllActiveDcResponseEvent += OnGetAllActiveDCsResponse;
+    }
+    private void OnDisable()
+    {
+        EventManager.Instance.OnGetGameDataResponseEvent -= OnGetGameDataResponse;
+        EventManager.Instance.OnGetCurrentWeekDemandsResponseEvent -= OnGetCurrentWeekDemandsResponse;
+        EventManager.Instance.OnGetCurrentWeekSuppliesResponseEvent -= OnGetCurrentWeekSuppliesResponse;
+        EventManager.Instance.OnSendNewsResponseEvent -= OnSendNewsResponse;
+        EventManager.Instance.OnGetAllAuctionsResponseEvent -= OnGetAllAuctionsResponse;
+        EventManager.Instance.OnAuctionFinishedResponseEvent -= OnAuctionFinishedResponse;
+        EventManager.Instance.OnGetAllActiveDcResponseEvent -= OnGetAllActiveDCsResponse;
     }
 
     public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
@@ -101,7 +115,7 @@ public class GameDataManager : MonoBehaviour
     private void CheckLastNewspaperSeen()
     {
         int lastSeen = PlayerPrefs.GetInt("LastNewsPaperNo", 0);
-        if (lastSeen < News.Count)
+        if (News != null && lastSeen < News.Count)
         {
             NewsController.Instance.SetNewNewspaperImageActive();
         }

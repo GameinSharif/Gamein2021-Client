@@ -313,15 +313,35 @@ public class MapManager : MonoBehaviour
         {
             if (mapAgentMarker.MapAgentType == agentType)
             {
-                var instance = Instantiate(MapAgenetMarkerPrefab, OnMapMarkersParent.transform);
-                instance.GetComponent<MaterialSetter>().Initialize(mapAgentMarker, name);
-                
-                instance.transform.localPosition = _abstractMap.GeoToWorldPosition(location) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);
-                instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-                MapUtils.OnMapMarker onMapMarker = new MapUtils.OnMapMarker(location, instance, mapAgentMarker, index);
-                _onMapMarkers.Add(onMapMarker);
+                MapUtils.OnMapMarker onMapMarker = GetOnMapMarker(agentType, index);
+                if (onMapMarker == null)
+                {
+                    var instance = Instantiate(MapAgenetMarkerPrefab, OnMapMarkersParent.transform);
+                    instance.GetComponent<MaterialSetter>().Initialize(mapAgentMarker, name);
+
+                    instance.transform.localPosition = _abstractMap.GeoToWorldPosition(location) + new Vector3(0, _onMapMarkerVerticalDistanceFromMap, 0);
+                    instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
+                    onMapMarker = new MapUtils.OnMapMarker(location, instance, mapAgentMarker, index);
+                    _onMapMarkers.Add(onMapMarker);
+                }
+                else
+                {
+                    ChangeMapAgentType(onMapMarker, agentType, name);
+                }
             }
         }
+    }
+
+    private MapUtils.OnMapMarker GetOnMapMarker(MapUtils.MapAgentMarker.AgentType agentType, int index)
+    {
+        foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
+        {
+            if (onMapMarker.Index == index && onMapMarker.MapAgentMarker.MapAgentType == agentType)
+            {
+                return onMapMarker;
+            }    
+        }
+        return null;
     }
 
     public void ChangeMapAgentType(MapUtils.OnMapMarker onMapMarker, MapUtils.MapAgentMarker.AgentType newAgentType, string name = null)

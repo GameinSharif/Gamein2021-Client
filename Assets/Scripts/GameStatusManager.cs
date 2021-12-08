@@ -32,21 +32,16 @@ public class GameStatusManager : MonoBehaviour
 
     private void OnUpdateGameStatusResponseReceived(UpdateGameStatusResponse updateGameStatusResponse)
     {
+        if (_gameStatus == updateGameStatusResponse.gameStatus)
+        {
+            return;
+        }
 
         textLocalize.SetKey("game_status_" + updateGameStatusResponse.gameStatus);
 
         switch (updateGameStatusResponse.gameStatus)
         {
             case Utils.GameStatus.RUNNING:
-                if (_gameStatus == Utils.GameStatus.RUNNING)
-                {
-                    return;
-                }
-
-                GameStatusPopupCanvas.SetActive(true);
-                CloseButtonGameObject.SetActive(true);
-                background.SetActive(false);
-                break;
             case Utils.GameStatus.PAUSED:
             case Utils.GameStatus.AUCTION:
                 GameStatusPopupCanvas.SetActive(true);
