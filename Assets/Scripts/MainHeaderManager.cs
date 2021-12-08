@@ -21,8 +21,18 @@ public class MainHeaderManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
         EventManager.Instance.OnGameTimeResponseEvent += OnGameTimeReceived;
         EventManager.Instance.OnMoneyUpdateResponseEvent += OnMoneyUpdateReceived;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnGameTimeResponseEvent -= OnGameTimeReceived;
+        EventManager.Instance.OnMoneyUpdateResponseEvent -= OnMoneyUpdateReceived;
     }
 
     private void Start()
@@ -30,6 +40,7 @@ public class MainHeaderManager : MonoBehaviour
         moneyRTLTMP.text = PlayerPrefs.GetFloat("Money").ToString("0.00");
         valueRTLTMP.text = PlayerPrefs.GetFloat("Value").ToString("0.00");
         brandRTLTMP.text = PlayerPrefs.GetFloat("Brand").ToString("0.00");
+
         SetDate();
     }
 
