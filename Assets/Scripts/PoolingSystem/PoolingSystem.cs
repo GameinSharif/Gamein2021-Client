@@ -58,6 +58,8 @@ public class PoolingSystem<T>
         var gameObject = GetAvailableGameObject();
         
         initializerAction.Invoke(gameObject, index, data);
+        
+        gameObject.transform.SetSiblingIndex(index);
 
         gameObject.SetActive(true);
         counter++;

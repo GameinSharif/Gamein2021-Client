@@ -7,13 +7,13 @@ public class NewsController : MonoBehaviour
 {
     public static NewsController Instance;
 
-    public GameObject newsPaperCanvas;
-    public GameObject breakingNewsCanvas;
+    public GameObject newsCanvas;
     public GameObject newNewspaperImage;
 
-    private List<Utils.News> _allWeeklyNews;
+    private List<Utils.News> _allNews;
     private int _newsIndex;
     private WeeklyNewsController _weeklyNewsController;
+    private BreakingNewsController _breakingNewsController;
 
     private void Awake()
     {
@@ -22,54 +22,64 @@ public class NewsController : MonoBehaviour
 
     public void OnShowPreviousNewspaperButtonClick()
     {
-        _allWeeklyNews = GameDataManager.Instance.GetAllWeeklyNews();
-        _newsIndex = _newsIndex == 0 ? _allWeeklyNews.Count - 1 : _newsIndex - 1;
-        _weeklyNewsController.SetInfo(_allWeeklyNews[_newsIndex]);
+        _allNews = GameDataManager.Instance.News;
+        _newsIndex = _newsIndex == 0 ? _allNews.Count - 1 : _newsIndex - 1;
+        if (_allNews[_newsIndex].newsType == Utils.NewsType.COMMON)
+        {
+            _weeklyNewsController.SetInfo(_allNews[_newsIndex]);
+        }
+        else
+        {
+            _breakingNewsController.SetInfo(_allNews[_newsIndex], false);
+        }    
     }
     
     public void OnShowNextNewspaperButtonClick()
     {
-        _allWeeklyNews = GameDataManager.Instance.GetAllWeeklyNews();
-        _newsIndex = _newsIndex == _allWeeklyNews.Count - 1 ? 0 : _newsIndex + 1;
-        _weeklyNewsController.SetInfo(_allWeeklyNews[_newsIndex]);
+        _allNews = GameDataManager.Instance.News;
+        _newsIndex = _newsIndex == _allNews.Count - 1 ? 0 : _newsIndex + 1;
+        if (_allNews[_newsIndex].newsType == Utils.NewsType.COMMON)
+        {
+            _weeklyNewsController.SetInfo(_allNews[_newsIndex]);
+        }
+        else
+        {
+            _breakingNewsController.SetInfo(_allNews[_newsIndex], false);
+        }
     }
 
     public void OnShowNewsButtonClick()
     {
         newNewspaperImage.SetActive(false);
-        //int lastNewspaperNo = PlayerPrefs.GetInt("LastNewsPaperNo", 0);
-        _allWeeklyNews = GameDataManager.Instance.GetAllWeeklyNews();
-        if (_allWeeklyNews.Count > 0)
+        _allNews = GameDataManager.Instance.News;
+        if (_allNews.Count > 0)
         {
-            _newsIndex = _allWeeklyNews.Count - 1;
-            _weeklyNewsController = newsPaperCanvas.GetComponent<WeeklyNewsController>();
+            _newsIndex = _allNews.Count - 1;
+            _weeklyNewsController = newsCanvas.GetComponent<WeeklyNewsController>();
+            _breakingNewsController = newsCanvas.GetComponent<BreakingNewsController>();
             PlayerPrefs.SetInt("LastNewsPaperNo", _newsIndex + 1);
-            _weeklyNewsController.SetInfo(_allWeeklyNews[_newsIndex]);
-            newsPaperCanvas.SetActive(true);
+            if (_allNews[_newsIndex].newsType == Utils.NewsType.COMMON)
+            {
+                _weeklyNewsController.SetInfo(_allNews[_newsIndex]);
+            }
+            else
+            {
+                _breakingNewsController.SetInfo(_allNews[_newsIndex], false);
+            }
+            newsCanvas.SetActive(true);
         }
     }
 
     public void OnBreakingNewsReceived(Utils.News news)
     {
-        BreakingNewsController controller = breakingNewsCanvas.GetComponent<BreakingNewsController>();
-        controller.SetInfo(news);
-        breakingNewsCanvas.SetActive(true);
+        BreakingNewsController controller = newsCanvas.GetComponent<BreakingNewsController>();
+        controller.SetInfo(news, true);
+        newsCanvas.SetActive(true);
     }
 
     public void SetNewNewspaperImageActive()
     {
         newNewspaperImage.SetActive(true);
-    }
-
-    public void Test1()
-    {
-        GameDataManager.Instance.TestButton1();
-    }
-    
-    public void Test2()
-    {
-        Debug.Log("in Test2");
-        GameDataManager.Instance.TestButton2();
     }
     
 }

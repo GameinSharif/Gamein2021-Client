@@ -28,7 +28,7 @@ public enum RequestTypeConstant
     SELL_DC = 25,
     GET_TEAM_TRANSPORTS = 26,
     GET_CONTRACTS_WITH_SUPPLIER = 27,
-    ADD_PRODUCT = 28,
+    GET_LEADERBOARD = 28,
     REMOVE_PRODUCT = 29,
     GET_STORAGES = 30,
     NEW_CONTRACT = 31,

@@ -12,6 +12,8 @@ public class MainHeaderManager : MonoBehaviour
     public RTLTextMeshPro moneyRTLTMP;
     public RTLTextMeshPro gameDateText;
 
+    public RTLTextMeshPro brandRTLTMP;
+
     private void Awake()
     {
         Instance = this;
@@ -23,6 +25,7 @@ public class MainHeaderManager : MonoBehaviour
     {
         moneyRTLTMP.text = PlayerPrefs.GetFloat("Money").ToString("0.00");
         valueRTLTMP.text = PlayerPrefs.GetFloat("Value").ToString("0.00");
+        brandRTLTMP.text = PlayerPrefs.GetFloat("Brand").ToString("0.00");
         SetDate();
     }
 
@@ -36,6 +39,14 @@ public class MainHeaderManager : MonoBehaviour
     {
         Money = moneyUpdateResponse.money;
         Value = moneyUpdateResponse.value;
+        Brand = moneyUpdateResponse.brand;
+
+        //TODO donated amount
+
+        if (MapManager.IsInMap)
+        {
+            MapManager.Instance.CashForAuction.text = Money.ToString("0.00");
+        }
     }
 
     public float Money
@@ -59,6 +70,17 @@ public class MainHeaderManager : MonoBehaviour
         }
 
         get => PlayerPrefs.GetFloat("Value", 0f);
+    }
+
+    public float Brand
+    {
+        set
+        {
+            PlayerPrefs.SetFloat("Brand", value);
+            brandRTLTMP.text = value.ToString("0.00");
+        }
+
+        get => PlayerPrefs.GetFloat("Brand", 0f);
     }
 
     private void SetDate()

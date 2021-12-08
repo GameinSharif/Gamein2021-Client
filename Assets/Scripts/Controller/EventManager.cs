@@ -347,6 +347,13 @@ public class EventManager : MonoBehaviour
         OnUpdateGameStatusResponseEvent?.Invoke(response);
     }
     
+    public event Action<GetLeaderboardResponse> OnGetLeaderboardResponseEvent;
+
+    public void OnGetLeaderboardResponse(GetLeaderboardResponse getLeaderboardResponse)
+    {
+        OnGetLeaderboardResponseEvent?.Invoke(getLeaderboardResponse);
+    }
+
     public event Action<CoronaInfoResponse> OnCoronaInfoResponseEvent;
     public void OnCoronaInfoResponse(CoronaInfoResponse response)
     {

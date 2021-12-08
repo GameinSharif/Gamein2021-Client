@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using UnityEngine;
 
 public class EncryptManager
 {
@@ -15,8 +16,10 @@ public class EncryptManager
         Rsa = new RSACryptoServiceProvider();
         Rsa.ImportParameters(rsaParameters);
 
-        GetGameStatusRequest getGameStatusRequest = new GetGameStatusRequest(RequestTypeConstant.GET_GAME_STATUS);
-        RequestManager.Instance.SendRequest(getGameStatusRequest);
+        if (!PlayerPrefs.HasKey("Language"))
+        {
+            LoginManager.Instance.GetGameStatus();
+        }
     }
 
     public static string Encrypt(string message)

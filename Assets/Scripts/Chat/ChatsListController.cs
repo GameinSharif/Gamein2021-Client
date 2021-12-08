@@ -136,4 +136,9 @@ public class ChatsListController : MonoBehaviour
             ChatPageController.Instance.LoadChat(otherTeamId);
         }
     }
+
+    public void OnCloseButtonCLicked()
+    {
+        chatParentGameObject.SetActive(false);
+    }
 }

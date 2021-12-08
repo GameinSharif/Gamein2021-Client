@@ -36,6 +36,10 @@ public class GameDataManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
         EventManager.Instance.OnGetGameDataResponseEvent += OnGetGameDataResponse;
         EventManager.Instance.OnGetCurrentWeekDemandsResponseEvent += OnGetCurrentWeekDemandsResponse;
         EventManager.Instance.OnGetCurrentWeekSuppliesResponseEvent += OnGetCurrentWeekSuppliesResponse;
@@ -43,6 +47,16 @@ public class GameDataManager : MonoBehaviour
         EventManager.Instance.OnGetAllAuctionsResponseEvent += OnGetAllAuctionsResponse;
         EventManager.Instance.OnAuctionFinishedResponseEvent += OnAuctionFinishedResponse;
         EventManager.Instance.OnGetAllActiveDcResponseEvent += OnGetAllActiveDCsResponse;
+    }
+    private void OnDisable()
+    {
+        EventManager.Instance.OnGetGameDataResponseEvent -= OnGetGameDataResponse;
+        EventManager.Instance.OnGetCurrentWeekDemandsResponseEvent -= OnGetCurrentWeekDemandsResponse;
+        EventManager.Instance.OnGetCurrentWeekSuppliesResponseEvent -= OnGetCurrentWeekSuppliesResponse;
+        EventManager.Instance.OnSendNewsResponseEvent -= OnSendNewsResponse;
+        EventManager.Instance.OnGetAllAuctionsResponseEvent -= OnGetAllAuctionsResponse;
+        EventManager.Instance.OnAuctionFinishedResponseEvent -= OnAuctionFinishedResponse;
+        EventManager.Instance.OnGetAllActiveDcResponseEvent -= OnGetAllActiveDCsResponse;
     }
 
     public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
@@ -104,7 +118,7 @@ public class GameDataManager : MonoBehaviour
     private void CheckLastNewspaperSeen()
     {
         int lastSeen = PlayerPrefs.GetInt("LastNewsPaperNo", 0);
-        if (lastSeen < GetAllWeeklyNews().Count)
+        if (News != null && lastSeen < News.Count)
         {
             NewsController.Instance.SetNewNewspaperImageActive();
         }
@@ -309,71 +323,6 @@ public class GameDataManager : MonoBehaviour
     public Utils.ProductionLineTemplate GetProductionLineTemplateById(int templateId)
     {
         return GameDataManager.Instance.ProductionLineTemplates.FirstOrDefault(c => c.id == templateId);
-    }
-
-    public List<Utils.News> GetAllWeeklyNews()
-    {
-        return News.Where(n => n.newsType == Utils.NewsType.COMMON).ToList();
-    }
-
-    public void TestButton1()
-    {
-        Utils.News test = new Utils.News
-        {
-            week = 1,
-            imageIndex = 0,
-            mainTextEng = "hi this is a test",
-            mainTitleEng = "CORONA",
-            subTextsEng1 = "sub\nwaincbocn\njwneweojevb",
-            subTextsEng2 = "cbjwabvaeovbqfjvbwabvj\ncbjwdbcdbvab",
-            subTextsEng3 = "wcbnwoudcvwbvw",
-            newsType = Utils.NewsType.COMMON
-        };
-        News.Add(test);
-        CheckLastNewspaperSeen();
-    }
-
-    public void TestButton2()
-    {
-        Debug.Log("in TestBtn2");
-
-        List<Utils.News> receivedNews = new List<Utils.News>();
-        Utils.News test = new Utils.News
-        {
-            week = 2,
-            imageIndex = 0,
-            mainTextEng = "hi this is a test",
-            mainTitleEng = "CORONA",
-            subTextsEng1 = "sub\nwaincbocn\njwneweojevb",
-            subTextsEng2 = "cbjwabvaeovbqfjvbwabvj\ncbjwdbcdbvab",
-            subTextsEng3 = "wcbnwoudcvwbvw",
-            newsType = Utils.NewsType.COMMON
-        };
-        Utils.News test2 = new Utils.News
-        {
-            week = 1,
-            imageIndex = 0,
-            mainTextEng = "hi this is a test",
-            mainTitleEng = "CORONA",
-            subTextsEng1 = "sub\nwaincbocn\njwneweojevb",
-            subTextsEng2 = "cbjwabvaeovbqfjvbwabvj\ncbjwdbcdbvab",
-            subTextsEng3 = "wcbnwoudcvwbvw",
-            newsType = Utils.NewsType.SERIOUS
-        };
-        receivedNews.Add(test);
-        receivedNews.Add(test2);
-        foreach (Utils.News news in receivedNews)
-        {
-            if (news.newsType == Utils.NewsType.SERIOUS)
-            {
-                NewsController.Instance.OnBreakingNewsReceived(news);
-            }
-            else
-            {
-                NewsController.Instance.SetNewNewspaperImageActive();
-            }
-            News.Add(news);
-        }
     }
     
 }

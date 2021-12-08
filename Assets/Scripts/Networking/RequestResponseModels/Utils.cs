@@ -7,9 +7,11 @@ public class Utils
 {
     public enum GameStatus
     {
+        NOT_STARTED,
+        AUCTION,
         RUNNING,
         PAUSED,
-        STOPPED
+        FINISHED
     }
 
 
@@ -21,6 +23,8 @@ public class Utils
         public Country country;
         public int factoryId;
         public float credit;
+        public float wealth;
+        public float brand;
     }
 
     public enum ProviderState
@@ -426,7 +430,14 @@ public class Utils
 
         public int imageIndex;
     }
-    
+
+    [Serializable]
+    public class Ranking
+    {
+        public int teamId;
+        public float value;
+    }
+
     [Serializable]
     public class CoronaInfoDto
     {

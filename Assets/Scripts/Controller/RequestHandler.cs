@@ -213,9 +213,6 @@ public class RequestHandler
                 EditProviderResponse editProviderResponse = JsonUtility.FromJson<EditProviderResponse>(responseJson);
                 EventManager.Instance.OnEditProviderResponse(editProviderResponse);
                 break;
-            case ResponseTypeConstant.ADD_PRODUCT:
-                //TODO remove this from server and here too
-                break;
             case ResponseTypeConstant.UPDATE_GAME_STATUS:
                 UpdateGameStatusResponse updateGameStatusResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateGameStatusResponse), new StringEnumConverter()) as UpdateGameStatusResponse;
                 EventManager.Instance.OnUpdateGameStatusResponse(updateGameStatusResponse);
@@ -230,6 +227,10 @@ public class RequestHandler
             case ResponseTypeConstant.UPDATE_WEEKLY_REPORT:
                 UpdateWeeklyReportResponse updateWeeklyReportResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateWeeklyReportResponse), new StringEnumConverter()) as UpdateWeeklyReportResponse;
                 EventManager.Instance.OnUpdateWeeklyReportResponse(updateWeeklyReportResponse);
+                break;
+            case ResponseTypeConstant.GET_LEADERBOARD:
+                GetLeaderboardResponse getLeaderboardResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetLeaderboardResponse), new StringEnumConverter()) as GetLeaderboardResponse;
+                EventManager.Instance.OnGetLeaderboardResponse(getLeaderboardResponse);
                 break;
             case ResponseTypeConstant.CORONA_INFO:
                 EventManager.Instance.OnCoronaInfoResponse(JsonConvert.DeserializeObject(responseJson,
