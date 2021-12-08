@@ -231,6 +231,10 @@ public class RequestHandler
                 UpdateWeeklyReportResponse updateWeeklyReportResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateWeeklyReportResponse), new StringEnumConverter()) as UpdateWeeklyReportResponse;
                 EventManager.Instance.OnUpdateWeeklyReportResponse(updateWeeklyReportResponse);
                 break;
+            case ResponseTypeConstant.GET_LEADERBOARD:
+                GetLeaderboardResponse getLeaderboardResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetLeaderboardResponse), new StringEnumConverter()) as GetLeaderboardResponse;
+                EventManager.Instance.OnGetLeaderboardResponse(getLeaderboardResponse);
+                break;
             default:
                 Debug.LogWarning(responseJson);
                 break;

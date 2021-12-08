@@ -53,4 +53,5 @@ public enum ResponseTypeConstant
     REJECT_NEGOTIATION = 50,
     EDIT_PROVIDER = 51,
     GET_NEWS =52,
+    GET_LEADERBOARD = 53,
 }

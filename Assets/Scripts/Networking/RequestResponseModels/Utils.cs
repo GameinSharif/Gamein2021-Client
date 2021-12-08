@@ -428,4 +428,11 @@ public class Utils
 
         public int imageIndex;
     }
+
+    [Serializable]
+    public class Ranking
+    {
+        public int teamId;
+        public float value;
+    }
 }
