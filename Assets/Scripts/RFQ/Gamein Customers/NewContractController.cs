@@ -28,6 +28,8 @@ public class NewContractController : MonoBehaviour
     private Utils.WeekDemand _weekDemand;
     private List<Utils.Storage> _storages = new List<Utils.Storage>();
 
+    private bool _isSendingRequest = false;
+
     private void Awake()
     {
         Instance = this;
@@ -54,6 +56,8 @@ public class NewContractController : MonoBehaviour
         {
             DialogManager.Instance.ShowErrorDialog();
         }
+
+        _isSendingRequest = false;
     }
 
     public void OnOpenMakeADealPopupClick(Utils.WeekDemand weekDemand)
@@ -125,6 +129,11 @@ public class NewContractController : MonoBehaviour
     
     public void OnDoneButtonClick()
     {
+        if (_isSendingRequest)
+        {
+            return;
+        }
+        
         string amountText = amount.text;
         string priceText = price.text;
         string weeksText = numberOfRepetition.text;
@@ -172,5 +181,6 @@ public class NewContractController : MonoBehaviour
 
         NewContractRequest newContract = new NewContractRequest(RequestTypeConstant.NEW_CONTRACT, _weekDemand.gameinCustomerId, _storages[sourceStorageDropDown.value].id, _weekDemand.productId, amountInt, priceFloat, weeksInt);
         RequestManager.Instance.SendRequest(newContract);
+        _isSendingRequest = true;
     }
 }
