@@ -9,6 +9,7 @@ public class NewsController : MonoBehaviour
 
     public GameObject newsCanvas;
     public GameObject newNewspaperImage;
+    public Button newspapersButton;
 
     private List<Utils.News> _allNews;
     private int _newsIndex;

@@ -100,6 +100,7 @@ public class GameDataManager : MonoBehaviour
     
     private void OnSendNewsResponse(SendNewsResponse sendNewsResponse)
     {
+        NewsController.Instance.newspapersButton.interactable = true;
         List<Utils.News> receivedNews = sendNewsResponse.news;
         foreach (Utils.News news in receivedNews)
         {
@@ -117,8 +118,15 @@ public class GameDataManager : MonoBehaviour
 
     private void CheckLastNewspaperSeen()
     {
+        if (News == null || News.Count == 0)
+        {
+            NewsController.Instance.newspapersButton.interactable = false;
+            News = new List<Utils.News>();
+            return;
+        }
+
         int lastSeen = PlayerPrefs.GetInt("LastNewsPaperNo", 0);
-        if (News != null && lastSeen < News.Count)
+        if (lastSeen < News.Count)
         {
             NewsController.Instance.SetNewNewspaperImageActive();
         }
