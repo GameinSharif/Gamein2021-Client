@@ -65,7 +65,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void Setup()
     {
         InitializeMap();
         InitializeGameDataOnMap();

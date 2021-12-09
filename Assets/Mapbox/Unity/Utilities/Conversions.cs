@@ -43,6 +43,7 @@ namespace Mapbox.Unity.Utilities
 		/// <param name="s">string.</param>
 		public static Vector2d StringToLatLon(string s)
 		{
+			s = s.Replace("/", ".");
 			var latLonSplit = s.Split(',');
 			if (latLonSplit.Length != 2)
 			{
