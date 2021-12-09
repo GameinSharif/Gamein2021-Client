@@ -85,8 +85,8 @@ public class VaccinePopupController : MonoBehaviour
 
     private void OnGetCoronaInfoResponse(CoronaInfoResponse response)
     {
-        print("aaaaaaaaaaa");
-        SetData(response.infos);
+        //if(response.coronaInfos is null) return;
+        SetData(response.coronaInfos);
         coronaButton.gameObject.SetActive(true);
     }
 
@@ -107,8 +107,9 @@ public class VaccinePopupController : MonoBehaviour
             {
                 otherCountriesStatus[i].maxValue = info.amountToBeCollect;
                 otherCountriesStatus[i].value = info.currentCollectedAmount;
+                var percent = info.currentCollectedAmount / info.amountToBeCollect;
                 otherCountriesStatus[i].GetComponentInChildren<Localize>()
-                    .SetKey("country_" + info.country);
+                    .SetKey("corona_country_" + info.country, percent.ToString("P0"));
                 i++;
             }
         }
