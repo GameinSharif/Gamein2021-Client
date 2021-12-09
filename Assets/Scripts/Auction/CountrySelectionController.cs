@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using RTLTMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 

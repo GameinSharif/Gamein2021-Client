@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Mapbox.Unity.Map;
 using Mapbox.Utils;
 using Mapbox.Examples;

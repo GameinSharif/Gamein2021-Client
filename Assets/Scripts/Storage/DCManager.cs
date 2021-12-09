@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Design.Serialization;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class DCManager : MonoBehaviour
 {
@@ -71,6 +69,6 @@ public class DCManager : MonoBehaviour
 
     private bool IsInMapScene()
     {
-        return SceneManager.GetSceneAt(SceneManager.sceneCount - 1).name.Contains("Map");
+        return MapManager.IsInMap;
     }
 }

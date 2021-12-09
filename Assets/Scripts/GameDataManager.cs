@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameDataManager : MonoBehaviour
 {
@@ -137,7 +136,7 @@ public class GameDataManager : MonoBehaviour
     {
         Auctions = getAllAuctionsResponse.auctions;
 
-        if (SceneManager.GetActiveScene().name == "MapScene")
+        if (MapManager.IsInMap)
             MapManager.Instance.UpdateAllAuctions();
 
         SetAuctionCurrentRound();
