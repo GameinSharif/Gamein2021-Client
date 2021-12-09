@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using RTLTMPro;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +12,7 @@ public class VaccinePopupController : MonoBehaviour
 
     
     public Button coronaButton;
-    
+    public RTLTextMeshPro collectedRatio;
     public TMP_InputField donateAmount;
     public Button donateButton;
     public List<Slider> otherCountriesStatus;
@@ -60,6 +62,12 @@ public class VaccinePopupController : MonoBehaviour
             return;
         }
 
+        if (amount < 0 || amount > RemainDonate())
+        {
+            DialogManager.Instance.ShowErrorDialog("invalid_donate_error");
+            return;
+        }
+
         var request = new DonateRequest(RequestTypeConstant.DONATE, amount);
         RequestManager.Instance.SendRequest(request);
     }
@@ -77,6 +85,7 @@ public class VaccinePopupController : MonoBehaviour
 
     private void OnGetCoronaInfoResponse(CoronaInfoResponse response)
     {
+        print("aaaaaaaaaaa");
         SetData(response.infos);
         coronaButton.gameObject.SetActive(true);
     }
@@ -90,6 +99,7 @@ public class VaccinePopupController : MonoBehaviour
         {
             if (info.country.ToString() == myCountry)
             {
+                collectedRatio.text = info.currentCollectedAmount + "/" + info.amountToBeCollect;
                 myCountryStatus.maxValue = info.amountToBeCollect;
                 myCountryStatus.value = info.currentCollectedAmount;
             }
@@ -102,5 +112,12 @@ public class VaccinePopupController : MonoBehaviour
                 i++;
             }
         }
+    }
+
+    private float RemainDonate()
+    {
+        var myCountry = PlayerPrefs.GetString("Country");
+        var info = GameDataManager.Instance.CoronaInfos.FirstOrDefault(c => c.country.ToString() == myCountry);
+        return info.amountToBeCollect - info.currentCollectedAmount;
     }
 }
