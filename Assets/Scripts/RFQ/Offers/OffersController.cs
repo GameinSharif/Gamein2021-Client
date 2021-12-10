@@ -113,6 +113,11 @@ public class OffersController : MonoBehaviour
     {
         if (response.acceptedOffer == null)
         {
+            if (response.message == "The Offer Placer Team doesn't have enough money!")
+            {
+                DialogManager.Instance.ShowErrorDialog("offer_accept_demander_error");
+                return;
+            }
             DialogManager.Instance.ShowErrorDialog();
             return;
         }

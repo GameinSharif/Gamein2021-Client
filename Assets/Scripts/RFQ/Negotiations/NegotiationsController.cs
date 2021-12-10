@@ -109,6 +109,16 @@ public class NegotiationsController : MonoBehaviour
         }
         else
         {
+            if (editNegotiationCostPerUnitResponse.message == "Supplier error")
+            {
+                DialogManager.Instance.ShowErrorDialog("negotiation_supplier_error");
+                return;
+            }
+            if (editNegotiationCostPerUnitResponse.message == "Demander error")
+            {
+                DialogManager.Instance.ShowErrorDialog("negotiation_demander_error");
+                return;
+            }
             DialogManager.Instance.ShowErrorDialog();
         }
     }
