@@ -121,7 +121,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    private void InitializeMapMarkers()
+    public void InitializeMapMarkers()
     {
         for (int i = 0; i < GameDataManager.Instance.GameinCustomers.Count; i++)
         {
@@ -161,7 +161,7 @@ public class MapManager : MonoBehaviour
 
         if (GameDataManager.Instance.IsAuctionOver())
         {
-            OtherCountryFactoriesLegend.SetActive(true);
+            OtherCountryFactoriesLegend.SetActive(false);
             SnapToMyTeamLocationButtonGameObject.SetActive(true);
 
             int teamId = PlayerPrefs.GetInt("TeamId");
@@ -185,7 +185,7 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            OtherCountryFactoriesLegend.SetActive(false);
+            OtherCountryFactoriesLegend.SetActive(true);
             SnapToMyTeamLocationButtonGameObject.SetActive(false);
 
             Enum.TryParse(PlayerPrefs.GetString("Country"), out Utils.Country country);
@@ -206,8 +206,8 @@ public class MapManager : MonoBehaviour
             UpdateAllAuctions();
             
         }
+
         InitializeAllDCs();
-        //TODO do the same thing for other map markers
     }
 
     public void UpdateOnMapObjects()
@@ -474,8 +474,7 @@ public class MapManager : MonoBehaviour
             {
                 case MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter:
                 case MapUtils.MapAgentMarker.AgentType.MyDistributionCenter:
-                case MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter:
-                    
+                case MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter:             
                     Utils.DC dcDto = GameDataManager.Instance.DCs.Find(dto => dto.id == onMapMarker.Index);
                     onMapMarker.SpawnedObject.GetComponent<EachDcController>().SetValues(dcDto, onMapMarker.MapAgentMarker.MapAgentType);
                     break;

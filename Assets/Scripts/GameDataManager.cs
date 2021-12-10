@@ -82,6 +82,7 @@ public class GameDataManager : MonoBehaviour
     public void OnGetAllActiveDCsResponse(GetAllActiveDcResponse getAllActiveDcResponse)
     {
         DCs = getAllActiveDcResponse.dcs;
+        MapManager.Instance.InitializeMapMarkers();
     }
 
     public void OnGetCurrentWeekDemandsResponse(GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse)
@@ -140,8 +141,6 @@ public class GameDataManager : MonoBehaviour
             MapManager.Instance.UpdateAllAuctions();
 
         SetAuctionCurrentRound();
-
-        //TODO update auction remained time
     }
 
     public void SetAuctionCurrentRound()
