@@ -46,7 +46,6 @@ public class NewNegotiationPopupController: MonoBehaviour
         }
         else
         {
-            NewNegotiationPopupCanvas.SetActive(false);
             DialogManager.Instance.ShowErrorDialog();
         }
     }

@@ -49,7 +49,6 @@ public class NewOfferPopupController : MonoBehaviour
         }
         else
         {
-            NewOfferPopupCanvas.SetActive(false);
             DialogManager.Instance.ShowErrorDialog();
         }
     }

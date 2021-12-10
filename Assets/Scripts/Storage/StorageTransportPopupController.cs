@@ -22,6 +22,8 @@ public class StorageTransportPopupController : MonoBehaviour
     private bool _firstTimeInitializing = true;
     private float _totalCostValue;
 
+    private bool _isSendingRequest = false;
+
     private List<Utils.VehicleType> _vehicleTypesOptions = new List<Utils.VehicleType>();
     private List<Utils.Storage> _destinationOptions = new List<Utils.Storage>();
 
@@ -93,6 +95,11 @@ public class StorageTransportPopupController : MonoBehaviour
 
     public void OnSendButtonClicked()
     {
+        if (_isSendingRequest)
+        {
+            return;
+        }
+        
         //valid input check
         
         var amount = ParseAmount();
@@ -172,6 +179,7 @@ public class StorageTransportPopupController : MonoBehaviour
             vehicleType: vehicleType
         );
         RequestManager.Instance.SendRequest(request);
+        _isSendingRequest = true;
     }
 
     public void RefreshTotalCost()
@@ -213,13 +221,16 @@ public class StorageTransportPopupController : MonoBehaviour
 
     private void OnStartTransportForPlayerStoragesResponse(StartTransportForPlayerStoragesResponse response)
     {
+        _isSendingRequest = false;
         Debug.Log("start transport response: " + response.response);
-
-        popup.SetActive(false);
 
         if (response.transportDto == null)
         {
             DialogManager.Instance.ShowErrorDialog();
+        }
+        else
+        {
+            popup.SetActive(false);
         }
     }
 }
