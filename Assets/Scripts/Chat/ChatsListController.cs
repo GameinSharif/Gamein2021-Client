@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RTLTMPro;
 using UnityEngine;
 
 public class ChatsListController : MonoBehaviour
@@ -13,6 +14,8 @@ public class ChatsListController : MonoBehaviour
 
     public Transform chatsListScrollPanel;
     public GameObject chatItemPrefab;
+
+    public GameObject hint;
     private void Awake()
     {
         Instance = this;
@@ -54,7 +57,11 @@ public class ChatsListController : MonoBehaviour
         if (response.chats.Count == 0)
         {
             Debug.Log("No Chat");
-            //TODO show message in chat list to hint them how to start a chat
+            hint.SetActive(true);
+        }
+        else
+        {
+            hint.SetActive(false);
         }
     }
 

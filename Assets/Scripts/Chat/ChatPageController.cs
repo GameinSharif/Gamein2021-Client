@@ -19,7 +19,7 @@ public class ChatPageController : MonoBehaviour
     public int CurrentChatId => _chatData == null ? _theirTeamId : _chatData.TheirTeamId;
 
     public GameObject chatPage;
-    public Transform chatScrollPanel;
+    public RectTransform chatScrollPanel;
     public GameObject myMessagePrefab;
     public GameObject theirMessagePrefab;
     public TMP_InputField inputField;
@@ -48,13 +48,20 @@ public class ChatPageController : MonoBehaviour
         _poolingSystem.Add(messageData.IsFromMe ? 0 : 1, messageData);
 
         RebuildLayout();
+        StartCoroutine(RebuildCoroutine());
     }
 
     private void RebuildLayout()
     {
         Canvas.ForceUpdateCanvases();
         chatScrollViewScrollRect.verticalNormalizedPosition = 0.0f;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(chatScrollPanel as RectTransform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(chatScrollPanel);
+    }
+
+    private IEnumerator RebuildCoroutine()
+    {
+        yield return new WaitForSeconds(0.05f);
+        RebuildLayout();
     }
 
     public void OnSendMessageClicked()
@@ -86,30 +93,29 @@ public class ChatPageController : MonoBehaviour
 
     public void LoadChat(ChatData chatData)
     {
-        chatPage.SetActive(true); // do not delete this; if scroll panel is not active, all children are not active as well and pooling system won't work 
+        chatPage.SetActive(true); 
         
         _chatData = chatData;
         teamName.text = chatData.TeamName;
-        //TODO set avatar
         
         _poolingSystem.RemoveAll();
         foreach (var messageData in chatData.messages)
         {
             _poolingSystem.Add(messageData.IsFromMe ? 0 : 1, messageData);
         }
-        
-        RebuildLayout();
+
         SetOpen(true);
+        RebuildLayout();
+        StartCoroutine(RebuildCoroutine());
     }
 
     public void LoadChat(int otherTeamId)
     {
-        chatPage.SetActive(true); // do not delete this; if scroll panel is not active, all children are not active as well and pooling system won't work 
+        chatPage.SetActive(true);
 
         _chatData = null;
         _theirTeamId = otherTeamId;
         teamName.text = GameDataManager.Instance.GetTeamName(otherTeamId);
-        //TODO set avatar
 
         _poolingSystem.RemoveAll();
 
@@ -124,7 +130,6 @@ public class ChatPageController : MonoBehaviour
 
     private void SetOpen(bool value)
     {
-        //TODO show animation
         chatPage.SetActive(value);
     }
 

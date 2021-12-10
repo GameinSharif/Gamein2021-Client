@@ -16,7 +16,7 @@ public class WarehouseTabController : MonoBehaviour
     public Transform scrollPanel;
     public GameObject storageProductPrefab;
 
-    private Utils.ProductType _currentSelectedType;
+    private Utils.ProductType _currentSelectedType = Utils.ProductType.RawMaterial;
     private bool _isSendingRequest = false;
 
     private void Awake()

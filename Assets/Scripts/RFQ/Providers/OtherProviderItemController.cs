@@ -1,4 +1,5 @@
 ﻿using System;
+using ProductionLine;
 using RTLTMPro;
 using UnityEngine;
 
@@ -34,7 +35,14 @@ public class OtherProviderItemController : MonoBehaviour
 
     public void OnNegotiationButtonClicked()
     {
-        NewNegotiationPopupController.Instance.OpenNewNegotiationPopup(_provider);
+        if (ProductionLinesDataManager.Instance.CanUseProduct(_product))
+        {
+            NewNegotiationPopupController.Instance.OpenNewNegotiationPopup(_provider);
+        }
+        else
+        {
+            DialogManager.Instance.ShowErrorDialog("can_not_use_this_product_error");
+        }
     }
     
     private int CalculateDistance()

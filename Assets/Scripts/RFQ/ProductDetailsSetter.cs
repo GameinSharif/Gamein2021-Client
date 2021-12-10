@@ -40,6 +40,7 @@ public class ProductDetailsSetter : MonoBehaviour
 
         button.transition = Selectable.Transition.None;
         button.interactable = false;
+        TurnOffToggle();
     }
 
     public void SetImageOnly(int productId)
