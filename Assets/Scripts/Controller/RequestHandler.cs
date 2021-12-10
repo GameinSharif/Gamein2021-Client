@@ -41,7 +41,7 @@ public class RequestHandler
                 EventManager.Instance.OnGetCurrentWeekSuppliesResponse(getCurrentWeekSuppliesResponse);
                 break;
             case ResponseTypeConstant.GET_NEWS:
-                SendNewsResponse sendNewsResponse = JsonUtility.FromJson<SendNewsResponse>(responseJson);
+                SendNewsResponse sendNewsResponse = JsonConvert.DeserializeObject(responseJson, typeof(SendNewsResponse), new StringEnumConverter()) as SendNewsResponse;
                 EventManager.Instance.OnSendNewsResponse(sendNewsResponse);
                 break;
             case ResponseTypeConstant.GET_CONTRACTS_WITH_SUPPLIER:

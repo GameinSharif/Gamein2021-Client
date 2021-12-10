@@ -15,10 +15,9 @@ public class WeeklyNewsController : MonoBehaviour
     public RTLTextMeshPro subTexts2;
     public RTLTextMeshPro subTexts3;
     public RTLTextMeshPro newsPaperNo;
-    public RTLTextMeshPro newsDate;
     public GameObject forWeekly;
+    public GameObject forSerious;
     public GameObject navigateButtons;
-    public Localize headerLocalize;
 
     public void SetInfo(Utils.News newspaper)
     {
@@ -38,14 +37,13 @@ public class WeeklyNewsController : MonoBehaviour
             subTexts2.text = newspaper.subTextsFa2;
             subTexts3.text = newspaper.subTextsFa3;
         }
-        headerLocalize.SetKey("weeky_news_title");
+
         newsImage.sprite = GameDataManager.Instance.NewsSprites[newspaper.imageIndex];
-        newsPaperNo.text = newspaper.week.ToString();
-        //TODO game start date
-        CustomDate newspaperDate = new CustomDate(2021, 12, 24).AddDays(newspaper.week * 7);
-        newsDate.text = newspaperDate.ToString();
+        newsPaperNo.text = newspaper.id.ToString();
+
         navigateButtons.SetActive(true);
         forWeekly.SetActive(true);
+        forSerious.SetActive(false);
         newsPaperNo.gameObject.SetActive(true);
     }
     

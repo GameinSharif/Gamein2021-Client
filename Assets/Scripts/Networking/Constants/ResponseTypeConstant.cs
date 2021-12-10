@@ -52,7 +52,7 @@ public enum ResponseTypeConstant
     UPDATE_WEEKLY_REPORT = 49,
     REJECT_NEGOTIATION = 50,
     EDIT_PROVIDER = 51,
-    GET_NEWS =52,
+    GET_NEWS = 52,
     CORONA_INFO = 53,
     DONATE = 54,
     REPORT_MESSAGE = 55,

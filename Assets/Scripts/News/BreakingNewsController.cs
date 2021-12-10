@@ -9,11 +9,10 @@ public class BreakingNewsController : MonoBehaviour
     public Image newsImage;
     public RTLTextMeshPro mainTitle;
     public RTLTextMeshPro mainText;
-    public RTLTextMeshPro newsDate;
     public GameObject forWeekly;
+    public GameObject forSerious;
     public GameObject navigateButtons;
     public RTLTextMeshPro newsNo;
-    public Localize headerLocalize;
 
     public void SetInfo(Utils.News newspaper, bool isSingle)
     {
@@ -27,21 +26,21 @@ public class BreakingNewsController : MonoBehaviour
             mainTitle.text = newspaper.mainTitleFa;
             mainText.text = newspaper.mainTextFa;
         }
+
         newsImage.sprite = GameDataManager.Instance.NewsSprites[newspaper.imageIndex];
-        newsDate.SetText(MainHeaderManager.Instance.gameDate.ToString());
-        headerLocalize.SetKey("breaking_news_title");
+        forWeekly.SetActive(false);
+        forSerious.SetActive(true);
+
         if (isSingle)
         {
-            navigateButtons.SetActive(false);
-            forWeekly.SetActive(false);
             newsNo.gameObject.SetActive(false);
+            navigateButtons.SetActive(false);        
         }
         else
         {
             newsNo.gameObject.SetActive(true);
             navigateButtons.SetActive(true);
-            forWeekly.SetActive(false);
-            newsNo.text = newspaper.week.ToString();
+            newsNo.text = newspaper.id.ToString();
         }
     }
 }
