@@ -60,7 +60,7 @@ public class SetContractDetail : MonoBehaviour
                 TerminateLongtermContractRequest terminateLongtermContract = new TerminateLongtermContractRequest(RequestTypeConstant.TERMINATE_CONTRACT, contractData.id);
                 RequestManager.Instance.SendRequest(terminateLongtermContract);
             }
-        });
+        }, "terminate_contract", contractData.terminatePenalty.ToString());
     }
     
     public void OnTerminateLongtermContractResponseReceived(TerminateLongtermContractResponse terminateLongtermContractResponse)
