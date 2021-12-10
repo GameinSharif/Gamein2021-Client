@@ -85,6 +85,7 @@ public class MapManager : MonoBehaviour
 
         _quadTreeCameraMovement.SetPanSpeed(_panSpeed);
         _quadTreeCameraMovement.SetZoomSpeed(_zoomSpeed);
+        SetMapZoom(_currnetZoomAmountIndex);
 
         MainMenuManager.IsLoadingMap = false;
         IsInMap = true;
@@ -273,7 +274,7 @@ public class MapManager : MonoBehaviour
                     case MapUtils.MapAgentMarker.AgentType.OtherFactory:
                     case MapUtils.MapAgentMarker.AgentType.DifferentCountryFactory:
                     case MapUtils.MapAgentMarker.AgentType.OtherDistributionCenter:
-                    case MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter:
+                    //case MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter:
                         onMapMarker.SpawnedObject.SetActive(false);
                         break;
                 }

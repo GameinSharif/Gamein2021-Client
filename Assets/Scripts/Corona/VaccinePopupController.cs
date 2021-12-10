@@ -85,7 +85,9 @@ public class VaccinePopupController : MonoBehaviour
 
     private void OnGetCoronaInfoResponse(CoronaInfoResponse response)
     {
-        //if(response.coronaInfos is null) return;
+        if(response.coronaInfos is null || response.coronaInfos.Count == 0) 
+            return;
+
         SetData(response.coronaInfos);
         coronaButton.gameObject.SetActive(true);
     }

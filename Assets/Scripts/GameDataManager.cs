@@ -136,7 +136,7 @@ public class GameDataManager : MonoBehaviour
     {
         Auctions = getAllAuctionsResponse.auctions;
 
-        if (MapManager.IsInMap)
+        if (!IsAuctionOver() && MapManager.IsInMap)
             MapManager.Instance.UpdateAllAuctions();
 
         SetAuctionCurrentRound();

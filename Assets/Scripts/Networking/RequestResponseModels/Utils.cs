@@ -102,8 +102,8 @@ public class Utils
         public float demandShare;
         public float minPrice;
         public float maxPrice;
-        public int lostSalePenalty;
-        public int terminatePenalty;
+        public float lostSalePenalty;
+        public float terminatePenalty;
     }
 
     [Serializable]
@@ -161,9 +161,9 @@ public class Utils
         public VehicleType transportType;
         public bool hasInsurance;
         public float transportationCost;
-        public int terminatePenalty;
+        public float terminatePenalty;
         public bool isTerminated;
-        public int noMoneyPenalty;
+        public float noMoneyPenalty;
     }
 
     public enum ProductType
