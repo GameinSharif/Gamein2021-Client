@@ -242,6 +242,17 @@ public class RequestHandler
                     typeof(DonateResponse),
                     new StringEnumConverter()) as DonateResponse);
                 break;
+            case ResponseTypeConstant.REPORT_MESSAGE:
+                //TODO
+                break;
+            case ResponseTypeConstant.CONTRACT_FINALIZED:
+                ContractFinalizedResponse contractFinalizedResponse = JsonConvert.DeserializeObject(responseJson, typeof(ContractFinalizedResponse), new StringEnumConverter()) as ContractFinalizedResponse;
+                EventManager.Instance.OnContractFinalizedResponse(contractFinalizedResponse);
+                break;
+            case ResponseTypeConstant.CONTRACT_SUPPLIER_FINALIZED:
+                ContractSupplierFinalizedResponse contractSupplierFinalizedResponse = JsonConvert.DeserializeObject(responseJson, typeof(ContractSupplierFinalizedResponse), new StringEnumConverter()) as ContractSupplierFinalizedResponse;
+                EventManager.Instance.OnContractSupplierFinalizedResponse(contractSupplierFinalizedResponse);
+                break;
             default:
                 Debug.LogWarning(responseJson);
                 break;

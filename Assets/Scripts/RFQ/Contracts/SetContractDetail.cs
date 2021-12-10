@@ -20,11 +20,13 @@ public class SetContractDetail : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnTerminateLongtermContractResponseEvent += OnTerminateLongtermContractResponseReceived;
+        EventManager.Instance.OnContractFinalizedResponseEvent += OnContractFinalizedRespinseReceived;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnTerminateLongtermContractResponseEvent -= OnTerminateLongtermContractResponseReceived;
+        EventManager.Instance.OnContractFinalizedResponseEvent -= OnContractFinalizedRespinseReceived;
     }
     
     public void InitializeContract(Utils.Contract contractData)
@@ -62,6 +64,20 @@ public class SetContractDetail : MonoBehaviour
                 MainHeaderManager.Instance.Money -= terminateLongtermContractResponse.terminatedContract.terminatePenalty;
                 gameObject.SetActive(false);
             }
+        }
+    }
+
+    public void OnContractFinalizedRespinseReceived(ContractFinalizedResponse contractFinalizedResponse)
+    {
+        if (contractData.id == contractFinalizedResponse.contract.id)
+        {
+            InitializeContract(contractFinalizedResponse.contract);
+            if (ContractMoreDetailsController.contractData != null && ContractMoreDetailsController.contractData.id == contractFinalizedResponse.contract.id)
+            {
+                ContractMoreDetailsController.Instance.ShowMoreDetailsButtonClick(contractFinalizedResponse.contract);
+            }
+
+            //TODO notification
         }
     }
 

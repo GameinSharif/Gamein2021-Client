@@ -54,5 +54,8 @@ public enum ResponseTypeConstant
     EDIT_PROVIDER = 51,
     GET_NEWS =52,
     CORONA_INFO = 53,
-    DONATE = 54
+    DONATE = 54,
+    REPORT_MESSAGE = 55,
+    CONTRACT_FINALIZED = 56,
+    CONTRACT_SUPPLIER_FINALIZED = 57
 }

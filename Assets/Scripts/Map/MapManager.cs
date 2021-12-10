@@ -88,6 +88,8 @@ public class MapManager : MonoBehaviour
 
         MainMenuManager.IsLoadingMap = false;
         IsInMap = true;
+
+        CashForAuction.text = MainHeaderManager.Instance.Money.ToString("0.00");
     }
 
     //Also called by a button in MapScene

@@ -365,4 +365,16 @@ public class EventManager : MonoBehaviour
     {
         OnDonateResponseEvent?.Invoke(response);
     }
+
+    public event Action<ContractFinalizedResponse> OnContractFinalizedResponseEvent;
+    public void OnContractFinalizedResponse(ContractFinalizedResponse response)
+    {
+        OnContractFinalizedResponseEvent?.Invoke(response);
+    }
+
+    public event Action<ContractSupplierFinalizedResponse> OnContractSupplierFinalizedResponseEvent;
+    public void OnContractSupplierFinalizedResponse(ContractSupplierFinalizedResponse response)
+    {
+        OnContractSupplierFinalizedResponseEvent?.Invoke(response);
+    }
 }

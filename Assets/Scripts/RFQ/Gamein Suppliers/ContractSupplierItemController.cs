@@ -13,6 +13,8 @@ public class ContractSupplierItemController : MonoBehaviour
     public Localize transportType;
     public RTLTextMeshPro totalCost;
 
+    public Color penaltyColor;
+
     public GameObject terminateButtonGameObject;
     public GameObject noTerminateTextGameObject;
     
@@ -21,11 +23,13 @@ public class ContractSupplierItemController : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnTerminateLongtermContractSupplierResponseEvent += OnTerminateLongtermContractSupplierResponseReceived;
+        EventManager.Instance.OnContractSupplierFinalizedResponseEvent += OnContractSupplierFinalizedRespinseReceived;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnTerminateLongtermContractSupplierResponseEvent -= OnTerminateLongtermContractSupplierResponseReceived;
+        EventManager.Instance.OnContractSupplierFinalizedResponseEvent -= OnContractSupplierFinalizedRespinseReceived;
     }
     
     public void SetInfo(string supplierName, string productNameKey, CustomDate contractDate, float currentWeekPrice, int boughtAmount, Utils.VehicleType transportType, float totalCost)
@@ -36,7 +40,20 @@ public class ContractSupplierItemController : MonoBehaviour
         pricePerUnit.text = currentWeekPrice.ToString();
         amount.text = boughtAmount.ToString();
         this.transportType.SetKey(transportType.ToString());
-        this.totalCost.text = totalCost.ToString();
+
+        if (_contractSupplier.pricePerUnit == 0) //not started yet
+        {
+            this.totalCost.text = "-";
+        }
+        else if(_contractSupplier.noMoneyPenalty != 0) //not have enough money for this
+        {
+            this.totalCost.text = _contractSupplier.noMoneyPenalty.ToString();
+            this.totalCost.color = penaltyColor;
+        }
+        else
+        {
+            this.totalCost.text = totalCost.ToString();
+        }
 
         if (contractDate.ToDateTime() <= MainHeaderManager.Instance.gameDate.ToDateTime())
         {
@@ -47,6 +64,8 @@ public class ContractSupplierItemController : MonoBehaviour
 
     public void SetInfo(Utils.ContractSupplier contractSupplier)
     {
+        _contractSupplier = contractSupplier;
+
         SetInfo(
             supplierName: GameDataManager.Instance.GetSupplierName(contractSupplier.supplierId),
             productNameKey: GameDataManager.Instance.GetProductById(contractSupplier.materialId).name,
@@ -56,8 +75,6 @@ public class ContractSupplierItemController : MonoBehaviour
             transportType: contractSupplier.transportType,
             totalCost: contractSupplier.transportationCost + contractSupplier.boughtAmount * contractSupplier.pricePerUnit
         );
-
-        _contractSupplier = contractSupplier;
     }
 
     public void OnTerminateButtonClicked()
@@ -87,5 +104,16 @@ public class ContractSupplierItemController : MonoBehaviour
                 DialogManager.Instance.ShowErrorDialog();
             }
         }
+    }
+
+    private void OnContractSupplierFinalizedRespinseReceived(ContractSupplierFinalizedResponse contractSupplierFinalizedResponse)
+    {
+        if (_contractSupplier.id == contractSupplierFinalizedResponse.contractSupplier.id)
+        {
+            SetInfo(contractSupplierFinalizedResponse.contractSupplier);
+
+            //TODO notification
+        }
+
     }
 }

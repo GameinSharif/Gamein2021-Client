@@ -59,11 +59,6 @@ public class MainHeaderManager : MonoBehaviour
         Brand = moneyUpdateResponse.brand;
 
         //TODO donated amount
-
-        if (MapManager.IsInMap)
-        {
-            MapManager.Instance.CashForAuction.text = Money.ToString("0.00");
-        }
     }
 
     public float Money
