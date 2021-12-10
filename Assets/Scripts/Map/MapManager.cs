@@ -312,7 +312,7 @@ public class MapManager : MonoBehaviour
         {
             if (mapAgentMarker.MapAgentType == agentType)
             {
-                MapUtils.OnMapMarker onMapMarker = GetOnMapMarker(agentType, index);
+                MapUtils.OnMapMarker onMapMarker = GetOnMapMarker(location);
                 if (onMapMarker == null)
                 {
                     var instance = Instantiate(MapAgenetMarkerPrefab, OnMapMarkersParent.transform);
@@ -331,11 +331,11 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    private MapUtils.OnMapMarker GetOnMapMarker(MapUtils.MapAgentMarker.AgentType agentType, int index)
+    private MapUtils.OnMapMarker GetOnMapMarker(Vector2d location)
     {
         foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
         {
-            if (onMapMarker.Index == index && onMapMarker.MapAgentMarker.MapAgentType == agentType)
+            if (onMapMarker.Location == location)
             {
                 return onMapMarker;
             }    
