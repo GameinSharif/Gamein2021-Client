@@ -45,6 +45,7 @@ namespace Mapbox.Unity.Map.TileProviders
 
 			if (_cbtpOptions.camera == null)
 			{
+				print("aaaaaaaaaaaaaaaaaaaaaaa");
 				_cbtpOptions.camera = Camera.main;
 			}
 			_cbtpOptions.camera.transform.hasChanged = false;

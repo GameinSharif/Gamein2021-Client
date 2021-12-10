@@ -1,13 +1,14 @@
 ﻿using RTLTMPro;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EachDcController : MonoBehaviour
 {
     public GameObject sellPopup;
-    public RTLTextMeshPro sellPrice;
+    public Localize sellPriceLocalize;
     [Space(10)]
     public GameObject buyPopup;
-    public RTLTextMeshPro buyPrice;
+    public Localize buyPriceLocalize;
 
     private bool _isClickable = false;
     private MapUtils.MapAgentMarker.AgentType _agentType;
@@ -25,8 +26,8 @@ public class EachDcController : MonoBehaviour
             _agentType == MapUtils.MapAgentMarker.AgentType.NoOwnerDistributionCenter)
         {
             _isClickable = true;
-            sellPrice.text = _dc.sellingPrice.ToString();
-            buyPrice.text = _dc.buyingPrice.ToString();
+            sellPriceLocalize.SetKey("dc_price", _dc.sellingPrice.ToString());
+            buyPriceLocalize.SetKey("dc_price", _dc.buyingPrice.ToString());
         }
         else
         {
@@ -64,6 +65,13 @@ public class EachDcController : MonoBehaviour
         {
             if (agreed)
             {
+                List<Utils.Transport> transports = TransportManager.Instance.GetTransportsByDestinationTypeAndId(Utils.TransportNodeType.DC, _dc.id);
+                if (transports == null || transports.Count != 0)
+                {
+                    DialogManager.Instance.ShowErrorDialog("dialog_popup_in_way_transport");
+                    return;
+                }
+
                 _isSendingRequest = true;
                 RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, _dc.id)); 
             }
@@ -81,6 +89,12 @@ public class EachDcController : MonoBehaviour
         {
             if (agreed)
             {
+                if (MainHeaderManager.Instance.Money < _dc.buyingPrice)
+                {
+                    DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                    return;
+                }
+
                 _isSendingRequest = true;
                 RequestManager.Instance.SendRequest(new BuyDCRequest(RequestTypeConstant.BUY_DC, _dc.id));
             }

@@ -27,7 +27,12 @@ public class TransportManager : MonoBehaviour
     private void OnGetTransportsResponseReceived(GetTeamTransportsResponse getTeamTransportsResponse)
     {
         Transports = getTeamTransportsResponse.myTeamTransports;
-        TransportsController.Instance.Initialize();
+        Transports.Reverse();
+        
+        if (StorageManager.Instance.Storages != null)
+        {
+            TransportsController.Instance.Initialize();
+        }
     }
 
     private void OnTransportStateChangedResponseReceived(TransportStateChangedResponse transportStateChangedResponse)
@@ -46,17 +51,16 @@ public class TransportManager : MonoBehaviour
                     transport.transportState = Utils.TransportState.IN_WAY;
                     TransportsController.Instance.AddInWay(transport);
                 }
+                //TODO notification
                 break;
             case Utils.TransportState.SUCCESSFUL:
                 Transports.Remove(transport);
                 TransportsController.Instance.AddDone(transport);
-                //TODO notification or something
                 SendNotificationForSuccessfulTransport(transport);
                 break;
             case Utils.TransportState.CRUSHED:
                 Transports.Remove(transport);
                 TransportsController.Instance.AddCrashed(transport);
-                //TODO notification or something
                 SendNotificationForCrashedTransport(transport);
                 break;
             case Utils.TransportState.PENDING:
@@ -173,7 +177,7 @@ public class TransportManager : MonoBehaviour
     public int CalculateTransportDuration(Vector2 sourceLocation, Vector2 destinationLocation, Utils.VehicleType vehicleType)
     {
         int transportDistance = GetTransportDistance(sourceLocation, destinationLocation, vehicleType);
-        return (int)Mathf.Ceil((float)transportDistance / GameDataManager.Instance.GetVehicleByType(vehicleType).speed);
+        return (int)Mathf.Ceil(1f * transportDistance / GameDataManager.Instance.GetVehicleByType(vehicleType).speed);
     }
 
     public int GetTransportDistance(Vector2 sourceLocation, Vector2 destinationLocation, Utils.VehicleType vehicleType)
@@ -184,13 +188,21 @@ public class TransportManager : MonoBehaviour
         return (int)Mathf.Ceil((float) distance * GameDataManager.Instance.GameConstants.distanceConstant * GameDataManager.Instance.GetVehicleByType(vehicleType).coefficient);
     }
 
+    public int GetTransportDistance(Vector2 sourceLocation, Vector2 destinationLocation)
+    {
+        double distance = (sourceLocation.x - destinationLocation.x) * (sourceLocation.x - destinationLocation.x);
+        distance += (sourceLocation.y - destinationLocation.y) * (sourceLocation.y - destinationLocation.y);
+        distance = Mathf.Sqrt((float)distance);
+        return (int)Mathf.Ceil((float)distance * GameDataManager.Instance.GameConstants.distanceConstant);
+    }
+
     public float CalculateTransportCost(Utils.VehicleType vehicleType, int distance, int productId, int productAmount, bool hasInsurance)
     {
         float insuranceFactor = (hasInsurance ? (1 + GameDataManager.Instance.GameConstants.insuranceCostFactor) : 1);
         Utils.Vehicle transportVehicle = GameDataManager.Instance.GetVehicleByType(vehicleType);
         float vehicleCost = transportVehicle.costPerKilometer * distance * insuranceFactor;
         int productVolume = GameDataManager.Instance.GetProductById(productId).volumetricUnit * productAmount;
-        int vehicleCount = (int)Mathf.Ceil((float)productVolume / transportVehicle.capacity);
+        int vehicleCount = (int)Mathf.Ceil(1f * productVolume / transportVehicle.capacity);
         return vehicleCost * vehicleCount;
     }
 
@@ -199,7 +211,7 @@ public class TransportManager : MonoBehaviour
         Utils.Vehicle transportVehicle = GameDataManager.Instance.GetVehicleByType(vehicleType);
         float vehicleCost = transportVehicle.costPerKilometer * distance;
         int productVolume = GameDataManager.Instance.GetProductById(productId).volumetricUnit * productAmount;
-        int vehicleCount = (int)Mathf.Ceil((float)productVolume / transportVehicle.capacity);
+        int vehicleCount = (int)Mathf.Ceil(1f * productVolume / transportVehicle.capacity);
         return vehicleCost * vehicleCount;
     }
 

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Design.Serialization;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class DCManager : MonoBehaviour
 {
@@ -26,6 +24,12 @@ public class DCManager : MonoBehaviour
 
     private void OnBuyDCResponse(BuyDCResponse response)
     {
+        if (response.dc == null)
+        {
+            DialogManager.Instance.ShowErrorDialog();
+            return;
+        }
+
         UpdateGameData(response.dc);
         MainHeaderManager.Instance.Money -= response.dc.buyingPrice;
         
@@ -33,12 +37,18 @@ public class DCManager : MonoBehaviour
         {
             MapManager.Instance.UpdateDcMarker(response.dc, false);
         }
-        NotificationsController.Instance.AddNewNotification("notification_DC_bought", 
-            response.dc.name);
+
+        NotificationsController.Instance.AddNewNotification("notification_DC_bought", response.dc.name);
     }
 
     private void OnSellDCResponse(SellDCResponse response)
     {
+        if (response.dc == null)
+        {
+            DialogManager.Instance.ShowErrorDialog();
+            return;
+        }
+
         UpdateGameData(response.dc);
         MainHeaderManager.Instance.Money += response.dc.sellingPrice;
 
@@ -46,8 +56,8 @@ public class DCManager : MonoBehaviour
         {
             MapManager.Instance.UpdateDcMarker(response.dc, true);
         }
-        NotificationsController.Instance.AddNewNotification("notification_DC_sold", 
-            response.dc.name);
+
+        NotificationsController.Instance.AddNewNotification("notification_DC_sold", response.dc.name);
     }
 
     private void UpdateGameData(Utils.DC dc)
@@ -59,6 +69,6 @@ public class DCManager : MonoBehaviour
 
     private bool IsInMapScene()
     {
-        return SceneManager.GetSceneAt(SceneManager.sceneCount - 1).name.Contains("Map");
+        return MapManager.IsInMap;
     }
 }

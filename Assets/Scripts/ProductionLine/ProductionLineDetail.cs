@@ -8,23 +8,25 @@ namespace ProductionLine
     public class ProductionLineDetail : MonoBehaviour
     {
         #region UI
-
-        public Button startProductionButton;
+        
         public Button qualityUpgradeButton;
         public Button efficiencyUpgradeButton;
+        private Localize qualityUpgradeLocalize;
+        private Localize efficiencyUpgradeLocalize;
+
         //public Button scrapButton;
 
-        public GameObject startProductionPopup;
+        public StartProductionPanel startProductionPanel;
 
         public GameObject inProcessPanel;
         public Localize remainingTime_T;
 
         public GameObject productionTab, upgradeTab;
-        
-        
+
+
         public List<GameObject> qualityStars = new List<GameObject>();
         public List<GameObject> efficiencyStars = new List<GameObject>();
-        
+
         #endregion
 
         #region fields
@@ -35,20 +37,45 @@ namespace ProductionLine
 
         private void Awake()
         {
-            startProductionPopup.SetActive(false);
+            startProductionPanel = GetComponent<StartProductionPanel>();
+            qualityUpgradeLocalize = qualityUpgradeButton.GetComponentInChildren<Localize>();
+            efficiencyUpgradeLocalize = efficiencyUpgradeButton.GetComponentInChildren<Localize>();
         }
 
         public void SetData(Utils.ProductionLineDto data)
         {
             Data = data;
+            startProductionPanel.Setup(Data);
+            GoToTab(1);
 
-            qualityUpgradeButton.interactable = data.status == ProductionLineStatus.ACTIVE && data.qualityLevel != 2;
+            if (data.status == ProductionLineStatus.ACTIVE)
+            {
+                qualityUpgradeButton.interactable = data.qualityLevel != 2;
+                if (data.qualityLevel < 2)
+                {
+                    qualityUpgradeLocalize.SetKey("production_line_button_upgrade_level",
+                        (data.qualityLevel + 2).ToString(),
+                        GameDataManager.Instance.GetProductionLineTemplateById(Data.productionLineTemplateId)
+                            .qualityLevels[data.qualityLevel + 1].upgradeCost.ToString());
+                }
+                else
+                {
+                    qualityUpgradeLocalize.SetKey("production_line_upgrade_max");
+                }
 
-            efficiencyUpgradeButton.interactable =
-                data.status == ProductionLineStatus.ACTIVE && data.efficiencyLevel != 2;
-
-            //startProductionButton.interactable = data.status == ProductionLineStatus.ACTIVE;
-            //scrapButton.interactable = data.status == ProductionLineStatus.ACTIVE;
+                efficiencyUpgradeButton.interactable = data.efficiencyLevel != 2;
+                if (data.efficiencyLevel < 2)
+                {
+                    efficiencyUpgradeLocalize.SetKey("production_line_button_upgrade_level",
+                        (data.qualityLevel + 2).ToString(),
+                        GameDataManager.Instance.GetProductionLineTemplateById(Data.productionLineTemplateId)
+                            .efficiencyLevels[data.efficiencyLevel + 1].upgradeCost.ToString());
+                }
+                else
+                {
+                    efficiencyUpgradeLocalize.SetKey("production_line_upgrade_max");
+                }
+            }
 
             for (int i = 0; i < qualityStars.Count; i++)
             {
@@ -59,26 +86,26 @@ namespace ProductionLine
             {
                 efficiencyStars[i].SetActive(i <= Data.efficiencyLevel);
             }
-            
+
             inProcessPanel.SetActive(false);
-            
-            if (data.status == ProductionLineStatus.IN_CONSTRUCTION)
+
+            /*if (data.status == ProductionLineStatus.IN_CONSTRUCTION)
             {
                 var remainingTime = (data.activationDate.ToDateTime() -
-                                 MainHeaderManager.Instance.gameDate.ToDateTime()).Days;
+                                     MainHeaderManager.Instance.gameDate.ToDateTime()).Days;
                 remainingTime_T.SetKey("construction_remaining_time", remainingTime.ToString());
                 inProcessPanel.SetActive(true);
                 return;
             }
-            
+
             if (data.products is null) return;
             if (data.products.Count == 0) return;
             var remaining = (data.products.Last().endDate.ToDateTime() -
-                            MainHeaderManager.Instance.gameDate.ToDateTime()).Days;
+                             MainHeaderManager.Instance.gameDate.ToDateTime()).Days;
             if (remaining <= 0) return;
 
             remainingTime_T.SetKey("production_remaining_time", remaining.ToString());
-            inProcessPanel.SetActive(true);
+            inProcessPanel.SetActive(true);*/
         }
 
 
@@ -95,12 +122,6 @@ namespace ProductionLine
                     upgradeTab.transform.SetSiblingIndex(1);
                     break;
             }
-        }
-        
-        public void PopupStartProduction()
-        {
-            startProductionPopup.SetActive(true);
-            startProductionPopup.GetComponent<StartProductionPopup>().Setup(Data);
         }
 
         public void UpgradeProductionLineEfficiency()

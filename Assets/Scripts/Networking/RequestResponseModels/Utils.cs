@@ -7,9 +7,11 @@ public class Utils
 {
     public enum GameStatus
     {
+        NOT_STARTED,
+        AUCTION,
         RUNNING,
         PAUSED,
-        STOPPED
+        FINISHED
     }
 
 
@@ -21,6 +23,8 @@ public class Utils
         public Country country;
         public int factoryId;
         public float credit;
+        public float wealth;
+        public float brand;
     }
 
     public enum ProviderState
@@ -100,7 +104,6 @@ public class Utils
         public float maxPrice;
         public int lostSalePenalty;
         public int terminatePenalty;
-        public bool isTerminated;
     }
 
     [Serializable]
@@ -143,16 +146,6 @@ public class Utils
         public int productId;
         public int price;
         public int sales;
-    }
-    
-    [Serializable]
-    public class ContractSupplierDetail
-    {
-        public int id;
-        public CustomDate contractDate;
-        public int boughtAmount;
-        public float pricePerUnit;
-        public TransportNodeType transportNodeType;
     }
 
     [Serializable]
@@ -409,5 +402,49 @@ public class Utils
         public float outFlow;
         public float transportationCosts;
         public float productionCosts;
+    }
+
+    public enum NewsType
+    {
+        COMMON, SERIOUS
+    }
+    
+    [Serializable]
+    public class News
+    {
+        public int id;
+        public int week;
+        public NewsType newsType;
+        
+        public string mainTitleEng;
+        public string mainTextEng;
+        public string subTextsEng1;
+        public string subTextsEng2;
+        public string subTextsEng3;
+
+        public string mainTitleFa;
+        public string mainTextFa;
+        public string subTextsFa1;
+        public string subTextsFa2;
+        public string subTextsFa3;
+
+        public int imageIndex;
+    }
+
+    [Serializable]
+    public class Ranking
+    {
+        public int teamId;
+        public float value;
+    }
+
+    [Serializable]
+    public class CoronaInfoDto
+    {
+        public int id;
+        public Country country;
+        public float amountToBeCollect = 10000F;
+        public float currentCollectedAmount = 0F;
+        public bool isCoronaOver = true;
     }
 }

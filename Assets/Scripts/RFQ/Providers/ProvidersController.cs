@@ -142,7 +142,7 @@ public class ProvidersController : MonoBehaviour
 
     public void AddMyProviderToList(Utils.Provider provider)
     {
-        _myProvidersPool.Add(provider);
+        _myProvidersPool.Add(0, provider);
         RebuildListLayout(myProvidersScrollPanel);
     }
 

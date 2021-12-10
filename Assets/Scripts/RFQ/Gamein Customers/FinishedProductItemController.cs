@@ -1,39 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using RTLTMPro;
+using UnityEngine.UI;
 
 public class FinishedProductItemController : MonoBehaviour
 {
-    public RTLTextMeshPro no;
-    public Localize productNameLocalize;
-
-    public GameObject showDemandsButtonGameObject;
-
+    public Image ProductImage;
+    public Localize ProductNameLocalize;
     
     private Utils.Product _finishedProduct;
 
-    public void SetInfo(int no, string productName)
+    public void SetInfo(Utils.Product rawProduct)
     {
-        this.no.text = no.ToString();
-        productNameLocalize.SetKey("product_" + productName);
+        _finishedProduct = rawProduct;
+
+        ProductImage.sprite = GameDataManager.Instance.ProductSprites[rawProduct.id - 1];
+        ProductNameLocalize.SetKey("product_" + rawProduct.name);
     }
 
-    public void SetInfo(int no, Utils.Product finishedProduct)
+    public void OnShowDemandersButtonClicked()
     {
-        _finishedProduct = finishedProduct;
-
-        SetInfo(
-            no: no,
-            productName: finishedProduct.name
-        );
-        
-        showDemandsButtonGameObject.SetActive(true);
-    }
-
-    public void OnShowDemandsButtonClicked()
-    {
-        FinishedProductDemandersPopupController.Instance.OnShowDemandersClick(_finishedProduct);
+        CustomersController.Instance.OnShowDemandersClick(_finishedProduct);
     }
 
 }

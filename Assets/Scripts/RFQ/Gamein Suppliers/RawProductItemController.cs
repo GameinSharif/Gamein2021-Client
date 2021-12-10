@@ -1,39 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using RTLTMPro;
+using UnityEngine.UI;
 
 public class RawProductItemController : MonoBehaviour
 {
-    public RTLTextMeshPro no;
-    public Localize productNameLocalize;
-
-    public GameObject ShowSuppliesButtonGameObject;
-
-    
+    public Image ProductImage;
+    public Localize ProductNameLocalize;
+  
     private Utils.Product _rawProduct;
 
-    public void SetInfo(int no, string productName)
-    {
-        this.no.text = no.ToString();
-        productNameLocalize.SetKey("product_" + productName);
-    }
-
-    public void SetInfo(int no, Utils.Product rawProduct)
+    public void SetInfo(Utils.Product rawProduct)
     {
         _rawProduct = rawProduct;
 
-        SetInfo(
-            no: no,
-            productName: rawProduct.name
-        );
-        
-        ShowSuppliesButtonGameObject.SetActive(true);
+        ProductImage.sprite = GameDataManager.Instance.ProductSprites[rawProduct.id - 1];
+        ProductNameLocalize.SetKey("product_" + rawProduct.name);
     }
     
     public void OnShowSuppliesButtonClicked()
     {
-        RawProductSuppliersPopupController.Instance.OnShowSuppliersClick(_rawProduct);
+        SuppliersController.Instance.OnShowSuppliersClick(_rawProduct);
     }
    
 }

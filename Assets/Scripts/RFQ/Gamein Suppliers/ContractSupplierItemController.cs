@@ -8,52 +8,64 @@ public class ContractSupplierItemController : MonoBehaviour
     public RTLTextMeshPro supplierName;
     public Localize productNameLocalize;
     public RTLTextMeshPro contractDate;
-    public RTLTextMeshPro currentWeekPrice;
-    public RTLTextMeshPro boughtAmount;
-    public RTLTextMeshPro transportType;
-    public RTLTextMeshPro transportCost;
-    public Localize hasInsurance;
-    public RTLTextMeshPro terminatePenalty;
-    public RTLTextMeshPro noMoneyPenalty;
-    
-    // public GameObject ShowDetailsButtonGameObject;
-    // public GameObject HideDetailsButtonGameObject;
-    public GameObject TerminateContractButtonGameObject;
-    // public GameObject DetailsParent;
-    // public GameObject DetailItemsParent;
+    public RTLTextMeshPro pricePerUnit;
+    public RTLTextMeshPro amount;
+    public Localize transportType;
+    public RTLTextMeshPro totalCost;
 
-    //public GameObject ContractSupplierDetailItemPrefab;
+    public Color penaltyColor;
+
+    public GameObject terminateButtonGameObject;
+    public GameObject noTerminateTextGameObject;
     
     private Utils.ContractSupplier _contractSupplier;
-    //private List<Utils.ContractSupplierDetail> _contractSupplierDetails;
-    //private List<GameObject> _spawnedDetailsGameObjects = new List<GameObject>();
 
     private void OnEnable()
     {
         EventManager.Instance.OnTerminateLongtermContractSupplierResponseEvent += OnTerminateLongtermContractSupplierResponseReceived;
+        EventManager.Instance.OnContractSupplierFinalizedResponseEvent += OnContractSupplierFinalizedRespinseReceived;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnTerminateLongtermContractSupplierResponseEvent -= OnTerminateLongtermContractSupplierResponseReceived;
+        EventManager.Instance.OnContractSupplierFinalizedResponseEvent -= OnContractSupplierFinalizedRespinseReceived;
     }
     
-    public void SetInfo(string supplierName, string productNameKey, CustomDate contractDate, float currentWeekPrice, int boughtAmount, Utils.VehicleType transportType, float transportCost, bool hasInsurance, int terminatePenalty, int noMoneyPenalty)
+    public void SetInfo(string supplierName, string productNameKey, CustomDate contractDate, float currentWeekPrice, int boughtAmount, Utils.VehicleType transportType, float totalCost)
     {
         this.supplierName.text = supplierName;
         productNameLocalize.SetKey("product_" + productNameKey);
         this.contractDate.text = contractDate.ToString();
-        this.currentWeekPrice.text = currentWeekPrice.ToString();
-        this.boughtAmount.text = boughtAmount.ToString();
-        this.transportType.text = transportType.ToString();
-        this.transportCost.text = transportCost.ToString();
-        this.hasInsurance.SetKey(hasInsurance ? "contract_supplier_item_insurance_yes" : "contract_supplier_item_insurance_no");
-        this.terminatePenalty.text = terminatePenalty.ToString();
-        this.noMoneyPenalty.text = noMoneyPenalty.ToString();
+        pricePerUnit.text = currentWeekPrice.ToString();
+        amount.text = boughtAmount.ToString();
+        this.transportType.SetKey(transportType.ToString());
+
+        if (_contractSupplier.pricePerUnit == 0) //not started yet
+        {
+            this.totalCost.text = "-";
+        }
+        else if(_contractSupplier.noMoneyPenalty != 0) //not have enough money for this
+        {
+            this.totalCost.text = _contractSupplier.noMoneyPenalty.ToString();
+            this.totalCost.color = penaltyColor;
+        }
+        else
+        {
+            this.totalCost.text = totalCost.ToString();
+        }
+
+        if (contractDate.ToDateTime() <= MainHeaderManager.Instance.gameDate.ToDateTime())
+        {
+            terminateButtonGameObject.SetActive(false);
+            noTerminateTextGameObject.SetActive(true);
+        }
     }
 
     public void SetInfo(Utils.ContractSupplier contractSupplier)
     {
+        _contractSupplier = contractSupplier;
+
         SetInfo(
             supplierName: GameDataManager.Instance.GetSupplierName(contractSupplier.supplierId),
             productNameKey: GameDataManager.Instance.GetProductById(contractSupplier.materialId).name,
@@ -61,90 +73,10 @@ public class ContractSupplierItemController : MonoBehaviour
             currentWeekPrice: contractSupplier.pricePerUnit,
             boughtAmount: contractSupplier.boughtAmount,
             transportType: contractSupplier.transportType,
-            transportCost: contractSupplier.transportationCost,
-            hasInsurance: contractSupplier.hasInsurance,
-            terminatePenalty: contractSupplier.terminatePenalty,
-            noMoneyPenalty: contractSupplier.noMoneyPenalty
+            totalCost: contractSupplier.transportationCost + contractSupplier.boughtAmount * contractSupplier.pricePerUnit
         );
-
-        // if (contractSupplier.contractType == Utils.ContractType.LONGTERM)
-        // {
-        //     TerminateContractButtonGameObject.SetActive(true);
-        //     ShowDetailsButtonGameObject.SetActive(true);
-        //     HideDetailsButtonGameObject.SetActive(false);
-        // }
-        // else
-        // {
-        //     TerminateContractButtonGameObject.SetActive(false);
-        //     ShowDetailsButtonGameObject.SetActive(true);
-        //     HideDetailsButtonGameObject.SetActive(false);
-        // }
-
-        _contractSupplier = contractSupplier;
-        // SetContractDetails();
-        // DetailsParent.SetActive(false);
-    }
-    /*
-    public void SetContractDetails()
-    {
-        _contractSupplierDetails = _contractSupplier.contractSupplierDetails;
-        DeactiveAllChildrenInScrollPanel();
-        for (int i = 0; i < _contractSupplierDetails.Count; i++)
-        {
-            AddContractDetailItemToList(_contractSupplierDetails[i], i + 1);
-        }
     }
 
-    private void DeactiveAllChildrenInScrollPanel()
-    {
-        foreach (GameObject gameObject in _spawnedDetailsGameObjects)
-        {
-            gameObject.SetActive(false);
-        }
-    }
-    
-    private void AddContractDetailItemToList(Utils.ContractSupplierDetail contractSupplierDetail, int index)
-    {
-        GameObject createdItem = GetItem(DetailItemsParent);
-        createdItem.transform.SetSiblingIndex(index);
-
-        ContractSupplierDetailItemController controller = createdItem.GetComponent<ContractSupplierDetailItemController>();
-        controller.SetInfo(index, contractSupplierDetail);
-
-        createdItem.SetActive(true);
-    }
-
-    private GameObject GetItem(GameObject parent)
-    {
-        foreach (GameObject gameObject in _spawnedDetailsGameObjects)
-        {
-            if (!gameObject.activeSelf)
-            {
-                return gameObject;
-            }
-        }
-
-        GameObject newItem;
-        newItem = Instantiate(ContractSupplierDetailItemPrefab, parent.transform);
-        _spawnedDetailsGameObjects.Add(newItem);
-        return newItem;
-    }
-
-    
-    public void OnShowDetailsButtonClicked()
-    {
-        DetailsParent.SetActive(true);
-        ShowDetailsButtonGameObject.SetActive(false);
-        HideDetailsButtonGameObject.SetActive(true);
-    }
-
-    public void OnHideDetailsButtonClicked()
-    {
-        DetailsParent.SetActive(false);
-        ShowDetailsButtonGameObject.SetActive(true);
-        HideDetailsButtonGameObject.SetActive(false);
-    }
-    */
     public void OnTerminateButtonClicked()
     {
         DialogManager.Instance.ShowConfirmDialog(agreed =>
@@ -163,10 +95,25 @@ public class ContractSupplierItemController : MonoBehaviour
         {
             if (terminateLongtermContractSupplierResponse.result == "Successful")
             {
-                DialogManager.Instance.ShowErrorDialog("contract_supplier_successfully_terminated");
-                MainHeaderManager.Instance.Money = MainHeaderManager.Instance.Money - terminateLongtermContractSupplierResponse.contractSupplier.terminatePenalty;
-                TerminateContractButtonGameObject.SetActive(false);
+                MainHeaderManager.Instance.Money -= terminateLongtermContractSupplierResponse.contractSupplier.terminatePenalty;
+                
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                DialogManager.Instance.ShowErrorDialog();
             }
         }
+    }
+
+    private void OnContractSupplierFinalizedRespinseReceived(ContractSupplierFinalizedResponse contractSupplierFinalizedResponse)
+    {
+        if (_contractSupplier.id == contractSupplierFinalizedResponse.contractSupplier.id)
+        {
+            SetInfo(contractSupplierFinalizedResponse.contractSupplier);
+
+            //TODO notification
+        }
+
     }
 }

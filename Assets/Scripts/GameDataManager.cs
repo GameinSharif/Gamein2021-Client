@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameDataManager : MonoBehaviour
 {
@@ -11,6 +10,7 @@ public class GameDataManager : MonoBehaviour
 
     [HideInInspector] public List<Utils.Team> Teams;
     [HideInInspector] public List<Utils.GameinCustomer> GameinCustomers;
+    [HideInInspector] public List<Utils.CoronaInfoDto> CoronaInfos;
     [HideInInspector] public List<Utils.Supplier> GameinSuppliers;
     [HideInInspector] public List<Utils.Product> Products;
     [HideInInspector] public List<Utils.Vehicle> Vehicles;
@@ -22,7 +22,9 @@ public class GameDataManager : MonoBehaviour
     [HideInInspector] public List<Utils.WeekDemand> CurrentWeekDemands;
     [HideInInspector] public List<Utils.WeekSupply> CurrentWeekSupplies;
 
-    
+    [HideInInspector] public List<Utils.News> News;
+    public List<Sprite> NewsSprites;
+ 
     [HideInInspector] public List<Utils.DC> DCs;
     [HideInInspector] public Utils.GameConstants GameConstants;
 
@@ -33,12 +35,27 @@ public class GameDataManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
         EventManager.Instance.OnGetGameDataResponseEvent += OnGetGameDataResponse;
         EventManager.Instance.OnGetCurrentWeekDemandsResponseEvent += OnGetCurrentWeekDemandsResponse;
         EventManager.Instance.OnGetCurrentWeekSuppliesResponseEvent += OnGetCurrentWeekSuppliesResponse;
+        EventManager.Instance.OnSendNewsResponseEvent += OnSendNewsResponse;
         EventManager.Instance.OnGetAllAuctionsResponseEvent += OnGetAllAuctionsResponse;
         EventManager.Instance.OnAuctionFinishedResponseEvent += OnAuctionFinishedResponse;
         EventManager.Instance.OnGetAllActiveDcResponseEvent += OnGetAllActiveDCsResponse;
+    }
+    private void OnDisable()
+    {
+        EventManager.Instance.OnGetGameDataResponseEvent -= OnGetGameDataResponse;
+        EventManager.Instance.OnGetCurrentWeekDemandsResponseEvent -= OnGetCurrentWeekDemandsResponse;
+        EventManager.Instance.OnGetCurrentWeekSuppliesResponseEvent -= OnGetCurrentWeekSuppliesResponse;
+        EventManager.Instance.OnSendNewsResponseEvent -= OnSendNewsResponse;
+        EventManager.Instance.OnGetAllAuctionsResponseEvent -= OnGetAllAuctionsResponse;
+        EventManager.Instance.OnAuctionFinishedResponseEvent -= OnAuctionFinishedResponse;
+        EventManager.Instance.OnGetAllActiveDcResponseEvent -= OnGetAllActiveDCsResponse;
     }
 
     public void OnGetGameDataResponse(GetGameDataResponse getGameDataResponse)
@@ -46,6 +63,7 @@ public class GameDataManager : MonoBehaviour
         Teams = getGameDataResponse.teams;
         GameinCustomers = getGameDataResponse.gameinCustomers;
         GameinSuppliers = getGameDataResponse.suppliers;
+        CoronaInfos = getGameDataResponse.coronaInfos;
         Products = getGameDataResponse.products;
         Vehicles = getGameDataResponse.vehicles;
         ProductionLineTemplates = getGameDataResponse.productionLineTemplates;
@@ -55,6 +73,10 @@ public class GameDataManager : MonoBehaviour
         Factories = getGameDataResponse.factories;
 
         GameConstants = getGameDataResponse.gameConstants;
+        News = getGameDataResponse.news;
+        MapManager.Instance.Setup();
+        CheckLastNewspaperSeen();
+        VaccinePopupController.Instance.CheckCorona();
     }
 
     public void OnGetAllActiveDCsResponse(GetAllActiveDcResponse getAllActiveDcResponse)
@@ -76,11 +98,45 @@ public class GameDataManager : MonoBehaviour
         GameinSuppliersController.Instance.UpdateSupplies();
     }
     
+    private void OnSendNewsResponse(SendNewsResponse sendNewsResponse)
+    {
+        NewsController.Instance.newspapersButton.interactable = true;
+        List<Utils.News> receivedNews = sendNewsResponse.news;
+        foreach (Utils.News news in receivedNews)
+        {
+            if (news.newsType == Utils.NewsType.SERIOUS)
+            {
+                NewsController.Instance.OnBreakingNewsReceived(news);
+            }
+            else
+            {
+                NewsController.Instance.SetNewNewspaperImageActive();
+            }
+            News.Add(news);
+        }
+    }
+
+    private void CheckLastNewspaperSeen()
+    {
+        if (News == null || News.Count == 0)
+        {
+            NewsController.Instance.newspapersButton.interactable = false;
+            News = new List<Utils.News>();
+            return;
+        }
+
+        int lastSeen = PlayerPrefs.GetInt("LastNewsPaperNo", 0);
+        if (lastSeen < News.Count)
+        {
+            NewsController.Instance.SetNewNewspaperImageActive();
+        }
+    }
+    
     public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
     {
         Auctions = getAllAuctionsResponse.auctions;
 
-        if (SceneManager.GetActiveScene().name == "MapScene")
+        if (MapManager.IsInMap)
             MapManager.Instance.UpdateAllAuctions();
 
         SetAuctionCurrentRound();
@@ -211,7 +267,7 @@ public class GameDataManager : MonoBehaviour
 
     public List<Utils.Product> GetRawProducts()
     {
-        return Products.Where(p => p.productType == Utils.ProductType.RawMaterial).ToList();
+        return Products.Where(p => (p.productType == Utils.ProductType.RawMaterial && p.id != 4) || p.id == 27).ToList();
     }
 
     public List<Utils.Product> GetFinishedProducts()
@@ -224,9 +280,9 @@ public class GameDataManager : MonoBehaviour
         return CurrentWeekSupplies.Where(s => s.productId == rawProductId).ToList();
     }
 
-    public List<Utils.WeekDemand> GetCurrentWeekFinishedProductDemands(int rawProductId)
+    public List<Utils.WeekDemand> GetCurrentWeekFinishedProductDemands(int productId)
     {
-        return CurrentWeekDemands.Where(d => d.productId == rawProductId).ToList();
+        return CurrentWeekDemands.Where(d => d.productId == productId).ToList();
     }
 
     public Vector2 GetMyTeamLocaionOnMap()
@@ -276,4 +332,5 @@ public class GameDataManager : MonoBehaviour
     {
         return GameDataManager.Instance.ProductionLineTemplates.FirstOrDefault(c => c.id == templateId);
     }
+    
 }

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -85,10 +84,7 @@ public class MainMenuManager : MonoBehaviour
                 break;
         }
 
-        if (index != 0) //because Map has no canvas
-        {
-            MainMenuTabCanvasGameobjects[index - 1].SetActive(true); 
-        }
+        MainMenuTabCanvasGameobjects[index].SetActive(true);
         MainMenuTabButtonsImages[index].sprite = selectedTabSprite;
     }
 
@@ -146,20 +142,21 @@ public class MainMenuManager : MonoBehaviour
         }
 
         IsLoadingMap = true;
-        SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
+        //SceneManager.LoadSceneAsync("MapScene", LoadSceneMode.Additive);
+        //MainMenuTabCanvasGameobjects[7].SetActive(true);
     }
 
     private void DisableAll()
     {
-        if (SceneManager.sceneCount > 1)
-        {
-            SceneManager.UnloadSceneAsync("MapScene");
-            MapManager.IsInMap = false;
-        }
+        //if (SceneManager.sceneCount > 1)
+        //{
+        //    SceneManager.UnloadSceneAsync("MapScene");
+        //    MapManager.IsInMap = false;
+        //}
 
-        foreach (GameObject gameObject in MainMenuTabCanvasGameobjects)
+        for (var i = 1; i < MainMenuTabCanvasGameobjects.Count; i++)
         {
-            gameObject.SetActive(false);
+            MainMenuTabCanvasGameobjects[i].SetActive(false);
         }
 
         foreach (Image image in MainMenuTabButtonsImages)

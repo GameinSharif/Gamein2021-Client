@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 
 namespace RTLTMPro
@@ -20,7 +21,7 @@ namespace RTLTMPro
                     return;
 
                 originalText = value;
-
+                onChange.Invoke(originalText);
                 UpdateText();
             }
         }
@@ -93,6 +94,8 @@ namespace RTLTMPro
         [SerializeField] public bool forceFix;
 
         protected readonly FastStringBuilder finalText = new FastStringBuilder(RTLSupport.DefaultBufferSize);
+        
+        public Action<string> onChange = delegate {  };
 
         protected void Update()
         {
@@ -102,7 +105,7 @@ namespace RTLTMPro
             }
         }
 
-        public void UpdateText()
+        public virtual void UpdateText()
         {
             if (originalText == null)
                 originalText = "";

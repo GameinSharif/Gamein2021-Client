@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using RTLTMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -20,6 +19,7 @@ public class CountrySelectionController : MonoBehaviour
 
     public GameObject countrySelectionCanvas;
 
+    public Localize luckyCountry;
     public List<CountryCardSetter> countryCardSetters;
     public List<CountryCard> cards;
     public Button goToMapButton;
@@ -112,7 +112,7 @@ public class CountrySelectionController : MonoBehaviour
 
         goToMapButton.gameObject.SetActive(true);
         startRandomizeProcessButton.gameObject.SetActive(false);
-
+        luckyCountry.SetKey(_countryNameLocalizeKeys[_countryIndex]);
         PlayerPrefs.SetString("SeenRandomizeProcess", "True");
     }
 

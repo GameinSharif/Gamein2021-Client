@@ -28,7 +28,7 @@ public enum RequestTypeConstant
     SELL_DC = 25,
     GET_TEAM_TRANSPORTS = 26,
     GET_CONTRACTS_WITH_SUPPLIER = 27,
-    ADD_PRODUCT = 28,
+    GET_LEADERBOARD = 28,
     REMOVE_PRODUCT = 29,
     GET_STORAGES = 30,
     NEW_CONTRACT = 31,
@@ -38,4 +38,5 @@ public enum RequestTypeConstant
     GET_ALL_WEEKLY_REPORTS = 35,
     REJECT_NEGOTIATION = 36,
     EDIT_PROVIDER = 37,
+    DONATE = 38
 }

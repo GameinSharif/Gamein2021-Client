@@ -40,6 +40,10 @@ public class RequestHandler
                 GetCurrentWeekSuppliesResponse getCurrentWeekSuppliesResponse = JsonUtility.FromJson<GetCurrentWeekSuppliesResponse>(responseJson);
                 EventManager.Instance.OnGetCurrentWeekSuppliesResponse(getCurrentWeekSuppliesResponse);
                 break;
+            case ResponseTypeConstant.GET_NEWS:
+                SendNewsResponse sendNewsResponse = JsonUtility.FromJson<SendNewsResponse>(responseJson);
+                EventManager.Instance.OnSendNewsResponse(sendNewsResponse);
+                break;
             case ResponseTypeConstant.GET_CONTRACTS_WITH_SUPPLIER:
                 GetContractSuppliersResponse getContractSuppliersResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetContractSuppliersResponse), new StringEnumConverter()) as GetContractSuppliersResponse;
                 EventManager.Instance.OnGetContractSuppliersResponse(getContractSuppliersResponse);
@@ -209,9 +213,6 @@ public class RequestHandler
                 EditProviderResponse editProviderResponse = JsonUtility.FromJson<EditProviderResponse>(responseJson);
                 EventManager.Instance.OnEditProviderResponse(editProviderResponse);
                 break;
-            case ResponseTypeConstant.ADD_PRODUCT:
-                //TODO remove this from server and here too
-                break;
             case ResponseTypeConstant.UPDATE_GAME_STATUS:
                 UpdateGameStatusResponse updateGameStatusResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateGameStatusResponse), new StringEnumConverter()) as UpdateGameStatusResponse;
                 EventManager.Instance.OnUpdateGameStatusResponse(updateGameStatusResponse);
@@ -226,6 +227,31 @@ public class RequestHandler
             case ResponseTypeConstant.UPDATE_WEEKLY_REPORT:
                 UpdateWeeklyReportResponse updateWeeklyReportResponse = JsonConvert.DeserializeObject(responseJson, typeof(UpdateWeeklyReportResponse), new StringEnumConverter()) as UpdateWeeklyReportResponse;
                 EventManager.Instance.OnUpdateWeeklyReportResponse(updateWeeklyReportResponse);
+                break;
+            case ResponseTypeConstant.GET_LEADERBOARD:
+                GetLeaderboardResponse getLeaderboardResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetLeaderboardResponse), new StringEnumConverter()) as GetLeaderboardResponse;
+                EventManager.Instance.OnGetLeaderboardResponse(getLeaderboardResponse);
+                break;
+            case ResponseTypeConstant.CORONA_INFO:
+                EventManager.Instance.OnCoronaInfoResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(CoronaInfoResponse),
+                    new StringEnumConverter()) as CoronaInfoResponse);
+                break;
+            case ResponseTypeConstant.DONATE:
+                EventManager.Instance.OnDonateResponse(JsonConvert.DeserializeObject(responseJson,
+                    typeof(DonateResponse),
+                    new StringEnumConverter()) as DonateResponse);
+                break;
+            case ResponseTypeConstant.REPORT_MESSAGE:
+                //TODO
+                break;
+            case ResponseTypeConstant.CONTRACT_FINALIZED:
+                ContractFinalizedResponse contractFinalizedResponse = JsonConvert.DeserializeObject(responseJson, typeof(ContractFinalizedResponse), new StringEnumConverter()) as ContractFinalizedResponse;
+                EventManager.Instance.OnContractFinalizedResponse(contractFinalizedResponse);
+                break;
+            case ResponseTypeConstant.CONTRACT_SUPPLIER_FINALIZED:
+                ContractSupplierFinalizedResponse contractSupplierFinalizedResponse = JsonConvert.DeserializeObject(responseJson, typeof(ContractSupplierFinalizedResponse), new StringEnumConverter()) as ContractSupplierFinalizedResponse;
+                EventManager.Instance.OnContractSupplierFinalizedResponse(contractSupplierFinalizedResponse);
                 break;
             default:
                 Debug.LogWarning(responseJson);

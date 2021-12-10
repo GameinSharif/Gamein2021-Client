@@ -45,10 +45,9 @@ public class BidForAuctionManager : MonoBehaviour
     {
         while (GameDataManager.Instance.AuctionCurrentRound < GameDataManager.Instance.GameConstants.AuctionRoundsStartTime.Count)
         {
-            int remainedTimeInSeconds = (int) GameDataManager.Instance.GameConstants.AuctionRoundsStartTime[GameDataManager.Instance.AuctionCurrentRound].ToDateTime().AddSeconds(GameDataManager.Instance.GameConstants.AuctionRoundDurationSeconds).Subtract(DateTime.Now).TotalSeconds;
-            
             CurrentRoundText.text = (GameDataManager.Instance.AuctionCurrentRound + 1) + "/" + GameDataManager.Instance.GameConstants.AuctionRoundsStartTime.Count;
-            
+
+            int remainedTimeInSeconds = (int)GameDataManager.Instance.GameConstants.AuctionRoundsStartTime[GameDataManager.Instance.AuctionCurrentRound].ToDateTime().AddSeconds(GameDataManager.Instance.GameConstants.AuctionRoundDurationSeconds).Subtract(DateTime.Now).TotalSeconds;
             while (remainedTimeInSeconds > 0)
             {
                 RemainedTimeText.text = remainedTimeInSeconds.ToString();

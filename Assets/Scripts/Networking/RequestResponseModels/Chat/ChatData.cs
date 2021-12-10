@@ -5,7 +5,6 @@ using UnityEngine;
 [Serializable]
 public class ChatData
 {
-    public int id;
     public CustomDateTime latestMessageDate;
     public int team1Id;
     public int team2Id;

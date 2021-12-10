@@ -22,7 +22,13 @@ namespace ProductionLine
         private void Awake()
         {
             Instance = this;
+            
+            productionLineDetail.gameObject.SetActive(false);
 
+        }
+
+        private void OnEnable()
+        {
             EventManager.Instance.OnGetProductionLinesResponseEvent += OnGetProductionLinesResponse;
             EventManager.Instance.OnConstructProductionLineResponseEvent += OnConstructProductionLineResponse;
             EventManager.Instance.OnScrapProductionLineResponseEvent += OnScrapProductionLineResponse;
@@ -31,8 +37,18 @@ namespace ProductionLine
             EventManager.Instance.OnUpgradeProductionLineQualityResponseEvent += OnUpgradeProductionLineQualityResponse;
             EventManager.Instance.OnProductionLineConstructionCompletedResponseEvent += OnProductionLineConstructionCompletedResponse;
             EventManager.Instance.OnProductCreationCompletedResponseEvent += OnProductCreationCompletedResponse;
+        }
 
-            productionLineDetail.gameObject.SetActive(false);
+        private void OnDisable()
+        {
+            EventManager.Instance.OnGetProductionLinesResponseEvent -= OnGetProductionLinesResponse;
+            EventManager.Instance.OnConstructProductionLineResponseEvent -= OnConstructProductionLineResponse;
+            EventManager.Instance.OnScrapProductionLineResponseEvent -= OnScrapProductionLineResponse;
+            EventManager.Instance.OnStartProductionResponseEvent -= OnStartProductionResponse;
+            EventManager.Instance.OnUpgradeProductionLineEfficiencyResponseEvent -= OnUpgradeProductionLineEfficiencyResponse;
+            EventManager.Instance.OnUpgradeProductionLineQualityResponseEvent -= OnUpgradeProductionLineQualityResponse;
+            EventManager.Instance.OnProductionLineConstructionCompletedResponseEvent -= OnProductionLineConstructionCompletedResponse;
+            EventManager.Instance.OnProductCreationCompletedResponseEvent -= OnProductCreationCompletedResponse;
         }
 
         public void ConstructProductionLine(int productionLineTemplateId)
@@ -86,7 +102,7 @@ namespace ProductionLine
             }
         }
 
-        private void UpdateRowNumbers()
+        /*private void UpdateRowNumbers()
         {
             for (int i = 0; i < productionLineTableRows.Count; i++)
             {
@@ -94,7 +110,7 @@ namespace ProductionLine
             }
 
             //constructButton.SetAsLastSibling();
-        }
+        }*/
 
         public void PopupConstructProductionLine()
         {
@@ -128,8 +144,8 @@ namespace ProductionLine
                 current.SetData(item);
                 productionLineTableRows.Add(current);
             }
-
-            UpdateRowNumbers();
+            
+            productionLineDetail.gameObject.SetActive(false);
         }
 
         private void OnConstructProductionLineResponse(ConstructProductionLineResponse response)
@@ -146,7 +162,6 @@ namespace ProductionLine
             var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
             current.SetData(response.productionLine, true);
             productionLineTableRows.Add(current);
-            UpdateRowNumbers();
         }
 
         private void OnScrapProductionLineResponse(ScrapProductionLineResponse response)
@@ -163,7 +178,6 @@ namespace ProductionLine
             if (current is null) return;
             productionLineTableRows.Remove(current);
             Destroy(current.gameObject);
-            UpdateRowNumbers();
 
             NotificationsController.Instance.AddNewNotification("notification_production_line_scrapped",
                 GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).name);

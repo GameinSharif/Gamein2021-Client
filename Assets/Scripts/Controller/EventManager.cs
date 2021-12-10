@@ -69,6 +69,12 @@ public class EventManager : MonoBehaviour
         OnGetCurrentWeekSuppliesResponseEvent?.Invoke(getCurrentWeekSuppliesResponse);
     }
     
+    public event Action<SendNewsResponse> OnSendNewsResponseEvent;
+    public void OnSendNewsResponse(SendNewsResponse sendNewsResponse)
+    {
+        OnSendNewsResponseEvent?.Invoke(sendNewsResponse);
+    }
+    
     public event Action<GetContractSuppliersResponse> OnGetContractSuppliersResponseEvent;
     public void OnGetContractSuppliersResponse(GetContractSuppliersResponse getContractSuppliersResponse)
     {
@@ -339,5 +345,36 @@ public class EventManager : MonoBehaviour
     public void OnUpdateGameStatusResponse(UpdateGameStatusResponse response)
     {
         OnUpdateGameStatusResponseEvent?.Invoke(response);
+    }
+    
+    public event Action<GetLeaderboardResponse> OnGetLeaderboardResponseEvent;
+
+    public void OnGetLeaderboardResponse(GetLeaderboardResponse getLeaderboardResponse)
+    {
+        OnGetLeaderboardResponseEvent?.Invoke(getLeaderboardResponse);
+    }
+
+    public event Action<CoronaInfoResponse> OnCoronaInfoResponseEvent;
+    public void OnCoronaInfoResponse(CoronaInfoResponse response)
+    {
+        OnCoronaInfoResponseEvent?.Invoke(response);
+    }
+    
+    public event Action<DonateResponse> OnDonateResponseEvent;
+    public void OnDonateResponse(DonateResponse response)
+    {
+        OnDonateResponseEvent?.Invoke(response);
+    }
+
+    public event Action<ContractFinalizedResponse> OnContractFinalizedResponseEvent;
+    public void OnContractFinalizedResponse(ContractFinalizedResponse response)
+    {
+        OnContractFinalizedResponseEvent?.Invoke(response);
+    }
+
+    public event Action<ContractSupplierFinalizedResponse> OnContractSupplierFinalizedResponseEvent;
+    public void OnContractSupplierFinalizedResponse(ContractSupplierFinalizedResponse response)
+    {
+        OnContractSupplierFinalizedResponseEvent?.Invoke(response);
     }
 }

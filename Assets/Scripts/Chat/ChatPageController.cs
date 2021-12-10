@@ -127,4 +127,10 @@ public class ChatPageController : MonoBehaviour
         //TODO show animation
         chatPage.SetActive(value);
     }
+
+    public void OnCloseButtonClicked()
+    {
+        SetOpen(false);
+        ChatsListController.Instance.OnCloseButtonCLicked();
+    }
 }

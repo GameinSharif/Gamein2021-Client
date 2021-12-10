@@ -4,7 +4,6 @@ using UnityEngine;
 [Serializable]
 public class MessageData
 {
-    public int id;
     public int senderTeamId;
     public int receiverTeamId;
     public string text;

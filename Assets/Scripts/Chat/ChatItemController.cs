@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class ChatItemController : MonoBehaviour
 {
     public RTLTextMeshPro teamName;
-    public Image teamAvatar;
-    public RTLTextMeshPro unreadCountText;
     public GameObject unreadCountObject;
     public RTLTextMeshPro lastMessagePreview;
     
@@ -26,7 +24,6 @@ public class ChatItemController : MonoBehaviour
                 return;
             }
 
-            unreadCountText.text = _unreadCount.ToString();
             unreadCountObject.SetActive(true);
         }
     }
