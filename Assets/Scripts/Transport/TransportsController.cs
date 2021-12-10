@@ -155,13 +155,13 @@ public class TransportsController : MonoBehaviour
 
     private bool IsGoing(Utils.Transport transport)
     {
-        if (transport.sourceType == Utils.TransportNodeType.FACTORY ||
-            transport.sourceType == Utils.TransportNodeType.DC)
+        if (transport.destinationType == Utils.TransportNodeType.FACTORY ||
+            transport.destinationType == Utils.TransportNodeType.DC)
         {
-            return StorageManager.Instance.GetStorageByBuildingIdAndType(transport.sourceId, transport.sourceType == Utils.TransportNodeType.DC) != null;
+            return StorageManager.Instance.GetStorageByBuildingIdAndType(transport.destinationId, transport.destinationType == Utils.TransportNodeType.DC) == null;
         }
 
-        return false;
+        return true;
     }
 
     private void InitializeTransportItem(GameObject theGameObject, int index, Tuple<Utils.Transport, bool, bool> transportData)

@@ -40,6 +40,7 @@ public class StorageDashboardController : MonoBehaviour
             }
         }
         RebuildListLayout();
+        WarehouseToggleOnValueChanged(true);
     }
 
     private void DcListItemInitializer(GameObject theGameObject, int index, Utils.Storage storage)

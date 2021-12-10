@@ -5,8 +5,9 @@ using System.Linq;
 using UnityEngine;
 using RTLTMPro;
 using TMPro;
+using UnityEngine.UI;
 
-public class GameinSuppliersController : MonoBehaviour
+public class GameinSuppliersController : MonoBehaviour, IComparer<Utils.ContractSupplier>
 {
     public static GameinSuppliersController Instance;
 
@@ -51,12 +52,15 @@ public class GameinSuppliersController : MonoBehaviour
     public void OnGetContractSuppliersResponse(GetContractSuppliersResponse getContractSuppliersResponse)
     {
         myContracts = getContractSuppliersResponse.contractsSupplier;
+        myContracts.Sort(this);
 
         DeactiveAllChildrenInScrollPanel(true);
         for (int i = 0; i < myContracts.Count; i++)
         {
-            AddContractItemToList(myContracts[i]);
+            AddContractItemToList(myContracts[i], i);
         }
+        
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contractSuppliersScrollViewParent.transform as RectTransform);
     }
     
     private void AddRawProductItemToList(Utils.Product product, int index)
@@ -78,14 +82,28 @@ public class GameinSuppliersController : MonoBehaviour
         }
     }
     
-    private void AddContractItemToList(Utils.ContractSupplier contractSupplier)
+    private void AddContractItemToList(Utils.ContractSupplier contractSupplier, int index = -1)
     {
+        bool shouldRebuild = false;
+        if (index == -1)
+        {
+            index = ~ myContracts.BinarySearch(contractSupplier, this);
+            myContracts.Insert(index, contractSupplier);
+            shouldRebuild = true;
+        }
+        
         GameObject createdItem = GetItem(contractSuppliersScrollViewParent, true);
 
         ContractSupplierItemController controller = createdItem.GetComponent<ContractSupplierItemController>();
         controller.SetInfo(contractSupplier);
-
+        
+        createdItem.transform.SetSiblingIndex(index);
         createdItem.SetActive(true);
+        
+        if (shouldRebuild)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(contractSuppliersScrollViewParent.transform as RectTransform);
+        }
     }
     
     private GameObject GetItem(GameObject parent, bool isContract)
@@ -143,5 +161,15 @@ public class GameinSuppliersController : MonoBehaviour
     {
         gameinSuppliersCanvas.SetActive(active);
     }
-    
+
+    public int Compare(Utils.ContractSupplier x, Utils.ContractSupplier y)
+    {
+        var dateDiff = x.contractDate.CompareTo(y.contractDate);
+        if (dateDiff != 0)
+        {
+            return dateDiff;
+        }
+
+        return x.id - y.id;
+    }
 }
