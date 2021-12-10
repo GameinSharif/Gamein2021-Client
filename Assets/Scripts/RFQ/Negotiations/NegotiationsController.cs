@@ -116,6 +116,11 @@ public class NegotiationsController : MonoBehaviour
             }
             if (editNegotiationCostPerUnitResponse.message == "Demander error")
             {
+                if (editNegotiationCostPerUnitResponse.negotiation.demanderId == PlayerPrefs.GetInt("TeamId"))
+                {
+                    DialogManager.Instance.ShowErrorDialog("not_enough_money_error");
+                    return;
+                }
                 DialogManager.Instance.ShowErrorDialog("negotiation_demander_error");
                 return;
             }

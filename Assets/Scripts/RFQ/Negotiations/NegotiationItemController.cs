@@ -159,7 +159,17 @@ public class NegotiationItemController : MonoBehaviour
             DialogManager.Instance.ShowErrorDialog("price_min_max_error");
             return;
         }
-        
+
+        if (_negotiation.supplierId == PlayerPrefs.GetInt("TeamId"))
+        {
+            var availableAmount = StorageManager.Instance.GetProductAmountByStorage(StorageManager.Instance.GetWarehouse(), _product.id);
+
+            if (availableAmount < _negotiation.amount)
+            {
+                DialogManager.Instance.ShowErrorDialog("not_enough_available_amount_error");
+                return;
+            }
+        }
         
         DialogManager.Instance.ShowConfirmDialog(agreed =>
         {

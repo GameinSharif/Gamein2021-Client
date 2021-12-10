@@ -50,8 +50,7 @@ public class OtherOfferItemController : MonoBehaviour
             return;
         }
 
-        var availableAmount =
-            StorageManager.Instance.GetProductAmountByStorage(StorageManager.Instance.GetWarehouse(), _product.id);
+        var availableAmount = StorageManager.Instance.GetProductAmountByStorage(StorageManager.Instance.GetWarehouse(), _product.id);
 
         if (availableAmount < _offer.volume)
         {
