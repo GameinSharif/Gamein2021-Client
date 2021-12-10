@@ -41,7 +41,7 @@ public class ContractSupplierItemController : MonoBehaviour
         amount.text = boughtAmount.ToString();
         this.transportType.SetKey(transportType.ToString());
 
-        if (_contractSupplier.pricePerUnit == 0) //not started yet
+        if (contractDate.ToDateTime() > MainHeaderManager.Instance.gameDate.ToDateTime()) //not started yet
         {
             this.totalCost.text = "-";
         }

@@ -25,10 +25,21 @@ public class ContractMoreDetailsController : MonoBehaviour
 
     public void ShowMoreDetailsButtonClick(Utils.Contract contract)
     {
-        currentBrand.text = contract.currentBrand.ToString();
-        valueShare.text = contract.valueShare.ToString("0.00");
-        minPrice.text = contract.minPrice.ToString("0.00");
-        maxPrice.text = contract.maxPrice.ToString("0.00");
+        currentBrand.text = contract.currentBrand.ToString("0.00");
+
+        if (contract.contractDate.ToDateTime() > MainHeaderManager.Instance.gameDate.ToDateTime())
+        {
+            valueShare.text = "-";
+            minPrice.text = "-";
+            maxPrice.text = "-";
+        }
+        else
+        {
+            valueShare.text = contract.valueShare.ToString("0.00");
+            minPrice.text = contract.minPrice.ToString("0.00");
+            maxPrice.text = contract.maxPrice.ToString("0.00");
+        }
+
         terminatePenalty.text = contract.terminatePenalty.ToString();
 
         if (contract.lostSalePenalty != 0)

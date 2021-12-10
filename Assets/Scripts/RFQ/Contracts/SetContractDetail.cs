@@ -33,11 +33,20 @@ public class SetContractDetail : MonoBehaviour
     {
         gameinCustomerNameTxt.text = GameDataManager.Instance.GetGameinCustomerById(contractData.gameinCustomerId).name;
         productNameLocalize.SetKey("product_" + GameDataManager.Instance.Products[contractData.productId].name);
-        contractDateTxt.text = contractData.contractDate.ToString();
         supplyAmountTxt.text = contractData.supplyAmount.ToString();
         pricePerUnitTxt.text = contractData.pricePerUnit.ToString("0.00");
-        boughtAmountTxt.text = contractData.boughtAmount.ToString();
-        demandShareTxt.text = contractData.demandShare.ToString("0.00") + "%";
+
+        contractDateTxt.text = contractData.contractDate.ToString();
+        if (contractData.contractDate.ToDateTime() > MainHeaderManager.Instance.gameDate.ToDateTime())
+        {
+            boughtAmountTxt.text = "-";
+            demandShareTxt.text = "-";
+        }
+        else
+        {
+            boughtAmountTxt.text = contractData.boughtAmount.ToString();
+            demandShareTxt.text = contractData.demandShare.ToString("0.00") + "%";
+        }
 
         this.contractData = contractData;
     }
