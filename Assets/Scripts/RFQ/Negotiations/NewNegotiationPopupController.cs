@@ -46,7 +46,6 @@ public class NewNegotiationPopupController: MonoBehaviour
         }
         else
         {
-            NewNegotiationPopupCanvas.SetActive(false);
             if (newProviderNegotiationResponse.message == "Supplier error")
             {
                 DialogManager.Instance.ShowErrorDialog("negotiation_supplier_error");

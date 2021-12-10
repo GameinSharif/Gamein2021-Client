@@ -9,18 +9,7 @@ public class MessageData
     public string text;
     public CustomDateTime insertedAt;
 
-    public bool IsFromMe
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("TeamId") == senderTeamId;
-        }
-
-        set
-        {
-            IsFromMe = value;
-        }
-    }
+    public bool IsFromMe => PlayerPrefs.GetInt("TeamId") == senderTeamId;
 
     public int TheirTeamId => IsFromMe ? receiverTeamId : senderTeamId;
 }
