@@ -60,6 +60,7 @@ public class RemoveProductController : MonoBehaviour
             return;
         }
 
+        _isSendingRequest = true;
         RemoveProductRequest removeProductRequest = new RemoveProductRequest(RequestTypeConstant.REMOVE_PRODUCT, _storage.dc, _storage.buildingId, _product.id, amount);
         RequestManager.Instance.SendRequest(removeProductRequest);
     }
