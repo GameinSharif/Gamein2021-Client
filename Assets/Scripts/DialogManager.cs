@@ -46,14 +46,14 @@ public class DialogManager : MonoBehaviour
         
         otherButtons.SetActive(false);
         closeButton.SetActive(true);
-        
+
         dialogCanvas.SetActive(true);
     }
 
     public void OnAgreeButtonClicked()
     {
-        _action.Invoke(true);
         OnCloseButtonClicked();
+        _action.Invoke(true);
     }
 
     public void OnDisagreeButtonClicked()
