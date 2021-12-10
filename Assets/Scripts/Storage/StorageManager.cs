@@ -38,11 +38,15 @@ public class StorageManager : MonoBehaviour
 
     private void OnRemoveProductResponseReceived(RemoveProductResponse removeProductResponse)
     {
+        RemoveProductController.Instance.OnResponse();
+        
         if (removeProductResponse.storage == null)
         {
             DialogManager.Instance.ShowErrorDialog();
             return;
         }
+        
+        RemoveProductController.Instance.Close();
 
         var oldStorage = GetStorageByBuildingIdAndType(removeProductResponse.storage.buildingId, removeProductResponse.storage.dc);
         oldStorage.products = removeProductResponse.storage.products;

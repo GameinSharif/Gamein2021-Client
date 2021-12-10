@@ -9,12 +9,13 @@ public class RemoveProductController : MonoBehaviour
 
     public GameObject popup;
 
-    public Localize productName;
-    public Image productImage;
+    public ProductDetailsSetter productDetailsSetter;
     public TMP_InputField amountInputField;
 
     private Utils.Storage _storage;
     private Utils.Product _product;
+
+    private bool _isSendingRequest = false;
 
     private void Awake()
     {
@@ -26,15 +27,19 @@ public class RemoveProductController : MonoBehaviour
         _storage = storage;
         _product = product;
         
-        productName.SetKey("product_" + _product.name);
-        
-        //TODO set product image
+        productDetailsSetter.SetRawData(product);
+        amountInputField.text = "";
         
         popup.SetActive(true);
     }
 
     public void OnRemoveButtonClicked()
     {
+        if (_isSendingRequest)
+        {
+            return;
+        }
+        
         string amountText = amountInputField.text;
         if (string.IsNullOrWhiteSpace(amountText))
         {
@@ -57,7 +62,15 @@ public class RemoveProductController : MonoBehaviour
 
         RemoveProductRequest removeProductRequest = new RemoveProductRequest(RequestTypeConstant.REMOVE_PRODUCT, _storage.dc, _storage.buildingId, _product.id, amount);
         RequestManager.Instance.SendRequest(removeProductRequest);
-        
+    }
+
+    public void Close()
+    {
         popup.SetActive(false);
+    }
+
+    public void OnResponse()
+    {
+        _isSendingRequest = false;
     }
 }
