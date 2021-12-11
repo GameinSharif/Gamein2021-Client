@@ -121,6 +121,10 @@ public class RequestHandler
                 GetAllChatsResponse getAllChatsResponse = JsonUtility.FromJson<GetAllChatsResponse>(responseJson);
                 EventManager.Instance.OnGetAllChatsResponse(getAllChatsResponse);
                 break;
+            case ResponseTypeConstant.REPORT_MESSAGE:
+                ReportMessageResponse reportMessageResponse = JsonUtility.FromJson<ReportMessageResponse>(responseJson);
+                EventManager.Instance.OnReportMessageResponse(reportMessageResponse);
+                break;
             case ResponseTypeConstant.GET_TEAM_TRANSPORTS:
                 GetTeamTransportsResponse getTeamTransportsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetTeamTransportsResponse), new StringEnumConverter()) as GetTeamTransportsResponse;
                 EventManager.Instance.OnGetTeamTransportsResponse(getTeamTransportsResponse);
@@ -241,9 +245,6 @@ public class RequestHandler
                 EventManager.Instance.OnDonateResponse(JsonConvert.DeserializeObject(responseJson,
                     typeof(DonateResponse),
                     new StringEnumConverter()) as DonateResponse);
-                break;
-            case ResponseTypeConstant.REPORT_MESSAGE:
-                //TODO
                 break;
             case ResponseTypeConstant.CONTRACT_FINALIZED:
                 ContractFinalizedResponse contractFinalizedResponse = JsonConvert.DeserializeObject(responseJson, typeof(ContractFinalizedResponse), new StringEnumConverter()) as ContractFinalizedResponse;

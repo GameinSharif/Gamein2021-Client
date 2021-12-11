@@ -162,6 +162,8 @@ namespace ProductionLine
             var current = Instantiate(productionLineRowPrefab, tableParent).GetComponent<ProductionLineTableRow>();
             current.SetData(response.productionLine, true);
             productionLineTableRows.Add(current);
+            NotificationsController.Instance.AddNewNotification("notification_construct_production_line",
+                GameDataManager.Instance.GetProductionLineTemplateById(response.productionLine.productionLineTemplateId).name);
         }
 
         private void OnScrapProductionLineResponse(ScrapProductionLineResponse response)
@@ -208,7 +210,11 @@ namespace ProductionLine
                 }
             }
 
-
+            string productName = GameDataManager.Instance.GetProductName(production.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            NotificationsController.Instance.AddNewNotification("notification_start_production", translatedProductName);
             var current = productionLineTableRows.FirstOrDefault(e => e.Data.id == response.productionLine.id);
             current?.SetData(response.productionLine);
             UpdateDetails(response.productionLine);
@@ -267,8 +273,12 @@ namespace ProductionLine
 
             StorageManager.Instance.ChangeStockInStorage(StorageManager.Instance.GetWarehouse().id,
                 response.product.productId, response.product.amount);
+            string productName = GameDataManager.Instance.GetProductName(response.product.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
             NotificationsController.Instance.AddNewNotification("notification_product_creation_done",
-                GameDataManager.Instance.GetProductById(response.product.productId).name);
+                translatedProductName);
         }
 
         #endregion

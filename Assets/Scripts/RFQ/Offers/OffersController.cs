@@ -30,6 +30,8 @@ public class OffersController : MonoBehaviour
     public GameObject acceptedOffersTitle;
     public GameObject acceptedOffersScrollView;
 
+    public TMP_InputField searchBar;
+
     void Awake()
     {
         Instance = this;
@@ -102,6 +104,12 @@ public class OffersController : MonoBehaviour
             var controller = _myTeamOfferItemControllers[i];
             if (controller.Offer.id != response.terminatedOfferId) continue;
             
+            string productName = GameDataManager.Instance.GetProductName(controller.Offer.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            NotificationsController.Instance.AddNewNotification("notification_terminate_offer",translatedProductName);
+
             _myOffersPool.Remove(controller.gameObject);
             _myTeamOfferItemControllers.Remove(controller);
             RebuildListLayout(myOffersScrollPanel);
@@ -145,6 +153,12 @@ public class OffersController : MonoBehaviour
             {
                 var controller = _myTeamOfferItemControllers[i];
                 if (controller.Offer.id != response.acceptedOffer.id) continue;
+                
+                string productName = GameDataManager.Instance.GetProductName(response.acceptedOffer.productId);
+                string translatedProductName =
+                    LocalizationManager.GetLocalizedValue("product_" + productName,
+                        LocalizationManager.GetCurrentLanguage());
+                NotificationsController.Instance.AddNewNotification("notification_offer_accepted",translatedProductName);
                 
                 controller.SetAsAccepted(response.acceptedOffer);
                 break;
@@ -197,5 +211,25 @@ public class OffersController : MonoBehaviour
     {
         _myOffersPool.Add(0, offer);
         RebuildListLayout(myOffersScrollPanel);
+    }
+
+    public void OnSearchBarValueChanged(string query)
+    {
+        query ??= "";
+
+        query = LocalizationManager.GetCurrentLanguage() == LocalizationManager.LocalizedLanguage.Farsi &&
+                StringUtils.IsAlphaNumeric(query)
+            ? StringUtils.Reverse(query)
+            : query;
+        
+        foreach (var controller in _otherTeamsOfferItemControllers)
+        {
+            controller.gameObject.SetActive(
+                controller.team.text.IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                controller.product.GetLocalizedString().value.IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0
+            );
+        }
+        
+        RebuildListLayout(otherOffersScrollPanel);
     }
 }

@@ -54,16 +54,23 @@ public class StorageManager : MonoBehaviour
         if (oldStorage.dc)
         {
             DcTabController.Instance.Initialize(oldStorage);
+            NotificationsController.Instance.AddNewNotification("notification_remove_product_dc");
         }
         else
         {
             WarehouseTabController.Instance.Initialize(oldStorage);
+            NotificationsController.Instance.AddNewNotification("notification_remove_product_warehouse");
         }
     }
 
     public Utils.Storage GetStorageByBuildingIdAndType(int buildingId, bool isDC)
     {
         return Storages.Find(s => s.buildingId == buildingId && s.dc == isDC);
+    }
+
+    public Utils.Storage GetStorageById(int storageId)
+    {
+        return Storages.Find(s => s.id == storageId);
     }
 
     public void ChangeStockInStorage(int storageId, int productId, int amountToAddOrSubtract)

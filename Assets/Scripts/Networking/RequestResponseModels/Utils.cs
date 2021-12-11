@@ -92,6 +92,7 @@ public class Utils
     {
         public int id;
         public int teamId;
+        public int storageId;
         public int gameinCustomerId;
         public int productId;
         public CustomDate contractDate;

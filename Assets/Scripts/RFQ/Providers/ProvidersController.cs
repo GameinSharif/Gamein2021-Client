@@ -15,6 +15,8 @@ public class ProvidersController : MonoBehaviour
 
     public RectTransform myProvidersScrollPanel;
     public RectTransform otherProvidersScrollPanel;
+    
+    public TMP_InputField searchBar;
 
     private List<MyProviderItemController> _myTeamProviderItemControllers = new List<MyProviderItemController>();
     private List<OtherProviderItemController> _otherTeamsProviderItemControllers = new List<OtherProviderItemController>();
@@ -92,6 +94,13 @@ public class ProvidersController : MonoBehaviour
             _myProvidersPool.Remove(controller.gameObject);
             _myTeamProviderItemControllers.Remove(controller);
             RebuildListLayout(myProvidersScrollPanel);
+            
+            string productName = GameDataManager.Instance.GetProductName(controller.Provider.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            NotificationsController.Instance.AddNewNotification("notification_remove_provider", translatedProductName);
+
             return;
         }
     }
@@ -105,6 +114,13 @@ public class ProvidersController : MonoBehaviour
                 if (controller.Provider.id != editProviderResponse.editedProvider.id) continue;
                 
                 controller.UpdateEditedProvider(editProviderResponse.editedProvider);
+                
+                string productName = GameDataManager.Instance.GetProductName(editProviderResponse.editedProvider.productId);
+                string translatedProductName =
+                    LocalizationManager.GetLocalizedValue("product_" + productName,
+                        LocalizationManager.GetCurrentLanguage());
+                NotificationsController.Instance.AddNewNotification("notification_edit_provider", translatedProductName);
+
             }
         }
         else
@@ -187,5 +203,25 @@ public class ProvidersController : MonoBehaviour
         min = min == float.MaxValue ? 0 : min;
 
         return new Tuple<float, float, float>(mean, max, min);
+    }
+
+    public void OnSearchBarValueChanged(string query)
+    {
+        query ??= "";
+        
+        query = LocalizationManager.GetCurrentLanguage() == LocalizationManager.LocalizedLanguage.Farsi &&
+                StringUtils.IsAlphaNumeric(query)
+            ? StringUtils.Reverse(query)
+            : query;
+
+        foreach (var controller in _otherTeamsProviderItemControllers)
+        {
+            controller.gameObject.SetActive(
+                controller.team.text.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                controller.product.GetLocalizedString().value.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0
+            );
+        }
+        
+        RebuildListLayout(otherProvidersScrollPanel);
     }
 }
