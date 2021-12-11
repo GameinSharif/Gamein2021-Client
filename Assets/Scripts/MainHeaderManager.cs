@@ -66,7 +66,7 @@ public class MainHeaderManager : MonoBehaviour
         Value = moneyUpdateResponse.value;
         Brand = moneyUpdateResponse.brand;
 
-        //TODO donated amount
+        VaccinePopupController.Instance.TeamDonation = moneyUpdateResponse.donatedAmount;
     }
 
     public float Money

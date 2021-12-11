@@ -13,14 +13,28 @@ public class VaccinePopupController : MonoBehaviour
     
     public Button coronaButton;
     public RTLTextMeshPro collectedRatio;
-    public TMP_InputField donateAmount;
+    public TMP_InputField donateAmountInputField;
     public Button donateButton;
     public List<Slider> otherCountriesStatus;
     public Slider myCountryStatus;
+    public Localize teamDonatedAmountText;
+    
+    private float _teamDonation = -1;
+
+    public float TeamDonation
+    {
+        get => _teamDonation;
+        set
+        {
+            _teamDonation = value;
+            teamDonatedAmountText.SetKey("corona_donate_amount", _teamDonation.ToString());
+        }
+    }
 
     private void Awake()
     {
         Instance = this;
+        TeamDonation = PlayerPrefs.GetFloat("DonatedAmount", 0f);
     }
 
     private void OnEnable()
@@ -52,9 +66,9 @@ public class VaccinePopupController : MonoBehaviour
 
     private void Donate()
     {
-        if (string.IsNullOrEmpty(donateAmount.text)) return;
+        if (string.IsNullOrEmpty(donateAmountInputField.text)) return;
 
-        var amount = float.Parse(donateAmount.text);
+        var amount = float.Parse(donateAmountInputField.text);
         if(amount == 0) return;
         if (amount > MainHeaderManager.Instance.Money)
         {
@@ -70,6 +84,7 @@ public class VaccinePopupController : MonoBehaviour
 
         var request = new DonateRequest(RequestTypeConstant.DONATE, amount);
         RequestManager.Instance.SendRequest(request);
+        TeamDonation += amount;
     }
 
     private void OnGetDonateResponse(DonateResponse response)

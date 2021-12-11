@@ -95,6 +95,7 @@ public class LoginManager : MonoBehaviour
             PlayerPrefs.SetFloat("Money", loginResponse.team.credit);
             PlayerPrefs.SetFloat("Value", loginResponse.team.wealth);
             PlayerPrefs.SetFloat("Brand", loginResponse.team.brand);
+            PlayerPrefs.SetFloat("DonatedAmount", loginResponse.team.donatedAmount);
 
             RequestObject.myToken = loginResponse.token;
 

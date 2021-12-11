@@ -25,6 +25,7 @@ public class Utils
         public float credit;
         public float wealth;
         public float brand;
+        public float donatedAmount;
     }
 
     public enum ProviderState
