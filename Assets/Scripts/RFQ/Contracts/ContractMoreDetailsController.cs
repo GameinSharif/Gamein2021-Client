@@ -12,6 +12,7 @@ public class ContractMoreDetailsController : MonoBehaviour
 
     public RTLTextMeshPro currentBrand;
     public RTLTextMeshPro valueShare;
+    public RTLTextMeshPro demandShare;
     public RTLTextMeshPro minPrice;
     public RTLTextMeshPro maxPrice;
     public RTLTextMeshPro terminatePenalty;
@@ -29,13 +30,15 @@ public class ContractMoreDetailsController : MonoBehaviour
 
         if (contract.contractDate.ToDateTime() > MainHeaderManager.Instance.gameDate.ToDateTime())
         {
+            demandShare.text = "-";
             valueShare.text = "-";
             minPrice.text = "-";
             maxPrice.text = "-";
         }
         else
         {
-            valueShare.text = contract.valueShare.ToString("0.00");
+            demandShare.text = contract.demandShare.ToString("0.00") + "%";
+            valueShare.text = contract.valueShare.ToString("0.00") + "%";
             minPrice.text = contract.minPrice.ToString("0.00");
             maxPrice.text = contract.maxPrice.ToString("0.00");
         }

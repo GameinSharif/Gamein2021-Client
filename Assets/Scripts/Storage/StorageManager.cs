@@ -66,6 +66,11 @@ public class StorageManager : MonoBehaviour
         return Storages.Find(s => s.buildingId == buildingId && s.dc == isDC);
     }
 
+    public Utils.Storage GetStorageById(int storageId)
+    {
+        return Storages.Find(s => s.id == storageId);
+    }
+
     public void ChangeStockInStorage(int storageId, int productId, int amountToAddOrSubtract)
     {
         var storage = Storages.Find(st => st.id == storageId);

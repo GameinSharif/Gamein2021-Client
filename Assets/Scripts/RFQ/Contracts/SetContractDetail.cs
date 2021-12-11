@@ -13,8 +13,8 @@ public class SetContractDetail : MonoBehaviour
     public RTLTextMeshPro supplyAmountTxt;
     public RTLTextMeshPro pricePerUnitTxt;
     public RTLTextMeshPro boughtAmountTxt;
-    public RTLTextMeshPro demandShareTxt;
-    
+    public Localize storageLocalize;
+
     public GameObject terminateButtonGameObject;
 
     private void OnEnable()
@@ -40,12 +40,20 @@ public class SetContractDetail : MonoBehaviour
         if (contractData.contractDate.ToDateTime() > MainHeaderManager.Instance.gameDate.ToDateTime())
         {
             boughtAmountTxt.text = "-";
-            demandShareTxt.text = "-";
         }
         else
         {
             boughtAmountTxt.text = contractData.boughtAmount.ToString();
-            demandShareTxt.text = contractData.demandShare.ToString("0.00") + "%";
+        }
+
+        Utils.Storage storage = StorageManager.Instance.GetStorageById(contractData.storageId);
+        if (storage.dc)
+        {
+            storageLocalize.SetKey("provider_item_dc", storage.buildingId.ToString());
+        }
+        else
+        {
+            storageLocalize.SetKey("provider_item_warehouse");
         }
 
         this.contractData = contractData;
