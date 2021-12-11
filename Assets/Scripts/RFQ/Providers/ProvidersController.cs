@@ -92,6 +92,13 @@ public class ProvidersController : MonoBehaviour
             _myProvidersPool.Remove(controller.gameObject);
             _myTeamProviderItemControllers.Remove(controller);
             RebuildListLayout(myProvidersScrollPanel);
+            
+            string productName = GameDataManager.Instance.GetProductName(controller.Provider.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            NotificationsController.Instance.AddNewNotification("notification_remove_provider", translatedProductName);
+
             return;
         }
     }
@@ -105,6 +112,13 @@ public class ProvidersController : MonoBehaviour
                 if (controller.Provider.id != editProviderResponse.editedProvider.id) continue;
                 
                 controller.UpdateEditedProvider(editProviderResponse.editedProvider);
+                
+                string productName = GameDataManager.Instance.GetProductName(editProviderResponse.editedProvider.productId);
+                string translatedProductName =
+                    LocalizationManager.GetLocalizedValue("product_" + productName,
+                        LocalizationManager.GetCurrentLanguage());
+                NotificationsController.Instance.AddNewNotification("notification_edit_provider", translatedProductName);
+
             }
         }
         else

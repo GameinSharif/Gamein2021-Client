@@ -69,7 +69,13 @@ public class SetContractDetail : MonoBehaviour
         {
             if (contractData.id == terminateLongtermContractResponse.terminatedContract.id)
             {
-                DialogManager.Instance.ShowErrorDialog("contract_supplier_successfully_terminated");
+                string productName = GameDataManager.Instance.GetProductName(terminateLongtermContractResponse.terminatedContract.productId);
+                string translatedProductName =
+                    LocalizationManager.GetLocalizedValue("product_" + productName,
+                        LocalizationManager.GetCurrentLanguage());
+                string gameinCustomerName = GameDataManager.Instance.GetGameinCustomerById(terminateLongtermContractResponse.terminatedContract.gameinCustomerId).name;
+                string[] param = {gameinCustomerName, translatedProductName};
+                NotificationsController.Instance.AddNewNotification("notification_terminate_contract", param);
                 MainHeaderManager.Instance.Money -= terminateLongtermContractResponse.terminatedContract.terminatePenalty;
                 gameObject.SetActive(false);
             }
@@ -85,8 +91,13 @@ public class SetContractDetail : MonoBehaviour
             {
                 ContractMoreDetailsController.Instance.ShowMoreDetailsButtonClick(contractFinalizedResponse.contract);
             }
-
-            //TODO notification
+            string productName = GameDataManager.Instance.GetProductName(contractFinalizedResponse.contract.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            string gameinCustomerName = GameDataManager.Instance.GetGameinCustomerById(contractFinalizedResponse.contract.gameinCustomerId).name;
+            string[] param = {gameinCustomerName, translatedProductName};
+            NotificationsController.Instance.AddNewNotification("notification_contract_finalized", param);
         }
     }
 

@@ -55,6 +55,14 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
             float cost = firstContract.boughtAmount * firstContract.pricePerUnit + firstContract.transportationCost;
             MainHeaderManager.Instance.Money -= cost;
             
+            string productName = GameDataManager.Instance.GetProductName(newContractSupplierResponse.contractSuppliers[0].materialId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            string gameinSupplierName = GameDataManager.Instance.GetSupplierName(newContractSupplierResponse.contractSuppliers[0].supplierId);
+            string[] param = {gameinSupplierName, translatedProductName};
+            NotificationsController.Instance.AddNewNotification("notification_new_contract_supplier", param);
+
             makeADealWithSupplierPopupCanvas.SetActive(false);
         }
         else

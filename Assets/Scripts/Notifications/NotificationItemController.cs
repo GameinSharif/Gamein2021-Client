@@ -7,16 +7,9 @@ public class NotificationItemController : MonoBehaviour
     public Localize notificationTextLocalize;
     private int _itemsGameObjectIndex;
 
-    public void SetInfo(string textLocalize, int index, string param)
+    public void SetInfo(string textLocalize, int index, params string[] replaceStrings)
     {
-        if (param != "")
-        {
-            notificationTextLocalize.SetKey(textLocalize, param);
-        }
-        else
-        {
-            notificationTextLocalize.SetKey(textLocalize);
-        }
+        notificationTextLocalize.SetKey(textLocalize, replaceStrings);
         _itemsGameObjectIndex = index;
     }
 

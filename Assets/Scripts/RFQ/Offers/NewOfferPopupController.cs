@@ -43,8 +43,12 @@ public class NewOfferPopupController : MonoBehaviour
         if (newOfferResponse.offer != null)
         {
             OffersController.Instance.AddMyOfferToList(newOfferResponse.offer);
+            string productName = GameDataManager.Instance.GetProductName(newOfferResponse.offer.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
             NotificationsController.Instance.AddNewNotification("notification_new_offer", 
-                GameDataManager.Instance.GetProductName(newOfferResponse.offer.productId));
+                translatedProductName);
             NewOfferPopupCanvas.SetActive(false);
         }
         else

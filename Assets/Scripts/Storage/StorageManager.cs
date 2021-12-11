@@ -54,10 +54,12 @@ public class StorageManager : MonoBehaviour
         if (oldStorage.dc)
         {
             DcTabController.Instance.Initialize(oldStorage);
+            NotificationsController.Instance.AddNewNotification("notification_remove_product_dc");
         }
         else
         {
             WarehouseTabController.Instance.Initialize(oldStorage);
+            NotificationsController.Instance.AddNewNotification("notification_remove_product_warehouse");
         }
     }
 

@@ -104,8 +104,12 @@ public class NegotiationsController : MonoBehaviour
                 controller.UpdateEditedNegotiation(editNegotiationCostPerUnitResponse.negotiation);
                 return;
             }
+            string productName = GameDataManager.Instance.GetProductName(editNegotiationCostPerUnitResponse.negotiation.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
             NotificationsController.Instance.AddNewNotification("notification_edit_negotiation",
-                GameDataManager.Instance.GetProductName(editNegotiationCostPerUnitResponse.negotiation.productId));
+                translatedProductName);
         }
         else
         {
@@ -143,6 +147,15 @@ public class NegotiationsController : MonoBehaviour
                 
                 _supplyNegotiationsPool.Remove(controller.gameObject);
                 _supplyNegotiationItemControllers.Remove(controller);
+                
+                string productName = GameDataManager.Instance.GetProductName(response.negotiation.productId);
+                string translatedProductName =
+                    LocalizationManager.GetLocalizedValue("product_" + productName,
+                        LocalizationManager.GetCurrentLanguage());
+                string supplierName = GameDataManager.Instance.GetTeamName(response.negotiation.supplierId);
+                string[] param = {supplierName, translatedProductName};
+                NotificationsController.Instance.AddNewNotification("notification_reject_negotiation_supplier", param);
+
                 RebuildSupplyNegotiationsLayout();
             }
         }
@@ -155,6 +168,15 @@ public class NegotiationsController : MonoBehaviour
                 
                 _demandNegotiationsPool.Remove(controller.gameObject);
                 _demandNegotiationItemControllers.Remove(controller);
+                
+                string productName = GameDataManager.Instance.GetProductName(response.negotiation.productId);
+                string translatedProductName =
+                    LocalizationManager.GetLocalizedValue("product_" + productName,
+                        LocalizationManager.GetCurrentLanguage());
+                string demanderName = GameDataManager.Instance.GetTeamName(response.negotiation.demanderId);
+                string[] param = {demanderName, translatedProductName};
+                NotificationsController.Instance.AddNewNotification("notification_reject_negotiation_demander", param);
+
                 RebuildDemandNegotiationsLayout();
             }
         }
