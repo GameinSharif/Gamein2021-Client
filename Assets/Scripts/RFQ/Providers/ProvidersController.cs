@@ -191,8 +191,23 @@ public class ProvidersController : MonoBehaviour
         return new Tuple<float, float, float>(mean, max, min);
     }
 
-    public void OnSearchButtonClicked()
+    public void OnSearchBarValueChanged(string query)
     {
+        query ??= "";
         
+        query = LocalizationManager.GetCurrentLanguage() == LocalizationManager.LocalizedLanguage.Farsi &&
+                StringUtils.IsAlphaNumeric(query)
+            ? StringUtils.Reverse(query)
+            : query;
+
+        foreach (var controller in _otherTeamsProviderItemControllers)
+        {
+            controller.gameObject.SetActive(
+                controller.team.text.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                controller.product.GetLocalizedString().value.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0
+            );
+        }
+        
+        RebuildListLayout(otherProvidersScrollPanel);
     }
 }

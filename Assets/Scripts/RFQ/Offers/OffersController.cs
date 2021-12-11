@@ -201,8 +201,23 @@ public class OffersController : MonoBehaviour
         RebuildListLayout(myOffersScrollPanel);
     }
 
-    public void OnSearchButtonClicked()
+    public void OnSearchBarValueChanged(string query)
     {
+        query ??= "";
+
+        query = LocalizationManager.GetCurrentLanguage() == LocalizationManager.LocalizedLanguage.Farsi &&
+                StringUtils.IsAlphaNumeric(query)
+            ? StringUtils.Reverse(query)
+            : query;
         
+        foreach (var controller in _otherTeamsOfferItemControllers)
+        {
+            controller.gameObject.SetActive(
+                controller.team.text.IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                controller.product.GetLocalizedString().value.IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0
+            );
+        }
+        
+        RebuildListLayout(otherOffersScrollPanel);
     }
 }
