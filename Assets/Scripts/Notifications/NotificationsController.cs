@@ -23,11 +23,6 @@ public class NotificationsController : MonoBehaviour
         Instance = this;
     }
 
-    // public void OnTestButtonClick()
-    // {
-    //     AddNewNotification("auction_min_raise");
-    // }
-
     public void AddNewNotification(string textLocalize, string param)
     {
         if (_activeNotificationsTextLocalize.Count == MAX_NOTIFICATIONS)
