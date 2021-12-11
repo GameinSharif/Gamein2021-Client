@@ -30,6 +30,8 @@ public class OffersController : MonoBehaviour
     public GameObject acceptedOffersTitle;
     public GameObject acceptedOffersScrollView;
 
+    public TMP_InputField searchBar;
+
     void Awake()
     {
         Instance = this;
@@ -197,5 +199,10 @@ public class OffersController : MonoBehaviour
     {
         _myOffersPool.Add(0, offer);
         RebuildListLayout(myOffersScrollPanel);
+    }
+
+    public void OnSearchButtonClicked()
+    {
+        
     }
 }

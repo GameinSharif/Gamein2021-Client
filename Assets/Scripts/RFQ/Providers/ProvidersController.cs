@@ -15,6 +15,8 @@ public class ProvidersController : MonoBehaviour
 
     public RectTransform myProvidersScrollPanel;
     public RectTransform otherProvidersScrollPanel;
+    
+    public TMP_InputField searchBar;
 
     private List<MyProviderItemController> _myTeamProviderItemControllers = new List<MyProviderItemController>();
     private List<OtherProviderItemController> _otherTeamsProviderItemControllers = new List<OtherProviderItemController>();
@@ -187,5 +189,10 @@ public class ProvidersController : MonoBehaviour
         min = min == float.MaxValue ? 0 : min;
 
         return new Tuple<float, float, float>(mean, max, min);
+    }
+
+    public void OnSearchButtonClicked()
+    {
+        
     }
 }
