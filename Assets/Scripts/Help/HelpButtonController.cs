@@ -6,7 +6,6 @@ public class HelpButtonController : MonoBehaviour
 {
     public GameObject helpFramePrefab;
     public string localizeKey;
-    public Transform parent;
 
     private GameObject _frame;
 
@@ -14,9 +13,10 @@ public class HelpButtonController : MonoBehaviour
     {
         if (_frame == null)
         {
-            _frame = Instantiate(helpFramePrefab, parent, true);
-            
             var buttonTransform = this.transform;
+            
+            _frame = Instantiate(helpFramePrefab, buttonTransform.parent, true);
+
             _frame.transform.SetPositionAndRotation(buttonTransform.position, buttonTransform.rotation);
             _frame.transform.localScale = Vector3.one;
             
