@@ -79,7 +79,11 @@ public class VaccinePopupController : MonoBehaviour
             DialogManager.Instance.ShowErrorDialog();
             return;
         }
-
+        var myCountry = PlayerPrefs.GetString("Country");
+        foreach (var info in response.infos.Where(info => info.country.ToString() == myCountry))
+        {
+            NotificationsController.Instance.AddNewNotification("notification_donate", info.currentCollectedAmount.ToString("0.00"));
+        }
         SetData(response.infos);
     }
 

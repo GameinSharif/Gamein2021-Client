@@ -50,6 +50,15 @@ public class NewContractController : MonoBehaviour
         if (newContractResponse.contract != null)
         {
             ContractsManager.Instance.AddContractItemToList(newContractResponse.contract);
+            
+            string productName = GameDataManager.Instance.GetProductName(newContractResponse.contract.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            string gameinCustomerName = GameDataManager.Instance.GetGameinCustomerById(newContractResponse.contract.gameinCustomerId).name;
+            string[] param = {gameinCustomerName, translatedProductName};
+            NotificationsController.Instance.AddNewNotification("notification_new_contract", param);
+            
             NewContractPopupCanvasGameObject.SetActive(false);
         }
         else

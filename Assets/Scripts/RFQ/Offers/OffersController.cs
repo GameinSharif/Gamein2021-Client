@@ -104,6 +104,12 @@ public class OffersController : MonoBehaviour
             var controller = _myTeamOfferItemControllers[i];
             if (controller.Offer.id != response.terminatedOfferId) continue;
             
+            string productName = GameDataManager.Instance.GetProductName(controller.Offer.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            NotificationsController.Instance.AddNewNotification("notification_terminate_offer",translatedProductName);
+
             _myOffersPool.Remove(controller.gameObject);
             _myTeamOfferItemControllers.Remove(controller);
             RebuildListLayout(myOffersScrollPanel);
@@ -147,6 +153,12 @@ public class OffersController : MonoBehaviour
             {
                 var controller = _myTeamOfferItemControllers[i];
                 if (controller.Offer.id != response.acceptedOffer.id) continue;
+                
+                string productName = GameDataManager.Instance.GetProductName(response.acceptedOffer.productId);
+                string translatedProductName =
+                    LocalizationManager.GetLocalizedValue("product_" + productName,
+                        LocalizationManager.GetCurrentLanguage());
+                NotificationsController.Instance.AddNewNotification("notification_offer_accepted",translatedProductName);
                 
                 controller.SetAsAccepted(response.acceptedOffer);
                 break;

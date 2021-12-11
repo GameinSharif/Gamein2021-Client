@@ -45,9 +45,13 @@ public class NewProviderPopupController : MonoBehaviour
         _isSendingRequest = false;
         if (newProviderResponse.newProvider != null)
         {
+            string productName = GameDataManager.Instance.GetProductName(newProviderResponse.newProvider.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
             ProvidersController.Instance.AddMyProviderToList(newProviderResponse.newProvider);
             NotificationsController.Instance.AddNewNotification("notification_new_provider",
-            GameDataManager.Instance.GetProductName(newProviderResponse.newProvider.productId));
+            translatedProductName);
             NewProviderPopupCanvas.SetActive(false);
         }
         else

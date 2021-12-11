@@ -214,6 +214,12 @@ public class EventManager : MonoBehaviour
     {
         OnGetAllChatsResponseEvent?.Invoke(getAllChatsResponse);
     }
+    
+    public event Action<ReportMessageResponse> OnReportMessageResponseEvent;
+    public void OnReportMessageResponse(ReportMessageResponse reportMessageResponse)
+    {
+        OnReportMessageResponseEvent?.Invoke(reportMessageResponse);
+    }
 
     public event Action<GetTeamTransportsResponse> OnGetTeamTransportsResponseEvent;
     public void OnGetTeamTransportsResponse(GetTeamTransportsResponse getTeamTransportsResponse)
