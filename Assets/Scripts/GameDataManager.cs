@@ -82,7 +82,9 @@ public class GameDataManager : MonoBehaviour
     public void OnGetAllActiveDCsResponse(GetAllActiveDcResponse getAllActiveDcResponse)
     {
         DCs = getAllActiveDcResponse.dcs;
-        MapManager.Instance.InitializeMapMarkers();
+
+        if (MapManager.IsInMap)
+            MapManager.Instance.InitializeMapMarkers();
     }
 
     public void OnGetCurrentWeekDemandsResponse(GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse)
