@@ -47,6 +47,8 @@ public class NewContractController : MonoBehaviour
 
     private void OnNewContractResponse(NewContractResponse newContractResponse)
     {
+        _isSendingRequest = false;
+
         if (newContractResponse.contract != null)
         {
             ContractsManager.Instance.AddContractItemToList(newContractResponse.contract);
@@ -60,13 +62,13 @@ public class NewContractController : MonoBehaviour
             NotificationsController.Instance.AddNewNotification("notification_new_contract", param);
             
             NewContractPopupCanvasGameObject.SetActive(false);
+            CustomersController.Instance.ContractsParentGameObject.SetActive(true);
+            CustomersController.Instance.CustomersParentGameObject.SetActive(false);
         }
         else
         {
             DialogManager.Instance.ShowErrorDialog();
         }
-
-        _isSendingRequest = false;
     }
 
     public void OnOpenMakeADealPopupClick(Utils.WeekDemand weekDemand)

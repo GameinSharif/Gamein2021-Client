@@ -23,11 +23,11 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     public TMP_InputField totalPrice;
     public TMP_InputField arrivalDate;
 
-    //TODO penalty?
-
     private bool _firstTimeInitializing = true;
     private List<Utils.VehicleType> _vehicleTypesOptions = new List<Utils.VehicleType>();
     private Utils.WeekSupply _weekSupply;
+
+    private bool _isSendingRequest = false;
 
     private void Awake()
     {
@@ -46,6 +46,8 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
 
     private void OnNewContractSupplierResponse(NewContractSupplierResponse newContractSupplierResponse)
     {
+        _isSendingRequest = false;
+
         if (newContractSupplierResponse.result == "Successful")
         {
             List<Utils.ContractSupplier> contractSuppliers = newContractSupplierResponse.contractSuppliers;
@@ -64,6 +66,8 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
             NotificationsController.Instance.AddNewNotification("notification_new_contract_supplier", param);
 
             makeADealWithSupplierPopupCanvas.SetActive(false);
+            SuppliersController.Instance.ContractsParentGameObject.SetActive(false);
+            SuppliersController.Instance.SuppliersParentGameObject.SetActive(true);
         }
         else
         {
@@ -196,6 +200,11 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     
     public void OnDoneButtonClick()
     {
+        if (_isSendingRequest)
+        {
+            return;
+        }
+
         string amountText = amount.text;
         int weeks = GetNumberOfWeeks();
         if (weeks < 1 || string.IsNullOrEmpty(amountText) || int.Parse(amountText) < 1)
@@ -226,6 +235,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         int amountInt = int.Parse(amount.text);
         NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_WITH_SUPPLIER, _weekSupply, weeks, amountInt, GameDataManager.Instance.GetVehicleByType(vehicleType).id, insurance.isOn);
         RequestManager.Instance.SendRequest(newContractSupplier);
+        _isSendingRequest = true;
     }
 
     private void SetArrivalDate()
