@@ -383,4 +383,10 @@ public class EventManager : MonoBehaviour
     {
         OnContractSupplierFinalizedResponseEvent?.Invoke(response);
     }
+    
+    public event Action<BanResponse> OnBanResponseEvent;
+    public void OnBanResponse(BanResponse response)
+    {
+        OnBanResponseEvent?.Invoke(response);
+    }
 }
