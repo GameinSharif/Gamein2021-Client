@@ -254,6 +254,10 @@ public class RequestHandler
                 ContractSupplierFinalizedResponse contractSupplierFinalizedResponse = JsonConvert.DeserializeObject(responseJson, typeof(ContractSupplierFinalizedResponse), new StringEnumConverter()) as ContractSupplierFinalizedResponse;
                 EventManager.Instance.OnContractSupplierFinalizedResponse(contractSupplierFinalizedResponse);
                 break;
+            case ResponseTypeConstant.BAN:
+                BanResponse banResponse = JsonUtility.FromJson<BanResponse>(responseJson);
+                EventManager.Instance.OnBanResponse(banResponse);
+                break;
             default:
                 Debug.LogWarning(responseJson);
                 break;

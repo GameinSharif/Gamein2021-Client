@@ -23,11 +23,13 @@ public class GameStatusManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnUpdateGameStatusResponseEvent += OnUpdateGameStatusResponseReceived;
+        EventManager.Instance.OnBanResponseEvent += OnBanResponseReceived;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnUpdateGameStatusResponseEvent -= OnUpdateGameStatusResponseReceived;
+        EventManager.Instance.OnBanResponseEvent -= OnBanResponseReceived;
     }
 
     private void OnUpdateGameStatusResponseReceived(UpdateGameStatusResponse updateGameStatusResponse)
@@ -57,5 +59,17 @@ public class GameStatusManager : MonoBehaviour
         }
 
         _gameStatus = updateGameStatusResponse.gameStatus;
+    }
+    
+    private void OnBanResponseReceived(BanResponse banResponse)
+    {
+        string minuets = banResponse.minutes.ToString();
+        
+        textLocalize.SetKey("ban_message", minuets);
+        
+        GameStatusPopupCanvas.SetActive(true);
+        CloseButtonGameObject.SetActive(false);
+        background.SetActive(true);
+
     }
 }
