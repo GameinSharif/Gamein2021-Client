@@ -101,6 +101,11 @@ public class LoginManager : MonoBehaviour
 
             SceneManager.LoadScene("MenuScene");
         }
+        else if (loginResponse.result == "Can not login. Already logged in.")
+        {
+            LoginErrorLocalize.SetKey("login_already_logged_in_error");
+            LoginErrorLocalize.gameObject.SetActive(true); 
+        }
         else
         {
             LoginErrorLocalize.SetKey("login_error_info");
