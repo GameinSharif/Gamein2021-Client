@@ -47,7 +47,8 @@ public class DcTabController : MonoBehaviour
         int comingAmount = TransportManager.Instance.CalculateInWayProductsAmount(_dc, product.id);
 
         var controller = theGameObject.GetComponent<StorageProductController>();
-        controller.SetData(product, Utils.StorageType.DC, availableAmount, comingAmount);
+        float occupiedPercent = StorageManager.Instance.GetOccupiedAmount(_dc, product);
+        controller.SetData(product, Utils.StorageType.DC, availableAmount, comingAmount, occupiedPercent);
         
         _itemControllers.Add(controller);
     }
@@ -64,6 +65,8 @@ public class DcTabController : MonoBehaviour
 
     public void ChangeProductInList(Utils.StorageProduct storageProduct)
     {
+        var product = GameDataManager.Instance.GetProductById(storageProduct.productId);
+
         foreach (var controller in _itemControllers)
         {
             if (controller.Product.id == storageProduct.productId)
@@ -75,15 +78,12 @@ public class DcTabController : MonoBehaviour
                 }
                 else
                 {
-                    controller.available.text = storageProduct.amount.ToString();
-                    //int coming = int.Parse(controller.coming.OriginalText);
-                    //controller.total.text = (coming + storageProduct.amount).ToString();
+                    controller.SetAvailableAndOccupiedAmount(storageProduct.amount, StorageManager.Instance.GetOccupiedAmount(_dc, product));
                 }
                 return;
             }
         }
         
-        var product = GameDataManager.Instance.GetProductById(storageProduct.productId);
         _pool.Add(new Tuple<Utils.Product, int>(product, storageProduct.amount));
         RebuildListLayout();
     }

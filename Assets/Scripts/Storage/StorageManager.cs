@@ -195,4 +195,31 @@ public class StorageManager : MonoBehaviour
         bool dc = id > GameDataManager.Instance.Factories.Count;
         return new Tuple<int, bool>(buildingId, dc);
     }
+
+    public float GetOccupiedAmount(Utils.Storage storage, Utils.Product product)
+    {
+        float volumetricAmount = 1f * GetProductAmountByStorage(storage, product.id) * product.volumetricUnit;
+        if (storage.dc)
+        {
+            Utils.DC dc = GameDataManager.Instance.GetDcById(storage.buildingId);
+            return volumetricAmount / dc.capacity * 100f;
+        }
+        else
+        {
+            int capacity = 0;
+            switch (product.productType)
+            {
+                case Utils.ProductType.RawMaterial:
+                    capacity = GameDataManager.Instance.GameConstants.rawMaterialCapacity;
+                    break;
+                case Utils.ProductType.SemiFinished:
+                    capacity = GameDataManager.Instance.GameConstants.semiFinishedProductCapacity;
+                    break;
+                case Utils.ProductType.Finished:
+                    capacity = GameDataManager.Instance.GameConstants.finishedProductCapacity;
+                    break;
+            }
+            return volumetricAmount / capacity * 100f;
+        }       
+    }
 }

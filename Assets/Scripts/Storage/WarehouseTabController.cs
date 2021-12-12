@@ -62,7 +62,9 @@ public class WarehouseTabController : MonoBehaviour
         int comingAmount = TransportManager.Instance.CalculateInWayProductsAmount(_warehouse, product.id);
 
         var controller = theGameObject.GetComponent<StorageProductController>();
-        controller.SetData(product, Utils.StorageType.WAREHOUSE, availableAmount, comingAmount);
+        float occupiedAmount = StorageManager.Instance.GetOccupiedAmount(_warehouse, product);
+
+        controller.SetData(product, Utils.StorageType.WAREHOUSE, availableAmount, comingAmount, occupiedAmount);
 
         _itemControllers.Add(controller);
     }
@@ -137,9 +139,7 @@ public class WarehouseTabController : MonoBehaviour
                 }
                 else
                 {
-                    controller.available.text = storageProduct.amount.ToString();
-                    //int coming = int.Parse(controller.coming.OriginalText);
-                    //controller.total.text = (coming + storageProduct.amount).ToString();
+                    controller.SetAvailableAndOccupiedAmount(storageProduct.amount, StorageManager.Instance.GetOccupiedAmount(_warehouse, product));
                 }
                 return;
             }
