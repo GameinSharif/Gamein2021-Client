@@ -18,12 +18,13 @@ namespace ProductionLine
         public TMP_InputField productAmount_I;
         public List<GameObject> ingredientItems;
         public Localize costBox;
-        public RTLTextMeshPro actualRate;
+        public Localize actualRate;
         public Localize productionTime;
         public RTLTextMeshPro finalAmount;
         public Image productIcon;
         public Button start_B;
 
+        public Color ingredientShortageColor;
 
         private int _selectedProductId;
 
@@ -32,7 +33,7 @@ namespace ProductionLine
             get => _selectedProductId;
             set
             {
-                start_B.interactable = int.Parse(productAmount_I.text) > 0 && value != -1;
+                start_B.interactable = Amount > 0 && value != -1;
                 _selectedProductId = value;
             }
         }
@@ -93,8 +94,10 @@ namespace ProductionLine
             //}
             //_toggleGroup.SetAllTogglesOff();
 
-            
+            productAmount_I.text = "";
             SelectedProductId = -1;
+            actualRate.SetKey("production_line_actual_rate",
+                _template.efficiencyLevels[data.efficiencyLevel].efficiencyPercentage + "%");
 
             UpdateShowData();
         }
@@ -125,7 +128,7 @@ namespace ProductionLine
 
             if (productId == 27 || productId == -1 || Amount <= 0) return; //CarbonDioxide has no ingredients
 
-            
+
             var ingredients = GameDataManager.Instance.GetProductById(productId).ingredientsPerUnit;
             if (ingredients is null) return;
 
@@ -134,7 +137,20 @@ namespace ProductionLine
                 var item = ingredientItems[i];
                 item.GetComponentInChildren<Image>().sprite =
                     GameDataManager.Instance.ProductSprites[ingredients[i].productId];
-                item.GetComponentInChildren<RTLTextMeshPro>().text = (ingredients[i].amount * Amount).ToString();
+                var ingredientAmount = item.GetComponentInChildren<RTLTextMeshPro>();
+                ingredientAmount.text = (ingredients[i].amount * Amount).ToString();
+
+                if (ingredients[i].productId == 4)
+                {
+                    ingredientAmount.color = Color.white;
+                }
+                else
+                {
+                    var stock = StorageManager.Instance.GetProductAmountByStorage(StorageManager.Instance.GetWarehouse(),
+                        ingredients[i].productId);
+                    ingredientAmount.color = ingredients[i].amount * Amount > stock ? ingredientShortageColor : Color.white;
+                }
+
                 item.SetActive(true);
             }
         }
