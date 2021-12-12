@@ -40,10 +40,12 @@ public class SetContractDetail : MonoBehaviour
         if (contractData.contractDate.ToDateTime() > MainHeaderManager.Instance.gameDate.ToDateTime())
         {
             boughtAmountTxt.text = "-";
+            terminateButtonGameObject.SetActive(true);
         }
         else
         {
             boughtAmountTxt.text = contractData.boughtAmount.ToString();
+            terminateButtonGameObject.SetActive(false);
         }
 
         Utils.Storage storage = StorageManager.Instance.GetStorageById(contractData.storageId);
