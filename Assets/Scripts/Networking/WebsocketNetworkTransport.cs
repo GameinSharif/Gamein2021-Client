@@ -107,6 +107,7 @@ public class WebsocketNetworkTransport : MonoBehaviour
     private void OnApplicationQuit()
     {
         _webSocket.Close(1000, "Bye!");
+        Debug.Log("Bye!");
     }
 
     public bool IsOpened

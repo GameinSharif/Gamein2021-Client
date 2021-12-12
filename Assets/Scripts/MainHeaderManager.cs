@@ -122,4 +122,9 @@ public class MainHeaderManager : MonoBehaviour
         }, 1439, OneDayTime).SetEase(Ease.Linear);
         dayTimer.onComplete += () => { dayTimeText.text = "00:00"; };
     }
+
+    public void OnSupportButtonClick()
+    {
+        Application.OpenURL("http://google.com");
+    }
 }
