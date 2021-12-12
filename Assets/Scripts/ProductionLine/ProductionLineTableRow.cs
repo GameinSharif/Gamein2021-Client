@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using RTLTMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,15 +12,15 @@ namespace ProductionLine
     {
         #region UI
 
-        public RTLTextMeshPro number_T;
+        //public RTLTextMeshPro number_T;
         public Localize name_T;
-        public Localize product_L;
-        public RTLTextMeshPro product_T;
-        public RTLTextMeshPro amount_T;
-        public RTLTextMeshPro endDate_T;
-        public Localize efficiency_L;
-        public Localize quality_L;
-        public RTLTextMeshPro status_T;
+        //public Localize product_L;
+        //public RTLTextMeshPro product_T;
+        //public RTLTextMeshPro amount_T;
+        //public RTLTextMeshPro endDate_T;
+        //public Localize efficiency_L;
+        //public Localize quality_L;
+        //public RTLTextMeshPro status_T;
         public Localize status_L;
 
         public List<GameObject> qualityStars = new List<GameObject>();
@@ -28,6 +29,12 @@ namespace ProductionLine
         public Button showDetailButton;
         private CanvasGroup panel;
 
+        private bool isBusy = false;
+        public CanvasGroup productionStatusPopup;
+        public Image productIcon;
+        public RTLTextMeshPro productAmount;
+        public Localize endDate;
+        
         #endregion
 
         public Utils.ProductionLineDto Data { get; set; }
@@ -56,6 +63,7 @@ namespace ProductionLine
 
             showDetailButton.onClick.AddListener(() => { ProductionLinesController.Instance.ShowDetails(Data.id); });
 
+            isBusy = false;
             if (Data.status == ProductionLineStatus.IN_CONSTRUCTION)
             {
                 var remainingTime = (data.activationDate.ToDateTime() -
@@ -86,44 +94,9 @@ namespace ProductionLine
                 {
                     status_L.SetKey("BUSY");
                     showDetailButton.interactable = false;
+                    isBusy = true;
                 }
             }
-
-            /*if (justCreated)
-            {
-                product_T.text = "-";
-                amount_T.text = "-";
-                endDate_T.text = "-";
-                return;
-            }
-            if (Data.products.Count == 0)
-            {
-                product_T.text = "-";
-                amount_T.text = "-";
-                endDate_T.text = "-";
-                return;
-            }
-            var currentProduction =
-                Data.products.Last().endDate.ToDateTime() > MainHeaderManager.Instance.gameDate.ToDateTime()
-                    ? Data.products.Last()
-                    : null;
-            if (currentProduction is null)
-            {
-                product_T.text = "-";
-                amount_T.text = "-";
-                endDate_T.text = "-";
-                return;
-            }
-            product_L.SetKey("product_" + GameDataManager.Instance.Products
-                .FirstOrDefault(c => c.id == currentProduction.productId)
-                ?.name);
-            amount_T.text = currentProduction.amount.ToString();
-            endDate_T.text = currentProduction.endDate.ToString();*/
-        }
-
-        public void SetRowNumber(int number)
-        {
-            number_T.text = number.ToString();
         }
 
         public void Highlight(bool on)
@@ -142,6 +115,22 @@ namespace ProductionLine
                     RequestManager.Instance.SendRequest(request);
                 }
             });
+        }
+
+        public void ShowProductionStatusPopup()
+        {
+            if(!isBusy) return;
+            var currentProduction = Data.products.Last();
+            productIcon.sprite = GameDataManager.Instance.ProductSprites[currentProduction.productId];
+            productAmount.text = currentProduction.amount.ToString();
+            var endDateString = currentProduction.endDate.year+"/"+currentProduction.endDate.month+"/" +currentProduction.endDate.day;
+            endDate.SetKey("production_line_end_date_show", endDateString);
+            productionStatusPopup.DOFade(1, 0.2f);
+        }
+        
+        public void HideProductionStatusPopup()
+        {
+            productionStatusPopup.DOFade(0, 0.2f);
         }
     }
 }
