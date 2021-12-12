@@ -125,6 +125,6 @@ public class MainHeaderManager : MonoBehaviour
 
     public void OnSupportButtonClick()
     {
-        Application.OpenURL("http://google.com");
+        Application.OpenURL("https://zil.ink/gamein_admin");
     }
 }
