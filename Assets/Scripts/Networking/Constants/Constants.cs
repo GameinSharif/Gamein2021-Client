@@ -12,6 +12,6 @@ public class Constants
     //public const int ServerPort = 8081;
 
     //Host
-    public const string ServerIp = "185.226.119.144";
+    public const string ServerIp = "45.82.138.200";
     public const int ServerPort = 8080;
 }
