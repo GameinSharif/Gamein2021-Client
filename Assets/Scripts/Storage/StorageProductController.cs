@@ -31,7 +31,7 @@ public class StorageProductController : MonoBehaviour
 
         transportButton.SetActive(product.productType != Utils.ProductType.RawMaterial);
         
-        //TODO set product image
+        productImage.sprite = GameDataManager.Instance.ProductSprites[_product.id - 1];
     }
 
     public void OnRemoveButtonClicked()
