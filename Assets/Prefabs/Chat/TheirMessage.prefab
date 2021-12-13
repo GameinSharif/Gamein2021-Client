@@ -65,10 +65,9 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 5032980284721084035}
+  m_Children: []
   m_Father: {fileID: 8188906208702877938}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -325,7 +324,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8188906208702877938}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -526,6 +525,7 @@ GameObject:
   - component: {fileID: 2221589478626376718}
   - component: {fileID: 4502052227147843015}
   - component: {fileID: 8419089988010142308}
+  - component: {fileID: 7722926285135128810}
   m_Layer: 5
   m_Name: 'ReportButton '
   m_TagString: Untagged
@@ -545,12 +545,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5813487704117205736}
-  m_Father: {fileID: 3336770580353918035}
-  m_RootOrder: 0
+  m_Father: {fileID: 8188906208702877938}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 173.2, y: 32.591}
+  m_AnchoredPosition: {x: 168.2, y: 86.59601}
   m_SizeDelta: {x: 119.9728, y: 73.183}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2221589478626376718
@@ -647,6 +647,26 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7722926285135128810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4660612006357523901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &5756047393677459609
 GameObject:
   m_ObjectHideFlags: 0
@@ -775,6 +795,7 @@ RectTransform:
   m_Children:
   - {fileID: 2226340734864861520}
   - {fileID: 2991712925439974426}
+  - {fileID: 5032980284721084035}
   - {fileID: 3336770580353918035}
   - {fileID: 4786711726710236204}
   m_Father: {fileID: 1386004863783227036}

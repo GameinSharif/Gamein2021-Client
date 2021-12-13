@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RTLTMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ChatsListController : MonoBehaviour
 {
@@ -147,5 +148,22 @@ public class ChatsListController : MonoBehaviour
     public void OnCloseButtonCLicked()
     {
         chatParentGameObject.SetActive(false);
+    }
+
+    public void OnSearchBarValueChanged(string query)
+    {
+        query ??= "";
+
+        foreach (var controller in _controllerOfChatId.Values)
+        {
+            controller.gameObject.SetActive(controller.teamName.text.Contains(query));
+        }
+
+        RebuildListLayout();
+    }
+
+    private void RebuildListLayout()
+    {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(chatsListScrollPanel as RectTransform);
     }
 }

@@ -26,6 +26,7 @@ public class ChatPageController : MonoBehaviour
     public RTLTextMeshPro teamName;
     public Image teamAvatar;
     public ScrollRect chatScrollViewScrollRect;
+    public RTLTextMeshPro characterLimit;
 
     private void Awake()
     {
@@ -138,4 +139,11 @@ public class ChatPageController : MonoBehaviour
         SetOpen(false);
         ChatsListController.Instance.OnCloseButtonCLicked();
     }
+
+    public void OnSendInputFieldValueChanged(string txt)
+    {
+        txt ??= "";
+        characterLimit.text = txt.Length + "/" + inputField.characterLimit;
+    }
+
 }
