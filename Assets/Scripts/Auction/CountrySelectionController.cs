@@ -87,6 +87,7 @@ public class CountrySelectionController : MonoBehaviour
             countryCardSetters[i].SetMaskActive(true);
         }
         
+        SFXManager.Instance.Play(SFXManager.SfxID.RANDOMIZE_COUNTRY);
         StartCoroutine(ShowCountryCoroutine());
     }
     

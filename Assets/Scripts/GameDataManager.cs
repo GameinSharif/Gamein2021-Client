@@ -77,6 +77,7 @@ public class GameDataManager : MonoBehaviour
         MapManager.Instance.Setup();
         CheckLastNewspaperSeen();
         VaccinePopupController.Instance.CheckCorona();
+        BGM.instance.Setup();
     }
 
     public void OnGetAllActiveDCsResponse(GetAllActiveDcResponse getAllActiveDcResponse)
@@ -173,6 +174,7 @@ public class GameDataManager : MonoBehaviour
 
         MapManager.Instance.InitializeGameDataOnMap();
         MainMenuManager.Instance.HeaderFooterGameObject.SetActive(true);
+        BGM.instance.Play(BGM.BGMs.DEFAULT);
     }
     
     public Utils.Auction GetAuctionByFactoryId(int id)

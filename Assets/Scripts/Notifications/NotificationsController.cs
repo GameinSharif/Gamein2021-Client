@@ -41,6 +41,8 @@ public class NotificationsController : MonoBehaviour
         {
             newMessageSign.SetActive(true);
         }
+        
+        SFXManager.Instance.Play(SFXManager.SfxID.NOTIFICATION);
     }
 
     private void ShowNotifications()

@@ -73,6 +73,7 @@ public class NewsController : MonoBehaviour
 
     public void OnBreakingNewsReceived(Utils.News news)
     {
+        SFXManager.Instance.Play(SFXManager.SfxID.NEWS_NOTIFICATION);
         BreakingNewsController controller = newsCanvas.GetComponent<BreakingNewsController>();
         controller.SetInfo(news, true);
         newsCanvas.SetActive(true);
