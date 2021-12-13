@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using RTLTMPro;
 using UnityEngine;
 
 public class LeaderboardController : MonoBehaviour
 {
     public GameObject leaderboardCanvas;
-
+    public Transform leaderboardPanelTransform;
+    
     public GameObject rankItemPrefab;
     public GameObject leaderboardScrollViewParent;
     public List<Sprite> rankBg;
@@ -17,6 +19,8 @@ public class LeaderboardController : MonoBehaviour
     public List<GameObject> _spawnedRankGameObjects;
     
     public Localize totalTeams;
+
+    public float closedPosY, openedPosY;
     
     private void OnEnable()
     {
@@ -43,6 +47,7 @@ public class LeaderboardController : MonoBehaviour
         totalTeams.SetKey("leaderboard_total_teams", GameDataManager.Instance.Teams.Count.ToString());
 
         leaderboardCanvas.SetActive(true);
+        leaderboardPanelTransform.DOMoveY(openedPosY, 0.5f).SetEase(Ease.Linear);
     }
     
     private void AddRankItemToList(Utils.Ranking ranking, int index)
@@ -84,7 +89,7 @@ public class LeaderboardController : MonoBehaviour
     {
         if (leaderboardCanvas.activeSelf)
         {
-            leaderboardCanvas.SetActive(false);
+            leaderboardPanelTransform.DOMoveY(closedPosY, 0.5f).SetEase(Ease.Linear).onComplete += () => leaderboardCanvas.SetActive(false);;
             return;
         }
 
