@@ -125,6 +125,9 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnOpenReportsPage()
     {
+        GetAllWeeklyReportsRequest getAllWeeklyReportsRequest = new GetAllWeeklyReportsRequest(RequestTypeConstant.GET_ALL_WEEKLY_REPORTS);
+        RequestManager.Instance.SendRequest(getAllWeeklyReportsRequest);
+
         WeeklyReportManager.Instance.OnOpenReportsPage();
     }
 
