@@ -61,18 +61,18 @@ public class BGM : MonoBehaviour
             source.pitch = b.Pitch;
             currentData = b;
             source.Play();
-            source.DOFade(IsMute ? 0 : b.Volume,0.5f).From(0);
+            source.DOFade(IsMute ? 0 : b.Volume,1f).From(0);
         }
         else
         {
-            source.DOFade(0, 0.3f).onComplete += () =>
+            source.DOFade(0, 1f).onComplete += () =>
             {
                 source.clip = b.audioClip;
                 //source.volume = IsMute ? 0 : b.Volume;
                 source.pitch = b.Pitch;
                 currentData = b;
                 source.Play();
-                source.DOFade(IsMute ? 0 : b.Volume,0.5f);
+                source.DOFade(IsMute ? 0 : b.Volume,1f);
             };   
         }
     }

@@ -42,14 +42,11 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start()
     {
+        OpenPage(0);
         if (PlayerPrefs.GetInt("FactoryId") == 0)
         {
             HeaderFooterGameObject.SetActive(false);
             CountrySelectionController.Instance.Initialize();
-        }
-        else
-        {
-            OpenPage(0);
         }
     }
 

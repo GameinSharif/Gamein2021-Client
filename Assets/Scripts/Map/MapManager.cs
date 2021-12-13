@@ -69,14 +69,19 @@ public class MapManager : MonoBehaviour
         InitializeMap();
         InitializeGameDataOnMap();
 
-        if (SnapToLocaltionOnOpenMap != Vector2.zero)
+        var teamId = PlayerPrefs.GetInt("TeamId");
+        if (GameDataManager.Instance.GetTeamById(teamId).factoryId != 0)
+        {
+            SnapToMyTeamLocation();
+        }
+        /*if (SnapToLocaltionOnOpenMap != Vector2.zero)
         {
             SnapToLocation(SnapToLocaltionOnOpenMap);
         }
         else
         {
             SnapToMyTeamLocation();
-        }
+        }*/
 
         if (!GameDataManager.Instance.IsAuctionOver())
         {
@@ -89,7 +94,7 @@ public class MapManager : MonoBehaviour
 
         MainMenuManager.IsLoadingMap = false;
         IsInMap = true;
-
+        
         CashForAuction.text = MainHeaderManager.Instance.Money.ToString("0.00");
     }
 
