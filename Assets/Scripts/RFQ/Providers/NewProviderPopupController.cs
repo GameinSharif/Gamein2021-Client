@@ -81,8 +81,17 @@ public class NewProviderPopupController : MonoBehaviour
         storageDropdown.ClearOptions();
         
         foreach (var storage in StorageManager.Instance.Storages)
-        {
-            var optionData = new TMP_Dropdown.OptionData(storage.dc ? ("DC " + storage.buildingId): "Warehouse");
+        {      
+            TempLocalization.Instance.localize.SetKey(storage.dc ? "provider_item_dc" : "provider_item_warehouse");
+            string value = TempLocalization.Instance.localize.GetLocalizedString().value;
+
+            if (storage.dc)
+            {
+                int index = value.IndexOf('#');
+                value = value.Remove(index, 1).Insert(index, storage.buildingId.ToString());
+            }
+
+            var optionData = new TMP_Dropdown.OptionData(value);
             storageDropdown.options.Add(optionData);
             _storageOptions.Add(storage);
         }
