@@ -12,7 +12,7 @@ public class GameStatusManager : MonoBehaviour
     public GameObject background;
     public Localize textLocalize;
 
-    private Utils.GameStatus _gameStatus = Utils.GameStatus.RUNNING;
+    [HideInInspector] public Utils.GameStatus GameStatus = Utils.GameStatus.RUNNING;
 
     private void Awake()
     {
@@ -34,14 +34,19 @@ public class GameStatusManager : MonoBehaviour
 
     private void OnUpdateGameStatusResponseReceived(UpdateGameStatusResponse updateGameStatusResponse)
     {
-        if (_gameStatus == updateGameStatusResponse.gameStatus)
+        if (GameStatus == updateGameStatusResponse.gameStatus)
         {
             return;
         }
 
-        textLocalize.SetKey("game_status_" + updateGameStatusResponse.gameStatus);
+        OpenGameStatusPopup(updateGameStatusResponse.gameStatus);
+    }
 
-        switch (updateGameStatusResponse.gameStatus)
+    public void OpenGameStatusPopup(Utils.GameStatus gameStatus)
+    {
+        textLocalize.SetKey("game_status_" + gameStatus);
+
+        switch (gameStatus)
         {
             case Utils.GameStatus.RUNNING:
             case Utils.GameStatus.PAUSED:
@@ -58,7 +63,7 @@ public class GameStatusManager : MonoBehaviour
                 break;
         }
 
-        _gameStatus = updateGameStatusResponse.gameStatus;
+        GameStatus = gameStatus;
     }
     
     private void OnBanResponseReceived(BanResponse banResponse)
