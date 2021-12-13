@@ -103,7 +103,17 @@ public class NewContractController : MonoBehaviour
 
         foreach (Utils.Storage storage in StorageManager.Instance.Storages)
         {
-            var optionData = new TMP_Dropdown.OptionData(storage.dc ? "DC " + storage.buildingId : "Warehouse");
+            TempLocalization.Instance.localize.SetKey(storage.dc ? "provider_item_dc" : "provider_item_warehouse");
+
+            string value = TempLocalization.Instance.localize.GetLocalizedString().value;
+
+            if (storage.dc)
+            {
+                int index = value.IndexOf('#');
+                value = value.Remove(index, 1).Insert(index, storage.buildingId.ToString());
+            }
+
+            var optionData = new TMP_Dropdown.OptionData(value);
 
             sourceStorageDropDown.options.Add(optionData);
             _storages.Add(storage);
