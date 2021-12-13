@@ -121,7 +121,7 @@ namespace ProductionLine
         {
             if(!isBusy) return;
             var currentProduction = Data.products.Last();
-            productIcon.sprite = GameDataManager.Instance.ProductSprites[currentProduction.productId];
+            productIcon.sprite = GameDataManager.Instance.ProductSprites[currentProduction.productId - 1];
             productAmount.text = currentProduction.amount.ToString();
             var endDateString = currentProduction.endDate.year+"/"+currentProduction.endDate.month+"/" +currentProduction.endDate.day;
             endDate.SetKey("production_line_end_date_show", endDateString);

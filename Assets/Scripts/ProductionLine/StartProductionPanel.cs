@@ -136,7 +136,7 @@ namespace ProductionLine
             {
                 var item = ingredientItems[i];
                 item.GetComponentInChildren<Image>().sprite =
-                    GameDataManager.Instance.ProductSprites[ingredients[i].productId];
+                    GameDataManager.Instance.ProductSprites[ingredients[i].productId - 1];
                 var ingredientAmount = item.GetComponentInChildren<RTLTextMeshPro>();
                 ingredientAmount.text = (ingredients[i].amount * Amount).ToString();
 
@@ -164,7 +164,7 @@ namespace ProductionLine
                 _template.setupCost.ToString(), CalculateProductionCost(Amount).ToString());
 
             var time = Mathf.CeilToInt((float) Amount / _template.dailyProductionRate);
-            productionTime.SetKey("time_DAY", time.ToString());
+            productionTime.SetKey("production_line_production_duration", time.ToString());
 
             if (SelectedProductId == -1)
             {
@@ -178,7 +178,7 @@ namespace ProductionLine
                 var final = Mathf.FloorToInt((float) Amount * _template.batchSize *
                     _template.efficiencyLevels[data.efficiencyLevel].efficiencyPercentage / 100);
                 finalAmount.text = final.ToString();
-                productIcon.sprite = GameDataManager.Instance.ProductSprites[SelectedProductId];
+                productIcon.sprite = GameDataManager.Instance.ProductSprites[SelectedProductId - 1];
             }
 
             /*formula.text = productAmount_I.text + " \u00D7 " + _template.batchSize + " \u00D7 " +
