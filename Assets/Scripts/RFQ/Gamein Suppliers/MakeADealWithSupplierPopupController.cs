@@ -206,10 +206,16 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         }
 
         string amountText = amount.text;
-        int weeks = GetNumberOfWeeks();
-        if (weeks < 1 || string.IsNullOrEmpty(amountText) || int.Parse(amountText) < 1)
+        if (string.IsNullOrEmpty(amountText) || int.Parse(amountText) < 1)
         {
             DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
+            return;
+        }
+
+        int weeks = GetNumberOfWeeks();
+        if (weeks < 1 || weeks > 10)
+        {
+            DialogManager.Instance.ShowErrorDialog("invalid_weeks_error");
             return;
         }
 
