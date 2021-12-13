@@ -597,7 +597,7 @@ public class MapManager : MonoBehaviour
                         return;
                     case Utils.TransportState.SUCCESSFUL:
                     case Utils.TransportState.CRUSHED:
-                        ChangeLineType(onMapLine, MapUtils.MapLine.LineType.SupplyChain);
+                        onMapLine.LineRenderer.gameObject.SetActive(false);
                         return;
                     case Utils.TransportState.PENDING:
                         //Do nothing
