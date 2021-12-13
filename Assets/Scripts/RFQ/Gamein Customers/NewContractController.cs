@@ -165,7 +165,7 @@ public class NewContractController : MonoBehaviour
             return;
         }
 
-        if (weeksInt < 1)
+        if (weeksInt < 1 || weeksInt > 10)
         {
             DialogManager.Instance.ShowErrorDialog("invalid_weeks_error");
             return;
