@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RTLTMPro;
 
 public class MaterialSetter : MonoBehaviour
 {
     [SerializeField] private MeshRenderer MeshRenderer;
-    [SerializeField] private TextMesh textMesh;
+    [SerializeField] private RTLTextMeshPro textMesh;
 
     public void Initialize(MapUtils.MapAgentMarker mapAgentMarker, string name = null)
     {

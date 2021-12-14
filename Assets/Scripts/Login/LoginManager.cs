@@ -18,6 +18,8 @@ public class LoginManager : MonoBehaviour
     public GameObject usernameError;
     public GameObject passwordError;
 
+    private string _username;
+    private string _password;
     
     private void Awake()
     {
@@ -35,15 +37,6 @@ public class LoginManager : MonoBehaviour
         if (PlayerPrefs.HasKey("Language"))
         {
             SelectLanguagePopup.SetActive(false);
-
-            if (HasDataForLogin())
-            {
-                SendLoginRequest(PlayerPrefs.GetString("Username"), PlayerPrefs.GetString("Password"));
-            }
-            else
-            {
-                OpenLoginPopup();
-            }
         }
         else
         {
@@ -67,15 +60,6 @@ public class LoginManager : MonoBehaviour
         LocalizationManager.Instance.SetLanguage(language);
         SelectLanguagePopup.SetActive(false);
         GetGameStatus();
-
-        if (HasDataForLogin())
-        {
-            SendLoginRequest(PlayerPrefs.GetString("Username"), PlayerPrefs.GetString("Password"));
-        }
-        else
-        {
-            OpenLoginPopup();
-        }
     }
 
     private bool HasDataForLogin()
@@ -87,6 +71,15 @@ public class LoginManager : MonoBehaviour
     {
         GetGameStatusRequest getGameStatusRequest = new GetGameStatusRequest(RequestTypeConstant.GET_GAME_STATUS);
         RequestManager.Instance.SendRequest(getGameStatusRequest);
+
+        if (HasDataForLogin())
+        {
+            SendLoginRequest(PlayerPrefs.GetString("Username"), PlayerPrefs.GetString("Password"));
+        }
+        else
+        {
+            OpenLoginPopup();
+        }
     }
 
     public void OnLoginButtonClick()
@@ -105,6 +98,8 @@ public class LoginManager : MonoBehaviour
 
     private void SendLoginRequest(string username, string password)
     {
+        _username = username;
+        _password = password;
         string encryptedPassword = EncryptManager.Encrypt(password);
 
         LoginRequest loginRequest = new LoginRequest(RequestTypeConstant.LOGIN, username, encryptedPassword);
@@ -125,8 +120,8 @@ public class LoginManager : MonoBehaviour
             PlayerPrefs.SetFloat("Brand", loginResponse.team.brand);
             PlayerPrefs.SetFloat("DonatedAmount", loginResponse.team.donatedAmount);
 
-            PlayerPrefs.SetString("Username", UsernameInputField.text);
-            PlayerPrefs.SetString("Password", PasswordInputField.text);
+            PlayerPrefs.SetString("Username", _username);
+            PlayerPrefs.SetString("Password", _password);
 
             RequestObject.myToken = loginResponse.token;
 

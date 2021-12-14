@@ -339,7 +339,7 @@ public class MapManager : MonoBehaviour
     {
         foreach (MapUtils.OnMapMarker onMapMarker in _onMapMarkers)
         {
-            if (onMapMarker.Location == location)
+            if (onMapMarker.Location.x == location.x && onMapMarker.Location.y == location.y)
             {
                 return onMapMarker;
             }    
