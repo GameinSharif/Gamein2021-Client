@@ -76,8 +76,7 @@ public class LoginManager : MonoBehaviour
             return;
         }
 
-        //string encryptedPassword = EncryptManager.Encrypt(password);
-        string encryptedPassword = password;
+        string encryptedPassword = EncryptManager.Encrypt(password);
 
         LoginRequest loginRequest = new LoginRequest(RequestTypeConstant.LOGIN, username, encryptedPassword);
         RequestManager.Instance.SendRequest(loginRequest);
