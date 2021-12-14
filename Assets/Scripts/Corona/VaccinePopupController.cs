@@ -27,7 +27,7 @@ public class VaccinePopupController : MonoBehaviour
         set
         {
             _teamDonation = value;
-            teamDonatedAmountText.SetKey("corona_donate_amount", _teamDonation.ToString());
+            teamDonatedAmountText.SetKey("corona_donate_amount", _teamDonation.ToString("N0"));
         }
     }
 
@@ -85,6 +85,7 @@ public class VaccinePopupController : MonoBehaviour
         var request = new DonateRequest(RequestTypeConstant.DONATE, amount);
         RequestManager.Instance.SendRequest(request);
         TeamDonation += amount;
+        MainHeaderManager.Instance.Money -= amount;
     }
 
     private void OnGetDonateResponse(DonateResponse response)
@@ -93,11 +94,6 @@ public class VaccinePopupController : MonoBehaviour
         {
             DialogManager.Instance.ShowErrorDialog();
             return;
-        }
-        var myCountry = PlayerPrefs.GetString("Country");
-        foreach (var info in response.infos.Where(info => info.country.ToString() == myCountry))
-        {
-            NotificationsController.Instance.AddNewNotification("notification_donate", info.currentCollectedAmount.ToString("0.00"));
         }
         SetData(response.infos);
     }
@@ -120,7 +116,7 @@ public class VaccinePopupController : MonoBehaviour
         {
             if (info.country.ToString() == myCountry)
             {
-                collectedRatio.text = info.currentCollectedAmount + "/" + info.amountToBeCollect;
+                collectedRatio.text = info.currentCollectedAmount.ToString("N0") + "/" + info.amountToBeCollect.ToString("N0");
                 myCountryStatus.maxValue = info.amountToBeCollect;
                 myCountryStatus.value = info.currentCollectedAmount;
             }
