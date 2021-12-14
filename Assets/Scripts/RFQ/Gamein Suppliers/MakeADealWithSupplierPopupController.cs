@@ -97,6 +97,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         Utils.Product product = GameDataManager.Instance.GetProductById(weekSupply.productId);
         productNameLocalize.SetKey("product_" + product.name);
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
+        supplierName.text = GameDataManager.Instance.GetSupplierName(weekSupply.supplierId);
 
         if (_firstTimeInitializing)
         {
