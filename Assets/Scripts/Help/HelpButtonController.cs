@@ -6,6 +6,8 @@ public class HelpButtonController : MonoBehaviour
 {
     public GameObject helpFramePrefab;
     public string localizeKey;
+    public float x = 1;
+    public float y = 1;
 
     private GameObject _frame;
 
@@ -17,8 +19,10 @@ public class HelpButtonController : MonoBehaviour
             
             _frame = Instantiate(helpFramePrefab, buttonTransform.parent, true);
 
-            _frame.transform.SetPositionAndRotation(buttonTransform.position, buttonTransform.rotation);
-            _frame.transform.localScale = Vector3.one;
+            var rectTransform = _frame.GetComponent<RectTransform>();
+            rectTransform.SetPositionAndRotation(buttonTransform.position, buttonTransform.rotation);
+            rectTransform.localScale = Vector3.one;
+            rectTransform.pivot = new Vector2(x, y);
             
             _frame.GetComponent<HelpFrameController>().SetText(localizeKey);
         }
