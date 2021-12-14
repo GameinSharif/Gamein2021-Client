@@ -45,8 +45,8 @@ public class MainHeaderManager : MonoBehaviour
 
     private void Start()
     {
-        moneyRTLTMP.text = PlayerPrefs.GetFloat("Money").ToString("0.00");
-        valueRTLTMP.text = PlayerPrefs.GetFloat("Value").ToString("0.00");
+        moneyRTLTMP.text = ((int) PlayerPrefs.GetFloat("Money")).ToString();
+        valueRTLTMP.text = ((int) PlayerPrefs.GetFloat("Value")).ToString();
         brandRTLTMP.text = PlayerPrefs.GetFloat("Brand").ToString("0.00");
 
         SetDate();
@@ -74,7 +74,7 @@ public class MainHeaderManager : MonoBehaviour
         set
         {
             PlayerPrefs.SetFloat("Money", value);
-            moneyRTLTMP.text = value.ToString("0.00");
+            moneyRTLTMP.text = ((int)value).ToString();
         }
 
         get => PlayerPrefs.GetFloat("Money", 0f);
@@ -86,7 +86,7 @@ public class MainHeaderManager : MonoBehaviour
         set
         {
             PlayerPrefs.SetFloat("Value", value);
-            valueRTLTMP.text = value.ToString("0.00");
+            valueRTLTMP.text = ((int)value).ToString();
         }
 
         get => PlayerPrefs.GetFloat("Value", 0f);
