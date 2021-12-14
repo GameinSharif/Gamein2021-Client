@@ -24,9 +24,9 @@ public class EncryptManager
 
     public static string Encrypt(string message)
     {
-        var messageBytes = Encoding.ASCII.GetBytes(message);
+        var messageBytes = Encoding.Unicode.GetBytes(message);
         var encryptedMessageBytes = Rsa.Encrypt(messageBytes, false);
-        var encryptedMessage = Encoding.ASCII.GetString(encryptedMessageBytes);
+        var encryptedMessage = Convert.ToBase64String(encryptedMessageBytes);
         return encryptedMessage;
     }
 }
