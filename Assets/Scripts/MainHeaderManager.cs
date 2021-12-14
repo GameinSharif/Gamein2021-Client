@@ -49,7 +49,7 @@ public class MainHeaderManager : MonoBehaviour
         valueRTLTMP.text = ((int) PlayerPrefs.GetFloat("Value")).ToString();
         brandRTLTMP.text = PlayerPrefs.GetFloat("Brand").ToString("0.00");
 
-        SetDate();
+        //SetDate();
     }
 
     private void OnGameTimeReceived(GameTimeResponse gameTimeResponse)
