@@ -32,7 +32,7 @@ public class SetContractDetail : MonoBehaviour
     public void InitializeContract(Utils.Contract contractData)
     {
         gameinCustomerNameTxt.text = GameDataManager.Instance.GetGameinCustomerById(contractData.gameinCustomerId).name;
-        productNameLocalize.SetKey("product_" + GameDataManager.Instance.Products[contractData.productId].name);
+        productNameLocalize.SetKey("product_" + GameDataManager.Instance.GetProductName(contractData.productId));
         supplyAmountTxt.text = contractData.supplyAmount.ToString();
         pricePerUnitTxt.text = contractData.pricePerUnit.ToString("0.00");
 

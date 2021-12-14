@@ -71,6 +71,12 @@ public class WarehouseTabController : MonoBehaviour
     
     public void OnProductTransportClicked(Utils.Product product)
     {
+        if (StorageManager.Instance.Storages.Count < 2)
+        {
+            DialogManager.Instance.ShowErrorDialog("have_no_dc_error");
+            return;
+        }
+
         StorageTransportPopupController.Instance.Initialize(_warehouse, product);
     }
 
