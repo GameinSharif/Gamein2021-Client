@@ -27,6 +27,9 @@ namespace ProductionLine
         public List<GameObject> qualityStars = new List<GameObject>();
         public List<GameObject> efficiencyStars = new List<GameObject>();
 
+        public GameObject productionHelp;
+        public GameObject upgradeHelp;
+
         #endregion
 
         #region fields
@@ -116,10 +119,14 @@ namespace ProductionLine
                 case 1:
                     productionTab.transform.SetSiblingIndex(1);
                     upgradeTab.transform.SetSiblingIndex(0);
+                    productionHelp.SetActive(true);
+                    upgradeHelp.SetActive(false);
                     break;
                 case 2:
                     productionTab.transform.SetSiblingIndex(0);
                     upgradeTab.transform.SetSiblingIndex(1);
+                    productionHelp.SetActive(false);
+                    upgradeHelp.SetActive(true);
                     break;
             }
         }
