@@ -11,25 +11,27 @@ public class StorageProductController : MonoBehaviour
     public RTLTextMeshPro total;
     public Image productImage;
     public GameObject transportButton;
+    public Localize occupiedAmountText;
 
     private Utils.Product _product;
     private Utils.StorageType _storageType;
 
     public Utils.Product Product => _product;
 
-    public void SetData(Utils.Product product, Utils.StorageType storageType, int availableAmount, int comingAmount)
+    public void SetData(Utils.Product product, Utils.StorageType storageType, int availableAmount, int comingAmount, float occupiedAmount)
     {
         _product = product;
         _storageType = storageType;
         
         nameLocalize.SetKey("product_" + _product.name);
-        available.text = availableAmount.ToString();
+        SetAvailableAndOccupiedAmount(availableAmount, occupiedAmount);
+
         //coming.text = comingAmount.ToString();
         //total.text = (availableAmount + comingAmount).ToString();
-        
+
         transportButton.SetActive(product.productType != Utils.ProductType.RawMaterial);
         
-        //TODO set product image
+        productImage.sprite = GameDataManager.Instance.ProductSprites[_product.id - 1];
     }
 
     public void OnRemoveButtonClicked()
@@ -56,5 +58,11 @@ public class StorageProductController : MonoBehaviour
                 WarehouseTabController.Instance.OnProductTransportClicked(_product);
                 break;
         }
+    }
+
+    public void SetAvailableAndOccupiedAmount(int availableAmount, float occupiedAmount)
+    {
+        available.text = availableAmount.ToString();
+        occupiedAmountText.SetKey("storage_occupied_percent", occupiedAmount.ToString("0.00"));
     }
 }

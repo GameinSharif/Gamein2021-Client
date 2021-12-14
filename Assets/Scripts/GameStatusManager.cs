@@ -12,7 +12,7 @@ public class GameStatusManager : MonoBehaviour
     public GameObject background;
     public Localize textLocalize;
 
-    private Utils.GameStatus _gameStatus = Utils.GameStatus.RUNNING;
+    [HideInInspector] public Utils.GameStatus GameStatus = Utils.GameStatus.RUNNING;
 
     private void Awake()
     {
@@ -23,23 +23,30 @@ public class GameStatusManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.OnUpdateGameStatusResponseEvent += OnUpdateGameStatusResponseReceived;
+        EventManager.Instance.OnBanResponseEvent += OnBanResponseReceived;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.OnUpdateGameStatusResponseEvent -= OnUpdateGameStatusResponseReceived;
+        EventManager.Instance.OnBanResponseEvent -= OnBanResponseReceived;
     }
 
     private void OnUpdateGameStatusResponseReceived(UpdateGameStatusResponse updateGameStatusResponse)
     {
-        if (_gameStatus == updateGameStatusResponse.gameStatus)
+        if (GameStatus == updateGameStatusResponse.gameStatus)
         {
             return;
         }
 
-        textLocalize.SetKey("game_status_" + updateGameStatusResponse.gameStatus);
+        OpenGameStatusPopup(updateGameStatusResponse.gameStatus);
+    }
 
-        switch (updateGameStatusResponse.gameStatus)
+    public void OpenGameStatusPopup(Utils.GameStatus gameStatus)
+    {
+        textLocalize.SetKey("game_status_" + gameStatus);
+
+        switch (gameStatus)
         {
             case Utils.GameStatus.RUNNING:
             case Utils.GameStatus.PAUSED:
@@ -49,6 +56,10 @@ public class GameStatusManager : MonoBehaviour
                 background.SetActive(false);
                 break;
             case Utils.GameStatus.NOT_STARTED:
+                GameStatusPopupCanvas.SetActive(true);
+                CloseButtonGameObject.SetActive(false);
+                background.SetActive(false);
+                break;
             case Utils.GameStatus.FINISHED:
                 GameStatusPopupCanvas.SetActive(true);
                 CloseButtonGameObject.SetActive(false);
@@ -56,6 +67,18 @@ public class GameStatusManager : MonoBehaviour
                 break;
         }
 
-        _gameStatus = updateGameStatusResponse.gameStatus;
+        GameStatus = gameStatus;
+    }
+    
+    private void OnBanResponseReceived(BanResponse banResponse)
+    {
+        string minuets = banResponse.minutes.ToString();
+        
+        textLocalize.SetKey("ban_message", minuets);
+        
+        GameStatusPopupCanvas.SetActive(true);
+        CloseButtonGameObject.SetActive(false);
+        background.SetActive(true);
+
     }
 }

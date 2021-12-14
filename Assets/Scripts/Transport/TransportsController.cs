@@ -150,6 +150,7 @@ public class TransportsController : MonoBehaviour
             }
         }
         
+        newList.Reverse();
         return newList;
     }
 

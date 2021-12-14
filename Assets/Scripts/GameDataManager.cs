@@ -24,7 +24,7 @@ public class GameDataManager : MonoBehaviour
 
     [HideInInspector] public List<Utils.News> News;
     public List<Sprite> NewsSprites;
- 
+
     [HideInInspector] public List<Utils.DC> DCs;
     [HideInInspector] public Utils.GameConstants GameConstants;
 
@@ -47,6 +47,7 @@ public class GameDataManager : MonoBehaviour
         EventManager.Instance.OnAuctionFinishedResponseEvent += OnAuctionFinishedResponse;
         EventManager.Instance.OnGetAllActiveDcResponseEvent += OnGetAllActiveDCsResponse;
     }
+
     private void OnDisable()
     {
         EventManager.Instance.OnGetGameDataResponseEvent -= OnGetGameDataResponse;
@@ -67,22 +68,23 @@ public class GameDataManager : MonoBehaviour
         Products = getGameDataResponse.products;
         Vehicles = getGameDataResponse.vehicles;
         ProductionLineTemplates = getGameDataResponse.productionLineTemplates;
-
-        Debug.Log(ProductionLineTemplates);
-
         Factories = getGameDataResponse.factories;
 
         GameConstants = getGameDataResponse.gameConstants;
         News = getGameDataResponse.news;
+        SetAuctionCurrentRound();
         MapManager.Instance.Setup();
         CheckLastNewspaperSeen();
         VaccinePopupController.Instance.CheckCorona();
+        BGM.instance.Setup();
     }
 
     public void OnGetAllActiveDCsResponse(GetAllActiveDcResponse getAllActiveDcResponse)
     {
         DCs = getAllActiveDcResponse.dcs;
-        MapManager.Instance.InitializeMapMarkers();
+
+        if (MapManager.IsInMap)
+            MapManager.Instance.InitializeMapMarkers();
     }
 
     public void OnGetCurrentWeekDemandsResponse(GetCurrentWeekDemandsResponse getCurrentWeekDemandsResponse)
@@ -98,7 +100,7 @@ public class GameDataManager : MonoBehaviour
 
         GameinSuppliersController.Instance.UpdateSupplies();
     }
-    
+
     private void OnSendNewsResponse(SendNewsResponse sendNewsResponse)
     {
         NewsController.Instance.newspapersButton.interactable = true;
@@ -113,6 +115,7 @@ public class GameDataManager : MonoBehaviour
             {
                 NewsController.Instance.SetNewNewspaperImageActive();
             }
+
             News.Add(news);
         }
     }
@@ -132,7 +135,7 @@ public class GameDataManager : MonoBehaviour
             NewsController.Instance.SetNewNewspaperImageActive();
         }
     }
-    
+
     public void OnGetAllAuctionsResponse(GetAllAuctionsResponse getAllAuctionsResponse)
     {
         Auctions = getAllAuctionsResponse.auctions;
@@ -145,7 +148,7 @@ public class GameDataManager : MonoBehaviour
 
     public void SetAuctionCurrentRound()
     {
-        AuctionCurrentRound = -1;
+        AuctionCurrentRound = 0;
         foreach (CustomDateTime customDateTime in GameConstants.AuctionRoundsStartTime)
         {
             if (DateTime.Now >= customDateTime.ToDateTime())
@@ -171,8 +174,9 @@ public class GameDataManager : MonoBehaviour
 
         MapManager.Instance.InitializeGameDataOnMap();
         MainMenuManager.Instance.HeaderFooterGameObject.SetActive(true);
+        BGM.instance.Play(BGM.BGMs.DEFAULT);
     }
-    
+
     public Utils.Auction GetAuctionByFactoryId(int id)
     {
         return Auctions.FirstOrDefault(a => a.factoryId == id);
@@ -192,7 +196,7 @@ public class GameDataManager : MonoBehaviour
 
         MapManager.Instance.UpdateAllAuctions();
     }
-    
+
     public Utils.Factory GetFactoryById(int id)
     {
         return Factories.First(f => f.id == id);
@@ -222,9 +226,10 @@ public class GameDataManager : MonoBehaviour
                 return team.teamName;
             }
         }
+
         return "Team";
     }
-    
+
     public string GetSupplierName(int supplierId)
     {
         foreach (Utils.Supplier supplier in GameinSuppliers)
@@ -234,6 +239,7 @@ public class GameDataManager : MonoBehaviour
                 return supplier.name;
             }
         }
+
         return "Supplier";
     }
 
@@ -246,12 +252,12 @@ public class GameDataManager : MonoBehaviour
     {
         return GameinCustomers.FirstOrDefault(c => c.id == id);
     }
-    
+
     public Utils.GameinCustomer GetGameinCustomerById(int customerId)
     {
         return GameinCustomers.FirstOrDefault(s => s.id == customerId);
     }
-    
+
     public string GetProductName(int productId)
     {
         foreach (Utils.Product product in Products)
@@ -261,12 +267,13 @@ public class GameDataManager : MonoBehaviour
                 return product.name;
             }
         }
+
         return "Product";
     }
 
     public List<Utils.Product> GetRawProducts()
     {
-        return Products.Where(p => (p.productType == Utils.ProductType.RawMaterial && p.id != 4) || p.id == 27).ToList();
+        return Products.Where(p => p.productType == Utils.ProductType.RawMaterial && p.id != 4).ToList();
     }
 
     public List<Utils.Product> GetFinishedProducts()
@@ -288,7 +295,7 @@ public class GameDataManager : MonoBehaviour
     {
         int teamId = PlayerPrefs.GetInt("TeamId");
         Utils.Factory factory = GetFactoryById(GetTeamById(teamId).factoryId);
-        return new Vector2((float)factory.latitude, (float)factory.longitude);
+        return new Vector2((float) factory.latitude, (float) factory.longitude);
     }
 
     public Vector2 GetLocationByTypeAndId(Utils.TransportNodeType transportNodeType, int transportNodeId)
@@ -297,16 +304,16 @@ public class GameDataManager : MonoBehaviour
         {
             case Utils.TransportNodeType.SUPPLIER:
                 Utils.Supplier supplier = GameinSuppliers.First(s => s.id == transportNodeId);
-                return new Vector2((float)supplier.latitude, (float)supplier.longitude);
+                return new Vector2((float) supplier.latitude, (float) supplier.longitude);
             case Utils.TransportNodeType.GAMEIN_CUSTOMER:
                 Utils.GameinCustomer gameinCustomer = GameinCustomers.First(c => c.id == transportNodeId);
-                return new Vector2((float)gameinCustomer.latitude, (float)gameinCustomer.longitude);
+                return new Vector2((float) gameinCustomer.latitude, (float) gameinCustomer.longitude);
             case Utils.TransportNodeType.DC:
                 Utils.DC dc = DCs.First(d => d.id == transportNodeId);
-                return new Vector2((float)dc.latitude, (float)dc.longitude);
+                return new Vector2((float) dc.latitude, (float) dc.longitude);
             case Utils.TransportNodeType.FACTORY:
                 Utils.Factory factory = Factories.First(f => f.id == transportNodeId);
-                return new Vector2((float)factory.latitude, (float)factory.longitude);
+                return new Vector2((float) factory.latitude, (float) factory.longitude);
         }
 
         return Vector2.zero;
@@ -324,12 +331,12 @@ public class GameDataManager : MonoBehaviour
 
     public bool IsAuctionOver()
     {
-        return DateTime.Now > GameConstants.AuctionRoundsStartTime[GameConstants.AuctionRoundsStartTime.Count - 1].ToDateTime().AddSeconds(GameConstants.AuctionRoundDurationSeconds);
+        return DateTime.Now > GameConstants.AuctionRoundsStartTime[GameConstants.AuctionRoundsStartTime.Count - 1]
+            .ToDateTime().AddSeconds(GameConstants.AuctionRoundDurationSeconds);
     }
 
     public Utils.ProductionLineTemplate GetProductionLineTemplateById(int templateId)
     {
         return GameDataManager.Instance.ProductionLineTemplates.FirstOrDefault(c => c.id == templateId);
     }
-    
 }

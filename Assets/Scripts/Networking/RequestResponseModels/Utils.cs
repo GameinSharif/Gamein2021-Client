@@ -25,6 +25,7 @@ public class Utils
         public float credit;
         public float wealth;
         public float brand;
+        public float donatedAmount;
     }
 
     public enum ProviderState
@@ -91,6 +92,7 @@ public class Utils
     {
         public int id;
         public int teamId;
+        public int storageId;
         public int gameinCustomerId;
         public int productId;
         public CustomDate contractDate;
@@ -362,7 +364,10 @@ public class Utils
 
     public enum TransportNodeType
     {
-        SUPPLIER, GAMEIN_CUSTOMER, DC, FACTORY
+        SUPPLIER = 0,
+        GAMEIN_CUSTOMER = 1,
+        DC = 2,
+        FACTORY = 3
     }
 
     public enum TransportState

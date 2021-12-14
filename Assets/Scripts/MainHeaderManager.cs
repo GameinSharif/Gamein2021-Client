@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using DG.Tweening;
 using RTLTMPro;
 using UnityEngine;
 
@@ -6,7 +8,7 @@ public class MainHeaderManager : MonoBehaviour
 {
     public static MainHeaderManager Instance;
 
-    [HideInInspector] public CustomDate gameDate = new CustomDate(0,0,0);
+    [HideInInspector] public CustomDate gameDate = new CustomDate(0, 0, 0);
     [HideInInspector] public int weekNumber = 0;
 
     public RTLTextMeshPro valueRTLTMP;
@@ -16,7 +18,13 @@ public class MainHeaderManager : MonoBehaviour
     public Localize dayLocalize;
     public RTLTextMeshPro weekNumberText;
 
+    public RTLTextMeshPro dayTimeText;
+
     public RTLTextMeshPro brandRTLTMP;
+
+    private const float OneDayTime = 20; //seconds 
+    private Tween dayTimer;
+
 
     private void Awake()
     {
@@ -37,11 +45,11 @@ public class MainHeaderManager : MonoBehaviour
 
     private void Start()
     {
-        moneyRTLTMP.text = PlayerPrefs.GetFloat("Money").ToString("0.00");
-        valueRTLTMP.text = PlayerPrefs.GetFloat("Value").ToString("0.00");
+        moneyRTLTMP.text = ((int) PlayerPrefs.GetFloat("Money")).ToString();
+        valueRTLTMP.text = ((int) PlayerPrefs.GetFloat("Value")).ToString();
         brandRTLTMP.text = PlayerPrefs.GetFloat("Brand").ToString("0.00");
 
-        SetDate();
+        //SetDate();
     }
 
     private void OnGameTimeReceived(GameTimeResponse gameTimeResponse)
@@ -58,7 +66,7 @@ public class MainHeaderManager : MonoBehaviour
         Value = moneyUpdateResponse.value;
         Brand = moneyUpdateResponse.brand;
 
-        //TODO donated amount
+        VaccinePopupController.Instance.TeamDonation = moneyUpdateResponse.donatedAmount;
     }
 
     public float Money
@@ -66,7 +74,7 @@ public class MainHeaderManager : MonoBehaviour
         set
         {
             PlayerPrefs.SetFloat("Money", value);
-            moneyRTLTMP.text = value.ToString("0.00");
+            moneyRTLTMP.text = ((int)value).ToString();
         }
 
         get => PlayerPrefs.GetFloat("Money", 0f);
@@ -78,7 +86,7 @@ public class MainHeaderManager : MonoBehaviour
         set
         {
             PlayerPrefs.SetFloat("Value", value);
-            valueRTLTMP.text = value.ToString("0.00");
+            valueRTLTMP.text = ((int)value).ToString();
         }
 
         get => PlayerPrefs.GetFloat("Value", 0f);
@@ -98,11 +106,25 @@ public class MainHeaderManager : MonoBehaviour
     private void SetDate()
     {
         gameDateText.text = gameDate.year + "/" +
-                            gameDate.month.ToString().PadLeft(2, '0') + "/" + 
+                            gameDate.month.ToString().PadLeft(2, '0') + "/" +
                             gameDate.day.ToString().PadLeft(2, '0');
 
         dayLocalize.SetKey(gameDate.ToDateTime().DayOfWeek.ToString());
 
         weekNumberText.text = weekNumber + "/100";
+
+        dayTimer.Kill();
+        int nowTime = 0;
+        dayTimer = DOTween.To(() => nowTime, x =>
+        {
+            nowTime = x;
+            dayTimeText.text = (nowTime / 60).ToString("00") + ":" + (nowTime % 60).ToString("00");
+        }, 1439, OneDayTime).SetEase(Ease.Linear);
+        dayTimer.onComplete += () => { dayTimeText.text = "00:00"; };
+    }
+
+    public void OnSupportButtonClick()
+    {
+        Application.OpenURL("https://zil.ink/gamein_admin");
     }
 }

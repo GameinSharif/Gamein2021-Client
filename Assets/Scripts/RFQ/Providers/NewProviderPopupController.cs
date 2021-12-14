@@ -45,9 +45,13 @@ public class NewProviderPopupController : MonoBehaviour
         _isSendingRequest = false;
         if (newProviderResponse.newProvider != null)
         {
+            string productName = GameDataManager.Instance.GetProductName(newProviderResponse.newProvider.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
             ProvidersController.Instance.AddMyProviderToList(newProviderResponse.newProvider);
             NotificationsController.Instance.AddNewNotification("notification_new_provider",
-            GameDataManager.Instance.GetProductName(newProviderResponse.newProvider.productId));
+            translatedProductName);
             NewProviderPopupCanvas.SetActive(false);
         }
         else
@@ -77,8 +81,17 @@ public class NewProviderPopupController : MonoBehaviour
         storageDropdown.ClearOptions();
         
         foreach (var storage in StorageManager.Instance.Storages)
-        {
-            var optionData = new TMP_Dropdown.OptionData(storage.dc ? ("DC " + storage.buildingId): "Warehouse");
+        {      
+            TempLocalization.Instance.localize.SetKey(storage.dc ? "provider_item_dc" : "provider_item_warehouse");
+            string value = TempLocalization.Instance.localize.GetLocalizedString().value;
+
+            if (storage.dc)
+            {
+                int index = value.IndexOf('#');
+                value = value.Remove(index, 1).Insert(index, storage.buildingId.ToString());
+            }
+
+            var optionData = new TMP_Dropdown.OptionData(value);
             storageDropdown.options.Add(optionData);
             _storageOptions.Add(storage);
         }

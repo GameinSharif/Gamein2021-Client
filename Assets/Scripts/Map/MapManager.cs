@@ -69,11 +69,12 @@ public class MapManager : MonoBehaviour
         InitializeMap();
         InitializeGameDataOnMap();
 
+        var teamId = PlayerPrefs.GetInt("TeamId");
         if (SnapToLocaltionOnOpenMap != Vector2.zero)
         {
             SnapToLocation(SnapToLocaltionOnOpenMap);
         }
-        else
+        else if (GameDataManager.Instance.GetTeamById(teamId).factoryId != 0)
         {
             SnapToMyTeamLocation();
         }
@@ -89,7 +90,7 @@ public class MapManager : MonoBehaviour
 
         MainMenuManager.IsLoadingMap = false;
         IsInMap = true;
-
+        
         CashForAuction.text = MainHeaderManager.Instance.Money.ToString("0.00");
     }
 
@@ -142,7 +143,7 @@ public class MapManager : MonoBehaviour
             else if (dc.ownerId == PlayerPrefs.GetInt("TeamId"))
             {
                 agentType = MapUtils.MapAgentMarker.AgentType.MyDistributionCenter;
-                dcName = PlayerPrefs.GetString("TeamName");
+                //dcName = PlayerPrefs.GetString("TeamName");
             }
             else
             {
@@ -592,7 +593,7 @@ public class MapManager : MonoBehaviour
                         return;
                     case Utils.TransportState.SUCCESSFUL:
                     case Utils.TransportState.CRUSHED:
-                        ChangeLineType(onMapLine, MapUtils.MapLine.LineType.SupplyChain);
+                        onMapLine.LineRenderer.gameObject.SetActive(false);
                         return;
                     case Utils.TransportState.PENDING:
                         //Do nothing

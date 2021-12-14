@@ -97,6 +97,13 @@ public class ContractSupplierItemController : MonoBehaviour
             {
                 MainHeaderManager.Instance.Money -= terminateLongtermContractSupplierResponse.contractSupplier.terminatePenalty;
                 
+                string productName = GameDataManager.Instance.GetProductName(terminateLongtermContractSupplierResponse.contractSupplier.materialId);
+                string translatedProductName =
+                    LocalizationManager.GetLocalizedValue("product_" + productName,
+                        LocalizationManager.GetCurrentLanguage());
+                string gameinSupplierName = GameDataManager.Instance.GetSupplierName(terminateLongtermContractSupplierResponse.contractSupplier.supplierId);
+                string[] param = {gameinSupplierName, translatedProductName};
+                NotificationsController.Instance.AddNewNotification("notification_terminate_contract_supplier", param);
                 gameObject.SetActive(false);
             }
             else
@@ -112,7 +119,13 @@ public class ContractSupplierItemController : MonoBehaviour
         {
             SetInfo(contractSupplierFinalizedResponse.contractSupplier);
 
-            //TODO notification
+            string productName = GameDataManager.Instance.GetProductName(contractSupplierFinalizedResponse.contractSupplier.materialId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            string gameinSupplierName = GameDataManager.Instance.GetSupplierName(contractSupplierFinalizedResponse.contractSupplier.supplierId);
+            string[] param = {gameinSupplierName, translatedProductName};
+            NotificationsController.Instance.AddNewNotification("notification_contract_supplier_finalized", param);
         }
 
     }

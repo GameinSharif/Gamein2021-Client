@@ -47,17 +47,28 @@ public class NewContractController : MonoBehaviour
 
     private void OnNewContractResponse(NewContractResponse newContractResponse)
     {
+        _isSendingRequest = false;
+
         if (newContractResponse.contract != null)
         {
             ContractsManager.Instance.AddContractItemToList(newContractResponse.contract);
+            
+            string productName = GameDataManager.Instance.GetProductName(newContractResponse.contract.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            string gameinCustomerName = GameDataManager.Instance.GetGameinCustomerById(newContractResponse.contract.gameinCustomerId).name;
+            string[] param = {gameinCustomerName, translatedProductName};
+            NotificationsController.Instance.AddNewNotification("notification_new_contract", param);
+            
             NewContractPopupCanvasGameObject.SetActive(false);
+            CustomersController.Instance.ContractsParentGameObject.SetActive(true);
+            CustomersController.Instance.CustomersParentGameObject.SetActive(false);
         }
         else
         {
             DialogManager.Instance.ShowErrorDialog();
         }
-
-        _isSendingRequest = false;
     }
 
     public void OnOpenMakeADealPopupClick(Utils.WeekDemand weekDemand)
@@ -92,7 +103,17 @@ public class NewContractController : MonoBehaviour
 
         foreach (Utils.Storage storage in StorageManager.Instance.Storages)
         {
-            var optionData = new TMP_Dropdown.OptionData(storage.dc ? "DC " + storage.buildingId : "Warehouse");
+            TempLocalization.Instance.localize.SetKey(storage.dc ? "provider_item_dc" : "provider_item_warehouse");
+
+            string value = TempLocalization.Instance.localize.GetLocalizedString().value;
+
+            if (storage.dc)
+            {
+                int index = value.IndexOf('#');
+                value = value.Remove(index, 1).Insert(index, storage.buildingId.ToString());
+            }
+
+            var optionData = new TMP_Dropdown.OptionData(value);
 
             sourceStorageDropDown.options.Add(optionData);
             _storages.Add(storage);
@@ -154,7 +175,7 @@ public class NewContractController : MonoBehaviour
             return;
         }
 
-        if (weeksInt < 1)
+        if (weeksInt < 1 || weeksInt > 10)
         {
             DialogManager.Instance.ShowErrorDialog("invalid_weeks_error");
             return;

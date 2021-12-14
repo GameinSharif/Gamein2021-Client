@@ -42,6 +42,7 @@ public class WeeklyReportManager: MonoBehaviour
     private void OnUpdateWeeklyReportResponseReceived(UpdateWeeklyReportResponse updateWeeklyReportResponse)
     {
         WeeklyReports.Add(updateWeeklyReportResponse.weeklyReport);
+        OnOpenReportsPage();
     }
 
     public void OnOpenReportsPage()
@@ -56,24 +57,24 @@ public class WeeklyReportManager: MonoBehaviour
         switch(index)
         {
             case 0:
-                RankingLineChart.gameObject.SetActive(true);
                 DrawRankingChart();
+                RankingLineChart.gameObject.SetActive(true);
                 break;
             case 1:
-                BrandLineChart.gameObject.SetActive(true);
                 DrawBrandChart();
+                BrandLineChart.gameObject.SetActive(true);
                 break;
             case 2:
-                FinanceLineChart.gameObject.SetActive(true);
                 DrawFinanceChart();
+                FinanceLineChart.gameObject.SetActive(true);
                 break;
             case 3:
-                CostsLineChart.gameObject.SetActive(true);
                 DrawCostsChart();
+                CostsLineChart.gameObject.SetActive(true);
                 break;
             case 4:
-                InventoryLineChart.gameObject.SetActive(true);
                 DrawInventoryChart();
+                InventoryLineChart.gameObject.SetActive(true);
                 break;
         }
 
@@ -142,16 +143,8 @@ public class WeeklyReportManager: MonoBehaviour
         {
             Utils.WeeklyReport weeklyReport = WeeklyReports[i];
 
-            if (i == 0)
-            {
-                transportCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.transportationCosts));
-                productionCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.productionCosts));
-            }
-            else
-            {
-                transportCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.transportationCosts - WeeklyReports[i - 1].transportationCosts));
-                productionCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.productionCosts - WeeklyReports[i - 1].productionCosts));
-            }
+            transportCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.transportationCosts));
+            productionCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.productionCosts));
         }
 
         CostsLineChart.data.DataSets[0].Entries = transportCostsLineEntries;

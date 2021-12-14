@@ -23,11 +23,11 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     public TMP_InputField totalPrice;
     public TMP_InputField arrivalDate;
 
-    //TODO penalty?
-
     private bool _firstTimeInitializing = true;
     private List<Utils.VehicleType> _vehicleTypesOptions = new List<Utils.VehicleType>();
     private Utils.WeekSupply _weekSupply;
+
+    private bool _isSendingRequest = false;
 
     private void Awake()
     {
@@ -46,6 +46,8 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
 
     private void OnNewContractSupplierResponse(NewContractSupplierResponse newContractSupplierResponse)
     {
+        _isSendingRequest = false;
+
         if (newContractSupplierResponse.result == "Successful")
         {
             List<Utils.ContractSupplier> contractSuppliers = newContractSupplierResponse.contractSuppliers;
@@ -55,7 +57,17 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
             float cost = firstContract.boughtAmount * firstContract.pricePerUnit + firstContract.transportationCost;
             MainHeaderManager.Instance.Money -= cost;
             
+            string productName = GameDataManager.Instance.GetProductName(newContractSupplierResponse.contractSuppliers[0].materialId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            string gameinSupplierName = GameDataManager.Instance.GetSupplierName(newContractSupplierResponse.contractSuppliers[0].supplierId);
+            string[] param = {gameinSupplierName, translatedProductName};
+            NotificationsController.Instance.AddNewNotification("notification_new_contract_supplier", param);
+
             makeADealWithSupplierPopupCanvas.SetActive(false);
+            SuppliersController.Instance.ContractsParentGameObject.SetActive(false);
+            SuppliersController.Instance.SuppliersParentGameObject.SetActive(true);
         }
         else
         {
@@ -69,7 +81,8 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         _vehicleTypesOptions.Clear();
         foreach (Utils.VehicleType vehicleType in Enum.GetValues(typeof(Utils.VehicleType)))
         {
-            var optionData = new TMP_Dropdown.OptionData(vehicleType.ToString());
+            TempLocalization.Instance.localize.SetKey(vehicleType.ToString());
+            var optionData = new TMP_Dropdown.OptionData(TempLocalization.Instance.localize.GetLocalizedString().value);
             vehicleTypeDropDown.options.Add(optionData);
             _vehicleTypesOptions.Add(vehicleType);
         }
@@ -81,21 +94,33 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     {
         _weekSupply = weekSupply;
         
-        //TODO clear inputfields
-        
         Utils.Product product = GameDataManager.Instance.GetProductById(weekSupply.productId);
         productNameLocalize.SetKey("product_" + product.name);
         productImage.sprite = GameDataManager.Instance.ProductSprites[product.id - 1];
+        supplierName.text = GameDataManager.Instance.GetSupplierName(weekSupply.supplierId);
 
         if (_firstTimeInitializing)
         {
             InitializeVehicleDropdown();
         }
+
         _firstTimeInitializing = false;
+
+        ClearInputFields();
 
         SetArrivalDate();
 
         makeADealWithSupplierPopupCanvas.SetActive(true);
+    }
+
+    private void ClearInputFields()
+    {
+        amount.text = "";
+        numberOfWeeks.text = "";
+        totalPrice.text = "";
+        arrivalDate.text = "";
+        insurance.SetIsOnWithoutNotify(false);
+        vehicleTypeDropDown.value = 0;
     }
 
     private int GetTransportDuration()
@@ -112,12 +137,12 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         string amount = this.amount.text;
         if (string.IsNullOrEmpty(amount))
         {
+            totalPrice.text = "";
             return;
         }
 
         float transportationCost = GetTransportCost(int.Parse(amount));
 
-        Debug.Log(transportationCost);
         float final = int.Parse(amount) * _weekSupply.price + transportationCost;
         totalPrice.text = final.ToString("0.00");
     }
@@ -133,8 +158,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
 
     private Utils.VehicleType GetTransportationMode()
     {
-        Debug.Log(vehicleTypeDropDown.value);
-        Utils.VehicleType vehicleType = _vehicleTypesOptions[vehicleTypeDropDown.value];
+        var vehicleType = _vehicleTypesOptions[vehicleTypeDropDown.value];
         return vehicleType;
     }
 
@@ -188,11 +212,22 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
     
     public void OnDoneButtonClick()
     {
+        if (_isSendingRequest)
+        {
+            return;
+        }
+
         string amountText = amount.text;
-        int weeks = GetNumberOfWeeks();
-        if (weeks < 1 || string.IsNullOrEmpty(amountText) || int.Parse(amountText) < 1)
+        if (string.IsNullOrEmpty(amountText) || int.Parse(amountText) < 1)
         {
             DialogManager.Instance.ShowErrorDialog("empty_input_field_error");
+            return;
+        }
+
+        int weeks = GetNumberOfWeeks();
+        if (weeks < 1 || weeks > 10)
+        {
+            DialogManager.Instance.ShowErrorDialog("invalid_weeks_error");
             return;
         }
 
@@ -218,6 +253,7 @@ public class MakeADealWithSupplierPopupController : MonoBehaviour
         int amountInt = int.Parse(amount.text);
         NewContractSupplierRequest newContractSupplier = new NewContractSupplierRequest(RequestTypeConstant.NEW_CONTRACT_WITH_SUPPLIER, _weekSupply, weeks, amountInt, GameDataManager.Instance.GetVehicleByType(vehicleType).id, insurance.isOn);
         RequestManager.Instance.SendRequest(newContractSupplier);
+        _isSendingRequest = true;
     }
 
     private void SetArrivalDate()

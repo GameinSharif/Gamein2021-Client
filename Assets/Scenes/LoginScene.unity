@@ -184,14 +184,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.011764706, g: 0.7529412, b: 0.85882354, a: 1}
+  m_Color: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 6e0bbe80ec585594282eae0213450a6d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -254,6 +254,8 @@ MonoBehaviour:
   UsernameInputField: {fileID: 29954503}
   PasswordInputField: {fileID: 1615342851}
   LoginErrorLocalize: {fileID: 59474652}
+  usernameError: {fileID: 8305499709672655516}
+  passwordError: {fileID: 8305499709672655515}
 --- !u!4 &499924053
 Transform:
   m_ObjectHideFlags: 0
@@ -925,10 +927,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3029974827073973036, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5712430878764014582, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 5712430878764014582, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305499709698312257, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8728498108911607933, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1015,3 +1029,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
+--- !u!1 &8305499709672655515 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4085632755499794490, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
+  m_PrefabInstance: {fileID: 8305499709672655514}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8305499709672655516 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3029974827073973036, guid: 48b3f197fa70bb547a9bd55b86f7bf5c, type: 3}
+  m_PrefabInstance: {fileID: 8305499709672655514}
+  m_PrefabAsset: {fileID: 0}

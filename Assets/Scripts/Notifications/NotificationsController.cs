@@ -16,19 +16,14 @@ public class NotificationsController : MonoBehaviour
     public GameObject notificationItemPrefab;
     private List<GameObject> _spawnedNotificationGameObjects = new List<GameObject>();
     private List<string> _activeNotificationsTextLocalize = new List<string>();
-    private List<string> _activeNotificationsTextLocalizeParams = new List<string>();
+    private List<string[]> _activeNotificationsTextLocalizeParams = new List<string[]>();
 
     void Awake()
     {
         Instance = this;
     }
 
-    // public void OnTestButtonClick()
-    // {
-    //     AddNewNotification("auction_min_raise");
-    // }
-
-    public void AddNewNotification(string textLocalize, string param)
+    public void AddNewNotification(string textLocalize, params string[] param)
     {
         if (_activeNotificationsTextLocalize.Count == MAX_NOTIFICATIONS)
         {
@@ -46,6 +41,8 @@ public class NotificationsController : MonoBehaviour
         {
             newMessageSign.SetActive(true);
         }
+        
+        SFXManager.Instance.Play(SFXManager.SfxID.NOTIFICATION);
     }
 
     private void ShowNotifications()
@@ -57,7 +54,7 @@ public class NotificationsController : MonoBehaviour
         }
     }
 
-    private void AddNotificationItemToList(int index, string textLocalize, string param)
+    private void AddNotificationItemToList(int index, string textLocalize, params string[] param)
     {
         GameObject createdItem = GetItem(notificationsScrollPanel);
         createdItem.transform.SetSiblingIndex(index + 1);

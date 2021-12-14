@@ -42,14 +42,11 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start()
     {
+        OpenPage(0);
         if (PlayerPrefs.GetInt("FactoryId") == 0)
         {
             HeaderFooterGameObject.SetActive(false);
             CountrySelectionController.Instance.Initialize();
-        }
-        else
-        {
-            OpenPage(0);
         }
     }
 
@@ -125,6 +122,9 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnOpenReportsPage()
     {
+        GetAllWeeklyReportsRequest getAllWeeklyReportsRequest = new GetAllWeeklyReportsRequest(RequestTypeConstant.GET_ALL_WEEKLY_REPORTS);
+        RequestManager.Instance.SendRequest(getAllWeeklyReportsRequest);
+
         WeeklyReportManager.Instance.OnOpenReportsPage();
     }
 

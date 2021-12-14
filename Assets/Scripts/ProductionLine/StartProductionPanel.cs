@@ -12,18 +12,19 @@ namespace ProductionLine
     {
         //public GameObject choicePrefab;
         //public Transform choicesParent;
-
-        public List<GameObject> ingredientItems;
-
-        public TMP_InputField productAmount_I;
-
-        public RTLTextMeshPro formula;
-        public RTLTextMeshPro total;
-        public Localize productionTime;
-        public Image productIcon;
-
         //public ToggleGroup _toggleGroup;
+
+        public TMP_Dropdown productDropdown;
+        public TMP_InputField productAmount_I;
+        public List<GameObject> ingredientItems;
+        public Localize costBox;
+        public Localize actualRate;
+        public Localize productionTime;
+        public RTLTextMeshPro finalAmount;
+        public Image productIcon;
         public Button start_B;
+
+        public Color ingredientShortageColor;
 
         private int _selectedProductId;
 
@@ -32,18 +33,30 @@ namespace ProductionLine
             get => _selectedProductId;
             set
             {
-                start_B.interactable = int.Parse(productAmount_I.text) > 0 && value != -1;
+                start_B.interactable = Amount > 0 && value != -1;
                 _selectedProductId = value;
             }
         }
 
-        public TMP_Dropdown productDropdown;
+        private int Amount
+        {
+            get
+            {
+                try
+                {
+                    var x = int.Parse(productAmount_I.text);
+                    return x;
+                }
+                catch (Exception e)
+                {
+                    return 0;
+                }
+            }
+        }
 
         //private List<GameObject> choices = new List<GameObject>();
-
         private Utils.ProductionLineDto data;
         private Utils.ProductionLineTemplate _template;
-
         private List<Utils.Product> currentLineProducts;
 
         private void Awake()
@@ -81,23 +94,29 @@ namespace ProductionLine
             //}
             //_toggleGroup.SetAllTogglesOff();
 
-            productAmount_I.text = "0";
+            productAmount_I.text = "";
             SelectedProductId = -1;
-            ShowProductionTime();
-            ShowTotalProduction();
-            foreach (var item in ingredientItems)
-            {
-                item.SetActive(false);
-            }
+            actualRate.SetKey("production_line_actual_rate",
+                _template.efficiencyLevels[data.efficiencyLevel].efficiencyPercentage + "%");
+
+            UpdateShowData();
         }
 
         private void ChooseProduct(int optionIndex)
         {
             SelectedProductId = currentLineProducts[optionIndex].id;
-            if (SelectedProductId == -1) return;
-            ShowIngredients(SelectedProductId);
-            ShowProductionTime();
-            ShowTotalProduction();
+
+            UpdateShowData();
+        }
+
+        private void AmountChange(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                productAmount_I.text = "0";
+            if (Amount < 0)
+                productAmount_I.text = "0";
+
+            UpdateShowData();
         }
 
         private void ShowIngredients(int productId)
@@ -107,7 +126,8 @@ namespace ProductionLine
                 item.SetActive(false);
             }
 
-            if (productId == 27) return; //CarbonDioxide has no ingredients
+            if (productId == 27 || productId == -1 || Amount <= 0) return; //CarbonDioxide has no ingredients
+
 
             var ingredients = GameDataManager.Instance.GetProductById(productId).ingredientsPerUnit;
             if (ingredients is null) return;
@@ -116,47 +136,55 @@ namespace ProductionLine
             {
                 var item = ingredientItems[i];
                 item.GetComponentInChildren<Image>().sprite =
-                    GameDataManager.Instance.ProductSprites[ingredients[i].productId];
-                item.GetComponentInChildren<RTLTextMeshPro>().text = ingredients[i].amount.ToString();
+                    GameDataManager.Instance.ProductSprites[ingredients[i].productId - 1];
+                var ingredientAmount = item.GetComponentInChildren<RTLTextMeshPro>();
+                ingredientAmount.text = (ingredients[i].amount * Amount).ToString();
+
+                if (ingredients[i].productId == 4)
+                {
+                    ingredientAmount.color = Color.white;
+                }
+                else
+                {
+                    var stock = StorageManager.Instance.GetProductAmountByStorage(StorageManager.Instance.GetWarehouse(),
+                        ingredients[i].productId);
+                    ingredientAmount.color = ingredients[i].amount * Amount > stock ? ingredientShortageColor : Color.white;
+                }
+
                 item.SetActive(true);
             }
         }
 
-        private void AmountChange(string value)
+        private void UpdateShowData()
         {
-            if (string.IsNullOrEmpty(value))
-                productAmount_I.text = "0";
+            ShowIngredients(SelectedProductId);
 
-            start_B.interactable = int.Parse(productAmount_I.text) > 0 && SelectedProductId != -1;
-            ShowTotalProduction();
-            ShowProductionTime();
-        }
+            costBox.SetKey("production_line_cost_box",
+                Amount + "\u00D7" + _template.productionCostPerOneProduct * _template.batchSize,
+                _template.setupCost.ToString(), CalculateProductionCost(Amount).ToString());
 
-        private void ShowTotalProduction()
-        {
+            var time = Mathf.CeilToInt((float) Amount / _template.dailyProductionRate);
+            productionTime.SetKey("production_line_production_duration", time.ToString());
+
             if (SelectedProductId == -1)
             {
                 productIcon.enabled = false;
-                total.enabled = false;
+                finalAmount.enabled = false;
             }
             else
             {
                 productIcon.enabled = true;
-                total.enabled = true;
-                var final = Mathf.FloorToInt(float.Parse(productAmount_I.text) * _template.batchSize *
+                finalAmount.enabled = true;
+                var final = Mathf.FloorToInt((float) Amount * _template.batchSize *
                     _template.efficiencyLevels[data.efficiencyLevel].efficiencyPercentage / 100);
-                total.text = final.ToString();
-                productIcon.sprite = GameDataManager.Instance.ProductSprites[SelectedProductId];
+                finalAmount.text = final.ToString();
+                productIcon.sprite = GameDataManager.Instance.ProductSprites[SelectedProductId - 1];
             }
 
-            formula.text = productAmount_I.text + " \u00D7 " + _template.batchSize + " \u00D7 " +
-                           _template.efficiencyLevels[data.efficiencyLevel].efficiencyPercentage + "/100";
-        }
+            /*formula.text = productAmount_I.text + " \u00D7 " + _template.batchSize + " \u00D7 " +
+                           _template.efficiencyLevels[data.efficiencyLevel].efficiencyPercentage + "/100";*/
 
-        private void ShowProductionTime()
-        {
-            var time = Mathf.CeilToInt(float.Parse(productAmount_I.text) / _template.dailyProductionRate);
-            productionTime.SetKey("time_DAY", time.ToString());
+            start_B.interactable = Amount > 0 && SelectedProductId != -1;
         }
 
         public void StartButton()

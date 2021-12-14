@@ -68,6 +68,12 @@ public class NegotiationItemController : MonoBehaviour
         demanderCostPerUnit.text = _negotiation.costPerUnitDemander.ToString("0.00");
         supplierCostPerUnit.text = _negotiation.costPerUnitSupplier.ToString("0.00");
         negotiationStatusLocalize.SetKey(_negotiation.state.ToString());
+
+        if (_negotiation.state != Utils.NegotiationState.IN_PROGRESS)
+        {
+            showActionToggle.isOn = false;
+            showActionToggle.gameObject.SetActive(false);
+        }
     }
 
     public void UpdateEditedNegotiation(Utils.Negotiation editedNegotiation)

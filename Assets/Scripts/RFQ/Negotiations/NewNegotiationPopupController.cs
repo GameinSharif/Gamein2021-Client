@@ -39,9 +39,13 @@ public class NewNegotiationPopupController: MonoBehaviour
         _isSendingRequest = false;
         if (newProviderNegotiationResponse.negotiation != null)
         {
+            string productName = GameDataManager.Instance.GetProductName(newProviderNegotiationResponse.negotiation.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
             NegotiationsController.Instance.AddNegotiationToList(newProviderNegotiationResponse.negotiation);
             NotificationsController.Instance.AddNewNotification("notification_new_negotiation",
-                GameDataManager.Instance.GetProductName(newProviderNegotiationResponse.negotiation.productId));
+                translatedProductName);
             NewNegotiationPopupCanvas.SetActive(false);
         }
         else

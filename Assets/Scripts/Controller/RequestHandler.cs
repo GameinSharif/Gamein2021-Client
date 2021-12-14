@@ -121,6 +121,10 @@ public class RequestHandler
                 GetAllChatsResponse getAllChatsResponse = JsonUtility.FromJson<GetAllChatsResponse>(responseJson);
                 EventManager.Instance.OnGetAllChatsResponse(getAllChatsResponse);
                 break;
+            case ResponseTypeConstant.REPORT_MESSAGE:
+                ReportMessageResponse reportMessageResponse = JsonUtility.FromJson<ReportMessageResponse>(responseJson);
+                EventManager.Instance.OnReportMessageResponse(reportMessageResponse);
+                break;
             case ResponseTypeConstant.GET_TEAM_TRANSPORTS:
                 GetTeamTransportsResponse getTeamTransportsResponse = JsonConvert.DeserializeObject(responseJson, typeof(GetTeamTransportsResponse), new StringEnumConverter()) as GetTeamTransportsResponse;
                 EventManager.Instance.OnGetTeamTransportsResponse(getTeamTransportsResponse);
@@ -242,9 +246,6 @@ public class RequestHandler
                     typeof(DonateResponse),
                     new StringEnumConverter()) as DonateResponse);
                 break;
-            case ResponseTypeConstant.REPORT_MESSAGE:
-                //TODO
-                break;
             case ResponseTypeConstant.CONTRACT_FINALIZED:
                 ContractFinalizedResponse contractFinalizedResponse = JsonConvert.DeserializeObject(responseJson, typeof(ContractFinalizedResponse), new StringEnumConverter()) as ContractFinalizedResponse;
                 EventManager.Instance.OnContractFinalizedResponse(contractFinalizedResponse);
@@ -252,6 +253,10 @@ public class RequestHandler
             case ResponseTypeConstant.CONTRACT_SUPPLIER_FINALIZED:
                 ContractSupplierFinalizedResponse contractSupplierFinalizedResponse = JsonConvert.DeserializeObject(responseJson, typeof(ContractSupplierFinalizedResponse), new StringEnumConverter()) as ContractSupplierFinalizedResponse;
                 EventManager.Instance.OnContractSupplierFinalizedResponse(contractSupplierFinalizedResponse);
+                break;
+            case ResponseTypeConstant.BAN:
+                BanResponse banResponse = JsonUtility.FromJson<BanResponse>(responseJson);
+                EventManager.Instance.OnBanResponse(banResponse);
                 break;
             default:
                 Debug.LogWarning(responseJson);

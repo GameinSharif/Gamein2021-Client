@@ -15,7 +15,10 @@ public class LoginManager : MonoBehaviour
     public TMP_InputField UsernameInputField;
     public TMP_InputField PasswordInputField;
     public Localize LoginErrorLocalize;
+    public GameObject usernameError;
+    public GameObject passwordError;
 
+    
     private void Awake()
     {
         Instance = this;
@@ -26,6 +29,8 @@ public class LoginManager : MonoBehaviour
     private void Start()
     {
         LoginErrorLocalize.gameObject.SetActive(false);
+        passwordError.SetActive(false);
+        usernameError.SetActive(false);
 
         if (PlayerPrefs.HasKey("Language"))
         {
@@ -76,8 +81,7 @@ public class LoginManager : MonoBehaviour
             return;
         }
 
-        //string encryptedPassword = EncryptManager.Encrypt(password);
-        string encryptedPassword = password;
+        string encryptedPassword = EncryptManager.Encrypt(password);
 
         LoginRequest loginRequest = new LoginRequest(RequestTypeConstant.LOGIN, username, encryptedPassword);
         RequestManager.Instance.SendRequest(loginRequest);
@@ -95,17 +99,24 @@ public class LoginManager : MonoBehaviour
             PlayerPrefs.SetFloat("Money", loginResponse.team.credit);
             PlayerPrefs.SetFloat("Value", loginResponse.team.wealth);
             PlayerPrefs.SetFloat("Brand", loginResponse.team.brand);
+            PlayerPrefs.SetFloat("DonatedAmount", loginResponse.team.donatedAmount);
 
             RequestObject.myToken = loginResponse.token;
 
             SceneManager.LoadScene("MenuScene");
         }
+        else if (loginResponse.result == "Can not login. Already logged in.")
+        {
+            LoginErrorLocalize.SetKey("login_already_logged_in_error");
+            LoginErrorLocalize.gameObject.SetActive(true); 
+        }
         else
         {
             LoginErrorLocalize.SetKey("login_error_info");
             LoginErrorLocalize.gameObject.SetActive(true);
+            passwordError.SetActive(true);
+            usernameError.SetActive(true);
         }
-        
     }
 
     public void print(string s)

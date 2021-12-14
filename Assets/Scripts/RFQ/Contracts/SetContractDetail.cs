@@ -13,8 +13,8 @@ public class SetContractDetail : MonoBehaviour
     public RTLTextMeshPro supplyAmountTxt;
     public RTLTextMeshPro pricePerUnitTxt;
     public RTLTextMeshPro boughtAmountTxt;
-    public RTLTextMeshPro demandShareTxt;
-    
+    public Localize storageLocalize;
+
     public GameObject terminateButtonGameObject;
 
     private void OnEnable()
@@ -32,7 +32,7 @@ public class SetContractDetail : MonoBehaviour
     public void InitializeContract(Utils.Contract contractData)
     {
         gameinCustomerNameTxt.text = GameDataManager.Instance.GetGameinCustomerById(contractData.gameinCustomerId).name;
-        productNameLocalize.SetKey("product_" + GameDataManager.Instance.Products[contractData.productId].name);
+        productNameLocalize.SetKey("product_" + GameDataManager.Instance.GetProductName(contractData.productId));
         supplyAmountTxt.text = contractData.supplyAmount.ToString();
         pricePerUnitTxt.text = contractData.pricePerUnit.ToString("0.00");
 
@@ -40,12 +40,22 @@ public class SetContractDetail : MonoBehaviour
         if (contractData.contractDate.ToDateTime() > MainHeaderManager.Instance.gameDate.ToDateTime())
         {
             boughtAmountTxt.text = "-";
-            demandShareTxt.text = "-";
+            terminateButtonGameObject.SetActive(true);
         }
         else
         {
             boughtAmountTxt.text = contractData.boughtAmount.ToString();
-            demandShareTxt.text = contractData.demandShare.ToString("0.00") + "%";
+            terminateButtonGameObject.SetActive(false);
+        }
+
+        Utils.Storage storage = StorageManager.Instance.GetStorageById(contractData.storageId);
+        if (storage.dc)
+        {
+            storageLocalize.SetKey("provider_item_dc", storage.buildingId.ToString());
+        }
+        else
+        {
+            storageLocalize.SetKey("provider_item_warehouse");
         }
 
         this.contractData = contractData;
@@ -69,7 +79,13 @@ public class SetContractDetail : MonoBehaviour
         {
             if (contractData.id == terminateLongtermContractResponse.terminatedContract.id)
             {
-                DialogManager.Instance.ShowErrorDialog("contract_supplier_successfully_terminated");
+                string productName = GameDataManager.Instance.GetProductName(terminateLongtermContractResponse.terminatedContract.productId);
+                string translatedProductName =
+                    LocalizationManager.GetLocalizedValue("product_" + productName,
+                        LocalizationManager.GetCurrentLanguage());
+                string gameinCustomerName = GameDataManager.Instance.GetGameinCustomerById(terminateLongtermContractResponse.terminatedContract.gameinCustomerId).name;
+                string[] param = {gameinCustomerName, translatedProductName};
+                NotificationsController.Instance.AddNewNotification("notification_terminate_contract", param);
                 MainHeaderManager.Instance.Money -= terminateLongtermContractResponse.terminatedContract.terminatePenalty;
                 gameObject.SetActive(false);
             }
@@ -85,8 +101,13 @@ public class SetContractDetail : MonoBehaviour
             {
                 ContractMoreDetailsController.Instance.ShowMoreDetailsButtonClick(contractFinalizedResponse.contract);
             }
-
-            //TODO notification
+            string productName = GameDataManager.Instance.GetProductName(contractFinalizedResponse.contract.productId);
+            string translatedProductName =
+                LocalizationManager.GetLocalizedValue("product_" + productName,
+                    LocalizationManager.GetCurrentLanguage());
+            string gameinCustomerName = GameDataManager.Instance.GetGameinCustomerById(contractFinalizedResponse.contract.gameinCustomerId).name;
+            string[] param = {gameinCustomerName, translatedProductName};
+            NotificationsController.Instance.AddNewNotification("notification_contract_finalized", param);
         }
     }
 

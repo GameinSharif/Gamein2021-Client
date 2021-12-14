@@ -1,9 +1,11 @@
-﻿public class StartTransportForPlayerStoragesRequest : RequestObject
+﻿using System;
+
+public class StartTransportForPlayerStoragesRequest : RequestObject
 {
     public int sourceId;
-    public string sourceType;
+    public int sourceType;
     public int destinationId;
-    public string destinationType;
+    public int destinationType;
     public int productId;
     public int amount;
     public bool hasInsurance;
@@ -14,9 +16,9 @@
         Utils.VehicleType vehicleType) : base(RequestTypeConstant.TRANSPORT_TO_STORAGE)
     {
         this.sourceId = sourceId;
-        this.sourceType = sourceType.ToString();
+        this.sourceType = Convert.ToInt32(sourceType);
         this.destinationId = destinationId;
-        this.destinationType = destinationType.ToString();
+        this.destinationType = Convert.ToInt32(destinationType);
         this.productId = productId;
         this.amount = amount;
         this.hasInsurance = hasInsurance;

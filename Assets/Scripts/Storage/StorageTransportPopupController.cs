@@ -30,7 +30,16 @@ public class StorageTransportPopupController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
         EventManager.Instance.OnStartTransportForPlayerStoragesResponseEvent += OnStartTransportForPlayerStoragesResponse;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnStartTransportForPlayerStoragesResponseEvent -= OnStartTransportForPlayerStoragesResponse;
     }
 
     public void Initialize(Utils.Storage source, Utils.Product product)
@@ -69,7 +78,8 @@ public class StorageTransportPopupController : MonoBehaviour
         _vehicleTypesOptions.Clear();
         foreach (Utils.VehicleType vehicleType in Enum.GetValues(typeof(Utils.VehicleType)))
         {
-            var optionData = new TMP_Dropdown.OptionData(vehicleType.ToString());
+            TempLocalization.Instance.localize.SetKey(vehicleType.ToString());
+            var optionData = new TMP_Dropdown.OptionData(TempLocalization.Instance.localize.GetLocalizedString().value);
             vehicleTypeDropDown.options.Add(optionData);
             _vehicleTypesOptions.Add(vehicleType);
         }
@@ -85,7 +95,16 @@ public class StorageTransportPopupController : MonoBehaviour
         {
             if (storage.id == _source.id) continue;
             
-            var optionData = new TMP_Dropdown.OptionData(storage.dc ? ("DC " + storage.buildingId) : "Warehouse");
+            TempLocalization.Instance.localize.SetKey(storage.dc ? "provider_item_dc" : "provider_item_warehouse");
+            string value = TempLocalization.Instance.localize.GetLocalizedString().value;
+
+            if (storage.dc)
+            {
+                int index = value.IndexOf('#');
+                value = value.Remove(index, 1).Insert(index, storage.buildingId.ToString());
+            }
+
+            var optionData = new TMP_Dropdown.OptionData(value);
             destinationDropDown.options.Add(optionData);
             _destinationOptions.Add(storage);
         }
