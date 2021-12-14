@@ -143,16 +143,8 @@ public class WeeklyReportManager: MonoBehaviour
         {
             Utils.WeeklyReport weeklyReport = WeeklyReports[i];
 
-            if (i == 0)
-            {
-                transportCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.transportationCosts));
-                productionCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.productionCosts));
-            }
-            else
-            {
-                transportCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.transportationCosts - WeeklyReports[i - 1].transportationCosts));
-                productionCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.productionCosts - WeeklyReports[i - 1].productionCosts));
-            }
+            transportCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.transportationCosts));
+            productionCostsLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.productionCosts));
         }
 
         CostsLineChart.data.DataSets[0].Entries = transportCostsLineEntries;
