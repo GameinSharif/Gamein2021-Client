@@ -70,18 +70,14 @@ public class MapManager : MonoBehaviour
         InitializeGameDataOnMap();
 
         var teamId = PlayerPrefs.GetInt("TeamId");
-        if (GameDataManager.Instance.GetTeamById(teamId).factoryId != 0)
-        {
-            SnapToMyTeamLocation();
-        }
-        /*if (SnapToLocaltionOnOpenMap != Vector2.zero)
+        if (SnapToLocaltionOnOpenMap != Vector2.zero)
         {
             SnapToLocation(SnapToLocaltionOnOpenMap);
         }
-        else
+        else if (GameDataManager.Instance.GetTeamById(teamId).factoryId != 0)
         {
             SnapToMyTeamLocation();
-        }*/
+        }
 
         if (!GameDataManager.Instance.IsAuctionOver())
         {
@@ -147,7 +143,7 @@ public class MapManager : MonoBehaviour
             else if (dc.ownerId == PlayerPrefs.GetInt("TeamId"))
             {
                 agentType = MapUtils.MapAgentMarker.AgentType.MyDistributionCenter;
-                dcName = PlayerPrefs.GetString("TeamName");
+                //dcName = PlayerPrefs.GetString("TeamName");
             }
             else
             {
