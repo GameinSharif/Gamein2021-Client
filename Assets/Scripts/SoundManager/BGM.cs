@@ -4,19 +4,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class BGM : MonoBehaviour
 {
     public static bool IsMute
     {
         set => PlayerPrefs.SetInt("BGM_Mute", value ? 1 : 0);
-        get => PlayerPrefs.GetInt("BGM_Mute") == 1;
+        get => PlayerPrefs.GetInt("BGM_Mute", 0) == 1;
     }
     
     public static BGM instance;
     public List<ClipData> clips = new List<ClipData>();
     public int startIndex = -1;
 
+    public Image muteButtonImage;
+    private Color mutedColor = new Color(0.316f, 0.316f, 0.316f);
 
     AudioSource source;
     ClipData currentData;
@@ -24,6 +27,7 @@ public class BGM : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        muteButtonImage.color = IsMute ? mutedColor : Color.white;
     }
 
     public void Setup()
@@ -39,11 +43,6 @@ public class BGM : MonoBehaviour
         {
             Play(BGMs.AUCTION);
         }
-    }
-
-    private void MuteChange(bool obj)
-    {
-        source.volume = IsMute ? 0 : currentData.Volume;
     }
 
     public void Play(BGMs bgm)
@@ -81,6 +80,7 @@ public class BGM : MonoBehaviour
     {
         IsMute = !IsMute;
         source.volume = IsMute ? 0 : currentData.Volume;
+        muteButtonImage.color = IsMute ? mutedColor : Color.white;
     }
 
     public enum BGMs

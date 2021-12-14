@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SFXManager : MonoBehaviour
 {
@@ -10,19 +11,24 @@ public class SFXManager : MonoBehaviour
     public static bool IsMute
     {
         set => PlayerPrefs.SetInt("SFX_Mute", value ? 1 : 0);
-        get => PlayerPrefs.GetInt("SFX_Mute") == 1;
+        get => PlayerPrefs.GetInt("SFX_Mute", 0) == 1;
     }
 
     public List<ClipData> clips = new List<ClipData>();
 
+    public Image muteButtonImage;
+    private Color mutedColor = new Color(0.316f, 0.316f, 0.316f);
+    
     private void Awake()
     {
         Instance = this;
+        muteButtonImage.color = IsMute ? mutedColor : Color.white;
     }
 
     public void MuteChange()
     {
         IsMute = !IsMute;
+        muteButtonImage.color = IsMute ? mutedColor : Color.white;
     }
 
     public void Play(SfxID id)

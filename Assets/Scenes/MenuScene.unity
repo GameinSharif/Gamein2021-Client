@@ -997,6 +997,7 @@ MonoBehaviour:
   - id: 3
     audioClip: {fileID: 8300000, guid: 05925b799e47167418114a82d3016bc0, type: 3}
     volume: 100
+  muteButtonImage: {fileID: 6091946378138331131}
 --- !u!114 &459139049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1017,6 +1018,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 4800d112fc764354a893d5e5464170db, type: 3}
     volume: 100
   startIndex: 0
+  muteButtonImage: {fileID: 6091946378138331130}
 --- !u!4 &459139050
 Transform:
   m_ObjectHideFlags: 0
@@ -7210,7 +7212,7 @@ MonoBehaviour:
   _spawnedRankGameObjects: []
   totalTeams: {fileID: 1363410053}
   closedPosY: 8
-  openedPosY: 0.5
+  openedPosY: 0
 --- !u!4 &1971768096
 Transform:
   m_ObjectHideFlags: 0
@@ -11708,6 +11710,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9839c2d141529145a431aef4d757ff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6091946378138331130 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6091946376905414866, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+  m_PrefabInstance: {fileID: 6091946378138331109}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6091946378138331131 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6091946377207702465, guid: 3a6bd30bff1747248b947f0eef758f3d, type: 3}
+  m_PrefabInstance: {fileID: 6091946378138331109}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6423773582588801987 stripped
