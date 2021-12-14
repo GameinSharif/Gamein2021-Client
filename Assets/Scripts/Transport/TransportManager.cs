@@ -48,8 +48,7 @@ public class TransportManager : MonoBehaviour
                 }
                 else
                 {
-                    transport.transportState = Utils.TransportState.IN_WAY;
-                    TransportsController.Instance.AddInWay(transport);
+                    return;
                 }
                 //TODO notification
                 break;

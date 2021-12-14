@@ -30,7 +30,16 @@ public class StorageTransportPopupController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
         EventManager.Instance.OnStartTransportForPlayerStoragesResponseEvent += OnStartTransportForPlayerStoragesResponse;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnStartTransportForPlayerStoragesResponseEvent -= OnStartTransportForPlayerStoragesResponse;
     }
 
     public void Initialize(Utils.Storage source, Utils.Product product)
