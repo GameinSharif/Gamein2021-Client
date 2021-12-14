@@ -500,7 +500,7 @@ public class MapManager : MonoBehaviour
         else if (dc.ownerId == PlayerPrefs.GetInt("TeamId"))
         {
             agentType = MapUtils.MapAgentMarker.AgentType.MyDistributionCenter;
-            dcName = PlayerPrefs.GetString("TeamName");
+            //dcName = PlayerPrefs.GetString("TeamName");
         }
         else
         {

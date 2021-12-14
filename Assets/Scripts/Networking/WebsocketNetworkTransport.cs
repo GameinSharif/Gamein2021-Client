@@ -51,6 +51,8 @@ public class WebsocketNetworkTransport : MonoBehaviour
         _count = 0;
         isReconnecting = false;
         _isOpened = true;
+
+        ReconnectManager.Instance.OnReconnect();
     }
 
     private void OnMessageReceived(WebSocket webSocket, string message)
@@ -73,11 +75,13 @@ public class WebsocketNetworkTransport : MonoBehaviour
         else
         {
             isReconnecting = false;
+            ReconnectManager.Instance.OnReconnectFail();
         }
     }
 
     private IEnumerator WaitCoroutine()
     {
+        ReconnectManager.Instance.OpenReconnectPopup();
         yield return new WaitForSeconds(1.0f);
         Connect();
     }
@@ -85,6 +89,7 @@ public class WebsocketNetworkTransport : MonoBehaviour
     private void OnError(WebSocket webSocket, string reason)
     {
         Debug.Log("Websocket has error.");
+        Debug.Log(reason);
         RequestManager.Instance.ResetStartReceived();
         _isOpened = false;
         if (_count < RELOAD_COUNT)
@@ -96,6 +101,7 @@ public class WebsocketNetworkTransport : MonoBehaviour
         else
         {
             isReconnecting = false;
+            ReconnectManager.Instance.OnReconnectFail();
         }
     }
 

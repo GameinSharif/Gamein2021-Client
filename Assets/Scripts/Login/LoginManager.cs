@@ -34,8 +34,16 @@ public class LoginManager : MonoBehaviour
 
         if (PlayerPrefs.HasKey("Language"))
         {
-            LoginCanvas.SetActive(true);
             SelectLanguagePopup.SetActive(false);
+
+            if (HasDataForLogin())
+            {
+                SendLoginRequest(PlayerPrefs.GetString("Username"), PlayerPrefs.GetString("Password"));
+            }
+            else
+            {
+                OpenLoginPopup();
+            }
         }
         else
         {
@@ -57,11 +65,22 @@ public class LoginManager : MonoBehaviour
     public void SelectLangugae(string language)
     {
         LocalizationManager.Instance.SetLanguage(language);
-
-        LoginCanvas.SetActive(true);
         SelectLanguagePopup.SetActive(false);
-
         GetGameStatus();
+
+        if (HasDataForLogin())
+        {
+            SendLoginRequest(PlayerPrefs.GetString("Username"), PlayerPrefs.GetString("Password"));
+        }
+        else
+        {
+            OpenLoginPopup();
+        }
+    }
+
+    private bool HasDataForLogin()
+    {
+        return PlayerPrefs.HasKey("Username") && PlayerPrefs.HasKey("Password");
     }
 
     public void GetGameStatus()
@@ -81,6 +100,11 @@ public class LoginManager : MonoBehaviour
             return;
         }
 
+        SendLoginRequest(username, password);
+    }
+
+    private void SendLoginRequest(string username, string password)
+    {
         string encryptedPassword = EncryptManager.Encrypt(password);
 
         LoginRequest loginRequest = new LoginRequest(RequestTypeConstant.LOGIN, username, encryptedPassword);
@@ -101,6 +125,9 @@ public class LoginManager : MonoBehaviour
             PlayerPrefs.SetFloat("Brand", loginResponse.team.brand);
             PlayerPrefs.SetFloat("DonatedAmount", loginResponse.team.donatedAmount);
 
+            PlayerPrefs.SetString("Username", UsernameInputField.text);
+            PlayerPrefs.SetString("Password", PasswordInputField.text);
+
             RequestObject.myToken = loginResponse.token;
 
             SceneManager.LoadScene("MenuScene");
@@ -108,7 +135,8 @@ public class LoginManager : MonoBehaviour
         else if (loginResponse.result == "Can not login. Already logged in.")
         {
             LoginErrorLocalize.SetKey("login_already_logged_in_error");
-            LoginErrorLocalize.gameObject.SetActive(true); 
+            LoginErrorLocalize.gameObject.SetActive(true);
+            OpenLoginPopup();
         }
         else
         {
@@ -116,11 +144,14 @@ public class LoginManager : MonoBehaviour
             LoginErrorLocalize.gameObject.SetActive(true);
             passwordError.SetActive(true);
             usernameError.SetActive(true);
+            OpenLoginPopup();
         }
     }
 
-    public void print(string s)
+    private void OpenLoginPopup()
     {
-        Debug.Log(s);
+        PlayerPrefs.DeleteKey("Username");
+        PlayerPrefs.DeleteKey("Password");
+        LoginCanvas.SetActive(true);
     }
 }
