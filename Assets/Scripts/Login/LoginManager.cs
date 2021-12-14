@@ -15,7 +15,10 @@ public class LoginManager : MonoBehaviour
     public TMP_InputField UsernameInputField;
     public TMP_InputField PasswordInputField;
     public Localize LoginErrorLocalize;
+    public GameObject usernameError;
+    public GameObject passwordError;
 
+    
     private void Awake()
     {
         Instance = this;
@@ -26,6 +29,8 @@ public class LoginManager : MonoBehaviour
     private void Start()
     {
         LoginErrorLocalize.gameObject.SetActive(false);
+        passwordError.SetActive(false);
+        usernameError.SetActive(false);
 
         if (PlayerPrefs.HasKey("Language"))
         {
@@ -109,8 +114,9 @@ public class LoginManager : MonoBehaviour
         {
             LoginErrorLocalize.SetKey("login_error_info");
             LoginErrorLocalize.gameObject.SetActive(true);
+            passwordError.SetActive(true);
+            usernameError.SetActive(true);
         }
-        
     }
 
     public void print(string s)
