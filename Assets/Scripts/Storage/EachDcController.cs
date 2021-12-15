@@ -9,6 +9,7 @@ public class EachDcController : MonoBehaviour
     [Space(10)]
     public GameObject buyPopup;
     public Localize buyPriceLocalize;
+    public Localize dcTypeLocalize;
 
     private bool _isClickable = false;
     private MapUtils.MapAgentMarker.AgentType _agentType;
@@ -28,6 +29,7 @@ public class EachDcController : MonoBehaviour
             _isClickable = true;
             sellPriceLocalize.SetKey("dc_price", _dc.sellingPrice.ToString());
             buyPriceLocalize.SetKey("dc_price", _dc.buyingPrice.ToString());
+            dcTypeLocalize.SetKey(_dc.type == Utils.DCType.SemiFinished ? "dc_type_semi" : "dc_type_finished");
         }
         else
         {
@@ -73,7 +75,8 @@ public class EachDcController : MonoBehaviour
                 }
 
                 _isSendingRequest = true;
-                RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, _dc.id)); 
+                RequestManager.Instance.SendRequest(new SellDCRequest(RequestTypeConstant.SELL_DC, _dc.id));
+                StartCoroutine(SetFalse());
             }
         });
     }
@@ -97,6 +100,7 @@ public class EachDcController : MonoBehaviour
 
                 _isSendingRequest = true;
                 RequestManager.Instance.SendRequest(new BuyDCRequest(RequestTypeConstant.BUY_DC, _dc.id));
+                StartCoroutine(SetFalse());
             }
         });
         
@@ -106,6 +110,12 @@ public class EachDcController : MonoBehaviour
     {
         sellPopup.SetActive(false);
         buyPopup.SetActive(false);
+    }
+
+    private IEnumerator<dynamic> SetFalse()
+    {
+        yield return new WaitForSeconds(5f);
+        _isSendingRequest = false;
     }
 
 }
