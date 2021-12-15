@@ -77,6 +77,7 @@ public class NewsController : MonoBehaviour
         BreakingNewsController controller = newsCanvas.GetComponent<BreakingNewsController>();
         controller.SetInfo(news, true);
         newsCanvas.SetActive(true);
+        PlayerPrefs.SetInt("lastSeriousNews", news.week);
     }
 
     public void SetNewNewspaperImageActive()

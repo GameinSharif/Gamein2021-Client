@@ -77,6 +77,7 @@ public class GameDataManager : MonoBehaviour
         CheckLastNewspaperSeen();
         VaccinePopupController.Instance.CheckCorona();
         BGM.instance.Setup();
+        CheckLastSeriousNewsSeen();
     }
 
     public void OnGetAllActiveDCsResponse(GetAllActiveDcResponse getAllActiveDcResponse)
@@ -338,5 +339,15 @@ public class GameDataManager : MonoBehaviour
     public Utils.ProductionLineTemplate GetProductionLineTemplateById(int templateId)
     {
         return GameDataManager.Instance.ProductionLineTemplates.FirstOrDefault(c => c.id == templateId);
+    }
+
+    private void CheckLastSeriousNewsSeen()
+    {
+        int lastSeriousSeen = PlayerPrefs.GetInt("lastSeriousNews", 0);
+        Utils.News lastSeriousNews = News.FindLast(n => n.newsType == Utils.NewsType.SERIOUS);
+        if (lastSeriousSeen != lastSeriousNews.week)
+        {
+            NewsController.Instance.OnBreakingNewsReceived(lastSeriousNews);
+        }
     }
 }

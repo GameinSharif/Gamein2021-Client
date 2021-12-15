@@ -72,9 +72,15 @@ public class GameStatusManager : MonoBehaviour
     
     private void OnBanResponseReceived(BanResponse banResponse)
     {
-        string minuets = banResponse.minutes.ToString();
-        
-        textLocalize.SetKey("ban_message", minuets);
+        int minuets = banResponse.minutes;
+        if (minuets == 2000000)
+        {
+            textLocalize.SetKey("ban_bankrupt");
+        }
+        else
+        {
+            textLocalize.SetKey("ban_message", minuets.ToString());
+        }
         
         GameStatusPopupCanvas.SetActive(true);
         CloseButtonGameObject.SetActive(false);
