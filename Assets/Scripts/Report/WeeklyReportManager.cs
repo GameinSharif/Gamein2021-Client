@@ -89,8 +89,9 @@ public class WeeklyReportManager: MonoBehaviour
             LineEntry lineEntry = new LineEntry(weeklyReport.weekNumber, weeklyReport.ranking);
             lineEntries.Add(lineEntry);
         }
-
+        
         RankingLineChart.data.DataSets[0].Entries = lineEntries;
+        RankingLineChart.SetDirty();
         RankingLineChart.enabled = false;
         RankingLineChart.enabled = true;
     }
@@ -105,6 +106,7 @@ public class WeeklyReportManager: MonoBehaviour
         }
 
         BrandLineChart.data.DataSets[0].Entries = lineEntries;
+        BrandLineChart.SetDirty();
         BrandLineChart.enabled = false;
         BrandLineChart.enabled = true;
     }
@@ -128,6 +130,7 @@ public class WeeklyReportManager: MonoBehaviour
         FinanceLineChart.data.DataSets[0].Entries = totalCapitalLineEntries;
         FinanceLineChart.data.DataSets[1].Entries = inFlowLineEntries;
         FinanceLineChart.data.DataSets[2].Entries = outFlowLineEntries;
+        FinanceLineChart.SetDirty();
 
         FinanceLineChart.enabled = false;
         FinanceLineChart.enabled = true;
@@ -148,6 +151,7 @@ public class WeeklyReportManager: MonoBehaviour
 
         CostsLineChart.data.DataSets[0].Entries = transportCostsLineEntries;
         CostsLineChart.data.DataSets[1].Entries = productionCostsLineEntries;
+        CostsLineChart.SetDirty();
 
         CostsLineChart.enabled = false;
         CostsLineChart.enabled = true;
@@ -171,6 +175,7 @@ public class WeeklyReportManager: MonoBehaviour
         InventoryLineChart.data.DataSets[0].Entries = rawMaterialsLineEntries;
         InventoryLineChart.data.DataSets[1].Entries = semiFinishedLineEntries;
         InventoryLineChart.data.DataSets[2].Entries = finishedEntries;
+        InventoryLineChart.SetDirty();
 
         InventoryLineChart.enabled = false;
         InventoryLineChart.enabled = true;
