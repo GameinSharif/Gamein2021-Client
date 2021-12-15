@@ -64,6 +64,8 @@ public class GameStatusManager : MonoBehaviour
                 GameStatusPopupCanvas.SetActive(true);
                 CloseButtonGameObject.SetActive(false);
                 background.SetActive(true);
+                PlayerPrefs.DeleteKey("Username");
+                PlayerPrefs.DeleteKey("Password");
                 break;
         }
 
