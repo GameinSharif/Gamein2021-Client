@@ -345,7 +345,7 @@ public class GameDataManager : MonoBehaviour
     {
         int lastSeriousSeen = PlayerPrefs.GetInt("lastSeriousNews", 0);
         Utils.News lastSeriousNews = News.FindLast(n => n.newsType == Utils.NewsType.SERIOUS);
-        if (lastSeriousSeen != lastSeriousNews.week)
+        if (lastSeriousNews != null && lastSeriousSeen != lastSeriousNews.week)
         {
             NewsController.Instance.OnBreakingNewsReceived(lastSeriousNews);
         }
