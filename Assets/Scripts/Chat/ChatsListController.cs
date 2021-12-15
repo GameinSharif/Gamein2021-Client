@@ -17,6 +17,7 @@ public class ChatsListController : MonoBehaviour
     public GameObject chatItemPrefab;
 
     public GameObject hint;
+
     private void Awake()
     {
         Instance = this;
@@ -125,6 +126,8 @@ public class ChatsListController : MonoBehaviour
         {
             ChatPageController.Instance.AddMessageToChat(newMessageResponse.message);
         }
+
+        SFXManager.Instance.Play(SFXManager.SfxID.NOTIFICATION);
     }
 
     public void ToggleChatParent()

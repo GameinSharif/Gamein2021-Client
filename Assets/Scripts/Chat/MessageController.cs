@@ -56,8 +56,10 @@ public class MessageController : MonoBehaviour
         }
         else
         {
-            ReportMessageRequest reportMessageRequest = new ReportMessageRequest(_chatId, text.text, _messageData.senderTeamId, _messageData.insertedAt);
+            ReportMessageRequest reportMessageRequest = new ReportMessageRequest(_messageData.chatId, text.text, _messageData.senderTeamId, _messageData.insertedAt);
             RequestManager.Instance.SendRequest(reportMessageRequest);
+            reportButton.SetActive(false);
+            showReportButtonButton.SetActive(true);
         }
     }
 
