@@ -10,6 +10,9 @@ public class ChatItemController : MonoBehaviour
     public RTLTextMeshPro lastMessagePreview;
     
     private int _chatId;
+    private string _teamNameString;
+
+    public string TeamNameString => _teamNameString;
 
     private int _unreadCount = 0;
     public int UnreadCount
@@ -31,6 +34,7 @@ public class ChatItemController : MonoBehaviour
     public void SetData(int chatId, string theTeamName)
     {
         _chatId = chatId;
+        _teamNameString = theTeamName;
         teamName.text = theTeamName;
         lastMessagePreview.text = "";
         //TODO set avatar

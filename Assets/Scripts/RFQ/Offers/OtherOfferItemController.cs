@@ -12,6 +12,7 @@ public class OtherOfferItemController : MonoBehaviour
     public GameObject acceptButton;
 
     public Utils.Offer Offer => _offer;
+    public Utils.Team OtherTeam => _otherTeam;
 
     private Utils.Offer _offer;
     private Utils.Product _product;

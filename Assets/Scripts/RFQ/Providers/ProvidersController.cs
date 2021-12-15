@@ -217,6 +217,7 @@ public class ProvidersController : MonoBehaviour
         foreach (var controller in _otherTeamsProviderItemControllers)
         {
             controller.gameObject.SetActive(
+                controller.OtherTeam.teamName.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0 ||
                 controller.team.text.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0 ||
                 controller.product.GetLocalizedString().value.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0
             );

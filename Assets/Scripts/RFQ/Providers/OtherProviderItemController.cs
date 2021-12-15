@@ -12,6 +12,7 @@ public class OtherProviderItemController : MonoBehaviour
     public Localize distance;
 
     public Utils.Provider Provider => _provider;
+    public Utils.Team OtherTeam => _otherTeam;
     
     private Utils.Provider _provider;
     private Utils.Product _product;

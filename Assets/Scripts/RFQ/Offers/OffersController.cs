@@ -225,6 +225,7 @@ public class OffersController : MonoBehaviour
         foreach (var controller in _otherTeamsOfferItemControllers)
         {
             controller.gameObject.SetActive(
+                controller.OtherTeam.teamName.IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                 controller.team.text.IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                 controller.product.GetLocalizedString().value.IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0
             );

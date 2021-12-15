@@ -159,7 +159,7 @@ public class ChatsListController : MonoBehaviour
 
         foreach (var controller in _controllerOfChatId.Values)
         {
-            controller.gameObject.SetActive(controller.teamName.text.Contains(query));
+            controller.gameObject.SetActive(controller.TeamNameString.Contains(query));
         }
 
         RebuildListLayout();
