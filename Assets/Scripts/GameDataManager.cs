@@ -72,11 +72,9 @@ public class GameDataManager : MonoBehaviour
 
         GameConstants = getGameDataResponse.gameConstants;
         News = getGameDataResponse.news;
-        SetAuctionCurrentRound();
-        MapManager.Instance.Setup();
+        //MapManager.Instance.Setup();
         CheckLastNewspaperSeen();
         VaccinePopupController.Instance.CheckCorona();
-        BGM.instance.Setup();
         CheckLastSeriousNewsSeen();
     }
 

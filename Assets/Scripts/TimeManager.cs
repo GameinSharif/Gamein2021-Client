@@ -27,6 +27,8 @@ public class TimeManager : MonoBehaviour
         Debug.Log(_diff);
 
         GameDataManager.Instance.SetAuctionCurrentRound();
+        MapManager.Instance.Setup();
+        BGM.instance.Setup();
     }
 
     public CustomDateTime CurrentServerTime => new CustomDateTime(DateTime.Now.Subtract(_diff));
