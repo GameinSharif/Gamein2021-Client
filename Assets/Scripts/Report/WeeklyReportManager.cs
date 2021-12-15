@@ -117,16 +117,8 @@ public class WeeklyReportManager: MonoBehaviour
 
             totalCapitalLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.totalCapital));
 
-            if (i == 0)
-            {
-                inFlowLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.inFlow));
-                outFlowLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.outFlow));
-            }
-            else
-            {
-                inFlowLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.inFlow - WeeklyReports[i-1].inFlow));
-                outFlowLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.outFlow - WeeklyReports[i-1].outFlow));
-            }
+            inFlowLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.inFlow));
+            outFlowLineEntries.Add(new LineEntry(weeklyReport.weekNumber, weeklyReport.outFlow));
         }
 
         FinanceLineChart.data.DataSets[0].Entries = totalCapitalLineEntries;
