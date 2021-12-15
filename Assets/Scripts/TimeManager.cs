@@ -29,6 +29,10 @@ public class TimeManager : MonoBehaviour
         GameDataManager.Instance.SetAuctionCurrentRound();
         MapManager.Instance.Setup();
         BGM.instance.Setup();
+        if (!GameDataManager.Instance.IsAuctionOver())
+        {
+            MainMenuManager.Instance.DeactivateHeaderAndFooter();
+        }
     }
 
     public CustomDateTime CurrentServerTime => new CustomDateTime(DateTime.Now.Subtract(_diff));
