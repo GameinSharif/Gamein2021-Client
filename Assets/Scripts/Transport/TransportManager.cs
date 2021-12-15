@@ -50,17 +50,16 @@ public class TransportManager : MonoBehaviour
                 {
                     return;
                 }
-                //TODO notification
                 break;
             case Utils.TransportState.SUCCESSFUL:
                 Transports.Remove(transport);
-                TransportsController.Instance.AddDone(transport);
-                SendNotificationForSuccessfulTransport(transport);
+                TransportsController.Instance.AddDone(transport ?? transportStateChangedResponse.transport);
+                SendNotificationForSuccessfulTransport(transport ?? transportStateChangedResponse.transport);
                 break;
             case Utils.TransportState.CRUSHED:
                 Transports.Remove(transport);
-                TransportsController.Instance.AddCrashed(transport);
-                SendNotificationForCrashedTransport(transport);
+                TransportsController.Instance.AddCrashed(transport ?? transportStateChangedResponse.transport);
+                SendNotificationForCrashedTransport(transport ?? transportStateChangedResponse.transport);
                 break;
             case Utils.TransportState.PENDING:
                 Transports.Add(transportStateChangedResponse.transport);

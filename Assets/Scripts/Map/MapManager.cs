@@ -550,6 +550,8 @@ public class MapManager : MonoBehaviour
                 instance.SetActive(true);
 
                 _onMapLines.Add(new MapUtils.OnMapLine(start, end, lineRenderer));
+
+                return;
             }
         }
     }
@@ -599,7 +601,7 @@ public class MapManager : MonoBehaviour
                         return;
                     case Utils.TransportState.PENDING:
                         //Do nothing
-                        break;
+                        return;
                 }
             }
         }
