@@ -73,7 +73,7 @@ public class GameStatusManager : MonoBehaviour
     private void OnBanResponseReceived(BanResponse banResponse)
     {
         int minuets = banResponse.minutes;
-        if (minuets == 2000000)
+        if (minuets > 2000)
         {
             textLocalize.SetKey("ban_bankrupt");
         }
