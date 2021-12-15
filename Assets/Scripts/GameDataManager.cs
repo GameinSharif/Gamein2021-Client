@@ -147,7 +147,7 @@ public class GameDataManager : MonoBehaviour
 
     public void SetAuctionCurrentRound()
     {
-        AuctionCurrentRound = 0;
+        AuctionCurrentRound = -1;
         foreach (CustomDateTime customDateTime in GameConstants.AuctionRoundsStartTime)
         {
             if (DateTime.Now >= customDateTime.ToDateTime())
