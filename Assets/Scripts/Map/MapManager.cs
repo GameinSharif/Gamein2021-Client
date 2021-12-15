@@ -547,6 +547,7 @@ public class MapManager : MonoBehaviour
                 LineRenderer lineRenderer = instance.GetComponent<LineRenderer>();
                 lineRenderer.SetPosition(0, start.SpawnedObject.transform.position);
                 lineRenderer.SetPosition(1, end.SpawnedObject.transform.position);
+                instance.SetActive(true);
 
                 _onMapLines.Add(new MapUtils.OnMapLine(start, end, lineRenderer));
             }
@@ -590,6 +591,7 @@ public class MapManager : MonoBehaviour
                 {
                     case Utils.TransportState.IN_WAY:
                         ChangeLineType(onMapLine, lineType);
+                        SetMapLine(lineType, sourceNode, destinationNode);
                         return;
                     case Utils.TransportState.SUCCESSFUL:
                     case Utils.TransportState.CRUSHED:
