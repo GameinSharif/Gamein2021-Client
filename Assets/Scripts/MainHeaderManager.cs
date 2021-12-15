@@ -22,7 +22,7 @@ public class MainHeaderManager : MonoBehaviour
 
     public RTLTextMeshPro brandRTLTMP;
 
-    private const float OneDayTime = 20; //seconds 
+    private const float OneDayTime = 60; //seconds 
     private Tween dayTimer;
 
 
