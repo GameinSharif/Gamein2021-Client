@@ -57,24 +57,24 @@ public class WeeklyReportManager: MonoBehaviour
         switch(index)
         {
             case 0:
-                RankingLineChart.gameObject.SetActive(true);
                 DrawRankingChart();
+                RankingLineChart.gameObject.SetActive(true);
                 break;
             case 1:
-                BrandLineChart.gameObject.SetActive(true);
                 DrawBrandChart();
+                BrandLineChart.gameObject.SetActive(true);
                 break;
             case 2:
-                FinanceLineChart.gameObject.SetActive(true);
                 DrawFinanceChart();
+                FinanceLineChart.gameObject.SetActive(true);
                 break;
             case 3:
-                CostsLineChart.gameObject.SetActive(true);
                 DrawCostsChart();
+                CostsLineChart.gameObject.SetActive(true);
                 break;
             case 4:
-                InventoryLineChart.gameObject.SetActive(true);
                 DrawInventoryChart();
+                InventoryLineChart.gameObject.SetActive(true);
                 break;
         }
 
