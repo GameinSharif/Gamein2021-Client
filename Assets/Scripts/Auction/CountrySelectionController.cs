@@ -60,12 +60,12 @@ public class CountrySelectionController : MonoBehaviour
         _countryNameLocalizeKeys.Add("auction_belgium");
         _countryNameLocalizeKeys.Add("auction_switzerland");
 
-        _countryCapitalsLocaltion.Add(new Vector2(48.8566f, 2.3522f));
-        _countryCapitalsLocaltion.Add(new Vector2(52.5200f, 13.4050f));
-        _countryCapitalsLocaltion.Add(new Vector2(51.5072f, 0.1276f));
-        _countryCapitalsLocaltion.Add(new Vector2(52.3676f, 4.9041f));
-        _countryCapitalsLocaltion.Add(new Vector2(50.8503f, 4.3517f));
-        _countryCapitalsLocaltion.Add(new Vector2(46.8182f, 8.2275f));
+        _countryCapitalsLocaltion.Add(new Vector2(48.8586f, 2.2885f));
+        _countryCapitalsLocaltion.Add(new Vector2(52.4426f, 13.4252f));
+        _countryCapitalsLocaltion.Add(new Vector2(51.5557f, -0.1052f));
+        _countryCapitalsLocaltion.Add(new Vector2(52.3707f, 4.8997f));
+        _countryCapitalsLocaltion.Add(new Vector2(47.3760f, 8.5748f));
+        _countryCapitalsLocaltion.Add(new Vector2(43.2732f, 5.4162f));
     }
         
     private void DisplayCards()

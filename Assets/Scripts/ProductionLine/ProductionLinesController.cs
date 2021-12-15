@@ -201,10 +201,14 @@ namespace ProductionLine
             MainHeaderManager.Instance.Money -= template.productionCostPerOneProduct * production.amount + template.setupCost;
             
             var ingredients = GameDataManager.Instance.GetProductById(production.productId).ingredientsPerUnit;
-            if (ingredients != null)
+            if (ingredients != null && production.productId != 27)
             {
                 foreach (var ingredient in ingredients)
                 {
+                    if (ingredient.productId == 4) //always has Water
+                    {
+                        continue;
+                    }
                     StorageManager.Instance.ChangeStockInStorage(StorageManager.Instance.GetWarehouse().id,
                         ingredient.productId, - ingredient.amount * production.amount);
                 }
