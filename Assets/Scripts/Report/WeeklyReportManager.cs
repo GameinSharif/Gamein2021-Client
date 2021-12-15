@@ -91,6 +91,8 @@ public class WeeklyReportManager: MonoBehaviour
         }
 
         RankingLineChart.data.DataSets[0].Entries = lineEntries;
+        RankingLineChart.enabled = false;
+        RankingLineChart.enabled = true;
     }
 
     private void DrawBrandChart()
@@ -103,6 +105,8 @@ public class WeeklyReportManager: MonoBehaviour
         }
 
         BrandLineChart.data.DataSets[0].Entries = lineEntries;
+        BrandLineChart.enabled = false;
+        BrandLineChart.enabled = true;
     }
 
     private void DrawFinanceChart()
@@ -124,6 +128,9 @@ public class WeeklyReportManager: MonoBehaviour
         FinanceLineChart.data.DataSets[0].Entries = totalCapitalLineEntries;
         FinanceLineChart.data.DataSets[1].Entries = inFlowLineEntries;
         FinanceLineChart.data.DataSets[2].Entries = outFlowLineEntries;
+
+        FinanceLineChart.enabled = false;
+        FinanceLineChart.enabled = true;
     }
 
     private void DrawCostsChart()
@@ -141,6 +148,9 @@ public class WeeklyReportManager: MonoBehaviour
 
         CostsLineChart.data.DataSets[0].Entries = transportCostsLineEntries;
         CostsLineChart.data.DataSets[1].Entries = productionCostsLineEntries;
+
+        CostsLineChart.enabled = false;
+        CostsLineChart.enabled = true;
     }
 
     private void DrawInventoryChart()
@@ -161,6 +171,9 @@ public class WeeklyReportManager: MonoBehaviour
         InventoryLineChart.data.DataSets[0].Entries = rawMaterialsLineEntries;
         InventoryLineChart.data.DataSets[1].Entries = semiFinishedLineEntries;
         InventoryLineChart.data.DataSets[2].Entries = finishedEntries;
+
+        InventoryLineChart.enabled = false;
+        InventoryLineChart.enabled = true;
     }
 
     private void DisableAll()
